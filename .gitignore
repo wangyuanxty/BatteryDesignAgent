@@ -6,3 +6,4 @@ __pycache__/
 runs/
 .superpowers/
 .pytest_cache/
+.coverage
