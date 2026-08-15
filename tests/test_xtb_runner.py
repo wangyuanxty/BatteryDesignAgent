@@ -13,3 +13,4 @@ def test_water_single_point():
     out = xtb_single_point("O")
     assert out["homo_ev"] < 0.0
     assert out["lumo_ev"] > out["homo_ev"]
+    assert out["total_energy_ev"] is not None

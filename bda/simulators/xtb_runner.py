@@ -16,7 +16,8 @@ def xtb_single_point(smiles: str) -> dict:
     from rdkit import Chem
     from rdkit.Chem import AllChem
     mol = Chem.AddHs(Chem.MolFromSmiles(smiles))
-    AllChem.EmbedMolecule(mol, randomSeed=42)
+    if AllChem.EmbedMolecule(mol, randomSeed=42) != 0:
+        raise RuntimeError(f"failed to embed 3D structure for {smiles}")
     AllChem.MMFFOptimizeMolecule(mol)
     with tempfile.TemporaryDirectory() as td:
         workdir = Path(td)
@@ -44,4 +45,6 @@ def xtb_single_point(smiles: str) -> dict:
             total_e = float(line.split()[-3])
     if homo is None or lumo is None:
         raise RuntimeError("failed to parse HOMO/LUMO from xtb output")
+    if total_e is None:
+        raise RuntimeError("failed to parse total energy from xtb output")
     return {"homo_ev": homo, "lumo_ev": lumo, "total_energy_ev": total_e}
