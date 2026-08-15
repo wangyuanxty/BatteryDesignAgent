@@ -10,3 +10,8 @@ def test_bad_protocol_fails_fast():
     import pytest
     with pytest.raises(ValueError, match="protocol"):
         run_simulation({}, protocol="nonsense", mode="spme")
+
+def test_unknown_param_fails_fast():
+    import pytest
+    with pytest.raises(ValueError, match="unknown parameter name"):
+        run_simulation({"Bogus parameter name [x]": 1.0}, protocol="1C_discharge", mode="spme")

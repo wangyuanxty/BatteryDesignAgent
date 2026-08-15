@@ -13,7 +13,10 @@ def run_simulation(params: dict, protocol: str, base: str = "Chen2020", mode: st
         raise ValueError(f"unknown mode '{mode}'; legal: spme, dfn")
     p = PROTOCOLS[protocol]
     parameter_values = pybamm.ParameterValues(base)
-    parameter_values.update(params, check_already_exists=False)
+    unknown_params = sorted(name for name in params if name not in parameter_values)
+    if unknown_params:
+        raise ValueError(f"unknown parameter name(s): {unknown_params}")
+    parameter_values.update(params)
     model = pybamm.lithium_ion.SPMe() if mode == "spme" else pybamm.lithium_ion.DFN()
     sim = pybamm.Simulation(model, parameter_values=parameter_values)
     sim.solve([0, p["t_end_s"]])
