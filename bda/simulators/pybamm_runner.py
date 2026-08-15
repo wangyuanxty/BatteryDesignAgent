@@ -5,6 +5,17 @@ PROTOCOLS = {
     "4C_charge_45C": {"kind": "charge", "C_rate": 4.0, "t_end_s": 900.0, "T_amb_K": 318.15},
 }
 
+# Standard lithium plating parameter values (constant approximation of PyBaMM's
+# OKane2022 set). The default Chen2020 parameter set has no plating parameters, so
+# they must be supplied whenever the plating option is enabled.
+PLATING_PARAM_DEFAULTS = {
+    "Initial plated lithium concentration [mol.m-3]": 0.0,
+    "Typical plated lithium concentration [mol.m-3]": 1000.0,
+    "Lithium plating transfer coefficient": 0.65,
+    "Exchange-current density for plating [A.m-2]": 0.001,
+    "Exchange-current density for stripping [A.m-2]": 0.001,
+}
+
 
 def run_simulation(
     params: dict,
@@ -26,6 +37,14 @@ def run_simulation(
         raise ValueError(f"unknown parameter name(s): {unknown_params}")
     parameter_values.update(params)
     parameter_values.update({"Ambient temperature [K]": p["T_amb_K"]}, check_already_exists=False)
+    if plating:
+        parameter_values.update(PLATING_PARAM_DEFAULTS, check_already_exists=False)
+
+    options = {}
+    if thermal != "isothermal":
+        options["thermal"] = "lumped"
+    if plating:
+        options["lithium plating"] = "irreversible"
 
     def _solve(model):
         sim = pybamm.Simulation(model, parameter_values=parameter_values)
@@ -34,10 +53,14 @@ def run_simulation(
 
     model_used = "DFN" if mode == "dfn" else "SPMe"
     try:
-        sol = _solve(pybamm.lithium_ion.DFN() if mode == "dfn" else pybamm.lithium_ion.SPMe())
+        sol = _solve(
+            pybamm.lithium_ion.DFN(options=options)
+            if mode == "dfn"
+            else pybamm.lithium_ion.SPMe(options=options)
+        )
     except pybamm.SolverError:
         if mode == "dfn" and fallback:
-            sol = _solve(pybamm.lithium_ion.SPMe())
+            sol = _solve(pybamm.lithium_ion.SPMe(options=options))
             model_used = "SPMe(fallback)"
         else:
             raise

@@ -22,7 +22,8 @@ def test_unknown_param_fails_fast():
 def test_thermal_returns_tmax():
     out = run_simulation({}, protocol="4C_charge_45C", mode="spme", thermal="lumped")
     assert "T_max_K" in out
-    assert out["T_max_K"] > 300.0
+    # Real lumped-thermal coupling: the 4C-charge cell must heat above the 45 C ambient.
+    assert out["T_max_K"] > 318.15 + 0.5
 
 def test_plating_returns_anode_potential():
     out = run_simulation({}, protocol="4C_charge_45C", mode="spme", plating=True)
@@ -37,3 +38,30 @@ def test_dfn_fallback_to_spme():
     except pybamm.SolverError:
         pytest.fail("fallback did not engage")
     assert out["model_used"] in ("DFN", "SPMe(fallback)")
+
+
+def test_dfn_fallback_engages(monkeypatch):
+    # Force the DFN solve to fail once; the SPMe rerun must engage and succeed.
+    real_solve = pybamm.Simulation.solve
+    calls = {"n": 0}
+
+    def fake_solve(self, *args, **kwargs):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise pybamm.SolverError("forced failure")
+        return real_solve(self, *args, **kwargs)
+
+    monkeypatch.setattr(pybamm.Simulation, "solve", fake_solve)
+    out = run_simulation({}, protocol="1C_discharge", mode="dfn", fallback=True)
+    assert calls["n"] == 2
+    assert out["model_used"] == "SPMe(fallback)"
+
+
+def test_dfn_no_fallback_reraises(monkeypatch):
+    # With fallback disabled the DFN SolverError must propagate unchanged.
+    def fake_solve(self, *args, **kwargs):
+        raise pybamm.SolverError("forced failure")
+
+    monkeypatch.setattr(pybamm.Simulation, "solve", fake_solve)
+    with pytest.raises(pybamm.SolverError):
+        run_simulation({}, protocol="1C_discharge", mode="dfn", fallback=False)
