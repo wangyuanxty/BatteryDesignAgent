@@ -6,7 +6,15 @@ PROTOCOLS = {
 }
 
 
-def run_simulation(params: dict, protocol: str, base: str = "Chen2020", mode: str = "spme") -> dict:
+def run_simulation(
+    params: dict,
+    protocol: str,
+    base: str = "Chen2020",
+    mode: str = "spme",
+    fallback: bool = True,
+    thermal: str = "lumped",
+    plating: bool = False,
+) -> dict:
     if protocol not in PROTOCOLS:
         raise ValueError(f"unknown protocol '{protocol}'; legal: {sorted(PROTOCOLS)}")
     if mode not in ("spme", "dfn"):
@@ -17,14 +25,36 @@ def run_simulation(params: dict, protocol: str, base: str = "Chen2020", mode: st
     if unknown_params:
         raise ValueError(f"unknown parameter name(s): {unknown_params}")
     parameter_values.update(params)
-    model = pybamm.lithium_ion.SPMe() if mode == "spme" else pybamm.lithium_ion.DFN()
-    sim = pybamm.Simulation(model, parameter_values=parameter_values)
-    sim.solve([0, p["t_end_s"]])
-    sol = sim.solution
-    return {
-        "model_used": "SPMe" if mode == "spme" else "DFN",
+    parameter_values.update({"Ambient temperature [K]": p["T_amb_K"]}, check_already_exists=False)
+
+    def _solve(model):
+        sim = pybamm.Simulation(model, parameter_values=parameter_values)
+        sim.solve([0, p["t_end_s"]])
+        return sim.solution
+
+    model_used = "DFN" if mode == "dfn" else "SPMe"
+    try:
+        sol = _solve(pybamm.lithium_ion.DFN() if mode == "dfn" else pybamm.lithium_ion.SPMe())
+    except pybamm.SolverError:
+        if mode == "dfn" and fallback:
+            sol = _solve(pybamm.lithium_ion.SPMe())
+            model_used = "SPMe(fallback)"
+        else:
+            raise
+
+    out = {
+        "model_used": model_used,
         "time_s": sol["Time [s]"].entries.tolist(),
         "voltage_v": sol["Terminal voltage [V]"].entries.tolist(),
-        "capacity_ah": float(sol["Discharge capacity [A.h]"].entries[-1])
-        if p["kind"] == "discharge" else float(sol["Time [s]"].entries[-1]) * p["C_rate"] / 3600.0,
     }
+    if p["kind"] == "discharge":
+        out["capacity_ah"] = float(sol["Discharge capacity [A.h]"].entries[-1])
+    else:
+        out["capacity_ah"] = float(sol["Time [s]"].entries[-1]) * p["C_rate"] / 3600.0
+    if thermal != "isothermal":
+        out["T_max_K"] = float(sol["Volume-averaged cell temperature [K]"].entries.max())
+    if plating:
+        out["anode_potential_v"] = sol[
+            "Negative electrode surface potential difference at separator interface [V]"
+        ].entries.tolist()
+    return out
