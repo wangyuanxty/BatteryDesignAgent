@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bda"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "pybamm",
+    "numpy",
+    "pyyaml",
+    "rdkit",
+    "ase",
+    "matplotlib",
+]
+
+[project.optional-dependencies]
+ml = ["torch", "mace-torch", "chgnet", "pymatgen"]
+host = ["claude-agent-sdk"]
+dev = ["pytest", "pytest-cov"]
+
+[tool.setuptools.packages.find]
+include = ["bda*"]
+
+[tool.pytest.ini_options]
+markers = ["slow: long-running smoke tests"]
