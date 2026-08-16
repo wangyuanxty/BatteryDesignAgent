@@ -1,8 +1,8 @@
 """Agent SDK 薄启动器：加载虚拟电池工厂协议（SKILL.md）并运行案例。
 
 用法：
-    python host/run.py --config <案例配置 YAML 路径>   # 运行/续跑案例（工作区=该文件所在目录）
-    python host/run.py --smoke-test                  # 连通性冒烟
+    python run.py --config <案例配置 YAML 路径>   # 运行/续跑案例（工作区=该文件所在目录）
+    python run.py --smoke-test                  # 连通性冒烟
 
 --config 直接加载所给路径的 YAML（文件名不限于 config.yaml）；
 工作区为其所在目录，session_id 与 log.jsonl 等产物均落在此目录。
@@ -35,7 +35,7 @@ from dotenv import load_dotenv
 if TYPE_CHECKING:
     from bda.config import CaseConfig
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parent
 SKILL_PATH = REPO_ROOT / ".claude" / "skills" / "virtual-battery-factory" / "SKILL.md"
 SESSION_FILE = "session_id"
 
@@ -202,7 +202,7 @@ async def _smoke() -> str:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="host/run.py",
+        prog="run.py",
         description="虚拟电池工厂 Agent SDK 薄启动器",
     )
     parser.add_argument("--config", help="案例配置 YAML 路径（工作区为其所在目录）")

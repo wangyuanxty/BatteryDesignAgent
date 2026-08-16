@@ -1,4 +1,4 @@
-"""Task 20: Agent SDK thin launcher (host/run.py)."""
+"""Task 20: Agent SDK thin launcher (run.py)."""
 
 import asyncio
 import importlib.util
@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
-RUN_PATH = ROOT / "host" / "run.py"
+RUN_PATH = ROOT / "run.py"
 SKILL_PATH = ROOT / ".claude" / "skills" / "virtual-battery-factory" / "SKILL.md"
 
 

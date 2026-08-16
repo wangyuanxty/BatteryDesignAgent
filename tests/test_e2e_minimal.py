@@ -33,7 +33,7 @@ def test_minimal_case_workspace_artifacts():
     if not report.exists() or not log.exists():
         pytest.skip(
             "e2e workspace missing: run "
-            f"`python host/run.py --config {WORKSPACE / 'config.yaml'}` "
+            f"`python run.py --config {WORKSPACE / 'config.yaml'}` "
             "(~30-60 min, real Agent SDK) or set BDA_E2E_FULL=1"
         )
     lines = log.read_text(encoding="utf-8").splitlines()
@@ -66,7 +66,7 @@ def test_minimal_case_end_to_end(tmp_path):
     case_dir.mkdir()
     shutil.copy(ROOT / ".claude" / "skills" / "virtual-battery-factory" / "assets" / "cases" / "minimal_smoke.yaml", case_dir / "config.yaml")
     r = subprocess.run(
-        [sys.executable, str(ROOT / "host" / "run.py"), "--config", str(case_dir / "config.yaml")],
+        [sys.executable, str(ROOT / "run.py"), "--config", str(case_dir / "config.yaml")],
         capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=2700,
     )
     assert r.returncode == 0, r.stderr[-1000:]
