@@ -6,6 +6,49 @@ def test_invalid_smiles():
     with pytest.raises(ValueError, match="SMILES"):
         orca_endorsement("nope")
 
+def test_multiplicity_for_parity_of_electrons():
+    import bda.simulators.orca_runner as r
+    # H2O: 10 electrons -> even -> singlet for all three charge states would be
+    # wrong for the ions: 9 (cation) and 11 (anion) electrons are odd -> doublet.
+    assert r._multiplicity_for("O", 0) == 1
+    assert r._multiplicity_for("O", 1) == 2
+    assert r._multiplicity_for("O", -1) == 2
+    # CH3 radical: 9 electrons -> doublet even at charge 0.
+    assert r._multiplicity_for("[CH3]", 0) == 2
+
+def test_write_input_embeds_charge_and_mult(tmp_path):
+    import bda.simulators.orca_runner as r
+    r._write_input(tmp_path, "cation", "O", 1, 2, "r2SCAN-3c", 42)
+    text = (tmp_path / "cation.inp").read_text(encoding="utf-8")
+    assert "* xyz 1 2" in text
+
+def test_input_template_requests_geometry_optimization(tmp_path):
+    """Spec decision 11: gas-phase geometry optimization, not a bare single point."""
+    import bda.simulators.orca_runner as r
+    r._write_input(tmp_path, "neutral", "O", 0, 1, "r2SCAN-3c", 42)
+    text = (tmp_path / "neutral.inp").read_text(encoding="utf-8")
+    assert text.splitlines()[0] == "! r2SCAN-3c OPT"
+
+def test_orca_endorsement_uses_spin_consistent_multiplicities(monkeypatch):
+    """The three states written for one molecule must carry (charge, mult) pairs
+    consistent with the electron parity: neutral (0, 1), cation (+1, 2), anion
+    (-1, 2) for water. Testable without the ORCA binary."""
+    import bda.simulators.orca_runner as r
+
+    seen = {}
+
+    def fake_run_and_parse(workdir, name):
+        text = (workdir / f"{name}.inp").read_text(encoding="utf-8")
+        line = next(ln for ln in text.splitlines() if ln.startswith("* xyz"))
+        seen[name] = tuple(int(x) for x in line.split()[2:4])
+        return {"E_hartree": -76.0, "homo_ev": -7.0, "lumo_ev": 1.0}
+
+    monkeypatch.setattr(r.shutil, "which", lambda name: "orca")
+    monkeypatch.setattr(r, "_run_and_parse", fake_run_and_parse)
+    out = r.orca_endorsement("O")
+    assert seen == {"neutral": (0, 1), "cation": (1, 2), "anion": (-1, 2)}
+    assert "ie_ev" in out and "ea_ev" in out
+
 @pytest.mark.slow
 def test_water_endorsement():
     if shutil.which("orca") is None:
