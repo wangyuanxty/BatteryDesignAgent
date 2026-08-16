@@ -20,8 +20,12 @@ import asyncio
 import os
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from dotenv import load_dotenv
+
+if TYPE_CHECKING:
+    from bda.config import CaseConfig
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILL_PATH = REPO_ROOT / "skills" / "virtual-battery-factory" / "SKILL.md"
@@ -63,7 +67,7 @@ def _resolve_session(case_dir: Path) -> str | None:
     return p.read_text(encoding="utf-8").strip() if p.exists() else None
 
 
-def _build_system(case_dir: Path, cfg) -> str:
+def _build_system(case_dir: Path, cfg: "CaseConfig") -> str:
     case_context = (
         f"目标: {cfg.goal}\n"
         f"体系: {cfg.system}\n"
@@ -93,9 +97,9 @@ async def _run(case_dir: Path, resume_session: str | None) -> int:
     final = None
     async for msg in query(prompt=f"开始执行设计任务：{cfg.goal}", options=options):
         final = msg
-    if final.is_error:
-        print(f"error: {final.errors}", file=sys.stderr)
-        print(final.result or "", file=sys.stderr)
+    if final is None or final.is_error:
+        print(f"error: {getattr(final, 'errors', 'no result message')}", file=sys.stderr)
+        print(getattr(final, "result", "") or "", file=sys.stderr)
         return 1
     (case_dir / SESSION_FILE).write_text(final.session_id, encoding="utf-8")
     print(f"session_id: {final.session_id}")
