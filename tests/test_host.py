@@ -12,7 +12,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
 RUN_PATH = ROOT / "host" / "run.py"
-SKILL_PATH = ROOT / "skills" / "virtual-battery-factory" / "SKILL.md"
+SKILL_PATH = ROOT / ".claude" / "skills" / "virtual-battery-factory" / "SKILL.md"
 
 
 def _has_api_route() -> bool:

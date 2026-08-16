@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     from bda.config import CaseConfig
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SKILL_PATH = REPO_ROOT / "skills" / "virtual-battery-factory" / "SKILL.md"
+SKILL_PATH = REPO_ROOT / ".claude" / "skills" / "virtual-battery-factory" / "SKILL.md"
 SESSION_FILE = "session_id"
 
 DEFAULT_BASE_URL = "https://api.deepseek.com/anthropic"

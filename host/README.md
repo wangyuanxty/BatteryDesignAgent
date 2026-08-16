@@ -1,6 +1,6 @@
 # host — Agent SDK 薄启动器
 
-`host/run.py` 是虚拟电池工厂协议的执行宿主：加载 `skills/virtual-battery-factory/SKILL.md`
+`host/run.py` 是虚拟电池工厂协议的执行宿主：加载 `.claude/skills/virtual-battery-factory/SKILL.md`
 全文作为系统提示，注入案例上下文，经 Agent SDK 运行设计闭环。宿主本身**不注册任何自定义工具**，
 协议要求的仿真全部通过内置 Bash 工具调用 `python -m bda` CLI 完成。
 
