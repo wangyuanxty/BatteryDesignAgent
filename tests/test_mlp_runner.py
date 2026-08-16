@@ -12,3 +12,10 @@ def test_water_relaxation():
     out = relax_structure("O", model="mace")
     assert "energy_ev" in out
     assert out["converged"] is True
+
+
+@pytest.mark.slow
+def test_water_relaxation_chgnet():
+    out = relax_structure("O", model="chgnet")
+    assert "energy_ev" in out
+    assert out["converged"] is True

@@ -24,9 +24,13 @@ def relax_structure(smiles: str, model: str = "mace") -> dict:
 
         calc = mace_mp(model="medium", device="cpu")
     else:
-        from chgnet.model.model import CHGNet
+        # CHGNet 需周期性晶格（pymatgen 结构转换要求非奇异晶胞）：置于 20 Å 真空盒
+        atoms.cell = [20.0, 20.0, 20.0]
+        atoms.pbc = True
+        atoms.center()
+        from chgnet.model.dynamics import CHGNetCalculator
 
-        calc = CHGNet.load()
+        calc = CHGNetCalculator()
     atoms.calc = calc
     from ase.optimize import BFGS
 

@@ -2,7 +2,57 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
+
 from bda.candidates import validate_smiles
+
+
+def _embed_mol_xyz(smiles: str, workdir: Path) -> None:
+    """RDKit 构象嵌入，写 workdir/mol.xyz（含氢，MMFF 预优化）。"""
+    from rdkit import Chem
+    from rdkit.Chem import AllChem
+
+    mol = Chem.AddHs(Chem.MolFromSmiles(smiles))
+    if AllChem.EmbedMolecule(mol, randomSeed=42) != 0:
+        raise RuntimeError(f"failed to embed 3D structure for {smiles}")
+    AllChem.MMFFOptimizeMolecule(mol)
+    conf = mol.GetConformer()
+    lines = [str(mol.GetNumAtoms()), ""]
+    for atom in mol.GetAtoms():
+        pos = conf.GetAtomPosition(atom.GetIdx())
+        lines.append(f"{atom.GetSymbol()} {pos.x:.6f} {pos.y:.6f} {pos.z:.6f}")
+    (workdir / "mol.xyz").write_text("\n".join(lines), encoding="utf-8")
+
+
+def _parse_output_text(text: str) -> tuple[float | None, float | None, float | None]:
+    """从 xtb 输出文本解析 HOMO/LUMO 与总能量。
+
+    兼容两种格式：
+    - xtb >= 6.5：输出全部走 stdout，轨道行带 `(HOMO)`/`(LUMO)` 后缀（能量为前一列）；
+    - 旧版 xtb.out：`HOMO/LUMO ... eV` 合并行 + `TOTAL ENERGY ... Eh` 行。
+    """
+    homo: float | None = None
+    lumo: float | None = None
+    total_e: float | None = None
+    for line in text.splitlines():
+        if "TOTAL ENERGY" in line:
+            parts = line.split()
+            if len(parts) >= 4:
+                total_e = float(parts[-3])
+        if "(HOMO)" in line and homo is None:
+            parts = line.split()
+            idx = parts.index("(HOMO)")
+            if idx >= 1:
+                homo = float(parts[idx - 1])
+        if "(LUMO)" in line and lumo is None:
+            parts = line.split()
+            idx = parts.index("(LUMO)")
+            if idx >= 1:
+                lumo = float(parts[idx - 1])
+        if "HOMO/LUMO" in line:
+            parts = line.replace("HOMO/LUMO", "").replace("eV", "").split()
+            if len(parts) >= 2:
+                homo, lumo = float(parts[0]), float(parts[1])
+    return homo, lumo, total_e
 
 
 def xtb_single_point(smiles: str) -> dict:
@@ -13,36 +63,20 @@ def xtb_single_point(smiles: str) -> dict:
             "xtb binary not found; install from https://github.com/grimme-lab/xtb/releases "
             "and put xtb.exe on PATH"
         )
-    from rdkit import Chem
-    from rdkit.Chem import AllChem
-    mol = Chem.AddHs(Chem.MolFromSmiles(smiles))
-    if AllChem.EmbedMolecule(mol, randomSeed=42) != 0:
-        raise RuntimeError(f"failed to embed 3D structure for {smiles}")
-    AllChem.MMFFOptimizeMolecule(mol)
     with tempfile.TemporaryDirectory() as td:
         workdir = Path(td)
-        conf = mol.GetConformer()
-        lines = [str(mol.GetNumAtoms()), ""]
-        for atom in mol.GetAtoms():
-            pos = conf.GetAtomPosition(atom.GetIdx())
-            lines.append(f"{atom.GetSymbol()} {pos.x:.6f} {pos.y:.6f} {pos.z:.6f}")
-        (workdir / "mol.xyz").write_text("\n".join(lines), encoding="utf-8")
+        _embed_mol_xyz(smiles, workdir)
         proc = subprocess.run(
             ["xtb", "mol.xyz", "--gfn", "2"],
             cwd=workdir, capture_output=True, text=True, encoding="utf-8",
         )
         if proc.returncode != 0:
             raise RuntimeError(f"xtb failed: {proc.stderr[-500:]}")
-        out_text = (workdir / "xtb.out").read_text(encoding="utf-8")
-    homo, lumo = None, None
-    total_e = None
-    for line in out_text.splitlines():
-        if "HOMO/LUMO" in line:
-            parts = line.replace("HOMO/LUMO", "").replace("eV", "").split()
-            if len(parts) >= 2:
-                homo, lumo = float(parts[0]), float(parts[1])
-        if "TOTAL ENERGY" in line:
-            total_e = float(line.split()[-3])
+        out_text = proc.stdout or ""
+        # 旧版 xtb 在 stdout 重定向时改写 xtb.out：stdout 无内容则回退读文件
+        if not out_text and (workdir / "xtb.out").exists():
+            out_text = (workdir / "xtb.out").read_text(encoding="utf-8")
+    homo, lumo, total_e = _parse_output_text(out_text)
     if homo is None or lumo is None:
         raise RuntimeError("failed to parse HOMO/LUMO from xtb output")
     if total_e is None:
