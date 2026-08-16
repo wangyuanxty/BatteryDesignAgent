@@ -6,6 +6,22 @@ from bda.candidates import validate_smiles
 
 INPUT_TEMPLATE = "! {functional}\n%pal nprocs 4 end\n* xyz {charge} {mult}\n{xyz}\n*\n"
 
+HARTREE_TO_EV = 27.2114
+
+
+def _orbital_energy_ev(tokens: list) -> float:
+    """Convert one ORCA E(HOMO)/E(LUMO) summary line to eV, honoring the printed unit."""
+    unit = tokens[-1] if tokens else ""
+    if unit not in ("a.u.", "Eh", "eV"):
+        raise RuntimeError("cannot determine orbital energy unit in ORCA output")
+    try:
+        value = float(tokens[-2])
+    except (IndexError, ValueError):
+        raise RuntimeError("cannot determine orbital energy unit in ORCA output") from None
+    if unit == "eV":
+        return value
+    return value * HARTREE_TO_EV
+
 
 def _write_input(
     workdir: Path, name: str, smiles: str, charge: int, mult: int, functional: str, seed: int
@@ -37,9 +53,9 @@ def _run_and_parse(workdir: Path, name: str) -> dict:
         if "FINAL SINGLE POINT ENERGY" in line:
             E = float(line.split()[-1])
         if "E(HOMO)" in line:
-            homo = float(line.split()[-2])
+            homo = _orbital_energy_ev(line.split())
         if "E(LUMO)" in line:
-            lumo = float(line.split()[-2])
+            lumo = _orbital_energy_ev(line.split())
     if E is None or homo is None or lumo is None:
         raise RuntimeError("failed to parse ORCA output")
     return {"E_hartree": E, "homo_ev": homo, "lumo_ev": lumo}
@@ -65,8 +81,8 @@ def orca_endorsement(smiles: str, charge: int = 0, mult: int = 1, functional: st
                     "E_hartree": neutral["E_hartree"],
                     "homo_ev": neutral["homo_ev"],
                     "lumo_ev": neutral["lumo_ev"],
-                    "ie_ev": (cation["E_hartree"] - neutral["E_hartree"]) * 27.2114,
-                    "ea_ev": (neutral["E_hartree"] - anion["E_hartree"]) * 27.2114,
+                    "ie_ev": (cation["E_hartree"] - neutral["E_hartree"]) * HARTREE_TO_EV,
+                    "ea_ev": (neutral["E_hartree"] - anion["E_hartree"]) * HARTREE_TO_EV,
                 }
             except RuntimeError as e:
                 last_err = e
