@@ -1,5 +1,5 @@
-# 注意：依赖列表与 skill 内 scripts/pyproject.toml 保持同步（两处同改）；
-# 本文件服务仓库级开发/测试，skill 内那份服务 skill 文件夹独立分发
+# bda 仿真库——skill 自包含安装定义（供 skill 文件夹独立分发时使用）
+# 依赖列表须与仓库根 pyproject.toml 保持同步（两处同改）
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
@@ -22,12 +22,6 @@ ml = ["torch", "mace-torch", "chgnet", "pymatgen"]
 host = ["claude-agent-sdk", "python-dotenv"]
 dev = ["pytest", "pytest-cov"]
 
-[tool.setuptools]
-package-dir = {"" = ".claude/skills/virtual-battery-factory/scripts"}
-
 [tool.setuptools.packages.find]
-where = [".claude/skills/virtual-battery-factory/scripts"]
+where = ["."]
 include = ["bda*"]
-
-[tool.pytest.ini_options]
-markers = ["slow: long-running smoke tests"]
