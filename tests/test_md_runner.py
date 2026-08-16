@@ -87,6 +87,12 @@ def test_mace_md_requires_at_least_one_molecule():
         md_runner.run_diffusion_md({"molecules": {}}, engine="mace")
 
 
+def test_mace_md_nonpositive_t_ns_raises():
+    with pytest.raises(ValueError, match="t_ns"):
+        md_runner.run_diffusion_md({"molecules": {"EC": 2, "Li": 1}},
+                                   engine="mace", t_ns=0.0)
+
+
 @pytest.mark.slow
 def test_short_trajectory():
     if shutil.which("gmx") is None:

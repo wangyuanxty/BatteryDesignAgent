@@ -484,6 +484,8 @@ def _run_mace_md(box: dict, t_ns: float) -> dict:
         raise RuntimeError(
             "mace engine requires mace-torch; install via `pip install mace-torch`"
         ) from e
+    if t_ns <= 0.0:
+        raise ValueError("t_ns must be positive")
     steps = int(t_ns * 1e6)  # 1 fs/step
     with tempfile.TemporaryDirectory() as td:
         workdir = Path(td)
