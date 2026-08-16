@@ -185,7 +185,7 @@ bda run-orca --in IN --out OUT
 
 - 输入 `--in`：`{"candidates": [{"smiles": "SMILES"}]}`
 - 输出：`{"candidates": [{"smiles": "SMILES", "endorsement": {"E_hartree": f, "homo_ev": f, "lumo_ev": f, "ie_ev": f, "ea_ev": f}}]}` —— ie_ev/ea_ev 为垂直电离能/电子亲和能（电压窗口代理）
-- 每个候选跑中性/阳离子/阴离子三次单点（r2SCAN-3c），每分子最多重试 3 次；CPU 慢（每分子约 2~3 小时），只在收尾执行，禁止在漏斗内使用
+- 每个候选跑中性/阳离子/阴离子三次气相几何优化（r2SCAN-3c + OPT，优化后自动单点），自旋多重度按各电荷态电子数奇偶推导（偶→单重态、奇→二重态）；每分子最多重试 3 次；CPU 慢（每分子约 2~3 小时），只在收尾执行，禁止在漏斗内使用
 - 报错：
   - `ORCA binary not found; download academic Windows build from the ORCA forum` → 安装 ORCA 并加入 PATH
   - `ORCA failed after 3 attempts for <smiles> (DFT not converged): ...` → 如实记录"该候选 DFT 未收敛"，不得伪造数值
