@@ -7,3 +7,5 @@ runs/
 .superpowers/
 .pytest_cache/
 .coverage
+.claude/settings.json
+.vscode/
