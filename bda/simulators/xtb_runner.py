@@ -5,6 +5,8 @@ from pathlib import Path
 
 from bda.candidates import validate_smiles
 
+HARTREE_TO_EV = 27.2114
+
 
 def _embed_mol_xyz(smiles: str, workdir: Path) -> None:
     """RDKit 构象嵌入，写 workdir/mol.xyz（含氢，MMFF 预优化）。"""
@@ -81,4 +83,6 @@ def xtb_single_point(smiles: str) -> dict:
         raise RuntimeError("failed to parse HOMO/LUMO from xtb output")
     if total_e is None:
         raise RuntimeError("failed to parse total energy from xtb output")
-    return {"homo_ev": homo, "lumo_ev": lumo, "total_energy_ev": total_e}
+    # _parse_output_text returns the TOTAL ENERGY in Eh (as printed by xtb);
+    # the exported key is named *_ev, so convert here.
+    return {"homo_ev": homo, "lumo_ev": lumo, "total_energy_ev": total_e * HARTREE_TO_EV}

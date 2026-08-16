@@ -59,7 +59,8 @@ def test_single_point_stdout_only(monkeypatch, tmp_path):
     out = xtb_single_point("O")
     assert out["homo_ev"] == pytest.approx(-12.1773)
     assert out["lumo_ev"] == pytest.approx(2.4727)
-    assert out["total_energy_ev"] == pytest.approx(-5.070369670927)
+    # TOTAL ENERGY is printed in Eh; total_energy_ev must be converted to eV.
+    assert out["total_energy_ev"] == pytest.approx(-5.070369670927 * 27.2114)
 
 
 @pytest.mark.slow
