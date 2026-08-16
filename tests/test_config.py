@@ -25,6 +25,20 @@ def test_rejects_missing_goal(tmp_path):
     with pytest.raises(ValueError, match="goal"):
         load_case_config(str(p))
 
+def test_rejects_missing_system(tmp_path):
+    p = tmp_path / "bad.yaml"
+    p.write_text("goal: g\n", encoding="utf-8")
+    import pytest
+    with pytest.raises(ValueError, match="system"):
+        load_case_config(str(p))
+
+def test_rejects_zero_max_rounds(tmp_path):
+    p = tmp_path / "bad.yaml"
+    p.write_text("goal: g\nsystem: s\nmax_rounds: 0\n", encoding="utf-8")
+    import pytest
+    with pytest.raises(ValueError, match="max_rounds"):
+        load_case_config(str(p))
+
 def test_loads_real_compute_flag(tmp_path):
     p_true = tmp_path / "true.yaml"
     p_true.write_text("goal: g\nsystem: s\nreal_compute: true\n", encoding="utf-8")
