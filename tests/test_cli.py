@@ -213,6 +213,17 @@ def test_run_orca_handler_in_process_with_cache(tmp_path, monkeypatch):
     assert data["candidates"][0]["endorsement"]["ie_ev"] == 12.0
 
 
+def test_run_orca_invalid_smiles_returns_1(capsys, tmp_path):
+    """Invalid SMILES must fail with the documented bda error (exit 1), not an
+    rdkit traceback, even though the cache key derivation parses the molecule."""
+    in_file = tmp_path / "in.json"
+    in_file.write_text(json.dumps({"candidates": [{"smiles": "nope"}]}), encoding="utf-8")
+    out = tmp_path / "o.json"
+    rc = main(["run-orca", "--in", str(in_file), "--out", str(out)])
+    assert rc == 1
+    assert "SMILES" in capsys.readouterr().err
+
+
 def test_run_md_handler_in_process_with_cache_and_engine(tmp_path, monkeypatch):
     import bda.simulators.md_runner as md
 
