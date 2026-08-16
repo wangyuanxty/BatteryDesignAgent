@@ -21,6 +21,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
    - 写 `propose` 与 `funnel` 日志条目
    - `consensus` 返回 `disputed` 的候选：不得淘汰即止，须推理改进（换取代基/生成变体）或明确给出淘汰理由后换新候选
 2. **参数桥梁**：对通过候选执行 `bridge`，产出 PyBaMM 参数更新（props 数值来源写入日志）
+   - props 数值来源规则：种子池候选用文献值（在日志中标注引用来源）；自由生成候选用领域估计值（标注 `estimate`）；来源必须写入日志；估计值不得冒充仿真输出——收尾时若该候选进入 Top-N，其 D/σ 由真 MD/文献背书复核
 3. **阶段2 电芯设计**：`run-pyamm --protocol 1C_discharge --mode spme`，随后按需 `--mode dfn`
 4. **阶段3 安全评估**：`run-pyamm --protocol 4C_charge_45C --thermal lumped --plating`；析锂判定以负极电位 < 0 V 为准
 5. **评估**：对照案例配置解析出的达标标准（已写入 log.jsonl 第 0 条）判断达标/不达标；写 `evaluate` 日志条目
