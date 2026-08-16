@@ -18,9 +18,10 @@ pip install -e ".[host]"
 .venv\Scripts\python.exe host/run.py --config cases/fast_charge_v1.yaml
 ```
 
-`--config` 指向案例 YAML；其**所在目录即工作区**（`config.yaml`、`log.jsonl`、`session_id`、
-`report.html` 均落在此目录）。运行前会自动创建 CaseWorkspace 子目录
-（`candidates/bridge/cell/validation/csv`）。
+`--config` 指向案例 YAML（**按所给路径直接加载，文件名不限于 config.yaml**，如
+`cases/fast_charge_v1.yaml`）；其**所在目录即工作区**（`log.jsonl`、`session_id`、
+`report.html` 与 CaseWorkspace 子目录 `candidates/bridge/cell/validation/csv` 均落在此目录）。
+案例 YAML 本身不被复制或改名。
 
 冒烟（连通性自检，单次 query）：
 

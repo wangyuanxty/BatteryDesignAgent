@@ -1,8 +1,11 @@
 """Agent SDK 薄启动器：加载虚拟电池工厂协议（SKILL.md）并运行案例。
 
 用法：
-    python host/run.py --config <case_dir>/config.yaml   # 运行/续跑案例
-    python host/run.py --smoke-test                      # 连通性冒烟
+    python host/run.py --config <案例配置 YAML 路径>   # 运行/续跑案例（工作区=该文件所在目录）
+    python host/run.py --smoke-test                  # 连通性冒烟
+
+--config 直接加载所给路径的 YAML（文件名不限于 config.yaml）；
+工作区为其所在目录，session_id 与 log.jsonl 等产物均落在此目录。
 
 环境引导（_bootstrap_env，密钥永不打印/落盘）：
     - ANTHROPIC_BASE_URL 缺省指向 DeepSeek Anthropic 兼容端点
@@ -67,26 +70,28 @@ def _resolve_session(case_dir: Path) -> str | None:
     return p.read_text(encoding="utf-8").strip() if p.exists() else None
 
 
-def _build_system(case_dir: Path, cfg: "CaseConfig") -> str:
+def _build_system(config_path: Path, cfg: "CaseConfig") -> str:
+    case_dir = config_path.parent
     case_context = (
         f"目标: {cfg.goal}\n"
         f"体系: {cfg.system}\n"
         f"预算: {cfg.max_rounds} 轮\n"
         f"参数集: {cfg.base_params}\n"
-        f"配置: {case_dir / 'config.yaml'}\n"
+        f"配置: {config_path}\n"
         f"工作区: {case_dir}"
     )
     return SKILL_PATH.read_text(encoding="utf-8") + SYSTEM_EXTRA.format(case_context=case_context)
 
 
-async def _run(case_dir: Path, resume_session: str | None) -> int:
+async def _run(config_path: Path, resume_session: str | None) -> int:
     from claude_agent_sdk import ClaudeAgentOptions, query
     from bda.config import load_case_config
     from bda.store import CaseWorkspace
 
+    case_dir = config_path.parent
     CaseWorkspace(case_dir.name, str(case_dir.parent))
-    cfg = load_case_config(str(case_dir / "config.yaml"))
-    system = _build_system(case_dir, cfg)
+    cfg = load_case_config(str(config_path))
+    system = _build_system(config_path, cfg)
     options = ClaudeAgentOptions(
         system_prompt=system,
         permission_mode="acceptEdits",
@@ -119,6 +124,8 @@ async def _smoke() -> str:
     final = None
     async for msg in query(prompt="回复 smoke ok", options=options):
         final = msg
+    if final is None:
+        raise RuntimeError("smoke query returned no result message")
     if final.is_error:
         raise RuntimeError(f"smoke query failed: {final.errors}")
     return final.result or ""
@@ -138,11 +145,12 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if not args.config:
         parser.error("--config is required (or use --smoke-test)")
-    case_dir = Path(args.config).resolve().parent
-    if not (case_dir / "config.yaml").exists():
-        print(f"config not found: {case_dir / 'config.yaml'}", file=sys.stderr)
+    config_path = Path(args.config).resolve()
+    if not config_path.is_file():
+        print(f"config not found: {config_path}", file=sys.stderr)
         return 1
-    return asyncio.run(_run(case_dir, _resolve_session(case_dir)))
+    case_dir = config_path.parent
+    return asyncio.run(_run(config_path, _resolve_session(case_dir)))
 
 
 if __name__ == "__main__":

@@ -1,9 +1,11 @@
 """Task 20: Agent SDK thin launcher (host/run.py)."""
 
+import asyncio
 import importlib.util
 import os
 import subprocess
 import sys
+import types
 from pathlib import Path
 
 import pytest
@@ -43,10 +45,12 @@ def test_host_runs_minimal_query():
         [sys.executable, str(RUN_PATH), "--smoke-test"],
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         timeout=300,
     )
     assert r.returncode == 0, r.stderr
-    assert "smoke" in r.stdout.lower()
+    assert "smoke" in (r.stdout or "").lower()
 
 
 def test_resolve_session_none_when_missing(run_mod, tmp_path):
@@ -61,8 +65,9 @@ def test_resolve_session_reads_id(run_mod, tmp_path):
 def test_build_system_injects_skill_and_case_context(run_mod, tmp_path):
     from bda.config import CaseConfig
 
+    config_path = tmp_path / "fast_charge_v1.yaml"
     cfg = CaseConfig(goal="设计快充添加剂", system="EC/EMC+LiPF6", max_rounds=5)
-    system = run_mod._build_system(tmp_path, cfg)
+    system = run_mod._build_system(config_path, cfg)
     # Full SKILL.md text is the protocol source of truth.
     assert "虚拟电池工厂协议" in system
     assert "goal" in system  # SKILL.md references the config schema
@@ -70,9 +75,54 @@ def test_build_system_injects_skill_and_case_context(run_mod, tmp_path):
     assert cfg.goal in system
     assert cfg.system in system
     assert "5 轮" in system
-    assert str(tmp_path) in system
+    assert str(config_path) in system  # actual config path, not a hardcoded name
+    assert str(tmp_path) in system  # workspace = config's parent dir
     # Decision-log instruction appended.
     assert "log.jsonl" in system
+
+
+class _DummyOptions:
+    def __init__(self, **kwargs):
+        pass
+
+
+def _fake_sdk(query_gen):
+    return types.SimpleNamespace(query=query_gen, ClaudeAgentOptions=_DummyOptions)
+
+
+def test_smoke_raises_on_empty_stream(run_mod, monkeypatch):
+    """Empty SDK stream (disconnect/zero messages) must raise, not AttributeError."""
+
+    async def empty_query(**kwargs):
+        if False:  # pragma: no cover - never yields
+            yield None
+
+    monkeypatch.setitem(sys.modules, "claude_agent_sdk", _fake_sdk(empty_query))
+    with pytest.raises(RuntimeError, match="no result message"):
+        asyncio.run(run_mod._smoke())
+
+
+def test_run_honors_config_path(run_mod, monkeypatch, tmp_path):
+    """--config loads the passed file (any name), not a hardcoded config.yaml."""
+    config_path = tmp_path / "custom_case.yaml"
+    config_path.write_text(
+        "goal: 设计快充添加剂\nsystem: EC/EMC+LiPF6\nmax_rounds: 5\n",
+        encoding="utf-8",
+    )
+
+    class _FakeResult:
+        is_error = False
+        session_id = "fake-session"
+        result = "done"
+
+    async def fake_query(**kwargs):
+        yield _FakeResult()
+
+    monkeypatch.setitem(sys.modules, "claude_agent_sdk", _fake_sdk(fake_query))
+    rc = asyncio.run(run_mod._run(config_path, None))
+    assert rc == 0
+    assert (tmp_path / "session_id").read_text(encoding="utf-8") == "fake-session"
+    assert (tmp_path / "candidates").is_dir()  # CaseWorkspace created in config dir
 
 
 def test_bootstrap_env_uses_deepseek_defaults(run_mod, monkeypatch):
