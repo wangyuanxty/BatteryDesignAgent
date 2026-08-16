@@ -11,7 +11,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 ### 准备（每案例一次）
 
-1. 读取案例工作区 `runs/<case_id>/config.yaml`（字段：`goal` 设计目标、`system` 材料体系、`max_rounds` 迭代预算、`seed_pool` 种子池、`ablations` 消融开关、`base_params` 参数集）。
+1. 读取案例配置（字段：`goal` 设计目标、`system` 材料体系、`max_rounds` 迭代预算、`seed_pool` 种子池、`ablations` 消融开关、`base_params` 参数集、`real_compute` 真计算开关）。配置与工作区路径以系统提示注入的 `配置:` / `工作区:` 字段为准（Agent SDK 启动器注入，工作区=配置所在目录；`runs/<case_id>/` 仅为无注入时的默认布局）。
 2. 若 `log.jsonl` 已存在（续跑/resume）：从最后一条记录恢复状态，不重复执行已完成步骤（以产物文件存在为准）。
 3. 从 `goal` 自然语言解析达标标准（指标名、阈值、单位），写入 `log.jsonl` 第 0 条后直接开跑。
 
@@ -27,6 +27,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 5. **评估**：对照案例配置解析出的达标标准（已写入 log.jsonl 第 0 条）判断达标/不达标；写 `evaluate` 日志条目
    - 不达标：诊断原因并**回退到对应阶段**——材料问题（电位窗/稳定性）回阶段1，结构参数问题回阶段2
 6. **收尾（唯一真计算时刻）**：Top-3 候选执行 `run-orca` 背书；Top-1 执行 `run-md` 背书；最后 `render` 生成报告；写 `endorse` 与 `final` 日志条目
+   - 若配置 `real_compute: false`：跳过 `run-orca`/`run-md` 真计算背书，`endorse` 条目如实记录跳过（如 `{"action": "endorse", "skipped": true, "reason": "real_compute=false"}`），随后直接 `render`
 
 ### log.jsonl 条目 schema（每轮必须按此写入）
 
@@ -51,6 +52,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 - 回退路由（不达标时）：材料问题（电位窗不满足/HOMO-LUMO 不稳定/添加剂无效果）→ 回阶段1（换取代基、生成变体或换新候选）；结构/参数问题（容量不足、温升过高但材料指标可接受）→ 回阶段2（调整电芯参数或 bridge props 后重跑）；每轮回退原因写入 `evaluate` 条目的 verdict 或日志
 - 预算：轮数上限 = `max_rounds`；预算耗尽仍未达标 → 如实写 `final` 条目（verdict 不达标、recommendation 说明），不得虚构达标
 - 消融开关按 `config.yaml` 的 `ablations` 执行：`guardrails: false` → 忽略本协议第三节；`consistency: false` → 跳过 `consensus`；`bridge: false` → 跳过参数桥梁用默认参数
+- `real_compute: false` → 收尾跳过 `run-orca`/`run-md` 真计算背书（`endorse` 条目如实记录跳过原因，不得虚构 DFT/MD 数值）
 
 ## 三、禁止事项与反模式（铁律）
 
@@ -70,7 +72,8 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 ### 通用约定
 
-- 调用形式（PowerShell，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`；全部 9 个子命令见 `-m bda --help`
+- 调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`；全部 9 个子命令见 `-m bda --help`
+- **必须用 Bash 工具执行仿真与 render 命令**：本环境 PowerShell 工具受 guardrail 限制（`$()` 子表达式、`Set-Location`、`&` 多操作等一律拦截且无法批准），若你只有 PowerShell 工具可用，说明会话工具白名单异常（续跑轮换了 session 即应恢复），先用 Bash 重试
 - JSON 即契约：所有输入/输出均为 UTF-8 JSON 文件，`--out` 指定输出路径；每一步可单独重跑
 - 报错约定：参数/校验类失败打印 `bda error: <原因>` 到 stderr、退出码 1；输入文件缺失或 JSON 键缺失会以 Python traceback 终止——读输出最后几行定位原因，按提示修正后重跑
 - 环境依赖：`run-xtb` 需 xtb 二进制在 PATH；`run-orca` 需 orca 在 PATH；`run-md` 需 gmx 在 PATH 且 `bda/simulators/data/opls/` 有对应 .itp 模板

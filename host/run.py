@@ -14,14 +14,19 @@
       DEEPSEEK_API_KEY 作为 ANTHROPIC_AUTH_TOKEN
     - ANTHROPIC_MODEL 缺省 deepseek-v4-pro
 
-会话恢复：session id 存于工作区（--config 所在目录）的 session_id 文件，
-重跑同命令自动 resume。
+会话恢复：session id 开跑前即写入工作区（--config 所在目录）的 session_id
+文件；首跑以 session_id= 传给 SDK 固定 id。续跑时轮换为新 session id 并
+改用"从断点恢复、不得重复已完成步骤"提示词——实测 --resume/--fork-session
+均丢弃 --allowedTools（Bash 工具丢失），--session-id 对已存在 id 报
+already in use；断点状态以工作区 log.jsonl 与产物文件为准。
 """
 
 import argparse
 import asyncio
 import os
+import shutil
 import sys
+import uuid
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -49,6 +54,7 @@ def _bootstrap_env() -> None:
     """确保 ANTHROPIC_* 环境变量就绪；密钥只在进程环境内传递。"""
     os.environ.setdefault("ANTHROPIC_BASE_URL", DEFAULT_BASE_URL)
     os.environ.setdefault("ANTHROPIC_MODEL", DEFAULT_MODEL)
+    _bootstrap_git_bash()
     if os.environ.get("ANTHROPIC_AUTH_TOKEN") or os.environ.get("ANTHROPIC_API_KEY"):
         return
     for env_file in (REPO_ROOT / ".env", Path.cwd() / ".env"):
@@ -65,9 +71,57 @@ def _bootstrap_env() -> None:
     )
 
 
+def _bootstrap_git_bash() -> None:
+    """Windows：设置 CLAUDE_CODE_GIT_BASH_PATH，保证 SDK 会话有 Bash 工具。
+
+    回归依据（e2e 实测，CLI 2.1.233）：SDK 子进程若找不到 Git Bash，
+    BashTool 不可用（"Git Bash not found; BashTool will be unavailable"），
+    会话只剩受限 PowerShell 工具，仿真与 render 命令被 guardrail 拦截
+    且无批准通道。显式设置该环境变量后 Bash 工具恢复可用。
+    """
+    if sys.platform != "win32" or os.environ.get("CLAUDE_CODE_GIT_BASH_PATH"):
+        return
+    candidates = [
+        r"C:\Program Files\Git\bin\bash.exe",
+        r"C:\Program Files (x86)\Git\bin\bash.exe",
+    ]
+    git = shutil.which("git")
+    if git:
+        git_dir = Path(git).resolve().parent
+        candidates.append(str(git_dir / "bash.exe"))
+        candidates.append(str(git_dir.parent.parent / "bin" / "bash.exe"))
+    for candidate in candidates:
+        if Path(candidate).is_file():
+            os.environ["CLAUDE_CODE_GIT_BASH_PATH"] = candidate
+            return
+
+
 def _resolve_session(case_dir: Path) -> str | None:
     p = case_dir / SESSION_FILE
     return p.read_text(encoding="utf-8").strip() if p.exists() else None
+
+
+def _ensure_session_id(case_dir: Path) -> str:
+    """首跑前持久化 session id：中断后重跑同命令可续跑同一案例。"""
+    existing = _resolve_session(case_dir)
+    if existing:
+        return existing
+    sid = str(uuid.uuid4())
+    (case_dir / SESSION_FILE).write_text(sid, encoding="utf-8")
+    return sid
+
+
+def _rotate_session_id(case_dir: Path) -> str:
+    """续跑时轮换 session id：以新会话 + 断点恢复提示词继续。
+
+    实测（CLI 2.1.233）：--resume / --fork-session 均丢弃 --allowedTools
+    （Bash 工具丢失，仅剩受限 PowerShell，render 等 CLI 命令无法执行），
+    --session-id 对已存在的 id 直接报 "already in use"。因此续跑唯一可靠
+    路径 = 新会话；断点状态以工作区产物（log.jsonl）为准（SKILL.md 准备节）。
+    """
+    sid = str(uuid.uuid4())
+    (case_dir / SESSION_FILE).write_text(sid, encoding="utf-8")
+    return sid
 
 
 def _build_system(config_path: Path, cfg: "CaseConfig") -> str:
@@ -92,15 +146,29 @@ async def _run(config_path: Path, resume_session: str | None) -> int:
     CaseWorkspace(case_dir.name, str(case_dir.parent))
     cfg = load_case_config(str(config_path))
     system = _build_system(config_path, cfg)
+    resuming = resume_session is not None
+    if resuming:
+        # 续跑 = 新会话（轮换 session id，工具白名单完整）+ 断点恢复提示词；
+        # 详见 _rotate_session_id 的回归依据。
+        session_id = _rotate_session_id(case_dir)
+    else:
+        # 首跑：预生成并持久化 session id（--session-id 固定 id）。
+        session_id = _ensure_session_id(case_dir)
     options = ClaudeAgentOptions(
         system_prompt=system,
         permission_mode="acceptEdits",
         allowed_tools=ALLOWED_TOOLS,
-        resume=resume_session,
+        session_id=session_id,
         cwd=str(REPO_ROOT),
     )
+    prompt = (
+        "继续执行设计任务（续跑）：先检查工作区 log.jsonl 与产物文件，"
+        "从断点恢复，不得重复已完成步骤。"
+        if resuming
+        else f"开始执行设计任务：{cfg.goal}"
+    )
     final = None
-    async for msg in query(prompt=f"开始执行设计任务：{cfg.goal}", options=options):
+    async for msg in query(prompt=prompt, options=options):
         final = msg
     if final is None or final.is_error:
         print(f"error: {getattr(final, 'errors', 'no result message')}", file=sys.stderr)
