@@ -8,6 +8,8 @@ INPUT_TEMPLATE = "! {functional} OPT\n%pal nprocs 4 end\n* xyz {charge} {mult}\n
 
 HARTREE_TO_EV = 27.2114
 
+DEFAULT_FUNCTIONAL = "r2SCAN-3c"
+
 
 def _multiplicity_for(smiles: str, charge: int) -> int:
     """Spin multiplicity consistent with the electron count of the charge state.
@@ -75,7 +77,7 @@ def _run_and_parse(workdir: Path, name: str) -> dict:
     return {"E_hartree": E, "homo_ev": homo, "lumo_ev": lumo}
 
 
-def orca_endorsement(smiles: str, charge: int = 0, functional: str = "r2SCAN-3c") -> dict:
+def orca_endorsement(smiles: str, charge: int = 0, functional: str = DEFAULT_FUNCTIONAL) -> dict:
     if not validate_smiles(smiles):
         raise ValueError(f"invalid SMILES: {smiles!r}")
     if shutil.which("orca") is None:

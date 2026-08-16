@@ -75,6 +75,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 - 调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`；全部 9 个子命令见 `-m bda --help`
 - **必须用 Bash 工具执行仿真与 render 命令**：本环境 PowerShell 工具受 guardrail 限制（`$()` 子表达式、`Set-Location`、`&` 多操作等一律拦截且无法批准），若你只有 PowerShell 工具可用，说明会话工具白名单异常（续跑轮换了 session 即应恢复），先用 Bash 重试
 - JSON 即契约：所有输入/输出均为 UTF-8 JSON 文件，`--out` 指定输出路径；每一步可单独重跑
+- 同参数必复用（spec 5.2 不变式 3）：所有 `run-*` 命令先查 store 缓存，命中直接复用不重算。缓存目录 = `--out` 文件所在目录下的 `cache/`（键 = 命令参数组合：run-pyamm: params+protocol+base+mode+thermal+plating；run-mlp: smiles+model；run-xtb: smiles；run-orca: smiles+charge+mult+functional；run-md: box+t_ns+engine）。缓存文件损坏（非法 JSON / 非对象）按未命中处理并重写
 - 报错约定：参数/校验类失败打印 `bda error: <原因>` 到 stderr、退出码 1；输入文件缺失或 JSON 键缺失会以 Python traceback 终止——读输出最后几行定位原因，按提示修正后重跑
 - 环境依赖：`run-xtb` 需 xtb 二进制在 PATH；`run-orca` 需 orca 在 PATH；`run-md` 需 gmx 在 PATH 且 `bda/simulators/data/opls/` 有对应 .itp 模板
 

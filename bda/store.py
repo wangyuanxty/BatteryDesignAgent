@@ -4,10 +4,11 @@ from pathlib import Path
 
 
 class CaseWorkspace:
-    def __init__(self, case_id: str, root: str = "runs"):
+    def __init__(self, case_id: str, root: str = "runs", create: bool = True):
         self.path = Path(root) / case_id
-        for sub in ("candidates", "bridge", "cell", "validation", "csv"):
-            (self.path / sub).mkdir(parents=True, exist_ok=True)
+        if create:
+            for sub in ("candidates", "bridge", "cell", "validation", "csv"):
+                (self.path / sub).mkdir(parents=True, exist_ok=True)
 
 
 def cache_key(params: dict) -> str:
@@ -23,7 +24,12 @@ def cache_get(ws: CaseWorkspace, params: dict) -> dict | None:
     p = _cache_path(ws, params)
     if not p.exists():
         return None
-    return json.loads(p.read_text(encoding="utf-8"))
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError, OSError):
+        # Corrupt cache file: treat as a miss (cache_put will overwrite it).
+        return None
+    return data if isinstance(data, dict) else None
 
 
 def cache_put(ws: CaseWorkspace, params: dict, result: dict) -> None:
