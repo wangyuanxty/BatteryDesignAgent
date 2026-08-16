@@ -7,11 +7,13 @@ from bda.candidates import validate_smiles
 INPUT_TEMPLATE = "! {functional}\n%pal nprocs 4 end\n* xyz {charge} {mult}\n{xyz}\n*\n"
 
 
-def _write_input(workdir: Path, name: str, smiles: str, charge: int, mult: int, functional: str) -> None:
+def _write_input(
+    workdir: Path, name: str, smiles: str, charge: int, mult: int, functional: str, seed: int
+) -> None:
     from rdkit import Chem
     from rdkit.Chem import AllChem
     mol = Chem.AddHs(Chem.MolFromSmiles(smiles))
-    AllChem.EmbedMolecule(mol, randomSeed=42)
+    AllChem.EmbedMolecule(mol, randomSeed=seed)
     AllChem.MMFFOptimizeMolecule(mol)
     conf = mol.GetConformer()
     lines = [str(mol.GetNumAtoms()), ""]
@@ -53,11 +55,11 @@ def orca_endorsement(smiles: str, charge: int = 0, mult: int = 1, functional: st
         workdir = Path(td)
         for attempt in range(3):
             try:
-                _write_input(workdir, "neutral", smiles, charge, mult, functional)
+                _write_input(workdir, "neutral", smiles, charge, mult, functional, seed=42 + attempt)
                 neutral = _run_and_parse(workdir, "neutral")
-                _write_input(workdir, "cation", smiles, charge + 1, 1, functional)
+                _write_input(workdir, "cation", smiles, charge + 1, 1, functional, seed=42 + attempt)
                 cation = _run_and_parse(workdir, "cation")
-                _write_input(workdir, "anion", smiles, charge - 1, 1, functional)
+                _write_input(workdir, "anion", smiles, charge - 1, 1, functional, seed=42 + attempt)
                 anion = _run_and_parse(workdir, "anion")
                 return {
                     "E_hartree": neutral["E_hartree"],
