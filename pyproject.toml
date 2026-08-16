@@ -17,7 +17,7 @@ dependencies = [
 
 [project.optional-dependencies]
 ml = ["torch", "mace-torch", "chgnet", "pymatgen"]
-host = ["claude-agent-sdk"]
+host = ["claude-agent-sdk", "python-dotenv"]
 dev = ["pytest", "pytest-cov"]
 
 [tool.setuptools.packages.find]
