@@ -10,6 +10,7 @@ class CaseConfig:
     seed_pool: list[str] = field(default_factory=list)
     ablations: dict[str, bool] = field(default_factory=dict)
     base_params: str = "Chen2020"
+    real_compute: bool = False
 
 
 def load_case_config(path: str) -> CaseConfig:
@@ -26,6 +27,7 @@ def load_case_config(path: str) -> CaseConfig:
         seed_pool=list(raw.get("seed_pool", [])),
         ablations=dict(raw.get("ablations", {})),
         base_params=str(raw.get("base_params", "Chen2020")),
+        real_compute=bool(raw.get("real_compute", False)),
     )
     if cfg.max_rounds < 1:
         raise ValueError("max_rounds must be >= 1")

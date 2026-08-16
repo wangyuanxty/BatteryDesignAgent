@@ -24,3 +24,12 @@ def test_rejects_missing_goal(tmp_path):
     import pytest
     with pytest.raises(ValueError, match="goal"):
         load_case_config(str(p))
+
+def test_loads_real_compute_flag(tmp_path):
+    p_true = tmp_path / "true.yaml"
+    p_true.write_text("goal: g\nsystem: s\nreal_compute: true\n", encoding="utf-8")
+    assert load_case_config(str(p_true)).real_compute is True
+
+    p_default = tmp_path / "default.yaml"
+    p_default.write_text("goal: g\nsystem: s\n", encoding="utf-8")
+    assert load_case_config(str(p_default)).real_compute is False

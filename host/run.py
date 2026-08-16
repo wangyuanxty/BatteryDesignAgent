@@ -131,6 +131,7 @@ def _build_system(config_path: Path, cfg: "CaseConfig") -> str:
         f"体系: {cfg.system}\n"
         f"预算: {cfg.max_rounds} 轮\n"
         f"参数集: {cfg.base_params}\n"
+        f"real_compute: {cfg.real_compute}\n"
         f"配置: {config_path}\n"
         f"工作区: {case_dir}"
     )
