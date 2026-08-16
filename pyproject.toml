@@ -20,7 +20,11 @@ ml = ["torch", "mace-torch", "chgnet", "pymatgen"]
 host = ["claude-agent-sdk", "python-dotenv"]
 dev = ["pytest", "pytest-cov"]
 
+[tool.setuptools]
+package-dir = {"" = ".claude/skills/virtual-battery-factory/scripts"}
+
 [tool.setuptools.packages.find]
+where = [".claude/skills/virtual-battery-factory/scripts"]
 include = ["bda*"]
 
 [tool.pytest.ini_options]
