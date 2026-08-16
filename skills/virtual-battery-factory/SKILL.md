@@ -195,15 +195,18 @@ bda run-orca --in IN --out OUT
 ### run-md — 真 MD 扩散背书（仅收尾 Top-1）
 
 ```
-bda run-md --box BOX [--t-ns T_NS] --out OUT
+bda run-md --box BOX [--engine ENGINE] [--t-ns T_NS] --out OUT
 ```
 
 - 输入 `--box`：`{"molecules": {"EC": 60, "EMC": 40, "PF6": 10, "Li": 10}}`（Li 至少 1；`t_ns` 可内嵌，`--t-ns` 默认 10.0）
-- 输出：`{"D_Li_m2_s": f, "trajectory_ok": bool, "drift_check": "ok"|"drift"|"skipped", "achieved_density_g_cm3": f}` —— `trajectory_ok: false`（drift）时如实记录并报告
+- `--engine`：`gromacs`（默认）/ `mace`。`mace` = ASE + MACE-MP Langevin NVT（固定种子盒、298.15 K、1 fs 步长），只需 mace-torch，不需要 GROMACS 与 .itp 模板；Top-1 交叉验证时可两引擎各跑一次对比 D_Li_m2_s
+- 输出：`{"D_Li_m2_s": f, "trajectory_ok": bool, "drift_check": "ok"|"drift"|"skipped", "achieved_density_g_cm3": f}` —— `trajectory_ok: false`（drift）时如实记录并报告（mace 引擎的 drift 判据 = 逐帧 MACE 势能的后 20% 均值相对中段漂移 > 5%）
 - 报错：
-  - `GROMACS not found; install via winget install GROMACS.GROMACS or conda` → 安装 GROMACS
+  - `unknown engine 'x'; legal: gromacs, mace` → 修正引擎名
+  - `GROMACS not found; install via winget install GROMACS.GROMACS or conda` → 安装 GROMACS（仅 gromacs 引擎）
+  - `mace engine requires mace-torch; install via \`pip install mace-torch\`` → 安装 mace-torch（仅 mace 引擎）
   - `box must contain at least 1 Li` → box 至少 1 个 Li
-  - `missing OPLS-AA .itp template(s): ...` → 按 `bda/simulators/data/opls/README.md` 生成对应 .itp 模板
+  - `missing OPLS-AA .itp template(s): ...` → 按 `bda/simulators/data/opls/README.md` 生成对应 .itp 模板（仅 gromacs 引擎）
   - `gmx mdrun failed: ...` / `gmx trjconv failed: ...` → 按 stderr 尾部内容排查
 
 ### render — HTML 报告

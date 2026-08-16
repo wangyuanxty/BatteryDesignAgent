@@ -410,8 +410,26 @@ def _parse_log_energies(text: str) -> list[float]:
     return []
 
 
-def _energy_drift_ok(workdir: Path) -> tuple[bool, str]:
+def _drift_from_values(values: list[float]) -> tuple[bool, str]:
     """(ok, status): mean of trailing 20% vs middle section, drift > 5% -> False.
+
+    Shared by the GROMACS log path and the MACE-MP per-frame energies. Fewer
+    than 20 samples -> check skipped and the trajectory accepted by default.
+    """
+    n = len(values)
+    if n < 20:
+        return True, "skipped"
+    arr = np.asarray(values, dtype=float)
+    mid = float(np.mean(arr[int(n * 0.25) : int(n * 0.75)]))
+    tail = float(np.mean(arr[int(n * 0.8) :]))
+    denom = abs(mid)
+    drift = abs(tail - mid) / denom if denom > 1e-9 else abs(tail - mid)
+    ok = drift <= 0.05
+    return ok, "ok" if ok else "drift"
+
+
+def _energy_drift_ok(workdir: Path) -> tuple[bool, str]:
+    """(ok, status) from the GROMACS per-step energy table in the run logs.
 
     ``gmx mdrun -deffnm run`` writes the per-step energy table to ``run.log``;
     ``md.log`` is the default log name only for mdrun without -deffnm and never
@@ -424,16 +442,69 @@ def _energy_drift_ok(workdir: Path) -> tuple[bool, str]:
         if not log.is_file():
             continue
         values = _parse_log_energies(log.read_text(encoding="utf-8", errors="ignore"))
-        if len(values) < 20:
-            continue
-        n = len(values)
-        mid = float(np.mean(values[int(n * 0.25) : int(n * 0.75)]))
-        tail = float(np.mean(values[int(n * 0.8) :]))
-        denom = abs(mid)
-        drift = abs(tail - mid) / denom if denom > 1e-9 else abs(tail - mid)
-        ok = drift <= 0.05
-        return ok, "ok" if ok else "drift"
+        if len(values) >= 20:
+            return _drift_from_values(values)
     return True, "skipped"
+
+
+# ---------------------------------------------------------------------------
+# MACE-MP engine (spec decision 12): ASE + MACE-MP Langevin NVT in the same
+# fixed-seed box, reusing the same MSD analysis as the GROMACS path.
+# ---------------------------------------------------------------------------
+
+
+def _mace_calculator():
+    """MACE-MP-0 medium calculator on CPU (separate factory so tests can mock)."""
+    from mace.calculators import mace_mp
+
+    return mace_mp(model="medium", device="cpu")
+
+
+def _run_mace_md(box: dict, t_ns: float) -> dict:
+    from ase import Atoms, units
+    from ase.io import write as ase_write
+    from ase.md.langevin import Langevin
+
+    molecules = {name: int(box.get("molecules", {}).get(name, 0)) for name in _SPECIES}
+    if sum(molecules.values()) < 1:
+        raise ValueError("box must contain at least 1 molecule")
+    n_li = molecules.get("Li", 0)
+    if n_li < 1:
+        raise ValueError("box must contain at least 1 Li")
+    atom_dicts, length_aa, achieved_density = _place_molecules(molecules)
+    atoms = Atoms(
+        symbols=[a["symbol"] for a in atom_dicts],
+        positions=[a["pos"] for a in atom_dicts],
+        cell=[length_aa] * 3,
+        pbc=True,
+    )
+    try:
+        atoms.calc = _mace_calculator()
+    except ImportError as e:  # pragma: no cover - only when mace-torch is absent
+        raise RuntimeError(
+            "mace engine requires mace-torch; install via `pip install mace-torch`"
+        ) from e
+    steps = int(t_ns * 1e6)  # 1 fs/step
+    with tempfile.TemporaryDirectory() as td:
+        workdir = Path(td)
+        frames: list[Atoms] = []
+        energies: list[float] = []
+        dyn = Langevin(atoms, timestep=1.0 * units.fs, temperature_K=298.15, friction=0.01)
+        dyn.attach(lambda: frames.append(atoms.copy()), interval=_NSTXOUT)
+        dyn.attach(lambda: energies.append(atoms.get_potential_energy()), interval=_NSTXOUT)
+        dyn.run(steps)
+        trj = workdir / "traj.xyz"
+        ase_write(str(trj), frames, format="xyz")
+        # MACE trajectory positions are plain A and unwrapped (no trjconv step),
+        # so the MSD fit runs with box_nm=None (no nm rescaling).
+        d_li = _msd_diffusion(trj, n_li, dt_frame_fs=float(_NSTXOUT), box_nm=None)
+    trajectory_ok, drift_check = _drift_from_values(energies)
+    return {
+        "D_Li_m2_s": d_li,
+        "trajectory_ok": trajectory_ok,
+        "drift_check": drift_check,
+        "achieved_density_g_cm3": achieved_density,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -442,14 +513,18 @@ def _energy_drift_ok(workdir: Path) -> tuple[bool, str]:
 
 
 def run_diffusion_md(box: dict, engine: str = "gromacs", t_ns: float = 10.0) -> dict:
-    """Run a GROMACS NVT trajectory and return Li+ diffusivity from MSD.
+    """Run an NVT trajectory and return Li+ diffusivity from MSD.
 
     box: {"molecules": {"EC": int, "EMC": int, "PF6": int, "Li": int}}
+    engine: "gromacs" (needs gmx + OPLS .itp templates) or "mace"
+    (ASE + MACE-MP Langevin, needs mace-torch only).
     Returns {"D_Li_m2_s": float, "trajectory_ok": bool, "drift_check": str,
     "achieved_density_g_cm3": float}.
     """
-    if engine not in ("gromacs",):
-        raise ValueError(f"unknown engine '{engine}'; legal: gromacs")
+    if engine not in ("gromacs", "mace"):
+        raise ValueError(f"unknown engine '{engine}'; legal: gromacs, mace")
+    if engine == "mace":
+        return _run_mace_md(box, t_ns)
     if shutil.which("gmx") is None:
         raise RuntimeError(
             "GROMACS not found; install via winget install GROMACS.GROMACS or conda"

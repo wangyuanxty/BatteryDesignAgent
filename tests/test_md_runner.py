@@ -18,6 +18,75 @@ def test_bad_engine():
         run_diffusion_md({"molecules": {"EC": 100}}, engine="nope")
 
 
+# ---------------------------------------------------------------------------
+# MACE-MP engine (spec decision 12): ASE + MACE-MP Langevin NVT. Testable
+# without binaries via a mocked calculator (fast suite); the real mace-torch
+# calculator path is exercised by the slow mlp tests (model download/load is
+# minutes on first run, so no slow real-MD test is registered here).
+# ---------------------------------------------------------------------------
+
+class _HarmonicCalc:
+    """Minimal ASE-compatible calculator: harmonic confinement, deterministic."""
+    implemented_properties = ["energy", "forces"]
+
+    def __init__(self, drift_per_step: float = 0.0):
+        self.steps = 0
+        self.drift_per_step = drift_per_step
+
+    def calculate(self, atoms=None, properties=None, system_changes=None):
+        self.steps += 1
+        pos = np.asarray(atoms.positions)
+        self.results = {
+            "energy": float(np.sum(pos ** 2) * 0.001 + self.steps * self.drift_per_step),
+            "forces": -0.002 * pos,
+        }
+
+    def get_potential_energy(self, atoms=None, force_consistent=False):
+        if atoms is not None and atoms.calc is self:
+            self.calculate(atoms)
+        return self.results["energy"]
+
+    def get_forces(self, atoms=None):
+        if atoms is not None and atoms.calc is self:
+            self.calculate(atoms)
+        return self.results["forces"]
+
+
+def test_mace_md_runs_with_mocked_calculator(tmp_path, monkeypatch):
+    """Tiny box + short trajectory (t_ns=0.001 -> 1000 steps -> 10 frames):
+    the full mace pipeline (box build -> Langevin NVT -> MSD -> drift) runs
+    end-to-end with a deterministic fake calculator."""
+    calc = _HarmonicCalc()
+    monkeypatch.setattr(md_runner, "_mace_calculator", lambda: calc)
+    box = {"molecules": {"EC": 2, "EMC": 1, "PF6": 1, "Li": 1}}
+    out = md_runner.run_diffusion_md(box, engine="mace", t_ns=0.001)
+    assert out["D_Li_m2_s"] > 0.0
+    assert out["trajectory_ok"] is True
+    assert out["drift_check"] == "skipped"  # <20 energy samples at 10 frames
+    assert out["achieved_density_g_cm3"] > 0.0
+
+
+def test_mace_md_drift_detected_from_potential_energies(tmp_path, monkeypatch):
+    """t_ns=0.002 -> 20 frames -> the same trailing-20% drift rule as GROMACS
+    applies to the per-frame MACE potential energies."""
+    calc = _HarmonicCalc(drift_per_step=10.0)
+    monkeypatch.setattr(md_runner, "_mace_calculator", lambda: calc)
+    box = {"molecules": {"EC": 2, "EMC": 1, "PF6": 1, "Li": 1}}
+    out = md_runner.run_diffusion_md(box, engine="mace", t_ns=0.002)
+    assert out["trajectory_ok"] is False
+    assert out["drift_check"] == "drift"
+
+
+def test_mace_md_requires_lithium():
+    with pytest.raises(ValueError, match="Li"):
+        md_runner.run_diffusion_md({"molecules": {"EC": 2}}, engine="mace")
+
+
+def test_mace_md_requires_at_least_one_molecule():
+    with pytest.raises(ValueError, match="molecule"):
+        md_runner.run_diffusion_md({"molecules": {}}, engine="mace")
+
+
 @pytest.mark.slow
 def test_short_trajectory():
     if shutil.which("gmx") is None:
