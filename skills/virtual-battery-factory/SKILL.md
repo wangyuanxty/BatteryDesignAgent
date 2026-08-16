@@ -22,8 +22,8 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
    - `consensus` 返回 `disputed` 的候选：不得淘汰即止，须推理改进（换取代基/生成变体）或明确给出淘汰理由后换新候选
 2. **参数桥梁**：对通过候选执行 `bridge`，产出 PyBaMM 参数更新（props 数值来源写入日志）
    - props 数值来源规则：种子池候选用文献值（在日志中标注引用来源）；自由生成候选用领域估计值（标注 `estimate`）；来源必须写入日志；估计值不得冒充仿真输出——收尾时若该候选进入 Top-N，其 D/σ 由真 MD/文献背书复核
-3. **阶段2 电芯设计**：`run-pyamm --protocol 1C_discharge --mode spme`，随后按需 `--mode dfn`
-4. **阶段3 安全评估**：`run-pyamm --protocol 4C_charge_45C --thermal lumped --plating`；析锂判定以负极电位 < 0 V 为准
+3. **阶段2 电芯设计**：`run-pyamm --base <案例配置 base_params> --protocol 1C_discharge --mode spme`，随后按需 `--mode dfn`
+4. **阶段3 安全评估**：`run-pyamm --base <案例配置 base_params> --protocol 4C_charge_45C --thermal lumped --plating`；析锂判定以负极电位 < 0 V 为准
 5. **评估**：对照案例配置解析出的达标标准（已写入 log.jsonl 第 0 条）判断达标/不达标；写 `evaluate` 日志条目
    - 不达标：诊断原因并**回退到对应阶段**——材料问题（电位窗/稳定性）回阶段1，结构参数问题回阶段2
 6. **收尾（唯一真计算时刻）**：Top-3 候选执行 `run-orca` 背书；Top-1 执行 `run-md` 背书；最后 `render` 生成报告；写 `endorse` 与 `final` 日志条目
@@ -136,19 +136,20 @@ bda consensus --in IN --out OUT
 ### run-pyamm — 电芯仿真
 
 ```
-bda run-pyamm --params PARAMS --protocol PROTOCOL [--mode MODE] [--thermal THERMAL] [--plating] --out OUT
+bda run-pyamm --params PARAMS --protocol PROTOCOL [--base BASE] [--mode MODE] [--thermal THERMAL] [--plating] --out OUT
 ```
 
+- `--base`：PyBaMM 参数集名（默认 `Chen2020`）；**案例配置的 `base_params` 字段必须原样传给 `--base`**（如 `--base ORegan2022`）。bridge 输出的参数名为跨参数集共享名（`Electrolyte diffusivity [m2.s-1]` 等），故 `--params` 可直接配合任一参数集使用
 - `--protocol` 合法值：`1C_discharge`（1C 放电，3600 s，298.15 K）；`4C_charge_45C`（4C 充电，900 s，318.15 K）
 - `--mode`：`spme`（默认）/ `dfn`；dfn 求解失败自动降级 SPMe 重试（输出 `model_used` 记 `"SPMe(fallback)"`）
 - `--thermal`：`lumped`（默认）/ `isothermal`；非 isothermal 时输出含 `T_max_K`
 - `--plating`：启用析锂模块（Chen2020 参数集无析锂参数，运行时注入标准默认值），输出含 `anode_potential_v`
-- 输入 `--params`：`{"<PyBaMM Chen2020 参数名>": 值}` —— 参数名会被校验，通常直接给 `bridge` 输出
+- 输入 `--params`：`{"<PyBaMM 参数名>": 值}` —— 参数名会按所选参数集校验，通常直接给 `bridge` 输出
 - 输出键：`model_used`、`time_s`、`voltage_v`、`capacity_ah`、`T_max_K`（非 isothermal）、`anode_potential_v`（--plating）
 - 报错：
   - `unknown protocol 'x'; legal: ['1C_discharge', '4C_charge_45C']` → 修正协议名
   - `unknown mode 'x'; legal: spme, dfn` → 修正模式名
-  - `unknown parameter name(s): ['...']` → 参数名不在 Chen2020 集内；检查 bridge 键与拼写
+  - `unknown parameter name(s): ['...']` → 参数名不在所选参数集内；检查 bridge 键与拼写
   - SPMe 求解失败（pybamm.SolverError traceback）→ 该参数组合无效，按第一节第 5 步回退调整
 
 ### run-mlp — ML 势结构松弛
