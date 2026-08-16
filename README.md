@@ -28,17 +28,26 @@ ML 势（MACE-MP/CHGNet）由 pip `[ml]` 附带，无需额外二进制。`real_
 
 ## 运行
 
-V1 主案例 `cases/fast_charge_v1.yaml`：EC/EMC + LiPF6 体系，4C 快充下的析锂与温升（T_max < 60℃ 且无析锂），30 轮预算，收尾 Top-3 `run-orca` + Top-1 `run-md` 真计算背书（挂夜，约一夜一案例）：
+样例案例位于 `.claude/skills/virtual-battery-factory/assets/cases/`，全部为三阶段全流程：
+
+| 案例 | 设计目标 |
+|------|---------|
+| `fast_charge_v1.yaml` | 快充/析锂添加剂：EC/EMC + LiPF6 体系 4C 快充下的析锂与温升（T_max < 60℃ 且无析锂），30 轮预算 |
+| `voltage_window.yaml` | 电压窗口拓宽：电化学稳定窗口 ≥ 5.0 V（IE/EA 代理）+ 容量不低于基线 + 无析锂 |
+| `energy_density.yaml` | 电芯级目标驱动：重力能量密度 ≥ 400 Wh/kg，材料与结构参数联合调整 |
+| `minimal_smoke.yaml` | 冒烟（真计算关）：最小闭环验证 |
+
+收尾 Top-3 `run-orca` + Top-1 `run-md` 真计算背书（挂夜，约一夜一案例）。运行：
 
 ```powershell
-.venv\Scripts\python.exe host/run.py --config cases/fast_charge_v1.yaml
+.venv\Scripts\python.exe host/run.py --config .claude/skills/virtual-battery-factory/assets/cases/fast_charge_v1.yaml
 ```
 
 **工作区 = 案例配置所在目录**（`log.jsonl`、`session_id`、`report.html`、`csv/` 及各阶段产物子目录均落在此处）。论文实验建议按设计文档 §5.1 布局把案例复制到独立目录再跑：
 
 ```powershell
 New-Item -ItemType Directory -Force runs/fast_charge_v1
-Copy-Item cases/fast_charge_v1.yaml runs/fast_charge_v1/config.yaml
+Copy-Item .claude/skills/virtual-battery-factory/assets/cases/fast_charge_v1.yaml runs/fast_charge_v1/config.yaml
 .venv\Scripts\python.exe host/run.py --config runs/fast_charge_v1/config.yaml
 ```
 

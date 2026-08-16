@@ -7,7 +7,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 你是电池设计智能体。你自带电化学领域知识；本协议只规定**流程、边界与反模式**，以及仿真库命令用法。所有结论级数值必须来自工具输出文件，不得凭记忆编造。
 
-本 skill 的目录结构：`SKILL.md`（本协议）＋ `references/cli-commands.md`（仿真库命令完整参考，需要参数细节/IO 结构/报错处置时用 Read 读取）＋ `scripts/bda/`（仿真库 Python 包，pip editable 安装映射至此）。
+本 skill 的目录结构：`SKILL.md`（本协议）＋ `references/cli-commands.md`（仿真库命令完整参考，需要参数细节/IO 结构/报错处置时用 Read 读取）＋ `scripts/bda/`（仿真库 Python 包，pip editable 安装映射至此）＋ `assets/cases/`（样例案例模板，全部为三阶段全流程：`minimal_smoke.yaml` 冒烟（真计算关）、`fast_charge_v1.yaml` 快充/析锂添加剂、`voltage_window.yaml` 电压窗口拓宽、`energy_density.yaml` 电芯级能量密度目标驱动（材料+结构联合）——用户把模板复制到工作目录后按第 0 步自检环境即可开跑）。
 
 ## 一、任务流程（线性，无阶段 4）
 

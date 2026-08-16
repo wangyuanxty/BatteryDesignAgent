@@ -1,0 +1,10 @@
+goal: "设计一种电解液添加剂，拓宽 EC/EMC + LiPF6 体系的电化学稳定窗口至 5.0 V 以上（以 IE/EA 为电压窗口代理），同时 1C 放电容量不低于基线且无析锂"
+system: "EC/EMC+LiPF6"
+max_rounds: 30
+seed_pool: ["FEC", "VC", "LiBOB", "LiDFOB", "PS", "DTD"]
+ablations:
+  guardrails: true
+  consistency: true
+  bridge: true
+real_compute: true    # 收尾 Top-3 run-orca + Top-1 run-md 挂夜
+base_params: "ORegan2022"

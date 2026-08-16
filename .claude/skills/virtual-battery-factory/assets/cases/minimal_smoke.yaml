@@ -1,0 +1,9 @@
+goal: "设计一种添加剂，使 1C 放电容量不低于 2.0 Ah（最小冒烟验证）"
+system: "EC/EMC+LiPF6"
+max_rounds: 3
+seed_pool: ["FEC", "VC"]
+ablations:
+  guardrails: true
+  consistency: true
+  bridge: true
+real_compute: false   # 冒烟：真 DFT/MD 关闭，收尾背书跳过

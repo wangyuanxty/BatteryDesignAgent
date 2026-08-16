@@ -1,0 +1,10 @@
+goal: "在 EC/EMC + LiPF6 体系基础上设计电池，使重力能量密度尽可能高（目标 ≥ 400 Wh/kg），同时 4C 快充无析锂且 T_max < 60℃；允许联合调整电解液组分与电芯结构参数"
+system: "EC/EMC+LiPF6"
+max_rounds: 30
+seed_pool: ["FEC", "VC", "LiBOB", "LiDFOB", "PS", "DTD"]
+ablations:
+  guardrails: true
+  consistency: true
+  bridge: true
+real_compute: true    # 收尾 Top-3 run-orca + Top-1 run-md 挂夜
+base_params: "ORegan2022"

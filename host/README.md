@@ -15,11 +15,11 @@ pip install -e ".[host]"
 ## 运行
 
 ```powershell
-.venv\Scripts\python.exe host/run.py --config cases/fast_charge_v1.yaml
+.venv\Scripts\python.exe host/run.py --config .claude/skills/virtual-battery-factory/assets/cases/fast_charge_v1.yaml
 ```
 
-`--config` 指向案例 YAML（**按所给路径直接加载，文件名不限于 config.yaml**，如
-`cases/fast_charge_v1.yaml`）；其**所在目录即工作区**（`log.jsonl`、`session_id`、
+`--config` 指向案例 YAML（**按所给路径直接加载，文件名不限于 config.yaml**，样例模板见
+`.claude/skills/virtual-battery-factory/assets/cases/`）；其**所在目录即工作区**（`log.jsonl`、`session_id`、
 `report.html` 与 CaseWorkspace 子目录 `candidates/bridge/cell/validation/csv` 均落在此目录）。
 案例 YAML 本身不被复制或改名。
 

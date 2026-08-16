@@ -64,7 +64,7 @@ def test_minimal_case_end_to_end(tmp_path):
         pytest.skip("set BDA_E2E_FULL=1 to run the full e2e (~30-60 min)")
     case_dir = tmp_path / "minimal_smoke"
     case_dir.mkdir()
-    shutil.copy(ROOT / "cases" / "minimal_smoke.yaml", case_dir / "config.yaml")
+    shutil.copy(ROOT / ".claude" / "skills" / "virtual-battery-factory" / "assets" / "cases" / "minimal_smoke.yaml", case_dir / "config.yaml")
     r = subprocess.run(
         [sys.executable, str(ROOT / "host" / "run.py"), "--config", str(case_dir / "config.yaml")],
         capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=2700,
