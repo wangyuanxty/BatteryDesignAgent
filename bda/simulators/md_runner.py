@@ -1,7 +1,8 @@
 """GROMACS diffusion runner with MSD analysis (Task 14).
 
 Produces ``run_diffusion_md(box, engine="gromacs", t_ns=10.0) -> dict`` returning
-``{"D_Li_m2_s": float, "trajectory_ok": bool, "drift_check": str}``.
+``{"D_Li_m2_s": float, "trajectory_ok": bool, "drift_check": str,
+"achieved_density_g_cm3": float}``.
 
 Rulings applied (controller preflight review, binding):
 1. The brief's flow assumed conf.gro/topol.top/md.mdp/traj.xyz already exist; no
@@ -16,15 +17,31 @@ Rulings applied (controller preflight review, binding):
    README when a required .itp is missing (no impact on the slow test, which
    skips earlier at the GROMACS check).
 3. ``trajectory_ok`` follows the brief's drift semantics: mean of the trailing
-   20% of Total-Energy samples in md.log vs the middle section; relative drift
-   > 5% -> False. When md.log has no usable energy table the result defaults to
-   True and the return dict carries ``"drift_check": "skipped"``.
+   20% of Total-Energy samples vs the middle section; relative drift > 5% ->
+   False. The energy table is read from ``run.log`` (``gmx mdrun -deffnm run``
+   writes it there; ``md.log`` is the default name only for mdrun without
+   -deffnm and carries no table for our runs). Only when neither log yields a
+   usable table is the check skipped and the trajectory accepted by default
+   (``"drift_check": "skipped"``).
 
-Unit note (documented deviation from the brief): the brief's MSD conversion
-``slope * 1e-12 / 6`` silently assumed frame index == femtoseconds. This module
-instead fits msd over real time (frames spaced by ``dt_frame_fs`` fs), so the
-slope is in A^2/fs and D = slope * 1e-5 / 6 (1 A^2/fs = 1e-5 m^2/s) -- correct
-for any output cadence and consistent with the "slope/6" contract.
+Unit notes (documented deviations from the brief):
+* The brief's MSD conversion ``slope * 1e-12 / 6`` silently assumed frame index
+  == femtoseconds. This module instead fits msd over real time (frames spaced
+  by ``dt_frame_fs`` fs), so the slope is in A^2/fs and D = slope * 1e-5 / 6
+  (1 A^2/fs = 1e-5 m^2/s) -- correct for any output cadence and consistent with
+  the "slope/6" contract.
+* GROMACS internal coordinates are nm and trjconv .xyz output follows the same
+  convention, but the .xyz format carries no unit metadata. ``_xyz_unit_scale``
+  sniffs the first frame's coordinate spread against the conf.gro box side (nm)
+  and rescales nm coordinates to A before the MSD fit, so D is unit-correct
+  whichever convention trjconv uses.
+* The box builder sizes grid cells as max(vdW-contact floor, density-derived
+  spacing), so the achieved density lands near the 1.2 g/cm3 target (reported
+  as ``achieved_density_g_cm3``) instead of the ~0.14 g/cm3 the old
+  bounding-box-only grid produced, which would systematically overestimate
+  Li+ diffusion. At liquid-like density the rotated rigid templates can
+  partially overlap, so a real production run should start with energy
+  minimization/equilibration (see README in bda/simulators/data/opls/).
 """
 
 import shutil
@@ -60,7 +77,13 @@ _ITP_FILES = {"EC": "ec.itp", "EMC": "emc.itp", "PF6": "pf6.itp", "Li": "li.itp"
 _MASSES_G_MOL = {"EC": 88.06, "EMC": 104.10, "PF6": 144.96, "Li": 6.94}
 
 _DENSITY_G_CM3 = 1.2  # approximate EC/EMC blend density used for box volume
-_MARGIN_AA = 1.5  # extra spacing between grid cells
+# vdW-contact floor between grid cells (heavy-atom contact distance, C...C ~
+# 3.4 A): tighter cells would place atomic cores of neighbouring molecules at
+# sub-contact distance. For realistic electrolyte compositions the
+# density-derived spacing exceeds this floor, so the density branch wins and
+# the achieved density lands near _DENSITY_G_CM3.
+_MIN_SPACING_AA = 3.0
+_PADDING_FRAC = 0.05  # extra box padding beyond the grid extent
 _JITTER_FRAC = 0.05  # max positional jitter as fraction of the grid cell
 _AVOGADRO = 6.02214076e23
 
@@ -101,29 +124,44 @@ def _random_rotation(rng: np.random.Generator) -> np.ndarray:
     return rz @ ry @ rx
 
 
-def _place_molecules(molecules: dict[str, int]) -> tuple[list[dict], float]:
-    """Grid-place all molecules deterministically; return (atoms, box length [A]).
+def _place_molecules(
+    molecules: dict[str, int],
+) -> tuple[list[dict], float, float]:
+    """Grid-place all molecules deterministically.
 
-    One molecule per cubic grid cell (cell = max template diameter + margin),
-    fixed-seed random orientation and small jitter; box side is the larger of a
-    density-based estimate and the grid extent, so no atom lands outside the box.
+    Returns ``(atoms, box_length_A, achieved_density_g_cm3)``.
+
+    Cell spacing is ``max(_MIN_SPACING_AA, density_spacing)``: the vdW-contact
+    floor keeps neighbouring grid cells above the heavy-atom contact distance,
+    and the density spacing derives the per-cell volume from the target density
+    and the total species mass, so the achieved density lands near
+    ``_DENSITY_G_CM3`` whenever the density branch wins (which it does for every
+    realistic electrolyte composition). The box is additionally padded so the
+    outermost jittered, rotated template always fits inside it, even when the
+    cells are smaller than the largest template diameter.
     """
+    molecules = {name: int(molecules.get(name, 0)) for name in _SPECIES}
     rng = np.random.default_rng(_SEED)
     templates = {name: _molecule_template(name) for name in _SPECIES}
-    cell = (
-        max(
+    max_diameter = max(
+        float(
             (templates[name][1].max(axis=0) - templates[name][1].min(axis=0)).max()
-            for name in _SPECIES
         )
-        + _MARGIN_AA
+        for name in _SPECIES
     )
     n_mol = sum(molecules.values())
     grid_n = max(1, int(np.ceil(n_mol ** (1.0 / 3.0))))
     total_mass = sum(molecules[name] * _MASSES_G_MOL[name] for name in _SPECIES)
-    volume_aa3 = total_mass / (_DENSITY_G_CM3 * _AVOGADRO) * 1e24
-    length = max(volume_aa3 ** (1.0 / 3.0), grid_n * cell * 1.05)
-    offset = (length - grid_n * cell) / 2.0
+    target_volume_aa3 = total_mass / (_DENSITY_G_CM3 * _AVOGADRO) * 1e24
+    density_spacing = (target_volume_aa3 / float(grid_n**3)) ** (1.0 / 3.0)
+    cell = max(_MIN_SPACING_AA, density_spacing)
     jitter_amp = _JITTER_FRAC * cell
+    radius = max_diameter / 2.0
+    length = grid_n * cell * (1.0 + _PADDING_FRAC)
+    # Containment: the outermost atom extent (offset + (grid_n-0.5)*cell +
+    # jitter + radius) must stay inside [0, length]; solved for length.
+    length = max(length, grid_n * cell + 2.0 * (radius + jitter_amp - cell / 2.0))
+    offset = (length - grid_n * cell) / 2.0
     atoms: list[dict] = []
     slot = 0
     for name in _SPECIES:
@@ -150,7 +188,9 @@ def _place_molecules(molecules: dict[str, int]) -> tuple[list[dict], float]:
                         "atomname": f"{symbol}{a + 1}",
                     }
                 )
-    return atoms, length
+    volume_cm3 = length**3 * 1e-24  # A^3 -> cm^3
+    achieved_density = total_mass / (_AVOGADRO * volume_cm3)
+    return atoms, length, achieved_density
 
 
 def _write_gro(atoms: list[dict], length_aa: float, path: Path) -> None:
@@ -231,22 +271,25 @@ nstxout-compressed = 10000
     path.write_text(content, encoding="utf-8")
 
 
-def _build_box(box: dict, workdir: Path) -> None:
+def _build_box(box: dict, workdir: Path) -> tuple[float, float]:
     """Deterministic GROMACS box: conf.gro + topol.top + md.mdp in workdir.
 
     ``box`` is ``{"molecules": {"EC": n, "EMC": n, "PF6": n, "Li": n}}`` plus an
     optional ``t_ns`` used only to size md.mdp (mdrun -nsteps overrides it at
     runtime). Same input => byte-identical output (fixed seed, fixed species
     order, no external programs).
+
+    Returns ``(achieved_density_g_cm3, box_nm)``.
     """
     molecules = {name: int(box.get("molecules", {}).get(name, 0)) for name in _SPECIES}
     if sum(molecules.values()) < 1:
         raise ValueError("box must contain at least 1 molecule")
     steps = int(box.get("t_ns", 10.0) * 1e6)
     _write_topol(molecules, _OPLS_DIR, workdir / "topol.top")
-    atoms, length_aa = _place_molecules(molecules)
+    atoms, length_aa, achieved_density = _place_molecules(molecules)
     _write_gro(atoms, length_aa, workdir / "conf.gro")
     _write_mdp(steps, workdir / "md.mdp")
+    return achieved_density, length_aa / 10.0  # A -> nm box side
 
 
 # ---------------------------------------------------------------------------
@@ -254,17 +297,62 @@ def _build_box(box: dict, workdir: Path) -> None:
 # ---------------------------------------------------------------------------
 
 
-def _msd_diffusion(trj_xyz: Path, n_li: int, dt_frame_fs: float = _NSTXOUT) -> float:
+def _xyz_unit_scale(trj_xyz: Path, box_nm: float) -> float:
+    """Factor converting the trjconv xyz coordinates to A (10.0 or 1.0).
+
+    GROMACS internal coordinates are nm and trjconv writes .xyz in the same
+    units, but the .xyz format carries no unit metadata, so the convention is
+    verified at runtime: if the first frame's max coordinate spread is
+    consistent with the conf.gro box side (nm), the coordinates are nm and must
+    be scaled by 10 to A; a spread ~10x the box side means the writer already
+    emitted A (ASE's assumption) and the factor is 1.
+    """
+    if box_nm <= 0.0:
+        raise ValueError("box_nm must be positive")
+    from ase.io import read
+
+    first = read(str(trj_xyz), index="0", format="xyz")
+    spread = float(np.max(first.positions.max(axis=0) - first.positions.min(axis=0)))
+    return 10.0 if spread <= 3.0 * box_nm else 1.0
+
+
+def _gro_box_nm(gro: Path) -> float:
+    """Box side in nm from the last line of a .gro file (first vector component)."""
+    for line in reversed(
+        gro.read_text(encoding="utf-8", errors="ignore").splitlines()
+    ):
+        tokens = line.split()
+        if tokens:
+            try:
+                return float(tokens[0])
+            except ValueError:
+                continue
+    raise ValueError(f"no box vector found in {gro}")
+
+
+def _msd_diffusion(
+    trj_xyz: Path,
+    n_li: int,
+    dt_frame_fs: float = _NSTXOUT,
+    box_nm: float | None = None,
+) -> float:
     """D (m^2/s) from the linear part of the unwrapped Li+ MSD: msd(t) = 6 D t.
 
-    The slope is fitted over the second half of the curve with time in fs, so
-    D = slope[A^2/fs] * 1e-5 / 6 (1 A^2/fs = 1e-5 m^2/s).
+    The slope is fitted over the second half of the curve with time in fs and
+    positions in A, so D = slope[A^2/fs] * 1e-5 / 6 (1 A^2/fs = 1e-5 m^2/s).
+    When ``box_nm`` (the conf.gro box side in nm) is given, the xyz units are
+    sniffed against it and nm coordinates are rescaled to A first.
     """
     if dt_frame_fs <= 0.0:
         raise ValueError("dt_frame_fs must be positive")
     from ase.io import read
 
     frames = read(str(trj_xyz), index=":", format="xyz")
+    if box_nm is not None:
+        scale = _xyz_unit_scale(trj_xyz, box_nm)
+        if scale != 1.0:
+            for frame in frames:
+                frame.set_positions(frame.positions * scale)
     li_idx = [i for i, atom in enumerate(frames[0]) if atom.symbol == "Li"]
     if len(li_idx) != n_li:
         raise ValueError(f"trajectory has {len(li_idx)} Li atoms, expected {n_li}")
@@ -322,24 +410,30 @@ def _parse_log_energies(text: str) -> list[float]:
     return []
 
 
-def _energy_drift_ok(md_log: Path) -> tuple[bool, str]:
+def _energy_drift_ok(workdir: Path) -> tuple[bool, str]:
     """(ok, status): mean of trailing 20% vs middle section, drift > 5% -> False.
 
-    Without a parseable md.log energy table the check is skipped and the
-    trajectory is accepted by default (status "skipped").
+    ``gmx mdrun -deffnm run`` writes the per-step energy table to ``run.log``;
+    ``md.log`` is the default log name only for mdrun without -deffnm and never
+    carries the table for our runs. Try ``run.log`` first, then ``md.log``; only
+    when neither yields a parseable table is the check skipped and the
+    trajectory accepted by default (status "skipped").
     """
-    if not md_log.is_file():
-        return True, "skipped"
-    values = _parse_log_energies(md_log.read_text(encoding="utf-8", errors="ignore"))
-    if len(values) < 20:
-        return True, "skipped"
-    n = len(values)
-    mid = float(np.mean(values[int(n * 0.25) : int(n * 0.75)]))
-    tail = float(np.mean(values[int(n * 0.8) :]))
-    denom = abs(mid)
-    drift = abs(tail - mid) / denom if denom > 1e-9 else abs(tail - mid)
-    ok = drift <= 0.05
-    return ok, "ok" if ok else "drift"
+    for name in ("run.log", "md.log"):
+        log = workdir / name
+        if not log.is_file():
+            continue
+        values = _parse_log_energies(log.read_text(encoding="utf-8", errors="ignore"))
+        if len(values) < 20:
+            continue
+        n = len(values)
+        mid = float(np.mean(values[int(n * 0.25) : int(n * 0.75)]))
+        tail = float(np.mean(values[int(n * 0.8) :]))
+        denom = abs(mid)
+        drift = abs(tail - mid) / denom if denom > 1e-9 else abs(tail - mid)
+        ok = drift <= 0.05
+        return ok, "ok" if ok else "drift"
+    return True, "skipped"
 
 
 # ---------------------------------------------------------------------------
@@ -351,7 +445,8 @@ def run_diffusion_md(box: dict, engine: str = "gromacs", t_ns: float = 10.0) -> 
     """Run a GROMACS NVT trajectory and return Li+ diffusivity from MSD.
 
     box: {"molecules": {"EC": int, "EMC": int, "PF6": int, "Li": int}}
-    Returns {"D_Li_m2_s": float, "trajectory_ok": bool, "drift_check": str}.
+    Returns {"D_Li_m2_s": float, "trajectory_ok": bool, "drift_check": str,
+    "achieved_density_g_cm3": float}.
     """
     if engine not in ("gromacs",):
         raise ValueError(f"unknown engine '{engine}'; legal: gromacs")
@@ -365,7 +460,7 @@ def run_diffusion_md(box: dict, engine: str = "gromacs", t_ns: float = 10.0) -> 
     steps = int(t_ns * 1e6)  # 1 fs/step
     with tempfile.TemporaryDirectory() as td:
         workdir = Path(td)
-        _build_box({**box, "t_ns": t_ns}, workdir)
+        achieved_density, _ = _build_box({**box, "t_ns": t_ns}, workdir)
         subprocess.run(
             [
                 "gmx",
@@ -410,10 +505,15 @@ def run_diffusion_md(box: dict, engine: str = "gromacs", t_ns: float = 10.0) -> 
         )
         if conv.returncode != 0:
             raise RuntimeError(f"gmx trjconv failed: {conv.stderr[-300:]}")
-        d_li = _msd_diffusion(workdir / "traj.xyz", n_li)
-        trajectory_ok, drift_check = _energy_drift_ok(workdir / "md.log")
+        d_li = _msd_diffusion(
+            workdir / "traj.xyz",
+            n_li,
+            box_nm=_gro_box_nm(workdir / "conf.gro"),
+        )
+        trajectory_ok, drift_check = _energy_drift_ok(workdir)
         return {
             "D_Li_m2_s": d_li,
             "trajectory_ok": trajectory_ok,
             "drift_check": drift_check,
+            "achieved_density_g_cm3": achieved_density,
         }
