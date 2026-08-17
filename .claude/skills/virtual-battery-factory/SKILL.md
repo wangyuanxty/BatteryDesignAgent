@@ -47,7 +47,9 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 2. 若 `log.jsonl` 已存在（续跑/resume）：从最后一条记录恢复状态，不重复执行已完成步骤（以产物文件存在为准）。
 3. 从 `goal` 自然语言解析达标标准（指标名、阈值、单位），先写入 `log.jsonl` 第 0 条再开跑——阈值是本次实验的"合同"，落盘审计后报告与评审都以它为准，避免事后改判。
 
-对每个候选分子严格执行（`start_stage: 2` 时跳过步骤 1 的分子筛选，材料物性直接用体系基线参数——props 来源标注 `baseline`（文献值），写一条 funnel 日志说明"本案例从阶段 2 开始，材料采用体系基线"）：
+### 每轮闭环（对每个候选分子严格执行）
+
+`start_stage: 2` 时跳过步骤 1 的分子筛选，材料物性直接用体系基线参数——props 来源标注 `baseline`（文献值），写一条 funnel 日志说明"本案例从阶段 2 开始，材料采用体系基线"。
 
 1. **阶段1 材料设计**（快环，零真计算，仅 `start_stage: 1`）。先提出一批候选分子（`seed_pool` 已知添加剂 + 你自由生成的 SMILES），随后依次真实执行 `run-mlp --model mace`、`run-mlp --model chgnet`、`run-xtb`（同一候选清单），直接读取三次输出 JSON，**你据此判定**（漏斗判定由协议规则执行，无对应 CLI 命令）：硬淘汰线——mace 输出的 `metrics.converged` 非真 → 淘汰；`metrics.energy_ev` 高于淘汰线 → 淘汰；xtb 输出的 `metrics.homo_ev` 高于淘汰线 → 淘汰。淘汰线数值 `max_energy_ev`（稳定性上限，无明确依据时取 0.0 eV）与 `max_homo_ev`（氧化稳定性上限，无明确依据时取 −6.0 eV）在你解析目标时一并确定、写进第 0 条 criteria；三模型异质投票——对 mace 的 `energy_ev`、chgnet 的 `energy_ev`、xtb 的 `homo_ev` 各自做升序排名（越低越优），某候选在三个排名中的极差 ≥ `max(2, 0.3×候选数)`（候选数 < 3 时不判定）→ 标记 `disputed`。分歧不是坏事：它是"该动脑子"的信号，对 disputed 候选推理改进（换取代基/生成变体）或给出明确淘汰理由后换新，而不是一淘汰了之。分子稳定性与电位窗在这里被廉价筛掉，昂贵的电芯仿真只留给少数值得深挖的分子——种子池保证可达性，自由生成展示创造力，两者混轨也让论文可以对照"种子池内 vs 自由探索"。写 `propose` 与 `funnel` 日志条目（passed/rejected/disputed 计数由你的判定得出）。
    命令：`run-mlp --in IN --model mace --out O` → `run-mlp --in IN --model chgnet --out O` → `run-xtb --in IN --out O`（同一 IN；随后直接读取三次输出 JSON 判定，无需合并文件）
