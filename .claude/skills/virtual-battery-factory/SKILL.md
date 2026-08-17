@@ -49,11 +49,14 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 对每个候选分子严格执行（`start_stage: 2` 时跳过步骤 1 的分子筛选，材料物性直接用体系基线参数——props 来源标注 `baseline`（文献值），写一条 funnel 日志说明"本案例从阶段 2 开始，材料采用体系基线"）：
 
 1. **阶段1 材料设计**（快环，零真计算，仅 `start_stage: 1`）。先提出一批候选分子（`seed_pool` 已知添加剂 + 你自由生成的 SMILES），用 MACE-MP 与 CHGNet 两个机器学习势对每个分子做结构松弛、算出稳定构型的能量，再用半经验量子方法 xTB 算出粗略的氧化稳定性指标 HOMO/LUMO；把三次结果合并后，`filter` 按硬性淘汰线（未收敛/能量过高/HOMO 过高）砍掉明显不合格的分子，`consensus` 按三个模型各自的排名做异质投票、标记分歧。分子稳定性与电位窗在这里被廉价筛掉，昂贵的电芯仿真只留给少数值得深挖的分子——种子池保证可达性，自由生成展示创造力，两者混轨也让论文可以对照"种子池内 vs 自由探索"。写 `propose` 与 `funnel` 日志条目；`disputed` 候选不得一淘汰了之，须推理改进（换取代基/生成变体）或给出明确淘汰理由后换新。
+   命令：`run-mlp --in IN --model mace --out O` → `run-mlp --in IN --model chgnet --out O` → `run-xtb --in IN --out O` → 合并 → `filter --in M --rules R --out O` → `consensus --in M --out O`
 2. **参数桥梁**。把微观物性（扩散系数、电导率、迁移数）映射成 PyBaMM 宏观模型认识的参数名与数值——如分子尺度的 `D_electrolyte_m2_s` 变成电芯模型里的 `"Electrolyte diffusivity [m2.s-1]"`。每个数值的来源（种子池→文献值标注引用；自由生成→领域估计标注 `estimate`）必须写入日志，估计值不得冒充仿真输出，进入 Top-N 的候选其 D/σ 由真 MD/文献背书复核——人工转录是常规流程最高频的错误源，机器化且留痕让论文里每个数字都答得出"从哪来"。
+   命令：`bridge --props P --out O`
 3. **阶段2 电芯设计**。把候选的电芯参数放进 PyBaMM 电化学模型，模拟 1C 恒流放电过程，得到电压曲线与放电容量——回答"这个材料装进电池行不行"。先用秒级的 SPMe 快速筛，对通过者再用分钟级的 DFN 精算（`run-pyamm --base <案例配置 base_params> --protocol 1C_discharge --mode spme`，随后按需 `--mode dfn`）——同一"代理优先"哲学在电芯尺度的应用；DFN 收敛失败会自动降级回 SPMe，不让数值刚性卡死流程。
 4. **阶段3 安全评估**。模拟 4C 快充、45℃ 高温的极限工况（`run-pyamm --base <案例配置 base_params> --protocol 4C_charge_45C --thermal lumped --plating`），输出电芯最高温度 `T_max_K` 与负极表面电位 `anode_potential_v`——负极电位任一刻低于 0 V 即判定析锂（金属锂沉积，快充失效与安全隐患的标志）。设计要在虚拟世界里先过"安全考试"；热模型必须真实耦合（`thermal: lumped`），否则温升是假的。
 5. **评估**。把阶段 2/3 的输出数值逐项对照第 0 条的达标标准判定通过与否；不通过就诊断失败原因、回退到原因所在的尺度（材料问题回阶段 1，结构参数问题回阶段 2），判定与诊断写 `evaluate` 日志条目。评估是环的尾段而非第 4 个阶段——回退到"原因所在"而不是盲目重跑全流程，正是本协议区别于网格搜索的地方；诊断留痕让论文能展示推理质量。
 6. **收尾（唯一真计算时刻）**。对最终 Top-3 用真第一性原理计算（`run-orca`）算分子总能量/HOMO/LUMO/垂直电离能/电子亲和能，对 Top-1 用真分子动力学（`run-md`）模拟 Li⁺ 在电解液中的运动、由均方位移拟合扩散系数；最后 `render` 把全部日志渲染为六节 HTML 报告，写 `endorse` 与 `final` 日志条目。论文里的结论级数值都要有第一性原理签字——代理只负责淘汰，真计算只配给决赛圈，这也是漏斗内禁止它的原因。若配置 `real_compute: false`：跳过真计算背书，`endorse` 条目如实记录跳过（如 `{"action": "endorse", "skipped": true, "reason": "real_compute=false"}`），随后直接 `render`，不虚构 DFT/MD 数值。
+   命令：`run-orca --in IN --out O`（Top-3）→ `run-md --box B [--engine gromacs|mace] [--t-ns T] --out O`（Top-1）→ `render --case-dir D [--out O]`
 
 ### log.jsonl 条目 schema（每轮必须按此写入）
 
