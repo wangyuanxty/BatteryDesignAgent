@@ -257,11 +257,18 @@ def _propose_html(e: dict) -> str:
         if isinstance(cand, dict):
             smiles = str(cand.get("smiles") or "")
             name = str(cand.get("name") or "")
+            role = str(cand.get("role") or "")
             source = str(cand.get("source") or "")
         else:
-            smiles, name, source = str(cand), "", ""
-        inner = f"<b>{_html_escape(name)}</b> " if name else ""
-        inner += f'<span class="sm">{_html_escape(smiles)}</span>'
+            smiles, name, role, source = str(cand), "", "", ""
+        if name:
+            inner = f"<b>{_html_escape(name)}</b>"
+            if role:
+                inner += f" · {_html_escape(role)}"
+            if smiles:
+                inner += f' <span class="sm">{_html_escape(smiles)}</span>'
+        else:
+            inner = f'<span class="sm">{_html_escape(smiles)}</span>'
         tag = ""
         if source:
             cls = "seed" if source.lower() == "seed" else "free" if source.lower() in ("free_gen", "free") else ""

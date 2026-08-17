@@ -312,6 +312,23 @@ def test_verdict_variants(tmp_path):
     assert "暂无推荐（预算耗尽或未达标）" in html4  # 空 final 条目如实回退
 
 
+def test_propose_dict_candidates_with_name_and_role(tmp_path):
+    ws = _make_case(tmp_path)
+    append_entry(ws, {"round": 2, "action": "propose",
+                      "candidates": [
+                          {"smiles": "FC1COC(=O)O1", "name": "FEC",
+                           "role": "氟代碳酸酯成膜剂"},
+                          {"smiles": "N#CCCC#N", "name": "SN"},
+                          "CCOC(=O)O",
+                      ]})
+    html = _render(ws)
+    assert "FEC" in html  # name 渲染
+    assert "氟代碳酸酯" in html  # role 渲染
+    assert "FC1COC(=O)O1" in html  # SMILES 作为次要信息仍显示
+    assert "SN" in html  # role 缺失只显示 name
+    assert "CCOC(=O)O" in html  # 纯字符串候选仍兼容
+
+
 def test_propose_dict_candidates_with_source(tmp_path):
     ws = _make_case(tmp_path)
     append_entry(ws, {"round": 2, "action": "propose",

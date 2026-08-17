@@ -67,7 +67,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 追加式，每行一条 UTF-8 JSON（格式与 `bda.store.append_entry` 写入一致）：
 
 - **第 0 条（开跑前写一次）**：`{"criteria": {...}}` —— 解析出的达标标准（审计记录，报告首页展示）
-- **propose**：`{"action": "propose", "round": 1, "candidates": ["SMILES", ...], "llm_reason": "生成理由"}` —— 每轮候选与决策理由
+- **propose**：`{"action": "propose", "round": 1, "candidates": [{"smiles": "SMILES", "name": "FEC", "role": "氟代碳酸酯成膜剂"}, ...], "llm_reason": "生成理由"}` —— 每轮候选与决策理由；候选对象形式**必须写 `name`（常用缩写或化学名）与 `role`（一句话说明用途）**，纯 SMILES 字符串仍兼容
 - **funnel**：`{"action": "funnel", "passed": 3, "rejected": 2, "disputed": 1, "detail": "一句话说明判定依据"}` —— 阶段1 漏斗计数（passed/rejected/disputed 由你按淘汰线与三模型投票规则判定得出）
 - **evaluate**：`{"action": "evaluate", "round": 2, "metrics": {"capacity_ah": ..., "T_max_K": ..., "plated": false, ...}, "verdict": "pass"}` —— metrics 至少含数值键 `T_max_K` 与布尔键 `plated`（报告趋势图与 CSV 导出依赖这两个键）；verdict 取值自由（如 pass/fail），报告原样展示
 - **endorse**：`{"action": "endorse", "candidates": [{"smiles": "SMILES", "endorsement": {...}}]}` —— endorsement 对象 = 该候选 `run-orca` 输出的 endorsement 键（Top-1 另附 `run-md` 输出键）
