@@ -1,4 +1,4 @@
-from bda.funnel.filter import apply_rules
+from bda.funnel import apply_rules
 
 def test_funnel_rules():
     cands = [
@@ -16,7 +16,7 @@ def test_does_not_mutate_input():
     apply_rules(cands, {"max_energy_ev": 0.0, "max_homo_ev": -6.0})
     assert "status" not in cands[0]
 
-from bda.funnel.consistency import check_consensus
+from bda.funnel import check_consensus
 
 def test_consensus_flags_rank_disagreement():
     cands = [

@@ -60,7 +60,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 ### log.jsonl 条目 schema（每轮必须按此写入）
 
-追加式，每行一条 UTF-8 JSON（格式与 `bda.log.append_entry` 写入一致）：
+追加式，每行一条 UTF-8 JSON（格式与 `bda.store.append_entry` 写入一致）：
 
 - **第 0 条（开跑前写一次）**：`{"criteria": {...}}` —— 解析出的达标标准（审计记录，报告首页展示）
 - **propose**：`{"action": "propose", "round": 1, "candidates": ["SMILES", ...], "llm_reason": "生成理由"}` —— 每轮候选与决策理由

@@ -316,7 +316,7 @@ def test_run_pyamm_handler_in_process_fast_protocol(tmp_path):
 
 
 def test_render_handler_in_process_on_tmp_fixture(tmp_path):
-    from bda.log import append_entry
+    from bda.store import append_entry
     from bda.store import CaseWorkspace
 
     ws = CaseWorkspace("case1", root=str(tmp_path))

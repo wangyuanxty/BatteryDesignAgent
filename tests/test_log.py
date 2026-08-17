@@ -1,6 +1,6 @@
 import json
 
-from bda.log import append_entry
+from bda.store import append_entry
 from bda.store import CaseWorkspace
 
 

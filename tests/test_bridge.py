@@ -1,4 +1,4 @@
-from bda.bridge.mapper import map_micro_to_pybamm
+from bda.bridge import map_micro_to_pybamm
 
 def test_maps_known_props():
     out = map_micro_to_pybamm({"D_electrolyte_m2_s": 3e-10, "conductivity_S_m": 1.1})

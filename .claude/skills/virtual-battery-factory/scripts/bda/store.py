@@ -36,3 +36,9 @@ def cache_put(ws: CaseWorkspace, params: dict, result: dict) -> None:
     p = _cache_path(ws, params)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
+
+
+def append_entry(ws: CaseWorkspace, entry: dict) -> None:
+    with open(ws.path / "log.jsonl", "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        f.flush()

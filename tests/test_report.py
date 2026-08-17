@@ -2,9 +2,9 @@ import os
 
 import pytest
 
-from bda.log import append_entry
+from bda.store import append_entry
 from bda.store import CaseWorkspace
-from bda.report.render import render_report, export_csv
+from bda.report import render_report, export_csv
 
 def _make_case(tmp_path):
     ws = CaseWorkspace("case1", root=str(tmp_path))

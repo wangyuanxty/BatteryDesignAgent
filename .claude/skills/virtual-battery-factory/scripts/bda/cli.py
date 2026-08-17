@@ -34,14 +34,14 @@ def _cached(ws: CaseWorkspace, key: dict, compute: Callable[[], dict]) -> dict:
 
 
 def _cmd_bridge(args) -> int:
-    from bda.bridge.mapper import map_micro_to_pybamm
+    from bda.bridge import map_micro_to_pybamm
     props = _load_json(args.props)
     _dump(args.out, map_micro_to_pybamm(props))
     return 0
 
 
 def _cmd_filter(args) -> int:
-    from bda.funnel.filter import apply_rules
+    from bda.funnel import apply_rules
     data = _load_json(args.in_file)
     rules = _load_json(args.rules)
     out = apply_rules(data["candidates"], rules)
@@ -50,7 +50,7 @@ def _cmd_filter(args) -> int:
 
 
 def _cmd_consensus(args) -> int:
-    from bda.funnel.consistency import check_consensus
+    from bda.funnel import check_consensus
     data = _load_json(args.in_file)
     out = check_consensus(data["candidates"])
     _dump(args.out, {"candidates": out})
@@ -135,7 +135,7 @@ def _cmd_run_md(args) -> int:
 
 
 def _cmd_render(args) -> int:
-    from bda.report.render import render_report
+    from bda.report import render_report
     render_report(args.case_dir, args.out)
     return 0
 

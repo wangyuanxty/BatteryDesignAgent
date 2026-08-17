@@ -1,4 +1,4 @@
-from bda.metrics.energy_density import cell_mass_kg, gravimetric_energy_density
+from bda.metrics import cell_mass_kg, gravimetric_energy_density
 
 def test_cell_mass_kg():
     layers = {
@@ -18,8 +18,8 @@ def test_zero_mass_raises():
     with pytest.raises(ValueError):
         gravimetric_energy_density(200.0, 0.0)
 
-from bda.metrics.plating import detect_lithium_plating
-from bda.metrics.electrochem import ie_ea_from_energies, homo_lumo_window
+from bda.metrics import detect_lithium_plating
+from bda.metrics import ie_ea_from_energies, homo_lumo_window
 
 def test_plating_detected_below_zero():
     t = [0.0, 1.0, 2.0, 3.0]
