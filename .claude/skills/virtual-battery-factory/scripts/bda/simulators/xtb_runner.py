@@ -3,8 +3,6 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from bda.candidates import validate_smiles
-
 HARTREE_TO_EV = 27.2114
 
 
@@ -13,7 +11,10 @@ def _embed_mol_xyz(smiles: str, workdir: Path) -> None:
     from rdkit import Chem
     from rdkit.Chem import AllChem
 
-    mol = Chem.AddHs(Chem.MolFromSmiles(smiles))
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        raise ValueError(f"invalid SMILES: {smiles!r}")
+    mol = Chem.AddHs(mol)
     if AllChem.EmbedMolecule(mol, randomSeed=42) != 0:
         raise RuntimeError(f"failed to embed 3D structure for {smiles}")
     AllChem.MMFFOptimizeMolecule(mol)
@@ -58,16 +59,16 @@ def _parse_output_text(text: str) -> tuple[float | None, float | None, float | N
 
 
 def xtb_single_point(smiles: str) -> dict:
-    if not validate_smiles(smiles):
-        raise ValueError(f"invalid SMILES: {smiles!r}")
-    if shutil.which("xtb") is None:
-        raise RuntimeError(
-            "xtb binary not found; install from https://github.com/grimme-lab/xtb/releases "
-            "and put xtb.exe on PATH"
-        )
     with tempfile.TemporaryDirectory() as td:
         workdir = Path(td)
+        # RDKit parse in _embed_mol_xyz raises ValueError on invalid SMILES
+        # before the xtb binary check, matching the former guard's ordering.
         _embed_mol_xyz(smiles, workdir)
+        if shutil.which("xtb") is None:
+            raise RuntimeError(
+                "xtb binary not found; install from https://github.com/grimme-lab/xtb/releases "
+                "and put xtb.exe on PATH"
+            )
         proc = subprocess.run(
             ["xtb", "mol.xyz", "--gfn", "2"],
             cwd=workdir, capture_output=True, text=True, encoding="utf-8",

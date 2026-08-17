@@ -2,7 +2,6 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
-from bda.candidates import validate_smiles
 
 INPUT_TEMPLATE = "! {functional} OPT\n%pal nprocs 4 end\n* xyz {charge} {mult}\n{xyz}\n*\n"
 
@@ -20,7 +19,10 @@ def _multiplicity_for(smiles: str, charge: int) -> int:
     """
     from rdkit import Chem
 
-    mol = Chem.AddHs(Chem.MolFromSmiles(smiles))
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        raise ValueError(f"invalid SMILES: {smiles!r}")
+    mol = Chem.AddHs(mol)
     n_electrons = sum(atom.GetAtomicNum() for atom in mol.GetAtoms()) - charge
     return 1 if n_electrons % 2 == 0 else 2
 
@@ -78,8 +80,10 @@ def _run_and_parse(workdir: Path, name: str) -> dict:
 
 
 def orca_endorsement(smiles: str, charge: int = 0, functional: str = DEFAULT_FUNCTIONAL) -> dict:
-    if not validate_smiles(smiles):
-        raise ValueError(f"invalid SMILES: {smiles!r}")
+    # _multiplicity_for parses the SMILES via RDKit and raises ValueError on
+    # invalid input; computing the three multiplicities up front keeps that
+    # validation ahead of the ORCA binary check.
+    mults = [_multiplicity_for(smiles, q) for q in (charge, charge + 1, charge - 1)]
     if shutil.which("orca") is None:
         raise RuntimeError("ORCA binary not found; download academic Windows build from the ORCA forum")
     last_err = None
@@ -88,13 +92,13 @@ def orca_endorsement(smiles: str, charge: int = 0, functional: str = DEFAULT_FUN
         for attempt in range(3):
             try:
                 _write_input(workdir, "neutral", smiles, charge,
-                             _multiplicity_for(smiles, charge), functional, seed=42 + attempt)
+                             mults[0], functional, seed=42 + attempt)
                 neutral = _run_and_parse(workdir, "neutral")
                 _write_input(workdir, "cation", smiles, charge + 1,
-                             _multiplicity_for(smiles, charge + 1), functional, seed=42 + attempt)
+                             mults[1], functional, seed=42 + attempt)
                 cation = _run_and_parse(workdir, "cation")
                 _write_input(workdir, "anion", smiles, charge - 1,
-                             _multiplicity_for(smiles, charge - 1), functional, seed=42 + attempt)
+                             mults[2], functional, seed=42 + attempt)
                 anion = _run_and_parse(workdir, "anion")
                 return {
                     "E_hartree": neutral["E_hartree"],

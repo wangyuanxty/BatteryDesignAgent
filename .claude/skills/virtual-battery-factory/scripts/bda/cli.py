@@ -79,7 +79,6 @@ def _cmd_run_xtb(args) -> int:
 
 
 def _cmd_run_orca(args) -> int:
-    from bda.candidates import validate_smiles
     from bda.simulators.orca_runner import (DEFAULT_FUNCTIONAL, _multiplicity_for,
                                             orca_endorsement)
     data = _load_json(args.in_file)
@@ -87,8 +86,6 @@ def _cmd_run_orca(args) -> int:
     out = []
     for c in data["candidates"]:
         smiles = c["smiles"]
-        if not validate_smiles(smiles):
-            raise ValueError(f"invalid SMILES: {smiles!r}")
         key = {"cmd": "run-orca", "smiles": smiles, "charge": 0,
                "mult": _multiplicity_for(smiles, 0), "functional": DEFAULT_FUNCTIONAL}
         r = _cached(ws, key, lambda: orca_endorsement(smiles))

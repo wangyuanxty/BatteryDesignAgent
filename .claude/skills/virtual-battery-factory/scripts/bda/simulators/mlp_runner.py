@@ -1,15 +1,13 @@
-from bda.candidates import validate_smiles
-
-
 def relax_structure(smiles: str, model: str = "mace") -> dict:
-    if not validate_smiles(smiles):
-        raise ValueError(f"invalid SMILES: {smiles!r}")
     if model not in ("mace", "chgnet"):
         raise ValueError(f"unknown model '{model}'; legal: mace, chgnet")
     from rdkit import Chem
     from rdkit.Chem import AllChem
 
-    mol = Chem.AddHs(Chem.MolFromSmiles(smiles))
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        raise ValueError(f"invalid SMILES: {smiles!r}")
+    mol = Chem.AddHs(mol)
     if AllChem.EmbedMolecule(mol, randomSeed=42) != 0:
         raise ValueError(f"failed to embed 3D structure for {smiles}")
     AllChem.MMFFOptimizeMolecule(mol)
