@@ -4,7 +4,8 @@
 
 ## 通用约定
 
-- 调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`；全部 7 个子命令见 `-m bda --help`
+- 调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`；全部 6 个子命令见 `-m bda --help`
+- 参数桥梁为协议规则（PyBaMM 参数名映射表见 SKILL.md 第一节第 2 步），无对应 CLI 命令。
 - **必须用 Bash 工具执行仿真与 render 命令**：本环境 PowerShell 工具受 guardrail 限制（`$()` 子表达式、`Set-Location`、`&` 多操作等一律拦截且无法批准），若你只有 PowerShell 工具可用，说明会话工具白名单异常（续跑轮换了 session 即应恢复），先用 Bash 重试
 - JSON 即契约：所有输入/输出均为 UTF-8 JSON 文件，`--out` 指定输出路径；每一步可单独重跑
 - 同参数必复用（spec 5.2 不变式 3）：所有 `run-*` 命令先查 store 缓存，命中直接复用不重算。缓存目录 = `--out` 文件所在目录下的 `cache/`（键 = 命令参数组合：run-pyamm: params+protocol+base+mode+thermal+plating；run-mlp: smiles+model；run-xtb: smiles；run-orca: smiles+charge+mult+functional；run-md: box+t_ns+engine）。缓存文件损坏（非法 JSON / 非对象）按未命中处理并重写
@@ -15,33 +16,23 @@
 
 漏斗判定（硬淘汰线 + 三模型异质投票）由协议规则执行，见 SKILL.md 第一节第 1 步——依次真实执行 `run-mlp --model mace`、`run-mlp --model chgnet`、`run-xtb`（同一候选清单）后，直接读取三次输出 JSON 判定，无对应 CLI 命令、无需合并文件。
 
-## bridge — 微观物性 → PyBaMM 参数映射
-
-```
-bda bridge --props PROPS --out OUT
-```
-
-- 输入 `--props`：`{"D_electrolyte_m2_s": 3e-10, "conductivity_S_m": 1.1, "transport_number": 0.4}`（键可只给子集；合法键仅 `D_electrolyte_m2_s`、`conductivity_S_m`、`transport_number`）
-- 输出：PyBaMM 参数名 → 值，如 `{"Electrolyte diffusivity [m2.s-1]": 3e-10, "Electrolyte conductivity [S.m-1]": 1.1, "Cation transference number": 0.4}`；可直接作为 `run-pyamm --params` 输入
-- 报错：`unknown micro property '<k>'; legal keys: ...` → 修正键名重跑
-
 ## run-pyamm — 电芯仿真
 
 ```
 bda run-pyamm --params PARAMS --protocol PROTOCOL [--base BASE] [--mode MODE] [--thermal THERMAL] [--plating] --out OUT
 ```
 
-- `--base`：PyBaMM 参数集名（默认 `Chen2020`）；**案例配置的 `base_params` 字段必须原样传给 `--base`**（如 `--base ORegan2022`）。bridge 输出的参数名为跨参数集共享名（`Electrolyte diffusivity [m2.s-1]` 等），故 `--params` 可直接配合任一参数集使用
+- `--base`：PyBaMM 参数集名（默认 `Chen2020`）；**案例配置的 `base_params` 字段必须原样传给 `--base`**（如 `--base ORegan2022`）。参数桥梁映射表（SKILL.md 第一节第 2 步）的参数名为跨参数集共享名（`Electrolyte diffusivity [m2.s-1]` 等），故 `--params` 可直接配合任一参数集使用
 - `--protocol` 合法值：`1C_discharge`（1C 放电，3600 s，298.15 K）；`4C_charge_45C`（4C 充电，900 s，318.15 K）
 - `--mode`：`spme`（默认）/ `dfn`；dfn 求解失败自动降级 SPMe 重试（输出 `model_used` 记 `"SPMe(fallback)"`）
 - `--thermal`：`lumped`（默认）/ `isothermal`；非 isothermal 时输出含 `T_max_K`
 - `--plating`：启用析锂模块（Chen2020 参数集无析锂参数，运行时注入标准默认值），输出含 `anode_potential_v`
-- 输入 `--params`：`{"<PyBaMM 参数名>": 值}` —— 参数名会按所选参数集校验，通常直接给 `bridge` 输出
+- 输入 `--params`：`{"<PyBaMM 参数名>": 值}` —— 参数名会按所选参数集校验，通常按 SKILL.md 第一节第 2 步的参数名映射表书写
 - 输出键：`model_used`、`time_s`、`voltage_v`、`capacity_ah`、`T_max_K`（非 isothermal）、`anode_potential_v`（--plating）
 - 报错：
   - `unknown protocol 'x'; legal: ['1C_discharge', '4C_charge_45C']` → 修正协议名
   - `unknown mode 'x'; legal: spme, dfn` → 修正模式名
-  - `unknown parameter name(s): ['...']` → 参数名不在所选参数集内；检查 bridge 键与拼写
+  - `unknown parameter name(s): ['...']` → 参数名不在所选参数集内；对照 SKILL.md 第一节第 2 步的映射表检查键名与拼写
   - SPMe 求解失败（pybamm.SolverError traceback）→ 该参数组合无效，按 SKILL.md 第一节第 5 步回退调整
 
 ## run-mlp — ML 势结构松弛

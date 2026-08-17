@@ -33,13 +33,6 @@ def _cached(ws: CaseWorkspace, key: dict, compute: Callable[[], dict]) -> dict:
     return result
 
 
-def _cmd_bridge(args) -> int:
-    from bda.bridge import map_micro_to_pybamm
-    props = _load_json(args.props)
-    _dump(args.out, map_micro_to_pybamm(props))
-    return 0
-
-
 def _cmd_run_pyamm(args) -> int:
     from bda.simulators.pybamm_runner import run_simulation
     params = _load_json(args.params)
@@ -126,7 +119,6 @@ def _cmd_render(args) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="bda", description="Virtual Battery Factory simulation library CLI")
     sub = parser.add_subparsers(dest="command", required=True)
-    p_bridge = sub.add_parser("bridge"); p_bridge.add_argument("--props", required=True); p_bridge.add_argument("--out", required=True)
     p_pybamm = sub.add_parser("run-pyamm"); p_pybamm.add_argument("--params", required=True); p_pybamm.add_argument("--protocol", required=True); p_pybamm.add_argument("--base", default="Chen2020"); p_pybamm.add_argument("--mode", default="spme"); p_pybamm.add_argument("--thermal", default="lumped"); p_pybamm.add_argument("--plating", action="store_true"); p_pybamm.add_argument("--out", required=True)
     p_mlp = sub.add_parser("run-mlp"); p_mlp.add_argument("--in", dest="in_file", required=True); p_mlp.add_argument("--model", default="mace"); p_mlp.add_argument("--out", required=True)
     p_xtb = sub.add_parser("run-xtb"); p_xtb.add_argument("--in", dest="in_file", required=True); p_xtb.add_argument("--out", required=True)
@@ -134,7 +126,7 @@ def main(argv: list[str] | None = None) -> int:
     p_md = sub.add_parser("run-md"); p_md.add_argument("--box", required=True); p_md.add_argument("--engine", default="gromacs"); p_md.add_argument("--t-ns", type=float, default=10.0); p_md.add_argument("--out", required=True)
     p_render = sub.add_parser("render"); p_render.add_argument("--case-dir", required=True); p_render.add_argument("--out", default="report.html")
 
-    handlers = {"bridge": _cmd_bridge, "run-pyamm": _cmd_run_pyamm, "run-mlp": _cmd_run_mlp,
+    handlers = {"run-pyamm": _cmd_run_pyamm, "run-mlp": _cmd_run_mlp,
                 "run-xtb": _cmd_run_xtb, "run-orca": _cmd_run_orca, "run-md": _cmd_run_md,
                 "render": _cmd_render}
     args = parser.parse_args(argv)

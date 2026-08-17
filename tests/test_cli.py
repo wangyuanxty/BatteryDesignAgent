@@ -13,25 +13,6 @@ def test_unknown_command_fails_fast():
     assert r.returncode != 0
     assert "command" in r.stderr.lower() or "usage" in r.stderr.lower()
 
-def test_bridge_roundtrip(tmp_path):
-    props = tmp_path / "p.json"
-    props.write_text(json.dumps({"D_electrolyte_m2_s": 3e-10}), encoding="utf-8")
-    out = tmp_path / "o.json"
-    r = subprocess.run([PY, "-m", "bda", "bridge", "--props", str(props), "--out", str(out)],
-                       capture_output=True, text=True)
-    assert r.returncode == 0, r.stderr
-    data = json.loads(out.read_text(encoding="utf-8"))
-    assert data["Electrolyte diffusivity [m2.s-1]"] == 3e-10
-
-def test_bridge_bad_key_exit_1(tmp_path):
-    props = tmp_path / "p.json"
-    props.write_text(json.dumps({"bogus": 1.0}), encoding="utf-8")
-    out = tmp_path / "o.json"
-    r = subprocess.run([PY, "-m", "bda", "bridge", "--props", str(props), "--out", str(out)],
-                       capture_output=True, text=True)
-    assert r.returncode == 1
-    assert "bogus" in r.stderr
-
 
 # ---------------------------------------------------------------------------
 # In-process handler tests (bda.cli.main): cover the CLI boundary directly.
@@ -247,20 +228,14 @@ def test_run_md_handler_in_process_with_cache_and_engine(tmp_path, monkeypatch):
     assert data["D_Li_m2_s"] == 1.5e-10
 
 
-def test_bridge_handler_in_process(tmp_path):
-    props = tmp_path / "p.json"
-    props.write_text(json.dumps({"conductivity_S_m": 1.1}), encoding="utf-8")
-    out = tmp_path / "o.json"
-    rc = main(["bridge", "--props", str(props), "--out", str(out)])
-    assert rc == 0
-    assert json.loads(out.read_text(encoding="utf-8"))["Electrolyte conductivity [S.m-1]"] == 1.1
-
-
 def test_handler_error_returns_1_and_prints(capsys, tmp_path):
-    props = tmp_path / "p.json"
-    props.write_text(json.dumps({"bogus": 1.0}), encoding="utf-8")
+    """Parameter/validation errors must exit 1 with the documented bda error
+    on stderr, not a traceback (unknown protocol vehicle for the error path)."""
+    params = tmp_path / "p.json"
+    params.write_text(json.dumps({}), encoding="utf-8")
     out = tmp_path / "o.json"
-    rc = main(["bridge", "--props", str(props), "--out", str(out)])
+    rc = main(["run-pyamm", "--params", str(params), "--protocol", "bogus",
+               "--out", str(out)])
     assert rc == 1
     err = capsys.readouterr().err
     assert "bogus" in err
@@ -297,11 +272,19 @@ def test_render_handler_in_process_on_tmp_fixture(tmp_path):
 def test_module_entrypoint_runs(monkeypatch, tmp_path):
     import runpy
 
-    props = tmp_path / "p.json"
-    props.write_text(json.dumps({"D_electrolyte_m2_s": 3e-10}), encoding="utf-8")
+    import bda.simulators.pybamm_runner as pr
+
+    def fake_run(params, protocol, base="Chen2020", mode="spme", fallback=True,
+                 thermal="lumped", plating=False):
+        return {"model_used": "SPMe", "time_s": [0.0, 1.0],
+                "voltage_v": [4.2, 3.5], "capacity_ah": 1.0}
+
+    monkeypatch.setattr(pr, "run_simulation", fake_run)
+    params = tmp_path / "p.json"
+    params.write_text(json.dumps({}), encoding="utf-8")
     out = tmp_path / "o.json"
-    monkeypatch.setattr(sys, "argv", ["bda", "bridge", "--props", str(props),
-                                      "--out", str(out)])
+    monkeypatch.setattr(sys, "argv", ["bda", "run-pyamm", "--params", str(params),
+                                      "--protocol", "1C_discharge", "--out", str(out)])
     with pytest.raises(SystemExit) as exc:
         runpy.run_module("bda", run_name="__main__")
     assert exc.value.code == 0
