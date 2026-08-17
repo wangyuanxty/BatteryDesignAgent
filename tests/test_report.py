@@ -9,9 +9,12 @@ from bda.report import render_report, export_csv
 from bda.report import (
     _as_list,
     _attr_escape,
+    _entry_stage,
     _fill_template,
     _fmt_num,
     _json_block,
+    _stage_badge,
+    _stage_range_badge,
     _threshold_text,
     _to_int,
     _verdict_class,
@@ -63,9 +66,9 @@ def test_render_produces_self_contained_html(tmp_path):
 def test_render_all_six_sections(tmp_path, full_case):
     ws = full_case
     html = _render(ws)
-    for heading in ("任务概览与达标标准", "迭代轨迹", "漏斗统计", "阶段结果", "收尾背书", "最终推荐", "设计说明"):
+    for heading in ("任务概览与达标标准", "迭代轨迹", "漏斗统计", "阶段结果", "真DFT/MD 验证背书", "最终推荐", "设计说明"):
         assert heading in html
-    assert "ORCA-PBE0" in html  # 收尾背书中的 endorsement 值
+    assert "ORCA-PBE0" in html  # 真DFT/MD 验证背书中的 endorsement 值
     assert "energy_density_Wh_kg" in html  # 阶段结果表格渲染全部 metrics 键
     assert 'class="stat-num">4</div>' in html  # 漏斗计数跨条目求和（3+1）
     assert 'class="verdict ok"' in html  # final 达标结论
@@ -113,8 +116,19 @@ def test_flow_overview_strip(tmp_path, full_case):
     assert "阶段1 · 材料设计" in html
     assert "阶段2 · 电芯设计" in html
     assert "阶段3 · 安全评估" in html
+    assert "真DFT/MD 验证" in html  # 收尾流程项更名为真DFT/MD 验证
+    assert '<span class="badge stage end">STAGE 4</span>' in html
     assert "分子 propose 1 · funnel 2" in html
     assert "背书 1 · 终审 1 · 结论 达标" in html
+
+
+def test_closing_phase_badge_is_stage_4(tmp_path, full_case):
+    """endorse/final 对应徽章为 STAGE 4（end 铜色样式）；说明性文字为"真DFT/MD 验证"。"""
+    html = _render(full_case)
+    assert '<span class="badge stage end">STAGE 4</span>' in html
+    assert "真DFT/MD 验证" in html
+    assert "收尾" not in html
+    assert '<span class="badge stage">STAGE 1</span>' in html  # 数字阶段徽章不受影响
 
 
 def test_stage_badges_in_round_cards(tmp_path, full_case):
@@ -144,6 +158,26 @@ def test_round_card_stage_range_badge(tmp_path):
     assert 'ROUND 02</span><span class="badge stage">STAGE 2–3</span>' in html  # 跨阶段轮=范围
     round02_tail = html.split("ROUND 02", 1)[1]
     assert '<span class="badge stage">STAGE 3</span>' not in round02_tail  # 不再仅显示最大阶段
+
+
+def test_stage_badge_helpers_closing_phase_is_stage_4():
+    """阶段 4（真DFT/MD 验证）沿用 end 铜色样式；范围徽章可含 4（如 STAGE 3–4）。"""
+    assert _stage_badge(4) == '<span class="badge stage end">STAGE 4</span>'
+    assert _stage_badge(1) == '<span class="badge stage">STAGE 1</span>'
+    assert _stage_badge(None) == ""
+    assert _stage_badge(0) == ""  # 0 不再是有效阶段键
+    assert _stage_range_badge(4, 4) == _stage_badge(4)  # 单阶段 4 沿用 end 徽章
+    assert _stage_range_badge(3, 4) == '<span class="badge stage">STAGE 3–4</span>'
+    assert _stage_range_badge(2, 3) == '<span class="badge stage">STAGE 2–3</span>'
+    assert _stage_range_badge(0, 4) == ""  # 无效阶段混入不产出范围
+
+
+def test_entry_stage_maps_endorse_final_to_stage_4():
+    """endorse/final 映射到阶段 4（真DFT/MD 验证）；其余阶段映射不变。"""
+    assert _entry_stage({"action": "endorse"}) == 4
+    assert _entry_stage({"action": "final"}) == 4
+    assert _entry_stage({"action": "propose", "candidates": ["FEC"]}) == 1
+    assert _entry_stage({"action": "funnel"}) == 1
 
 
 def test_criteria_min_max_thresholds(tmp_path):

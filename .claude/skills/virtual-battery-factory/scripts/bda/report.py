@@ -113,35 +113,36 @@ def _verdict_badge(verdict: str) -> str:
     return f'<span class="badge {cls}">{_html_escape(str(verdict))}</span>'
 
 
-# 三阶段流程 + 收尾（0=收尾；阶段编号与 SKILL.md 流程一致）
-_STAGE_LABELS = {0: "STAGE 收尾", 1: "STAGE 1", 2: "STAGE 2", 3: "STAGE 3"}
+# 四阶段流程（1–3=漏斗阶段，4=真DFT/MD 验证；阶段编号与 SKILL.md 流程一致。
+# 阶段 4 沿用 .badge.stage.end 铜色样式区分。）
+_STAGE_LABELS = {1: "STAGE 1", 2: "STAGE 2", 3: "STAGE 3", 4: "STAGE 4"}
 
 
 def _stage_badge(stage: int | None) -> str:
     """STAGE 小标（blueprint 风格：等宽 10.5px 边框徽章，沿用 .badge + --blue/--accent）。"""
     if stage not in _STAGE_LABELS:
         return ""
-    cls = "badge stage end" if stage == 0 else "badge stage"
+    cls = "badge stage end" if stage == 4 else "badge stage"
     return f'<span class="{cls}">{_STAGE_LABELS[stage]}</span>'
 
 
 def _stage_range_badge(lo: int, hi: int) -> str:
     """轮卡片阶段范围徽章：单阶段沿用 _stage_badge；跨阶段显示 STAGE N–M（en dash）。
-    阶段编号与 _entry_stage / _STAGE_LABELS 同一体系（0=收尾）。"""
+    范围仅由数字阶段（1–4）构成，阶段 4（真DFT/MD 验证）可参与范围（如 STAGE 3–4）；
+    endorse/final 条目不进轮卡片，阶段 4 在流程一览条中单独显示。"""
     if lo == hi:
         return _stage_badge(lo)
     if lo not in _STAGE_LABELS or hi not in _STAGE_LABELS:
         return ""
-    cls = "badge stage end" if lo == 0 else "badge stage"
-    return f'<span class="{cls}">STAGE {lo}–{hi}</span>'
+    return f'<span class="badge stage">STAGE {lo}–{hi}</span>'
 
 
 def _entry_stage(e: dict) -> int | None:
-    """log 条目 → 阶段：endorse/final=收尾(0)；分子 propose/funnel=1；struct propose=2；
+    """log 条目 → 阶段：endorse/final=4（真DFT/MD 验证）；分子 propose/funnel=1；struct propose=2；
     evaluate 按条目内容推断（提及 struct/结构 → 含安全指标为 3，否则 2；否则视为材料轮=1）。"""
     action = e.get("action")
     if action in ("endorse", "final"):
-        return 0
+        return 4
     if action == "propose":
         has_struct = any(
             isinstance(c, dict) and c.get("struct") for c in _as_list(e.get("candidates"))
@@ -220,7 +221,7 @@ def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]]) -> str:
     """概览区流程一览条：四阶段徽章，各带由 log 条目 / cell 曲线机械推导的计数或结论摘要。
 
     阶段1 材料设计=分子 propose/funnel；阶段2 电芯设计=struct propose/discharge 曲线；
-    阶段3 安全评估=charge45 曲线；收尾=endorse/final（含最终结论）。
+    阶段3 安全评估=charge45 曲线；阶段4 真DFT/MD 验证=endorse/final（含最终结论）。
     """
     mol_prop = struct_prop = funnel_n = endorse_n = final_n = 0
     for e in log:
@@ -246,10 +247,10 @@ def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]]) -> str:
         (1, "阶段1 · 材料设计", f"分子 propose {mol_prop} · funnel {funnel_n}"),
         (2, "阶段2 · 电芯设计", f"结构 propose {struct_prop} · 放电曲线 {n_discharge}"),
         (3, "阶段3 · 安全评估", f"4C 快充曲线 {n_charge45}"),
-        (0, "收尾", close_sum),
+        (4, "真DFT/MD 验证", close_sum),
     )
     blocks = [
-        f'<div class="flow-item {"end" if stage == 0 else ""}">{_stage_badge(stage)}'
+        f'<div class="flow-item {"end" if stage == 4 else ""}">{_stage_badge(stage)}'
         f'<div class="flow-name">{_html_escape(name)}</div>'
         f'<div class="flow-count">{_html_escape(count)}</div></div>'
         for stage, name, count in items
