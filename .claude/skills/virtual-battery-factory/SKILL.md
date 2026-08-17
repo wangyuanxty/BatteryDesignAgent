@@ -7,16 +7,17 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 你是电池设计智能体。你自带电化学领域知识；本协议只规定**流程、边界与反模式**，以及仿真库命令用法。所有结论级数值必须来自工具输出文件，不得凭记忆编造。
 
-本 skill 的目录结构：`SKILL.md`（本协议）＋ `references/cli-commands.md`（仿真库命令完整参考，需要参数细节/IO 结构/报错处置时用 Read 读取）＋ `scripts/bda/`（仿真库 Python 包，pip editable 安装映射至此）＋ `assets/cases/`（案例模板/默认值来源：`minimal_smoke.yaml`、`fast_charge_v1.yaml`、`voltage_window.yaml`、`energy_density.yaml`，交互模式按最近模板生成配置时取默认值）。
+本 skill 的目录结构：`SKILL.md`（本协议）＋ `references/cli-commands.md`（仿真库命令完整参考，需要参数细节/IO 结构/报错处置时用 Read 读取）＋ `scripts/bda/`（仿真库 Python 包，pip editable 安装映射至此）＋ `assets/cases/`（案例模板/默认值来源：`minimal_smoke.yaml`、`fast_charge_v1.yaml`、`voltage_window.yaml`、`energy_density.yaml`（以上全流程 start_stage 1）、`structure_opt.yaml`（从阶段 2 开始的结构优化），交互模式按最近模板生成配置时取默认值）。
 
 ## 〇、运行模式（先判定，再行动）
 
 - **交互模式（开发期，Claude Code 对话）**：用户只给自然语言设计目标（如"设计一款能量密度 ≥ 400 Wh/kg 且 4C 快充无析锂的电池"）。**不得立即开跑**——先用 AskUserQuestion 逐项澄清（每项带推荐默认值，用户可直接选默认）：
   1. 设计目标量化：给出你解析出的指标与阈值（criteria 草案）请用户确认或修正
-  2. 材料体系：默认 EC/EMC + LiPF6
-  3. 迭代预算：默认 30 轮
-  4. 消融开关：默认全 true（完整系统）
-  5. 真计算开关：默认 **false**（交互调试不要误烧一夜 CPU；用户明确要求真 DFT/MD 背书时再 true）
+  2. **起点判定**：目标是否涉及新材料/添加剂/电解质设计？——涉及 → `start_stage: 1`（全流程）；只涉及结构/配方参数（厚度、孔隙率、N/P 等）或"在现有体系上优化" → `start_stage: 2`（从阶段 2 开始，材料用体系基线参数）。把判定结果作为澄清选项请用户确认
+  3. 材料体系：默认 EC/EMC + LiPF6
+  4. 迭代预算：默认 30 轮
+  5. 消融开关：默认全 true（完整系统）
+  6. 真计算开关：默认 **false**（交互调试不要误烧一夜 CPU；用户明确要求真 DFT/MD 背书时再 true）
   澄清完毕：把答案按 `assets/cases/` 模板字段写成案例 YAML 存入工作区，log.jsonl 第 0 条写入最终 criteria，然后按第一节执行（交互模式下你直接以自身工具执行协议，无需 run.py）。
 - **批量模式（实验期，`run.py` 驱动）**：系统提示注入了 `配置:` 路径与 `工作区:` 目录时，**不得提问**——直接按配置执行（阈值解析写 log 第 0 条后自动开跑）。此模式支撑论文的 N=3 重复与消融矩阵，必须零交互、全可复现。
 - 判定依据：系统提示含 `配置:` 字段 = 批量模式；否则若处于对话中且用户提出电池设计目标 = 交互模式。
@@ -33,9 +34,9 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 2. 若 `log.jsonl` 已存在（续跑/resume）：从最后一条记录恢复状态，不重复执行已完成步骤（以产物文件存在为准）。
 3. 从 `goal` 自然语言解析达标标准（指标名、阈值、单位），写入 `log.jsonl` 第 0 条后直接开跑。
 
-对每个候选分子严格执行：
+对每个候选分子严格执行（`start_stage: 2` 时跳过步骤 1 的分子筛选，材料物性直接用体系基线参数——props 来源标注 `baseline`（文献值），写一条 funnel 日志说明"本案例从阶段 2 开始，材料采用体系基线"）：
 
-1. **阶段1 材料设计**（快环，零真计算）：生成候选（`seed_pool` + 自由生成）→ `run-mlp --model mace` → `run-mlp --model chgnet` → `run-xtb` → 按合并约定建 consensus 输入 → `filter`（漏斗硬淘汰）→ `consensus`（三模型一致性投票）
+1. **阶段1 材料设计**（快环，零真计算，仅 `start_stage: 1`）：生成候选（`seed_pool` + 自由生成）→ `run-mlp --model mace` → `run-mlp --model chgnet` → `run-xtb` → 按合并约定建 consensus 输入 → `filter`（漏斗硬淘汰）→ `consensus`（三模型一致性投票）
    - 写 `propose` 与 `funnel` 日志条目
    - `consensus` 返回 `disputed` 的候选：不得淘汰即止，须推理改进（换取代基/生成变体）或明确给出淘汰理由后换新候选
 2. **参数桥梁**：对通过候选执行 `bridge`，产出 PyBaMM 参数更新（props 数值来源写入日志）

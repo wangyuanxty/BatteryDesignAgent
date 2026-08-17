@@ -47,3 +47,19 @@ def test_loads_real_compute_flag(tmp_path):
     p_default = tmp_path / "default.yaml"
     p_default.write_text("goal: g\nsystem: s\n", encoding="utf-8")
     assert load_case_config(str(p_default)).real_compute is False
+
+def test_loads_start_stage(tmp_path):
+    p2 = tmp_path / "s2.yaml"
+    p2.write_text("goal: g\nsystem: s\nstart_stage: 2\n", encoding="utf-8")
+    assert load_case_config(str(p2)).start_stage == 2
+
+    p_default = tmp_path / "default.yaml"
+    p_default.write_text("goal: g\nsystem: s\n", encoding="utf-8")
+    assert load_case_config(str(p_default)).start_stage == 1
+
+def test_rejects_invalid_start_stage(tmp_path):
+    p = tmp_path / "bad.yaml"
+    p.write_text("goal: g\nsystem: s\nstart_stage: 3\n", encoding="utf-8")
+    import pytest
+    with pytest.raises(ValueError, match="start_stage"):
+        load_case_config(str(p))

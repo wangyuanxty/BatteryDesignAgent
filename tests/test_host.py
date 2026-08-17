@@ -41,14 +41,19 @@ def test_host_runs_minimal_query():
     """Smoke: the launcher boots the SDK and gets a text reply back."""
     if not _has_api_route():
         pytest.skip("no API route configured (no DEEPSEEK_API_KEY in .env)")
-    r = subprocess.run(
-        [sys.executable, str(RUN_PATH), "--smoke-test"],
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        timeout=300,
-    )
+    r = None
+    for _attempt in range(2):  # live API can hiccup; one retry before failing
+        r = subprocess.run(
+            [sys.executable, str(RUN_PATH), "--smoke-test"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=300,
+        )
+        if r.returncode == 0 and "smoke" in (r.stdout or "").lower():
+            break
+    assert r is not None
     assert r.returncode == 0, r.stderr
     assert "smoke" in (r.stdout or "").lower()
 

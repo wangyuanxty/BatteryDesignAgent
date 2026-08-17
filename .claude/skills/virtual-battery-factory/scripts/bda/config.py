@@ -11,6 +11,7 @@ class CaseConfig:
     ablations: dict[str, bool] = field(default_factory=dict)
     base_params: str = "Chen2020"
     real_compute: bool = False
+    start_stage: int = 1  # 1=全流程（阶段1 材料设计起）；2=从阶段2 结构设计起（材料用体系基线）
 
 
 def load_case_config(path: str) -> CaseConfig:
@@ -28,7 +29,10 @@ def load_case_config(path: str) -> CaseConfig:
         ablations=dict(raw.get("ablations", {})),
         base_params=str(raw.get("base_params", "Chen2020")),
         real_compute=bool(raw.get("real_compute", False)),
+        start_stage=int(raw.get("start_stage", 1)),
     )
     if cfg.max_rounds < 1:
         raise ValueError("max_rounds must be >= 1")
+    if cfg.start_stage not in (1, 2):
+        raise ValueError("start_stage must be 1 or 2")
     return cfg

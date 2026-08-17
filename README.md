@@ -51,6 +51,7 @@ ML 势（MACE-MP/CHGNet）由 pip `[ml]` 附带，无需额外二进制。`real_
 | `fast_charge_v1.yaml` | 快充/析锂添加剂：EC/EMC + LiPF6 体系 4C 快充下的析锂与温升（T_max < 60℃ 且无析锂），30 轮预算 |
 | `voltage_window.yaml` | 电压窗口拓宽：电化学稳定窗口 ≥ 5.0 V（IE/EA 代理）+ 容量不低于基线 + 无析锂 |
 | `energy_density.yaml` | 电芯级目标驱动：重力能量密度 ≥ 400 Wh/kg，材料与结构参数联合调整 |
+| `structure_opt.yaml` | 结构参数优化（`start_stage: 2`，从阶段 2 开始，不换材料）：厚度/孔隙率/N/P 优化提升容量 |
 | `minimal_smoke.yaml` | 冒烟（真计算关）：最小闭环验证 |
 
 收尾 Top-3 `run-orca` + Top-1 `run-md` 真计算背书（挂夜，约一夜一案例）。运行：
