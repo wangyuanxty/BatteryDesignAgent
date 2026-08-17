@@ -15,7 +15,7 @@ LLM Agent 驱动的跨尺度虚拟电池设计平台——材料基因 → 电�
 ```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
-pip install -e ".[dev,ml,host]"
+pip install -e ".claude/skills/virtual-battery-factory/scripts[dev,ml,host]"
 ```
 
 外部二进制（仅收尾真计算背书需要；各 runner 以 `PATH` 查找可执行文件，装好目录加入 `PATH` 即可）：

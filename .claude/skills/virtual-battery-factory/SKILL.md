@@ -15,7 +15,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 0. **环境自检与自装**（每次会话开始先做）：
    - 检查 `.venv\Scripts\python.exe -c "import bda"` 能否成功；能 → 跳过本步
-   - 不能 → 自己安装环境（Bash 执行，勿等用户）：仓库根有 `pyproject.toml` 时建虚拟环境并 `pip install -e ".[dev,ml,host]"`；仅拿到本 skill 文件夹（无仓库）时改为 `pip install -e <本skill目录>/scripts`（scripts/ 内有独立 pyproject.toml）。ml 额外依赖（torch/mace-torch/chgnet）体积大，按阶段 1 需要再装亦可，但收尾 run-md 的 mace 引擎必须有 mace-torch
+   - 不能 → 自己安装环境（Bash 执行，勿等用户）：建虚拟环境并 `pip install -e "<本skill目录>/scripts[dev,ml,host]"`（scripts/ 内 pyproject.toml 是**唯一安装定义**，仓库根无 pyproject）。ml 额外依赖（torch/mace-torch/chgnet）体积大，按阶段 1 需要再装亦可，但收尾 run-md 的 mace 引擎必须有 mace-torch
    - 外部二进制（xtb/orca/gmx）不在 pip 范围：缺失时对应命令会给出安装指引，按指引装或如实记录跳过
 1. 读取案例配置（字段：`goal` 设计目标、`system` 材料体系、`max_rounds` 迭代预算、`seed_pool` 种子池、`ablations` 消融开关、`base_params` 参数集、`real_compute` 真计算开关）。配置与工作区路径以系统提示注入的 `配置:` / `工作区:` 字段为准（Agent SDK 启动器注入，工作区=配置所在目录；`runs/<case_id>/` 仅为无注入时的默认布局）。
 2. 若 `log.jsonl` 已存在（续跑/resume）：从最后一条记录恢复状态，不重复执行已完成步骤（以产物文件存在为准）。

@@ -1,5 +1,4 @@
-# bda 仿真库——skill 自包含安装定义（供 skill 文件夹独立分发时使用）
-# 依赖列表须与仓库根 pyproject.toml 保持同步（两处同改）
+# bda 仿真库——唯一安装定义（仓库根不再有 pyproject；测试配置见仓库根 pytest.ini）
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
