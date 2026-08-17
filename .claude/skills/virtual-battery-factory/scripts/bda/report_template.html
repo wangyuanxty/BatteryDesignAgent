@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+/* ============================================================
+   虚拟电池工厂 · 工程蓝图纸报告模板 (BLUEPRINT)
+   数据位由 bda/report.py 以模板占位符确定性填充，无外部资源。
+   ============================================================ */
+:root{
+  --ink:#14283C;
+  --blue:#1E5A8A;
+  --paper:#F4F7FA;
+  --grid:#D8E2EC;
+  --accent:#C97B3D;
+  --ok:#2E7D4F;
+  --bad:#B3402A;
+  --ok-dark:#7FC79B;   /* 深底上的达标色 */
+  --bad-dark:#E08A73;  /* 深底上的不达标色 */
+  --mono:"Cascadia Mono",ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace;
+  --sans:system-ui,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body{
+  margin:0;
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.65;
+  color:var(--ink);
+  background-color:var(--paper);
+  /* 晒图纸蓝图网格 */
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  min-height:100vh;
+}
+::selection{background:rgba(201,123,61,.28)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--blue)}
+.mono,code,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- 图纸头 ---------- */
+.drawing-head{
+  background:var(--ink);
+  color:#EDF3F9;
+  border-bottom:3px solid var(--accent);
+  padding:40px clamp(16px,4vw,48px) 28px;
+  background-image:
+    linear-gradient(rgba(216,226,236,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(216,226,236,.07) 1px,transparent 1px);
+  background-size:22px 22px;
+}
+.head-row{
+  display:flex;flex-wrap:wrap;gap:28px;
+  justify-content:space-between;align-items:flex-start;
+}
+.head-main{max-width:680px;min-width:0}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--blue);
+  margin:0 0 6px;
+}
+.eyebrow::before{content:"▍";color:var(--accent)}
+.eyebrow.light{color:#9FB7CC}
+.case-name{
+  font-size:clamp(26px,4vw,40px);font-weight:700;letter-spacing:.02em;
+  margin:0 0 10px;color:#fff;overflow-wrap:anywhere;
+}
+.goal{font-size:16px;color:#C9D7E3;margin:0 0 10px;max-width:56ch}
+.head-meta{font-family:var(--mono);font-size:12px;color:#8CA5BC;margin:0}
+.head-meta span{
+  display:inline-block;border:1px solid rgba(159,183,204,.35);
+  padding:1px 8px;margin:2px 6px 2px 0;border-radius:2px;
+}
+.verdict-block{text-align:right;min-width:190px}
+.verdict{
+  font-family:var(--mono);font-weight:700;
+  font-size:clamp(30px,5vw,52px);line-height:1.05;letter-spacing:.02em;
+  text-transform:uppercase;
+}
+.verdict.ok{color:var(--ok-dark)}
+.verdict.bad{color:var(--bad-dark)}
+.verdict.neutral{color:var(--accent)}
+
+/* ---------- 关键结果大数字 ---------- */
+.kpi-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
+  background:rgba(216,226,236,.2);border:1px solid rgba(216,226,236,.28);
+  margin-top:28px;
+}
+.kpi-item{background:rgba(20,40,60,.55);padding:14px 16px 12px;min-width:0}
+.kpi-label{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#9FB7CC;margin-bottom:6px;
+}
+.kpi-num{
+  font-family:var(--mono);font-size:clamp(22px,3vw,30px);font-weight:600;
+  color:#fff;line-height:1.1;overflow-wrap:anywhere;
+}
+.kpi-num.ok{color:var(--ok-dark)}
+.kpi-num.bad{color:var(--bad-dark)}
+.kpi-num.mute{color:#8CA5BC}
+.kpi-sub{font-family:var(--mono);font-size:11px;color:#8CA5BC;margin-top:5px}
+.kpi-unit{font-size:.55em;color:#8CA5BC;margin-left:4px;font-weight:400}
+
+/* ---------- 顶部导航 ---------- */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:var(--ink);border-bottom:1px solid var(--blue);
+  display:flex;align-items:stretch;gap:2px;padding:0 14px;overflow-x:auto;
+}
+.nav-brand{
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#9FB7CC;
+  display:flex;align-items:center;white-space:nowrap;
+  padding-right:12px;margin-right:8px;border-right:1px solid rgba(159,183,204,.3);
+}
+.nav-brand b{color:var(--accent);font-weight:700}
+.nav a{
+  color:#C9D7E3;text-decoration:none;font-family:var(--mono);font-size:12px;
+  letter-spacing:.04em;padding:12px 12px;white-space:nowrap;
+  border-bottom:2px solid transparent;display:flex;align-items:center;
+}
+.nav a .n{color:#7C96AC;margin-right:6px}
+.nav a:hover{color:#fff;background:rgba(216,226,236,.08)}
+.nav a.active{color:#fff;border-bottom-color:var(--accent)}
+.nav a.active .n{color:var(--accent)}
+
+/* ---------- 布局与图纸区块 ---------- */
+main{max-width:1120px;margin:0 auto;padding:34px clamp(14px,3vw,32px) 8px}
+.sheet{
+  position:relative;
+  background:rgba(255,255,255,.93);
+  border:1px solid var(--blue);
+  border-radius:2px;
+  box-shadow:0 2px 0 rgba(20,40,60,.1);
+  padding:28px clamp(18px,3vw,36px) 32px;
+  margin:0 0 30px;
+  scroll-margin-top:64px;
+}
+.sheet::before,.sheet::after{
+  content:"+";position:absolute;font-family:var(--mono);
+  font-size:13px;color:var(--blue);line-height:1;
+}
+.sheet::before{top:6px;left:8px}
+.sheet::after{bottom:6px;right:8px}
+.sheet h2{font-size:20px;margin:2px 0 16px;letter-spacing:.02em}
+.sheet h2::after{
+  content:"";display:block;width:56px;height:3px;
+  background:var(--accent);margin-top:6px;
+}
+.empty{color:#5E768C;font-style:italic;margin:6px 0}
+.hint{font-style:normal;font-family:var(--mono);font-size:12px;color:#7C96AC}
+
+/* ---------- 表格 ---------- */
+.tbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13px}
+.tbl th{
+  text-align:left;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--blue);border-bottom:2px solid var(--blue);
+  padding:6px 10px;font-weight:600;white-space:nowrap;
+}
+.tbl td{border-bottom:1px solid var(--grid);padding:7px 10px;vertical-align:top;overflow-wrap:anywhere}
+.tbl td.num{text-align:right;white-space:nowrap}
+.tbl tr:hover td{background:rgba(216,226,236,.35)}
+.crit-meta{font-size:11.5px;color:#5E768C;overflow-wrap:anywhere}
+
+/* ---------- 徽章与标签 ---------- */
+.badge{
+  font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;border:1px solid currentColor;border-radius:2px;
+  padding:2px 8px;white-space:nowrap;background:rgba(216,226,236,.15);
+}
+.badge.ok{color:var(--ok);background:rgba(46,125,79,.08)}
+.badge.bad{color:var(--bad);background:rgba(179,64,42,.08)}
+.badge.mute{color:#6B8296;background:rgba(107,130,150,.08)}
+.chip{
+  font-family:var(--mono);font-size:12px;background:#EEF3F8;
+  border:1px solid var(--grid);border-radius:2px;padding:2px 9px;
+  white-space:nowrap;overflow-wrap:anywhere;max-width:100%;
+}
+.chip b{color:var(--ink)}
+.chip .sm{color:#5E768C}
+.chip.tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6B8296;background:#fff}
+.chip.tag.seed{color:var(--blue);border-color:rgba(30,90,138,.45)}
+.chip.tag.free{color:var(--accent);border-color:rgba(201,123,61,.55)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+
+/* ---------- 迭代轨迹：轮次可折叠卡片 ---------- */
+details.round{
+  border:1px solid var(--grid);border-left:3px solid var(--blue);
+  margin-bottom:12px;background:#fff;border-radius:2px;
+}
+details.round summary{
+  cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;
+  padding:10px 14px;user-select:none;
+}
+details.round summary::-webkit-details-marker{display:none}
+details.round summary::before{
+  content:"+";font-family:var(--mono);font-weight:700;color:var(--blue);
+  transition:transform .15s ease;display:inline-block;font-size:14px;
+}
+details.round[open] summary::before{transform:rotate(45deg)}
+details.round summary .round-no{
+  font-family:var(--mono);font-weight:700;font-size:13px;
+  letter-spacing:.08em;color:var(--ink);
+}
+details.round summary .round-sub{
+  font-family:var(--mono);font-size:11.5px;color:#5E768C;
+  margin-left:auto;text-align:right;
+}
+details.round summary:hover{background:rgba(216,226,236,.4)}
+details.round summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.round-body{padding:4px 16px 16px;border-top:1px solid var(--grid)}
+.blk{margin:16px 0}
+.blk-label{
+  font-family:var(--mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;
+}
+.reason{font-size:13.5px;color:#44586C;margin:8px 0 0;max-width:95ch}
+
+/* ---------- 漏斗统计 ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:10px 0 20px}
+.stat{
+  border:1px solid var(--grid);border-top:3px solid var(--blue);
+  background:#fff;padding:12px 16px;border-radius:2px;
+}
+.stat.rej{border-top-color:var(--bad)}
+.stat.dis{border-top-color:var(--accent)}
+.stat-num{font-family:var(--mono);font-size:30px;font-weight:600;line-height:1.1}
+.stat.pass .stat-num{color:var(--ok)}
+.stat.rej .stat-num{color:var(--bad)}
+.stat.dis .stat-num{color:var(--accent)}
+.stat-label{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#5E768C;margin-top:4px;
+}
+.funnel-detail{border-left:2px solid var(--grid);padding:2px 0 2px 14px;margin:0 0 12px}
+.funnel-detail p{margin:6px 0 0;color:#44586C;font-size:14px}
+
+/* ---------- 阶段结果：内联 SVG 曲线 ---------- */
+figure.plot{margin:0 0 28px}
+figcaption{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}
+figcaption .fname{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink);overflow-wrap:anywhere}
+.plot-wrap{position:relative;border:1px solid var(--grid);background:#fff;border-radius:2px;overflow:hidden}
+svg.plot{display:block;width:100%;height:auto}
+svg.plot text{font-family:var(--mono);font-size:10px;fill:var(--blue)}
+svg.plot .grid{stroke:var(--grid);stroke-width:1}
+svg.plot .axis{stroke:var(--ink);stroke-width:1;opacity:.55}
+svg.plot .s-voltage{stroke:var(--blue);stroke-width:1.8;fill:none}
+svg.plot .s-anode{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+.tooltip{
+  position:absolute;pointer-events:none;z-index:10;
+  background:var(--ink);color:#E8F0F8;border:1px solid var(--accent);
+  font-family:var(--mono);font-size:11px;line-height:1.55;padding:6px 10px;
+  border-radius:2px;box-shadow:0 2px 8px rgba(20,40,60,.35);white-space:nowrap;
+}
+.tooltip .t-t{color:var(--accent)}
+
+/* ---------- 收尾背书 ---------- */
+pre.term{
+  background:var(--ink);color:#DCE9F5;border-left:3px solid var(--accent);
+  border-radius:2px;padding:14px 16px;overflow-x:auto;
+  font-family:var(--mono);font-size:12.5px;line-height:1.55;margin:8px 0 20px;
+}
+.endorse-cand{margin-bottom:22px}
+.endorse-head{font-family:var(--mono);font-size:13px;margin:2px 0 4px;overflow-wrap:anywhere}
+.endorse-head .sm{color:#5E768C}
+.skipped{
+  border:1px dashed #B9C6D2;background:rgba(216,226,236,.25);
+  color:#5E768C;font-style:italic;padding:12px 16px;margin:10px 0;border-radius:2px;
+}
+.skipped .reason{font-family:var(--mono);font-style:normal;color:#44586C}
+
+/* ---------- 最终推荐 ---------- */
+.final-quote{
+  font-size:19px;line-height:1.7;border-left:4px solid var(--accent);
+  padding:4px 0 4px 20px;margin:10px 0 16px;
+}
+.final-verdict{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* ---------- 设计说明 ---------- */
+.note{border-left:2px solid var(--grid);padding:2px 0 2px 14px;margin:0 0 16px}
+.note p{margin:6px 0 0;color:#44586C}
+.note .chip{font-size:10.5px}
+
+/* ---------- 底部标尺与页脚 ---------- */
+.ruler{
+  height:34px;margin-top:48px;border-top:2px solid var(--ink);position:relative;
+  background-image:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 10px);
+  background-size:100% 8px;background-repeat:no-repeat;background-position:0 100%;
+}
+.ruler::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:16px;
+  background-image:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 50px);
+  background-size:auto 16px;background-repeat:no-repeat;
+}
+.ruler span{
+  position:absolute;bottom:2px;font-family:var(--mono);font-size:9px;color:#7C96AC;
+  transform:translateX(-50%);
+}
+.page-foot{
+  max-width:1120px;margin:0 auto;padding:12px clamp(14px,3vw,32px) 44px;
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;color:#7C96AC;letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:760px){
+  .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .verdict-block{text-align:left}
+  .stats{grid-template-columns:1fr}
+  .nav-brand{display:none}
+  .sheet{padding:22px 16px 26px}
+}
+</style>
+</head>
+<body>
+
+<header class="drawing-head">
+{{HEADER}}
+</header>
+
+<nav class="nav" aria-label="章节导航">
+  <span class="nav-brand"><b>▦ VBF</b>&nbsp;虚拟电池工厂</span>
+  <a href="#overview"><span class="n">01</span>概览</a>
+  <a href="#trajectory"><span class="n">02</span>迭代轨迹</a>
+  <a href="#funnel"><span class="n">03</span>漏斗统计</a>
+  <a href="#stages"><span class="n">04</span>阶段结果</a>
+  <a href="#endorse"><span class="n">05</span>收尾背书</a>
+  <a href="#final"><span class="n">06</span>最终推荐</a>
+  <a href="#notes"><span class="n">07</span>设计说明</a>
+</nav>
+
+<main>
+
+<section id="overview" class="sheet" aria-labelledby="overview-title">
+  <div class="eyebrow">SHEET 01 · OVERVIEW / 任务概览</div>
+  <h2 id="overview-title">任务概览与达标标准</h2>
+  {{CRITERIA_TABLE}}
+  <h3 style="font-size:14px;margin:22px 0 8px">涉及候选</h3>
+  {{CANDIDATES}}
+</section>
+
+<section id="trajectory" class="sheet" aria-labelledby="trajectory-title">
+  <div class="eyebrow">SHEET 02 · TRAJECTORY / 迭代轨迹</div>
+  <h2 id="trajectory-title">迭代轨迹</h2>
+  {{ROUNDS}}
+</section>
+
+<section id="funnel" class="sheet" aria-labelledby="funnel-title">
+  <div class="eyebrow">SHEET 03 · FUNNEL / 漏斗统计</div>
+  <h2 id="funnel-title">漏斗统计</h2>
+  {{FUNNEL}}
+</section>
+
+<section id="stages" class="sheet" aria-labelledby="stages-title">
+  <div class="eyebrow">SHEET 04 · STAGE RESULTS / 阶段结果</div>
+  <h2 id="stages-title">阶段结果</h2>
+  {{PLOTS}}
+</section>
+
+<section id="endorse" class="sheet" aria-labelledby="endorse-title">
+  <div class="eyebrow">SHEET 05 · ENDORSEMENT / 收尾背书</div>
+  <h2 id="endorse-title">收尾背书</h2>
+  {{ENDORSE}}
+</section>
+
+<section id="final" class="sheet" aria-labelledby="final-title">
+  <div class="eyebrow">SHEET 06 · FINAL / 最终推荐</div>
+  <h2 id="final-title">最终推荐</h2>
+  {{FINAL}}
+</section>
+
+<section id="notes" class="sheet" aria-labelledby="notes-title">
+  <div class="eyebrow">SHEET 07 · DESIGN NOTES / 设计说明</div>
+  <h2 id="notes-title">设计说明</h2>
+  {{NOTES}}
+</section>
+
+</main>
+
+<div class="ruler" aria-hidden="true">
+  <span style="left:0%">0</span><span style="left:20%">10</span><span style="left:40%">20</span>
+  <span style="left:60%">30</span><span style="left:80%">40</span><span style="left:100%">50</span>
+</div>
+<footer class="page-foot">
+  <span>Virtual Battery Factory · Design Report</span>
+  <span>由 log.jsonl 确定性生成 · 零 LLM 渲染</span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* 锚点平滑滚动（reduced-motion 下直接跳转） */
+  var links = Array.prototype.slice.call(document.querySelectorAll(".nav a[href^='#']"));
+  links.forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      var target = document.getElementById(a.getAttribute("href").slice(1));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        if (history.replaceState) {
+          history.replaceState(null, "", a.getAttribute("href"));
+        }
+      }
+    });
+  });
+
+  /* 导航高亮当前章节 */
+  var sections = document.querySelectorAll("main section[id]");
+  if ("IntersectionObserver" in window && sections.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) { return; }
+        links.forEach(function (a) {
+          a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id);
+        });
+      });
+    }, { rootMargin: "-15% 0px -75% 0px" });
+    sections.forEach(function (s) { io.observe(s); });
+  }
+
+  /* SVG 曲线 hover 十字线 + 数值 tooltip（读 data-series 属性） */
+  var NS = "http://www.w3.org/2000/svg";
+  var esc = function (s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  };
+  document.querySelectorAll("svg.plot").forEach(function (svg) {
+    var series;
+    try { series = JSON.parse(svg.getAttribute("data-series") || "{}"); }
+    catch (err) { return; }
+    var keys = Object.keys(series);
+    if (!keys.length || !series[keys[0]].length) { return; }
+    var wrap = svg.parentElement;
+    var tip = wrap ? wrap.querySelector(".tooltip") : null;
+    var vb = svg.viewBox.baseVal;
+    var cross = document.createElementNS(NS, "line");
+    cross.setAttribute("y1", "0");
+    cross.setAttribute("y2", vb ? vb.height : 320);
+    cross.setAttribute("stroke", "#C97B3D");
+    cross.setAttribute("stroke-width", "1");
+    cross.setAttribute("stroke-dasharray", "3 3");
+    cross.style.opacity = "0";
+    svg.appendChild(cross);
+    svg.addEventListener("pointermove", function (e) {
+      var rect = svg.getBoundingClientRect();
+      if (!rect.width) { return; }
+      var fx = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      var first = series[keys[0]];
+      var idx = Math.round(fx * (first.length - 1));
+      var px = fx * (vb ? vb.width : 640);
+      cross.setAttribute("x1", px);
+      cross.setAttribute("x2", px);
+      cross.style.opacity = "0.9";
+      if (tip) {
+        var lines = keys.map(function (k) {
+          var row = series[k][Math.min(idx, series[k].length - 1)];
+          return esc(k) + ": " + row[1];
+        });
+        tip.innerHTML = "<span class='t-t'>t = " + first[idx][0] + " s</span><br>" + lines.join("<br>");
+        tip.hidden = false;
+        var wx = Math.min(wrap.clientWidth - tip.offsetWidth - 8, Math.max(4, e.clientX - rect.left + 12));
+        var wy = Math.min(wrap.clientHeight - tip.offsetHeight - 8, Math.max(4, e.clientY - rect.top - 36));
+        tip.style.left = wx + "px";
+        tip.style.top = wy + "px";
+      }
+    });
+    svg.addEventListener("pointerleave", function () {
+      cross.style.opacity = "0";
+      if (tip) { tip.hidden = true; }
+    });
+  });
+})();
+</script>
+</body>
+</html>

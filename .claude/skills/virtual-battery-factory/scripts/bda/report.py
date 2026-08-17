@@ -1,13 +1,23 @@
-import base64
+"""log.jsonl → 自包含 HTML 报告（工程蓝图纸模板，确定性渲染，零 LLM）。
+
+数据源：
+- log.jsonl：criteria 第 0 条 + propose/funnel/evaluate/endorse/final 条目
+- <case_dir>/config.yaml：goal（可选，仅用于图纸头展示）
+- <case_dir>/cell/*.json：run-pyamm 曲线输出（time_s/voltage_v/anode_potential_v）
+"""
+
 import csv
-import io
 import json
+import math
+import re
 from pathlib import Path
 
-import matplotlib
+TEMPLATE_PATH = Path(__file__).parent / "report_template.html"
 
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+# 内联 SVG 曲线几何（viewBox 640×320）
+_VIEW_W, _VIEW_H = 640, 320
+_PAD_L, _PAD_R, _PAD_T, _PAD_B = 56, 20, 16, 40
+_MAX_PTS = 400  # 每条曲线路径的采样点数上限
 
 
 def _load_log(case_dir: str) -> list[dict]:
@@ -19,6 +29,11 @@ def _load_log(case_dir: str) -> list[dict]:
 
 def _html_escape(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def _attr_escape(s: str) -> str:
+    """HTML 属性值转义（配合单引号定界使用）。"""
+    return _html_escape(str(s)).replace('"', "&quot;").replace("'", "&#39;")
 
 
 def _to_int(v) -> int:
@@ -41,130 +56,485 @@ def _as_list(v) -> list:
     return [v] if v else []
 
 
+def _fmt_num(v, sig: int = 4) -> str:
+    """数值展示格式化：int 原样、float 取有效数字、其余转字符串。"""
+    if isinstance(v, bool):
+        return str(v).lower()
+    if isinstance(v, int):
+        return str(v)
+    if isinstance(v, float):
+        if not math.isfinite(v):
+            return str(v)
+        if abs(v) >= 1e6 or (v != 0 and abs(v) < 1e-4):
+            return f"{v:.3e}"
+        return f"{v:.{sig}g}"
+    return str(v)
+
+
 def _candidate_names(log: list[dict]) -> list[str]:
     names = []
     for e in log:
         for c in _as_list(e.get("candidates")):
             if isinstance(c, dict):
-                names.append(str(c.get("smiles") or c))
+                names.append(str(c.get("smiles") or c.get("name") or c))
             else:
                 names.append(str(c))
     return sorted(set(names))
 
 
-def _trend_chart_html(log: list[dict]) -> str:
-    """温度趋势图：matplotlib 画图 → PNG → base64 内嵌 <img>，无外部资源依赖。"""
-    points = [
-        (e.get("round"), m.get("T_max_K"))
-        for e in log
-        if e.get("action") == "evaluate"
-        for m in [e.get("metrics", {})]
-        if isinstance(m.get("T_max_K"), (int, float))
-    ]
-    if not points:
-        return ""
-    rounds = [r for r, _ in points]
-    temps = [t for _, t in points]
-    fig, ax = plt.subplots(figsize=(6, 2.5), dpi=110)
-    ax.plot(rounds, temps, "o-", color="#c0392b")
-    ax.set_xlabel("round")
-    ax.set_ylabel("T_max_K")
-    ax.grid(True, linestyle="--", alpha=0.4)
-    fig.tight_layout()
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png")
-    plt.close(fig)
-    b64 = base64.b64encode(buf.getvalue()).decode("ascii")
-    return f'<img alt="温度趋势图" src="data:image/png;base64,{b64}">'
+def _read_goal(case_dir: str) -> str | None:
+    """从 config.yaml 读取设计目标（缺失/损坏时返回 None，如实标注）。"""
+    p = Path(case_dir) / "config.yaml"
+    if not p.exists():
+        return None
+    try:
+        import yaml
+
+        data = yaml.safe_load(p.read_text(encoding="utf-8"))
+        goal = data.get("goal") if isinstance(data, dict) else None
+        return str(goal) if goal else None
+    except Exception:
+        return None
 
 
-def _trajectory_section_html(log: list[dict]) -> str:
-    """迭代轨迹：每轮候选与 Agent 决策理由（propose 条目）。"""
-    proposals = [e for e in log if e.get("action") == "propose"]
-    if not proposals:
-        return "<h2>迭代轨迹</h2><p>暂无数据</p>"
+def _verdict_class(verdict: str) -> str:
+    v = str(verdict).strip().lower()
+    if not v:
+        return "neutral"
+    if "不达标" in v or v in ("fail", "failed", "reject", "rejected", "no"):
+        return "bad"
+    if "达标" in v or v in ("pass", "passed", "ok", "yes"):
+        return "ok"
+    return "neutral"
+
+
+def _verdict_badge(verdict: str) -> str:
+    cls = _verdict_class(verdict)
+    return f'<span class="badge {cls}">{_html_escape(str(verdict))}</span>'
+
+
+def _threshold_text(value) -> str:
+    if isinstance(value, dict):
+        parts = []
+        if "min" in value:
+            parts.append(f"≥ {_fmt_num(value['min'], sig=5)}")
+        if "max" in value:
+            parts.append(f"≤ {_fmt_num(value['max'], sig=5)}")
+        return " · ".join(parts) if parts else ""
+    return _fmt_num(value)
+
+
+def _criteria_html(criteria: dict) -> str:
+    if not criteria:
+        return (
+            '<p class="empty">暂无数据</p>'
+            '<p class="hint">log.jsonl 第 0 条未提供达标标准（criteria）。</p>'
+        )
     rows = []
-    for e in proposals:
-        cands = "、".join(str(c) for c in _as_list(e.get("candidates")))
+    for key, value in criteria.items():
+        if isinstance(value, dict):
+            threshold = _threshold_text(value)
+            meta_bits = [
+                f"{k}={_fmt_num(v)}" for k, v in value.items() if k not in ("min", "max")
+            ]
+            meta = " · ".join(meta_bits)
+        else:
+            threshold = _fmt_num(value)
+            meta = ""
         rows.append(
             "<tr>"
-            f"<td>{_html_escape(str(e.get('round', '')))}</td>"
-            f"<td>{_html_escape(cands)}</td>"
-            f"<td>{_html_escape(str(e.get('llm_reason', '')))}</td>"
+            f"<th scope='row'>{_html_escape(str(key))}</th>"
+            f"<td class='num'>{_html_escape(threshold)}</td>"
+            f"<td class='crit-meta'>{_html_escape(meta)}</td>"
             "</tr>"
         )
-    table = "<table><tr><th>轮</th><th>候选</th><th>决策理由</th></tr>" + "".join(rows) + "</table>"
-    return "<h2>迭代轨迹</h2>" + table
+    head = "<tr><th>指标</th><th>阈值</th><th>说明</th></tr>"
+    return f'<table class="tbl">{head}{"".join(rows)}</table>'
 
 
-def _funnel_section_html(log: list[dict]) -> str:
-    """漏斗统计：通过/淘汰/分歧计数，跨条目求和。"""
+def _candidates_html(log: list[dict]) -> str:
+    names = _candidate_names(log)
+    if not names:
+        return '<p class="empty">暂无数据</p>'
+    chips = "".join(f'<span class="chip mono">{_html_escape(c)}</span>' for c in names)
+    return f'<div class="chips">{chips}</div>'
+
+
+def _kpi_compare(value, criteria: dict, key: str, direction: str) -> tuple[str, str]:
+    """关键结果 vs criteria 阈值的机械比较 → (颜色类, 阈值说明)。"""
+    spec = criteria.get(key)
+    thr = spec.get(direction) if isinstance(spec, dict) else None
+    if not isinstance(value, (int, float)) or not isinstance(thr, (int, float)):
+        return "", ""
+    ok = (value >= thr) if direction == "min" else (value <= thr)
+    sign = "≥" if direction == "min" else "≤"
+    return ("ok" if ok else "bad"), f"阈值 {sign} {_fmt_num(thr, sig=5)}"
+
+
+def _kpi_item(label: str, value, unit: str, cls: str, sub: str) -> str:
+    num = _fmt_num(value) if value is not None else "N/A"
+    cls = cls or ("mute" if value is None else "")
+    unit_html = f'<span class="kpi-unit">{_html_escape(unit)}</span>' if unit else ""
+    return (
+        f'<div class="kpi-item"><div class="kpi-label">{_html_escape(label)}</div>'
+        f'<div class="kpi-num {cls}">{_html_escape(num)}{unit_html}</div>'
+        f'<div class="kpi-sub">{_html_escape(sub)}</div></div>'
+    )
+
+
+def _latest_metrics(log: list[dict]) -> dict:
+    for e in reversed(log):
+        if e.get("action") == "evaluate" and isinstance(e.get("metrics"), dict):
+            return e["metrics"]
+    return {}
+
+
+def _kpi_html(metrics: dict, criteria: dict) -> str:
+    items = []
+    for key, label, unit, direction in (
+        ("energy_density_wh_kg", "能量密度", "Wh/kg", "min"),
+        ("capacity_ah", "放电容量", "Ah", None),
+        ("T_max_K", "最高温度", "K", "max"),
+    ):
+        value = metrics.get(key) if isinstance(metrics.get(key), (int, float)) else None
+        cls, sub = "", ""
+        if direction and value is not None:
+            cls, sub = _kpi_compare(value, criteria, key, direction)
+        if key == "T_max_K" and value is not None:
+            conv = f"≈ {value - 273.15:.1f} °C"
+            sub = f"{sub} · {conv}" if sub else conv
+        items.append(_kpi_item(label, value, unit, cls, sub))
+    plated = metrics.get("plated")
+    if isinstance(plated, bool):
+        if not plated:
+            items.append(_kpi_item("析锂判定", "无析锂", "", "ok", "负极电位全程 ≥ 0 V"))
+        else:
+            items.append(_kpi_item("析锂判定", "析锂风险", "", "bad", "负极电位曾 < 0 V"))
+    else:
+        items.append(_kpi_item("析锂判定", None, "", "mute", "未提供"))
+    return f'<div class="kpi-grid">{"".join(items)}</div>'
+
+
+def _header_html(case_dir: str, log: list[dict], criteria: dict) -> str:
+    case_name = Path(case_dir).name or "case"
+    goal = _read_goal(case_dir) or "（设计目标未记录于 config.yaml）"
+    meta = []
+    if "max_rounds" in criteria:
+        meta.append(f"预算 {_fmt_num(criteria['max_rounds'])} 轮")
+    if "real_compute" in criteria:
+        meta.append("真计算开启" if criteria["real_compute"] is True else "真计算关闭")
+    meta_html = "".join(f"<span>{_html_escape(m)}</span>" for m in meta)
+
+    final_entries = [e for e in log if e.get("action") == "final"]
+    verdict = str(final_entries[-1].get("verdict") or "") if final_entries else ""
+    if not verdict:
+        verdict, vcls = "未判定", "neutral"
+    else:
+        vcls = _verdict_class(verdict)
+    verdict_html = (
+        '<div class="verdict-block"><div class="eyebrow light">Conclusion · 结论</div>'
+        f'<div class="verdict {vcls}">{_html_escape(verdict)}</div></div>'
+    )
+
+    metrics = _latest_metrics(log)
+    return (
+        '<div class="head-row">'
+        '<div class="head-main">'
+        '<div class="eyebrow light">Virtual Battery Factory · Case Design Report</div>'
+        f'<h1 class="case-name">{_html_escape(case_name)}</h1>'
+        f'<p class="goal">{_html_escape(goal)}</p>'
+        f'<p class="head-meta">{meta_html}</p>'
+        "</div>"
+        f"{verdict_html}"
+        "</div>"
+        f"{_kpi_html(metrics, criteria)}"
+    )
+
+
+def _propose_html(e: dict) -> str:
+    parts = []
+    for cand in _as_list(e.get("candidates")):
+        if isinstance(cand, dict):
+            smiles = str(cand.get("smiles") or "")
+            name = str(cand.get("name") or "")
+            source = str(cand.get("source") or "")
+        else:
+            smiles, name, source = str(cand), "", ""
+        inner = f"<b>{_html_escape(name)}</b> " if name else ""
+        inner += f'<span class="sm">{_html_escape(smiles)}</span>'
+        tag = ""
+        if source:
+            cls = "seed" if source.lower() == "seed" else "free" if source.lower() in ("free_gen", "free") else ""
+            tag = f'<span class="chip tag {cls}">{_html_escape(source.upper())}</span>'
+        parts.append(f'<span class="chip">{inner}</span>{tag}')
+    reason = e.get("llm_reason")
+    reason_html = f'<p class="reason">{_html_escape(str(reason))}</p>' if reason else ""
+    return (
+        '<div class="blk"><div class="blk-label">Propose · 候选方案</div>'
+        f'<div class="chips">{"".join(parts)}</div>{reason_html}</div>'
+    )
+
+
+def _funnel_entry_html(e: dict) -> str:
+    chips = "".join(
+        f'<span class="chip">{lab} <b class="num">{_to_int(e.get(k))}</b></span>'
+        for k, lab in (("passed", "PASS"), ("rejected", "REJECT"), ("disputed", "DISP."))
+    )
+    detail = e.get("detail")
+    detail_html = f"<p>{_html_escape(str(detail))}</p>" if detail else ""
+    return f'<div class="blk"><div class="blk-label">Funnel · 漏斗判定</div>{chips}{detail_html}</div>'
+
+
+def _evaluate_html(e: dict) -> str:
+    metrics = e.get("metrics") or {}
+    rows = "".join(
+        f"<tr><td>{_html_escape(str(k))}</td>"
+        f"<td class='num'>{_html_escape(_fmt_num(v))}</td></tr>"
+        for k, v in metrics.items()
+    )
+    verdict = e.get("verdict")
+    verdict_html = _verdict_badge(str(verdict)) if verdict else '<span class="badge mute">N/A</span>'
+    note = e.get("note")
+    note_html = f'<p class="reason">{_html_escape(str(note))}</p>' if note else ""
+    return (
+        f'<div class="blk"><div class="blk-label">Evaluate · 评估 {verdict_html}</div>'
+        f'<table class="tbl"><tr><th>指标</th><th>数值</th></tr>{rows}</table>{note_html}</div>'
+    )
+
+
+def _rounds_html(log: list[dict]) -> str:
+    groups: dict[int, list[dict]] = {}
+    for e in log:
+        r = e.get("round")
+        if r is None or _to_int(r) <= 0:
+            continue
+        if e.get("action") not in ("propose", "funnel", "evaluate"):
+            continue
+        groups.setdefault(_to_int(r), []).append(e)
+    if not groups:
+        return '<p class="empty">暂无数据</p>'
+    cards = []
+    first_round = min(groups)
+    for r, entries in sorted(groups.items()):
+        ev = next((e for e in entries if e.get("action") == "evaluate"), None)
+        verdict = str(ev.get("verdict") or "") if ev else ""
+        badge = _verdict_badge(verdict) if verdict else ""
+        subs = []
+        prop = next((e for e in entries if e.get("action") == "propose"), None)
+        if prop:
+            subs.append(f"{len(_as_list(prop.get('candidates')))} 候选")
+        m = ev.get("metrics", {}) if ev else {}
+        if isinstance(m.get("T_max_K"), (int, float)):
+            subs.append(f"T_max {_fmt_num(m['T_max_K'])} K")
+        if isinstance(m.get("plated"), bool):
+            subs.append("无析锂" if not m["plated"] else "析锂风险")
+        sub = f'<span class="round-sub">{" · ".join(subs)}</span>' if subs else ""
+        body = []
+        for e in entries:
+            action = e.get("action")
+            if action == "propose":
+                body.append(_propose_html(e))
+            elif action == "funnel":
+                body.append(_funnel_entry_html(e))
+            elif action == "evaluate":
+                body.append(_evaluate_html(e))
+        open_attr = " open" if r == first_round else ""
+        cards.append(
+            f'<details class="round"{open_attr}><summary>'
+            f'<span class="round-no">ROUND {r:02d}</span>{badge}{sub}'
+            f'</summary><div class="round-body">{"".join(body)}</div></details>'
+        )
+    return "".join(cards)
+
+
+def _funnel_html(log: list[dict]) -> str:
     entries = [e for e in log if e.get("action") == "funnel"]
     if not entries:
-        return "<h2>漏斗统计</h2><p>暂无数据</p>"
-    totals = {"passed": 0, "rejected": 0, "disputed": 0}
+        return '<p class="empty">暂无数据</p>'
+    totals = {k: sum(_to_int(e.get(k)) for e in entries) for k in ("passed", "rejected", "disputed")}
+    stats = (
+        f'<div class="stat pass"><div class="stat-num">{totals["passed"]}</div>'
+        '<div class="stat-label">Passed · 通过</div></div>'
+        f'<div class="stat rej"><div class="stat-num">{totals["rejected"]}</div>'
+        '<div class="stat-label">Rejected · 淘汰</div></div>'
+        f'<div class="stat dis"><div class="stat-num">{totals["disputed"]}</div>'
+        '<div class="stat-label">Disputed · 分歧</div></div>'
+    )
+    details = []
     for e in entries:
-        for k in totals:
-            totals[k] += _to_int(e.get(k))
-    labels = {"passed": "通过", "rejected": "淘汰", "disputed": "分歧"}
-    rows = "".join(
-        f"<tr><td>{_html_escape(labels[k])}</td><td>{totals[k]}</td></tr>" for k in totals
+        r = e.get("round")
+        label = f"R{_to_int(r):02d}" if r is not None else "R—"
+        detail = e.get("detail")
+        detail_html = f"<p>{_html_escape(str(detail))}</p>" if detail else ""
+        details.append(f'<div class="funnel-detail"><span class="chip">{label}</span>{detail_html}</div>')
+    return f'<div class="stats">{stats}</div>{"".join(details)}'
+
+
+def _load_cell_curves(case_dir: str) -> list[tuple[str, dict]]:
+    """cell/*.json 中 run-pyamm 曲线输出（含 time_s 与至少一条等长曲线序列）。"""
+    cell_dir = Path(case_dir) / "cell"
+    if not cell_dir.is_dir():
+        return []
+    out = []
+    for p in sorted(cell_dir.glob("*.json")):
+        try:
+            data = json.loads(p.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        t = data.get("time_s")
+        if not isinstance(t, list) or len(t) < 2:
+            continue
+        if not any(
+            isinstance(data.get(k), list) and len(data.get(k)) == len(t)
+            for k in ("voltage_v", "anode_potential_v")
+        ):
+            continue
+        out.append((p.name, data))
+    return out
+
+
+def _svg_plot(filename: str, data: dict) -> str:
+    """run-pyamm 输出 → 内联 SVG 曲线（网格 + 双序列 + 轴标注 + tooltip 数据）。"""
+    t = data["time_s"]
+    series = {
+        k: data[k]
+        for k in ("voltage_v", "anode_potential_v")
+        if isinstance(data.get(k), list) and len(data.get(k)) == len(t)
+    }
+    tmin, tmax = min(t), max(t)
+    x0, x1 = _PAD_L, _VIEW_W - _PAD_R
+    y0, y1 = _PAD_T, _VIEW_H - _PAD_B
+    stride = max(1, math.ceil(len(t) / _MAX_PTS))
+    span_t = (tmax - tmin) or 0.0
+    elements = []
+    tooltip: dict[str, list[list[float]]] = {}
+
+    for i in range(9):
+        gx = x0 + (x1 - x0) * i / 8
+        elements.append(f'<line class="grid" x1="{gx:.1f}" y1="{y0}" x2="{gx:.1f}" y2="{y1}"/>')
+    for i in range(5):
+        gy = y0 + (y1 - y0) * i / 4
+        elements.append(f'<line class="grid" x1="{x0}" y1="{gy:.1f}" x2="{x1}" y2="{gy:.1f}"/>')
+    elements.append(f'<line class="axis" x1="{x0}" y1="{y0}" x2="{x0}" y2="{y1}"/>')
+    elements.append(f'<line class="axis" x1="{x0}" y1="{y1}" x2="{x1}" y2="{y1}"/>')
+
+    for key, cls in (("voltage_v", "s-voltage"), ("anode_potential_v", "s-anode")):
+        vals = series.get(key)
+        if vals is None:
+            continue
+        vmin, vmax = min(vals), max(vals)
+        span = (vmax - vmin) or 0.0
+        pts, rows = [], []
+        for i in range(0, len(t), stride):
+            px = x0 + (t[i] - tmin) / span_t * (x1 - x0) if span_t else x0
+            py = y1 - (vals[i] - vmin) / span * (y1 - y0) if span else (y0 + y1) / 2
+            pts.append(f"{px:.1f},{py:.1f}")
+            rows.append([round(t[i], 2), round(vals[i], 4)])
+        elements.append(f'<path class="{cls}" d="M{" L".join(pts)}"/>')
+        tooltip[f"{key}"] = rows
+        side = 1 if key == "voltage_v" else -1
+        if side > 0:
+            elements.append(f'<text x="{x0 - 6}" y="{y0 + 4}" text-anchor="end">{_fmt_num(vmax)}</text>')
+            elements.append(f'<text x="{x0 - 6}" y="{y1 + 4}" text-anchor="end">{_fmt_num(vmin)}</text>')
+        else:
+            elements.append(f'<text x="{x1 + 6}" y="{y0 + 4}" fill="var(--accent)">{_fmt_num(vmax)}</text>')
+            elements.append(f'<text x="{x1 + 6}" y="{y1 + 4}" fill="var(--accent)">{_fmt_num(vmin)}</text>')
+
+    if "voltage_v" in series:
+        elements.append(f'<text x="{x0 + 4}" y="{y0 + 10}" fill="var(--blue)">— voltage_v [V]</text>')
+    if "anode_potential_v" in series:
+        ly = y0 + (26 if "voltage_v" in series else 10)
+        elements.append(f'<text x="{x0 + 4}" y="{ly}" fill="var(--accent)">-- anode_potential_v [V]</text>')
+
+    t_max = data.get("T_max_K")
+    if isinstance(t_max, (int, float)):
+        elements.append(
+            f'<text x="{x1}" y="{y0 + 10}" text-anchor="end">T_max = {_fmt_num(t_max)} K</text>'
+        )
+
+    tmid = (tmin + tmax) / 2
+    for tv, anchor, tx in ((tmin, "start", x0), (tmid, "middle", (x0 + x1) / 2), (tmax, "end", x1)):
+        elements.append(
+            f'<text x="{tx:.1f}" y="{y1 + 18}" text-anchor="{anchor}">{_fmt_num(tv)}</text>'
+        )
+    elements.append(f'<text x="{(x0 + x1) / 2:.1f}" y="{_VIEW_H - 8}" text-anchor="middle">time [s]</text>')
+
+    model = str(data.get("model_used") or "N/A")
+    label = f"{filename} 曲线（模型 {model}）"
+    return (
+        f'<svg class="plot" viewBox="0 0 {_VIEW_W} {_VIEW_H}" role="img" '
+        f'aria-label="{_attr_escape(label)}" '
+        f"data-series='{_attr_escape(json.dumps(tooltip))}'>"
+        f"<title>{_html_escape(f'{filename} — model {model}')}</title>"
+        + "".join(elements)
+        + "</svg>"
     )
-    return "<h2>漏斗统计</h2><table><tr><th>类别</th><th>数量</th></tr>" + rows + "</table>"
 
 
-def _stage23_section_html(log: list[dict]) -> str:
-    """阶段 2/3 结果：全部 metrics 键的逐轮表格 + 温度趋势图 + 最新判定摘要。"""
-    evals = [e for e in log if e.get("action") == "evaluate"]
-    if not evals:
-        return "<h2>阶段 2/3 结果</h2><p>暂无数据</p>"
-    metric_keys = sorted({k for e in evals for k in e.get("metrics", {})})
-    header = (
-        "<tr><th>轮</th>"
-        + "".join(f"<th>{_html_escape(k)}</th>" for k in metric_keys)
-        + "<th>判定</th></tr>"
-    )
-    rows = []
-    for e in evals:
-        m = e.get("metrics", {})
-        cells = [f"<td>{_html_escape(str(e.get('round', '')))}</td>"]
-        cells += [f"<td>{_html_escape(str(m.get(k, '')))}</td>" for k in metric_keys]
-        cells.append(f"<td>{_html_escape(str(e.get('verdict', '')))}</td>")
-        rows.append("<tr>" + "".join(cells) + "</tr>")
-    latest = evals[-1]
-    summary = (
-        "<p>最新判定（第 "
-        f"{_html_escape(str(latest.get('round', '')))} 轮）："
-        f"{_html_escape(str(latest.get('verdict', '')))}</p>"
-    )
-    chart = _trend_chart_html(log)
-    chart_html = f"<h3>温度趋势</h3>{chart}" if chart else ""
-    table = "<table>" + header + "".join(rows) + "</table>"
-    return "<h2>阶段 2/3 结果</h2>" + table + chart_html + summary
+def _plots_html(cell_files: list[tuple[str, dict]]) -> str:
+    if not cell_files:
+        return (
+            '<p class="empty">暂无数据</p>'
+            '<p class="hint">cell/ 目录下未发现 run-pyamm 曲线输出'
+            "（含 time_s 与 voltage_v / anode_potential_v 的 JSON）。</p>"
+        )
+    figures = []
+    for idx, (fname, data) in enumerate(cell_files, start=1):
+        model = str(data.get("model_used") or "N/A")
+        chips = f'<span class="chip">MODEL {_html_escape(model)}</span>'
+        if isinstance(data.get("T_max_K"), (int, float)):
+            chips += f'<span class="chip">T_max {_fmt_num(data["T_max_K"])} K</span>'
+        figures.append(
+            "<figure class='plot'><figcaption>"
+            f'<span class="eyebrow" style="margin:0">Plot {idx:02d}</span>'
+            f'<span class="fname">{_html_escape(fname)}</span>{chips}'
+            "</figcaption>"
+            f'<div class="plot-wrap">{_svg_plot(fname, data)}<div class="tooltip" hidden></div></div>'
+            "</figure>"
+        )
+    return "".join(figures)
 
 
-def _endorse_section_html(log: list[dict]) -> str:
-    """收尾背书：每个候选的 endorsement dict 以 <pre> JSON 展示。"""
+def _endorse_html(log: list[dict]) -> str:
     entries = [e for e in log if e.get("action") == "endorse"]
     if not entries:
-        return "<h2>收尾背书</h2><p>暂无数据</p>"
+        return '<p class="empty">暂无数据</p>'
     blocks = []
     for e in entries:
+        if e.get("skipped"):
+            reason = str(e.get("reason") or "未说明原因")
+            names = " · ".join(
+                str(c.get("name") or c.get("smiles") or c) if isinstance(c, dict) else str(c)
+                for c in _as_list(e.get("candidates"))
+            )
+            names_html = (
+                f'<br><span class="reason">候选：{_html_escape(names)}</span>' if names else ""
+            )
+            blocks.append(
+                '<div class="skipped"><span class="badge mute">Skipped</span> '
+                f'真计算背书已跳过<span class="reason"> — {_html_escape(reason)}</span>'
+                f"{names_html}</div>"
+            )
+            continue
         for cand in _as_list(e.get("candidates")):
             if not isinstance(cand, dict):
                 cand = {"smiles": str(cand), "endorsement": {}}
-            smiles = str(cand.get("smiles", ""))
-            endorsement = cand.get("endorsement", {})
+            smiles = str(cand.get("smiles") or "")
+            name = str(cand.get("name") or "")
+            endorsement = cand.get("endorsement")
+            if endorsement is None:
+                endorsement = {k: v for k, v in cand.items() if k not in ("smiles", "name")}
+            head = f"<b>{_html_escape(name)}</b> " if name else ""
+            head += f'<span class="sm">{_html_escape(smiles)}</span>'
             blocks.append(
-                f"<p>候选：{_html_escape(smiles)}</p>"
-                f"<pre>{_html_escape(_json_block(endorsement))}</pre>"
+                f'<div class="endorse-cand"><div class="endorse-head">{head}</div>'
+                f'<pre class="term">{_html_escape(_json_block(endorsement))}</pre></div>'
             )
-    return "<h2>收尾背书</h2>" + "".join(blocks)
+    return "".join(blocks)
 
 
-def _final_section_html(log: list[dict]) -> str:
-    """最终推荐方案与指标达标清单：最终条目的 recommendation 与 verdict。"""
-    fallback = "<h2>最终推荐方案与指标达标清单</h2><p>暂无推荐（预算耗尽或未达标）</p>"
+def _final_html(log: list[dict]) -> str:
+    fallback = '<p class="empty">暂无推荐（预算耗尽或未达标）</p>'
     entries = [e for e in log if e.get("action") == "final"]
     if not entries:
         return fallback
@@ -175,31 +545,71 @@ def _final_section_html(log: list[dict]) -> str:
         return fallback
     parts = []
     if rec:
-        parts.append(f"<p><strong>推荐方案：</strong>{_html_escape(rec)}</p>")
+        parts.append(f'<blockquote class="final-quote">{_html_escape(rec)}</blockquote>')
     if verdict:
-        parts.append(f"<p><strong>结论：</strong>{_html_escape(verdict)}</p>")
-    return "<h2>最终推荐方案与指标达标清单</h2>" + "".join(parts)
+        parts.append(f'<div class="final-verdict">结论 {_verdict_badge(verdict)}</div>')
+    return "".join(parts)
+
+
+def _notes_html(log: list[dict]) -> str:
+    blocks = []
+    for e in log:
+        action = e.get("action")
+        text = None
+        if e.get("note"):
+            text = str(e["note"])
+        elif action == "funnel" and e.get("detail"):
+            text = str(e["detail"])
+        if text is None:
+            continue
+        r = e.get("round")
+        rl = f"R{_to_int(r):02d}" if r is not None else "R—"
+        blocks.append(
+            f'<div class="note"><span class="chip">{_html_escape(str(action))}</span> '
+            f'<span class="chip">{rl}</span><p>{_html_escape(text)}</p></div>'
+        )
+    if not blocks:
+        return '<p class="empty">暂无数据</p>'
+    return "".join(blocks)
+
+
+def _fill_template(parts: dict[str, str]) -> str:
+    """模板占位符一次性替换；缺位即报错（宁可失败也不产出残缺报告）。"""
+    template = TEMPLATE_PATH.read_text(encoding="utf-8")
+    missing: list[str] = []
+
+    def _sub(m: re.Match) -> str:
+        key = m.group(1)
+        if key not in parts:
+            missing.append(key)
+            return m.group(0)
+        return parts[key]
+
+    html = re.sub(r"\{\{(\w+)\}\}", _sub, template)
+    if missing:
+        raise ValueError(f"template placeholders not provided: {sorted(set(missing))}")
+    return html
 
 
 def render_report(case_dir: str, out_html: str = "report.html") -> str:
     log = _load_log(case_dir)
     criteria = log[0].get("criteria", {}) if log else {}
-    candidates = "".join(f"<li>{_html_escape(c)}</li>" for c in _candidate_names(log))
-    html = f"""<!DOCTYPE html>
-<html lang="zh"><head><meta charset="utf-8"><title>案例报告</title>
-<style>body{{font-family:system-ui;max-width:900px;margin:2em auto;padding:0 1em}}
-table{{border-collapse:collapse;width:100%}}td,th{{border:1px solid #ccc;padding:4px 8px}}
-pre{{background:#f7f7f7;padding:8px;overflow-x:auto}}</style>
-</head><body>
-<h1>虚拟电池工厂 · 案例报告</h1>
-<h2>任务概览与达标标准</h2><pre>{_html_escape(_json_block(criteria))}</pre>
-<h2>涉及候选</h2><ul>{candidates}</ul>
-{_trajectory_section_html(log)}
-{_funnel_section_html(log)}
-{_stage23_section_html(log)}
-{_endorse_section_html(log)}
-{_final_section_html(log)}
-</body></html>"""
+    if not isinstance(criteria, dict):
+        criteria = {}
+    cell_files = _load_cell_curves(case_dir)
+    parts = {
+        "TITLE": f"{Path(case_dir).name} · 虚拟电池工厂设计报告",
+        "HEADER": _header_html(case_dir, log, criteria),
+        "CRITERIA_TABLE": _criteria_html(criteria),
+        "CANDIDATES": _candidates_html(log),
+        "ROUNDS": _rounds_html(log),
+        "FUNNEL": _funnel_html(log),
+        "PLOTS": _plots_html(cell_files),
+        "ENDORSE": _endorse_html(log),
+        "FINAL": _final_html(log),
+        "NOTES": _notes_html(log),
+    }
+    html = _fill_template(parts)
     out_path = Path(case_dir) / out_html
     out_path.write_text(html, encoding="utf-8")
     return str(out_path)
