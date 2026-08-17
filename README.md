@@ -42,7 +42,9 @@ ML 势（MACE-MP/CHGNet）由 pip `[ml]` 附带，无需额外二进制。`real_
 
 ## 运行
 
-样例案例位于 `.claude/skills/virtual-battery-factory/assets/cases/`，全部为三阶段全流程：
+**交互模式（开发期）**：在 Claude Code 对话里直接说自然语言设计目标即可（如"设计一款能量密度 ≥ 400 Wh/kg 且 4C 快充无析锂的电池"）——skill 会用 AskUserQuestion 逐项澄清（目标量化/体系/预算/消融/真计算开关，均带默认值），澄清后自动生成案例配置并执行。无需手写任何 YAML。
+
+**批量模式（论文实验期）**：`run.py` 驱动零交互可复现运行。样例案例（即交互模式生成的模板）位于 `.claude/skills/virtual-battery-factory/assets/cases/`，全部为三阶段全流程：
 
 | 案例 | 设计目标 |
 |------|---------|

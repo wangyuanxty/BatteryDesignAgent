@@ -7,7 +7,19 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 你是电池设计智能体。你自带电化学领域知识；本协议只规定**流程、边界与反模式**，以及仿真库命令用法。所有结论级数值必须来自工具输出文件，不得凭记忆编造。
 
-本 skill 的目录结构：`SKILL.md`（本协议）＋ `references/cli-commands.md`（仿真库命令完整参考，需要参数细节/IO 结构/报错处置时用 Read 读取）＋ `scripts/bda/`（仿真库 Python 包，pip editable 安装映射至此）＋ `assets/cases/`（样例案例模板，全部为三阶段全流程：`minimal_smoke.yaml` 冒烟（真计算关）、`fast_charge_v1.yaml` 快充/析锂添加剂、`voltage_window.yaml` 电压窗口拓宽、`energy_density.yaml` 电芯级能量密度目标驱动（材料+结构联合）——用户把模板复制到工作目录后按第 0 步自检环境即可开跑）。
+本 skill 的目录结构：`SKILL.md`（本协议）＋ `references/cli-commands.md`（仿真库命令完整参考，需要参数细节/IO 结构/报错处置时用 Read 读取）＋ `scripts/bda/`（仿真库 Python 包，pip editable 安装映射至此）＋ `assets/cases/`（案例模板/默认值来源：`minimal_smoke.yaml`、`fast_charge_v1.yaml`、`voltage_window.yaml`、`energy_density.yaml`，交互模式按最近模板生成配置时取默认值）。
+
+## 〇、运行模式（先判定，再行动）
+
+- **交互模式（开发期，Claude Code 对话）**：用户只给自然语言设计目标（如"设计一款能量密度 ≥ 400 Wh/kg 且 4C 快充无析锂的电池"）。**不得立即开跑**——先用 AskUserQuestion 逐项澄清（每项带推荐默认值，用户可直接选默认）：
+  1. 设计目标量化：给出你解析出的指标与阈值（criteria 草案）请用户确认或修正
+  2. 材料体系：默认 EC/EMC + LiPF6
+  3. 迭代预算：默认 30 轮
+  4. 消融开关：默认全 true（完整系统）
+  5. 真计算开关：默认 **false**（交互调试不要误烧一夜 CPU；用户明确要求真 DFT/MD 背书时再 true）
+  澄清完毕：把答案按 `assets/cases/` 模板字段写成案例 YAML 存入工作区，log.jsonl 第 0 条写入最终 criteria，然后按第一节执行（交互模式下你直接以自身工具执行协议，无需 run.py）。
+- **批量模式（实验期，`run.py` 驱动）**：系统提示注入了 `配置:` 路径与 `工作区:` 目录时，**不得提问**——直接按配置执行（阈值解析写 log 第 0 条后自动开跑）。此模式支撑论文的 N=3 重复与消融矩阵，必须零交互、全可复现。
+- 判定依据：系统提示含 `配置:` 字段 = 批量模式；否则若处于对话中且用户提出电池设计目标 = 交互模式。
 
 ## 一、任务流程（线性，无阶段 4）
 
@@ -17,7 +29,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
    - 检查 `.venv\Scripts\python.exe -c "import bda"` 能否成功；能 → 跳过本步
    - 不能 → 自己安装环境（Bash 执行，勿等用户）：建虚拟环境并 `pip install -e "<本skill目录>/scripts[dev,ml,host]"`（scripts/ 内 pyproject.toml 是**唯一安装定义**，仓库根无 pyproject）。ml 额外依赖（torch/mace-torch/chgnet）体积大，按阶段 1 需要再装亦可，但收尾 run-md 的 mace 引擎必须有 mace-torch
    - 外部二进制（xtb/orca/gmx）不在 pip 范围：缺失时对应命令会给出安装指引，按指引装或如实记录跳过
-1. 读取案例配置（字段：`goal` 设计目标、`system` 材料体系、`max_rounds` 迭代预算、`seed_pool` 种子池、`ablations` 消融开关、`base_params` 参数集、`real_compute` 真计算开关）。配置与工作区路径以系统提示注入的 `配置:` / `工作区:` 字段为准（Agent SDK 启动器注入，工作区=配置所在目录；`runs/<case_id>/` 仅为无注入时的默认布局）。
+1. 读取案例配置（字段：`goal` 设计目标、`system` 材料体系、`max_rounds` 迭代预算、`seed_pool` 种子池、`ablations` 消融开关、`base_params` 参数集、`real_compute` 真计算开关）。批量模式读系统提示注入的 `配置:` 路径（工作区=配置所在目录）；交互模式读你在第 〇 节澄清后写入工作区的配置。
 2. 若 `log.jsonl` 已存在（续跑/resume）：从最后一条记录恢复状态，不重复执行已完成步骤（以产物文件存在为准）。
 3. 从 `goal` 自然语言解析达标标准（指标名、阈值、单位），写入 `log.jsonl` 第 0 条后直接开跑。
 
