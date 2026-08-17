@@ -4,32 +4,16 @@
 
 ## 通用约定
 
-- 调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`；全部 9 个子命令见 `-m bda --help`
+- 调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`；全部 7 个子命令见 `-m bda --help`
 - **必须用 Bash 工具执行仿真与 render 命令**：本环境 PowerShell 工具受 guardrail 限制（`$()` 子表达式、`Set-Location`、`&` 多操作等一律拦截且无法批准），若你只有 PowerShell 工具可用，说明会话工具白名单异常（续跑轮换了 session 即应恢复），先用 Bash 重试
 - JSON 即契约：所有输入/输出均为 UTF-8 JSON 文件，`--out` 指定输出路径；每一步可单独重跑
 - 同参数必复用（spec 5.2 不变式 3）：所有 `run-*` 命令先查 store 缓存，命中直接复用不重算。缓存目录 = `--out` 文件所在目录下的 `cache/`（键 = 命令参数组合：run-pyamm: params+protocol+base+mode+thermal+plating；run-mlp: smiles+model；run-xtb: smiles；run-orca: smiles+charge+mult+functional；run-md: box+t_ns+engine）。缓存文件损坏（非法 JSON / 非对象）按未命中处理并重写
 - 报错约定：参数/校验类失败打印 `bda error: <原因>` 到 stderr、退出码 1；输入文件缺失或 JSON 键缺失会以 Python traceback 终止——读输出最后几行定位原因，按提示修正后重跑
 - 环境依赖：`run-xtb` 需 xtb 二进制在 PATH；`run-orca` 需 orca 在 PATH；`run-md` 需 gmx 在 PATH 且 skill 内 `scripts/bda/simulators/data/opls/` 有对应 .itp 模板
 
-## 阶段1 合并约定（consensus 输入，预飞裁定）
+## 阶段1 漏斗判定（无对应 CLI 命令）
 
-依次真实执行 `run-mlp --model mace`、`run-mlp --model chgnet`、`run-xtb`（同一候选清单），将三次输出合并为一个新建文件（如 `candidates/round_N_merged.json`）作为 `filter`/`consensus` 的输入。合并规则：
-
-- `run-mlp` 输出键为 `metrics.energy_ev` + `"model"` 字段：`model == "mace"` 的 `energy_ev` → 键 `mace_energy_ev`；`model == "chgnet"` 的 `energy_ev` → 键 `chgnet_energy_ev`
-- `run-xtb` 输出键为 `metrics.homo_ev`/`lumo_ev`：`homo_ev` → 键 `xtb_homo_ev`（`lumo_ev` 可一并保留）
-- 同时保留 `converged`、`energy_ev`（mace 值）、`homo_ev`（xtb 值）——`filter` 读取这三个键，`consensus` 读取三个排名键 `mace_energy_ev`、`chgnet_energy_ev`、`xtb_homo_ev`；一个合并文件同时满足两者，且 `filter` 输出可直接作为 `consensus` 输入
-
-合并文件示例（数值为占位，以实际输出为准）：
-
-```json
-{"candidates": [
-  {"smiles": "C1COC(=O)O1", "metrics": {
-    "converged": true, "energy_ev": -123.45,
-    "mace_energy_ev": -123.45, "chgnet_energy_ev": -122.98,
-    "homo_ev": -8.12, "lumo_ev": 0.41, "xtb_homo_ev": -8.12
-  }}
-]}
-```
+漏斗判定（硬淘汰线 + 三模型异质投票）由协议规则执行，见 SKILL.md 第一节第 1 步——依次真实执行 `run-mlp --model mace`、`run-mlp --model chgnet`、`run-xtb`（同一候选清单）后，直接读取三次输出 JSON 判定，无对应 CLI 命令、无需合并文件。
 
 ## bridge — 微观物性 → PyBaMM 参数映射
 
@@ -40,31 +24,6 @@ bda bridge --props PROPS --out OUT
 - 输入 `--props`：`{"D_electrolyte_m2_s": 3e-10, "conductivity_S_m": 1.1, "transport_number": 0.4}`（键可只给子集；合法键仅 `D_electrolyte_m2_s`、`conductivity_S_m`、`transport_number`）
 - 输出：PyBaMM 参数名 → 值，如 `{"Electrolyte diffusivity [m2.s-1]": 3e-10, "Electrolyte conductivity [S.m-1]": 1.1, "Cation transference number": 0.4}`；可直接作为 `run-pyamm --params` 输入
 - 报错：`unknown micro property '<k>'; legal keys: ...` → 修正键名重跑
-
-## filter — 漏斗硬淘汰
-
-```
-bda filter --in IN --rules RULES --out OUT
-```
-
-- 输入 `--in`：`{"candidates": [{"smiles": "SMILES", "metrics": {...}}]}` —— 用合并文件（见合并约定）
-- 输入 `--rules`：`{"max_energy_ev": -1.0, "max_homo_ev": -6.0}`（两键均可选；都不给则只看 converged）
-- 规则：`metrics.converged` 非真 → rejected；给了 `max_energy_ev` 而 `energy_ev` 缺失或超限 → rejected；给了 `max_homo_ev` 而 `homo_ev` 缺失或超限 → rejected；否则 passed
-- 输出：输入同结构 + 每候选增加 `"status": "passed" | "rejected"`
-- 报错：无自定义校验错误；JSON 语法错误 → `bda error: ...`；输入文件不存在 → FileNotFoundError traceback
-- 注意：缺少 `converged` 键的输入会被整体淘汰——不要把 `run-xtb` 输出直接喂给 filter
-
-## consensus — 三模型一致性投票
-
-```
-bda consensus --in IN --out OUT
-```
-
-- 输入 `--in`：`{"candidates": [{"smiles": "SMILES", "metrics": {"mace_energy_ev": f, "chgnet_energy_ev": f, "xtb_homo_ev": f}}]}` —— 合并文件或 `filter` 输出
-- 规则：三个键各自升序排名（能量/轨道能越低越优）；某候选三排名 max−min ≥ 阈值 → disputed。阈值为 `max(2, 0.3×候选数)`（候选数 < 3 时原样返回不判定）
-- 输出：输入同结构；分歧候选增加 `"status": "disputed"` 与 `"dispute_detail": {"ranks": {"mace_energy_ev": r, "chgnet_energy_ev": r, "xtb_homo_ev": r}}`；未分歧候选不加 status
-- 报错：输入 metrics 缺少任一排名键 → KeyError traceback → 检查合并文件键名
-- 处置：disputed 候选按 SKILL.md 第一节第 1 步处理（改进或明确淘汰理由）
 
 ## run-pyamm — 电芯仿真
 

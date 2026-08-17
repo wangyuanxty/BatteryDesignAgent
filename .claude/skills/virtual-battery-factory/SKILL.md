@@ -48,8 +48,8 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 对每个候选分子严格执行（`start_stage: 2` 时跳过步骤 1 的分子筛选，材料物性直接用体系基线参数——props 来源标注 `baseline`（文献值），写一条 funnel 日志说明"本案例从阶段 2 开始，材料采用体系基线"）：
 
-1. **阶段1 材料设计**（快环，零真计算，仅 `start_stage: 1`）。先提出一批候选分子（`seed_pool` 已知添加剂 + 你自由生成的 SMILES），用 MACE-MP 与 CHGNet 两个机器学习势对每个分子做结构松弛、算出稳定构型的能量，再用半经验量子方法 xTB 算出粗略的氧化稳定性指标 HOMO/LUMO；把三次结果合并后，`filter` 按硬性淘汰线（未收敛/能量过高/HOMO 过高）砍掉明显不合格的分子，`consensus` 按三个模型各自的排名做异质投票、标记分歧。分子稳定性与电位窗在这里被廉价筛掉，昂贵的电芯仿真只留给少数值得深挖的分子——种子池保证可达性，自由生成展示创造力，两者混轨也让论文可以对照"种子池内 vs 自由探索"。写 `propose` 与 `funnel` 日志条目；`disputed` 候选不得一淘汰了之，须推理改进（换取代基/生成变体）或给出明确淘汰理由后换新。
-   命令：`run-mlp --in IN --model mace --out O` → `run-mlp --in IN --model chgnet --out O` → `run-xtb --in IN --out O` → 合并 → `filter --in M --rules R --out O` → `consensus --in M --out O`
+1. **阶段1 材料设计**（快环，零真计算，仅 `start_stage: 1`）。先提出一批候选分子（`seed_pool` 已知添加剂 + 你自由生成的 SMILES），随后依次真实执行 `run-mlp --model mace`、`run-mlp --model chgnet`、`run-xtb`（同一候选清单），直接读取三次输出 JSON，**你据此判定**（漏斗判定由协议规则执行，无对应 CLI 命令）：硬淘汰线——mace 输出的 `metrics.converged` 非真 → 淘汰；`metrics.energy_ev` 高于淘汰线 → 淘汰；xtb 输出的 `metrics.homo_ev` 高于淘汰线 → 淘汰。淘汰线数值 `max_energy_ev`（稳定性上限，无明确依据时取 0.0 eV）与 `max_homo_ev`（氧化稳定性上限，无明确依据时取 −6.0 eV）在你解析目标时一并确定、写进第 0 条 criteria；三模型异质投票——对 mace 的 `energy_ev`、chgnet 的 `energy_ev`、xtb 的 `homo_ev` 各自做升序排名（越低越优），某候选在三个排名中的极差 ≥ `max(2, 0.3×候选数)`（候选数 < 3 时不判定）→ 标记 `disputed`。分歧不是坏事：它是"该动脑子"的信号，对 disputed 候选推理改进（换取代基/生成变体）或给出明确淘汰理由后换新，而不是一淘汰了之。分子稳定性与电位窗在这里被廉价筛掉，昂贵的电芯仿真只留给少数值得深挖的分子——种子池保证可达性，自由生成展示创造力，两者混轨也让论文可以对照"种子池内 vs 自由探索"。写 `propose` 与 `funnel` 日志条目（passed/rejected/disputed 计数由你的判定得出）。
+   命令：`run-mlp --in IN --model mace --out O` → `run-mlp --in IN --model chgnet --out O` → `run-xtb --in IN --out O`（同一 IN；随后直接读取三次输出 JSON 判定，无需合并文件）
 2. **参数桥梁**。把微观物性（扩散系数、电导率、迁移数）映射成 PyBaMM 宏观模型认识的参数名与数值——如分子尺度的 `D_electrolyte_m2_s` 变成电芯模型里的 `"Electrolyte diffusivity [m2.s-1]"`。每个数值的来源（种子池→文献值标注引用；自由生成→领域估计标注 `estimate`）必须写入日志，估计值不得冒充仿真输出，进入 Top-N 的候选其 D/σ 由真 MD/文献背书复核——人工转录是常规流程最高频的错误源，机器化且留痕让论文里每个数字都答得出"从哪来"。
    命令：`bridge --props P --out O`
 3. **阶段2 电芯设计**。把候选的电芯参数放进 PyBaMM 电化学模型，模拟 1C 恒流放电过程，得到电压曲线与放电容量——回答"这个材料装进电池行不行"。先用秒级的 SPMe 快速筛，对通过者再用分钟级的 DFN 精算（`run-pyamm --base <案例配置 base_params> --protocol 1C_discharge --mode spme`，随后按需 `--mode dfn`）——同一"代理优先"哲学在电芯尺度的应用；DFN 收敛失败会自动降级回 SPMe，不让数值刚性卡死流程。
@@ -64,7 +64,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 - **第 0 条（开跑前写一次）**：`{"criteria": {...}}` —— 解析出的达标标准（审计记录，报告首页展示）
 - **propose**：`{"action": "propose", "round": 1, "candidates": ["SMILES", ...], "llm_reason": "生成理由"}` —— 每轮候选与决策理由
-- **funnel**：`{"action": "funnel", "passed": 3, "rejected": 2, "disputed": 1}` —— 阶段1 漏斗计数（passed/rejected 来自 `filter` 输出，disputed 来自 `consensus` 输出）
+- **funnel**：`{"action": "funnel", "passed": 3, "rejected": 2, "disputed": 1, "detail": "一句话说明判定依据"}` —— 阶段1 漏斗计数（passed/rejected/disputed 由你按淘汰线与三模型投票规则判定得出）
 - **evaluate**：`{"action": "evaluate", "round": 2, "metrics": {"capacity_ah": ..., "T_max_K": ..., "plated": false, ...}, "verdict": "pass"}` —— metrics 至少含数值键 `T_max_K` 与布尔键 `plated`（报告趋势图与 CSV 导出依赖这两个键）；verdict 取值自由（如 pass/fail），报告原样展示
 - **endorse**：`{"action": "endorse", "candidates": [{"smiles": "SMILES", "endorsement": {...}}]}` —— endorsement 对象 = 该候选 `run-orca` 输出的 endorsement 键（Top-1 另附 `run-md` 输出键）
 - **final**：`{"action": "final", "recommendation": "最终推荐方案", "verdict": "达标/不达标"}` —— 收尾必写，含"预算耗尽未达标"情形
@@ -74,13 +74,13 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 - 阈值由你从案例目标自然语言解析（`config.yaml` 的 `goal`），解析结果写入 log.jsonl 第 0 条后**直接开跑**，不等待人工确认——批量模式下无人可确认，审计记录（第 0 条）保证即使解析错了也可事后追溯与复核，而不是流程中途卡住等人。
 - 达标判定只看工具输出 JSON 中的数值；任何换算必须由工具输出值机械推导（例：T_max_C = T_max_K − 273.15）——换算凭直觉做，单位错误（K/℃、eV/hartree）就会污染论文数据，机械推导可逐行核查。
 - 各阶段判定要点（内嵌回退规则）：
-  - 阶段1：漏斗 `passed` 且 `consensus` 无 `disputed`（或 disputed 经推理改进后一致）
+  - 阶段1：漏斗 `passed` 且无 `disputed`（或 disputed 经推理改进后一致）——淘汰线与三模型投票判定由你执行（见第一节第 1 步）
   - 阶段2：`capacity_ah`（1C 放电容量）对照解析目标
   - 阶段3：析锂——`anode_potential_v` 任一值 < 0 V 即 `plated = true`；温升——`T_max_K` 对照解析目标
   - 综合达标 = 阶段 2/3 全部指标满足第 0 条阈值
 - 回退路由（不达标时）：材料问题（电位窗不满足/HOMO-LUMO 不稳定/添加剂无效果）→ 回阶段1（换取代基、生成变体或换新候选）；结构/参数问题（容量不足、温升过高但材料指标可接受）→ 回阶段2（调整电芯参数或 bridge props 后重跑）；每轮回退原因写入 `evaluate` 条目的 verdict 或日志。症状对应尺度：电位窗/稳定性是分子属性（阶段 1 的职责），容量/温升是结构与参数属性（阶段 2 的职责）——回错尺度等于瞎折腾。
 - 预算：轮数上限 = `max_rounds`；预算耗尽仍未达标 → 如实写 `final` 条目（verdict 不达标、recommendation 说明），不得虚构达标。负结果也是结果——论文如实报告"预算内未达标"比美化数据有价值得多。
-- 消融开关按 `config.yaml` 的 `ablations` 执行：`guardrails: false` → 忽略本协议第三节；`consistency: false` → 跳过 `consensus`；`bridge: false` → 跳过参数桥梁用默认参数。消融是论文回答"每个组件贡献多少"的手段，开关必须只从配置生效——运行时自行增删步骤会毁掉消融的纯净性。
+- 消融开关按 `config.yaml` 的 `ablations` 执行：`guardrails: false` → 忽略本协议第三节；`consistency: false` → 跳过三模型一致性投票（协议规则）；`bridge: false` → 跳过参数桥梁用默认参数。消融是论文回答"每个组件贡献多少"的手段，开关必须只从配置生效——运行时自行增删步骤会毁掉消融的纯净性。
 - `real_compute: false` → 收尾跳过 `run-orca`/`run-md` 真计算背书（`endorse` 条目如实记录跳过原因，不得虚构 DFT/MD 数值）。
 
 ## 三、禁止事项与反模式（铁律）
@@ -93,20 +93,18 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 补充纪律：
 
-- 铁律"不得编辑 JSON 中间文件"指**命令输出产物**（`--out` 文件与工作区产物）只读；Agent 自建的**输入文件**（consensus 合并文件、bridge props、run-md box 等）是新建文件，允许写
+- 铁律"不得编辑 JSON 中间文件"指**命令输出产物**（`--out` 文件与工作区产物）只读；Agent 自建的**输入文件**（bridge props、run-md box 等）是新建文件，允许写
 - 失败必须如实记录：仿真失败、DFT 未收敛、候选被淘汰——全部原样写入日志与报告，不得美化或隐瞒
 - 消融实验只通过 `config.yaml` 的 `ablations` 开关执行，不得在运行中自行增删协议步骤
 
 ## 四、仿真库命令速查
 
-调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`。**完整参数/IO 结构/报错处置见 `references/cli-commands.md`（需要细节时用 Read 读取）**——特别是阶段1的合并约定与 run-pyamm 的 `--base` 传参规则，首次运行前必读。
+调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`。**完整参数/IO 结构/报错处置见 `references/cli-commands.md`（需要细节时用 Read 读取）**——特别是 run-pyamm 的 `--base` 传参规则，首次运行前必读。
 
 | 子命令 | 用途 | 使用位置 |
 |--------|------|---------|
 | `run-mlp --in IN [--model mace\|chgnet] --out OUT` | ML 势结构松弛（能量/收敛） | 阶段1，mace 与 chgnet 各一次 |
 | `run-xtb --in IN --out OUT` | 半经验单点（HOMO/LUMO） | 阶段1 |
-| `filter --in IN --rules RULES --out OUT` | 漏斗硬淘汰（converged/能量/HOMO 淘汰线） | 阶段1 |
-| `consensus --in IN --out OUT` | 三模型一致性投票（分歧标记 disputed） | 阶段1 |
 | `bridge --props PROPS --out OUT` | 微观物性 → PyBaMM 参数映射 | 参数桥梁 |
 | `run-pyamm --params P --protocol X [--base B] [--mode M] [--thermal T] [--plating] --out O` | 电芯仿真（放电/快充/热/析锂，DFN 自动降级） | 阶段2/3 |
 | `run-orca --in IN --out OUT` | 真 DFT 背书（气相优化+HOMO/LUMO+IE/EA） | 仅收尾 Top-3 |

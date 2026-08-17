@@ -247,41 +247,6 @@ def test_run_md_handler_in_process_with_cache_and_engine(tmp_path, monkeypatch):
     assert data["D_Li_m2_s"] == 1.5e-10
 
 
-def test_filter_handler_in_process(tmp_path):
-    in_file = tmp_path / "in.json"
-    in_file.write_text(json.dumps({"candidates": [
-        {"smiles": "CCO", "metrics": {"converged": True, "energy_ev": -120.0, "homo_ev": -8.0}},
-        {"smiles": "FEC", "metrics": {"converged": False}},
-    ]}), encoding="utf-8")
-    rules = tmp_path / "rules.json"
-    rules.write_text(json.dumps({"max_energy_ev": -1.0, "max_homo_ev": -6.0}),
-                     encoding="utf-8")
-    out = tmp_path / "o.json"
-    rc = main(["filter", "--in", str(in_file), "--rules", str(rules), "--out", str(out)])
-    assert rc == 0
-    statuses = {c["smiles"]: c["status"] for c in
-                json.loads(out.read_text(encoding="utf-8"))["candidates"]}
-    assert statuses == {"CCO": "passed", "FEC": "rejected"}
-
-
-def test_consensus_handler_in_process(tmp_path):
-    in_file = tmp_path / "in.json"
-    in_file.write_text(json.dumps({"candidates": [
-        {"smiles": "A", "metrics": {"mace_energy_ev": -100.0, "chgnet_energy_ev": -90.0, "xtb_homo_ev": -8.0}},
-        {"smiles": "B", "metrics": {"mace_energy_ev": -99.0, "chgnet_energy_ev": -89.0, "xtb_homo_ev": -7.9}},
-        {"smiles": "C", "metrics": {"mace_energy_ev": -98.0, "chgnet_energy_ev": -88.0, "xtb_homo_ev": -7.8}},
-        {"smiles": "D", "metrics": {"mace_energy_ev": -50.0, "chgnet_energy_ev": -5.0, "xtb_homo_ev": -9.0}},
-    ]}), encoding="utf-8")
-    out = tmp_path / "o.json"
-    rc = main(["consensus", "--in", str(in_file), "--out", str(out)])
-    assert rc == 0
-    cands = json.loads(out.read_text(encoding="utf-8"))["candidates"]
-    disputed = {c["smiles"]: c.get("status") for c in cands}
-    assert disputed["D"] == "disputed"
-    assert "dispute_detail" in next(c for c in cands if c["smiles"] == "D")
-    assert all(c.get("status") is None for c in cands if c["smiles"] != "D")
-
-
 def test_bridge_handler_in_process(tmp_path):
     props = tmp_path / "p.json"
     props.write_text(json.dumps({"conductivity_S_m": 1.1}), encoding="utf-8")
