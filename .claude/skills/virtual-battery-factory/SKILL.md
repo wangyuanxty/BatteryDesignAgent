@@ -57,7 +57,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 5. **评估**。把阶段 2/3 的输出数值逐项对照第 0 条的达标标准判定通过与否；不通过就诊断失败原因、回退到原因所在的尺度（材料问题回阶段 1，结构参数问题回阶段 2），判定与诊断写 `evaluate` 日志条目。评估是环的尾段而非第 4 个阶段——回退到"原因所在"而不是盲目重跑全流程，正是本协议区别于网格搜索的地方；诊断留痕让论文能展示推理质量。
 6. **收尾（唯一真计算时刻）**。对最终 Top-3 用真第一性原理计算（`run-orca`）算分子总能量/HOMO/LUMO/垂直电离能/电子亲和能，对 Top-1 用真分子动力学（`run-md`）模拟 Li⁺ 在电解液中的运动、由均方位移拟合扩散系数；最后 `render` 把全部日志渲染为六节 HTML 报告，写 `endorse` 与 `final` 日志条目。论文里的结论级数值都要有第一性原理签字——代理只负责淘汰，真计算只配给决赛圈，这也是漏斗内禁止它的原因。若配置 `real_compute: false`：跳过真计算背书，`endorse` 条目如实记录跳过（如 `{"action": "endorse", "skipped": true, "reason": "real_compute=false"}`），随后直接 `render`，不虚构 DFT/MD 数值。
    命令：`run-orca --in IN --out O`（Top-3）→ `run-md --box B [--engine gromacs|mace] [--t-ns T] --out O`（Top-1）→ `render --case-dir D [--out O]`
-7. **设计交付物（行业标准文件）**：收尾产出电池设计行业标准文件——电芯设计规格书 `design_spec.md`、物料清单 `bom.md/xlsx`、技术参数表 `datasheet.md`、设计计算书 `calc.xlsx`（推荐）。**每种文件的格式与内容要求分别见 `references/deliverable-{design-spec,bom,datasheet,calc-sheet}.md`（按需 Read 对应文件）**。所有数值机械取自参数集/仿真结果/文献并逐行标注来源，缺失项如实写"未提供"。结构图/材料规格书/产线工艺卡属纯仿真边界外，报告中如实说明。
+7. **设计交付物（行业标准文件）**：收尾产出电池设计行业标准文件——电芯设计规格书 `design_spec.md`、物料清单 `bom.md/xlsx`、技术参数表 `datasheet.md`、设计计算书 `calc.xlsx`（推荐）、设计验证报告 `dvpr.md`（虚拟测试版）、设计失效模式分析 `dfmea.md`（定性版）。**每种文件的格式与内容要求分别见 `references/deliverable-{design-spec,bom,datasheet,calc-sheet,dvpr,dfmea}.md`（按需 Read 对应文件）**。所有数值机械取自参数集/仿真结果/文献并逐行标注来源，缺失项如实写"未提供"。结构图/材料规格书/产线工艺卡属纯仿真边界外，报告中如实说明。
 
 ### log.jsonl 条目 schema（每轮必须按此写入）
 
