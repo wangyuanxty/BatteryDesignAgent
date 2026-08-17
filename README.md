@@ -42,44 +42,25 @@ ML 势（MACE-MP/CHGNet）由 pip `[ml]` 附带，无需额外二进制。`real_
 
 ## 运行
 
-**交互模式（开发期）**：在 Claude Code 对话里直接说自然语言设计目标即可（如"设计一款能量密度 ≥ 400 Wh/kg 且 4C 快充无析锂的电池"）——skill 会用 AskUserQuestion 逐项澄清（目标量化/体系/预算/消融/真计算开关，均带默认值），澄清后自动生成案例配置并执行。无需手写任何 YAML。
+**用户唯一输入 = 自然语言**，全程无需手写或查看任何 YAML。在 Claude Code 对话里直接说设计目标即可（如"设计一款能量密度 ≥ 400 Wh/kg 且 4C 快充无析锂的电池"）：
 
-**批量模式（论文实验期）**：`run.py` 驱动零交互可复现运行。样例案例（即交互模式生成的模板）位于 `.claude/skills/virtual-battery-factory/assets/cases/`，全部为三阶段全流程：
+1. skill 用 AskUserQuestion 逐项澄清（目标量化 / 起点判定（是否从阶段 2 开始）/ 体系 / 预算 / 消融 / 真计算开关，均带默认值）
+2. 澄清后 skill 自动生成配置、写入工作区并执行闭环
+3. 批量实验同样用自然语言发起："跑 N=3"、"跑消融矩阵"、"关掉 guardrails 跑一次"——skill 生成各变体配置并依次以 `run.py` 挂夜执行
 
-| 案例 | 设计目标 |
-|------|---------|
-| `fast_charge_v1.yaml` | 快充/析锂添加剂：EC/EMC + LiPF6 体系 4C 快充下的析锂与温升（T_max < 60℃ 且无析锂），30 轮预算 |
-| `voltage_window.yaml` | 电压窗口拓宽：电化学稳定窗口 ≥ 5.0 V（IE/EA 代理）+ 容量不低于基线 + 无析锂 |
-| `energy_density.yaml` | 电芯级目标驱动：重力能量密度 ≥ 400 Wh/kg，材料与结构参数联合调整 |
-| `structure_opt.yaml` | 结构参数优化（`start_stage: 2`，从阶段 2 开始，不换材料）：厚度/孔隙率/N/P 优化提升容量 |
-| `minimal_smoke.yaml` | 冒烟（真计算关）：最小闭环验证 |
+样例设计目标（自然语言示例与推荐设置，也是澄清时的默认值来源）见 `.claude/skills/virtual-battery-factory/assets/examples.md`，共五类：快充/析锂添加剂、电压窗口拓宽、能量密度目标驱动（以上全流程）、结构参数优化（从阶段 2 开始）、最小冒烟（真计算关）。
 
-收尾 Top-3 `run-orca` + Top-1 `run-md` 真计算背书（挂夜，约一夜一案例）。运行：
-
-```powershell
-.venv\Scripts\python.exe run.py --config .claude/skills/virtual-battery-factory/assets/cases/fast_charge_v1.yaml
-```
-
-**工作区 = 案例配置所在目录**（`log.jsonl`、`session_id`、`report.html`、`csv/` 及各阶段产物子目录均落在此处）。论文实验建议按设计文档 §5.1 布局把案例复制到独立目录再跑：
-
-```powershell
-New-Item -ItemType Directory -Force runs/fast_charge_v1
-Copy-Item .claude/skills/virtual-battery-factory/assets/cases/fast_charge_v1.yaml runs/fast_charge_v1/config.yaml
-.venv\Scripts\python.exe run.py --config runs/fast_charge_v1/config.yaml
-```
-
-**resume（续跑）**：重跑同一条命令即自动续跑——session id 持久化在工作区 `session_id` 文件，断点状态以工作区产物（`log.jsonl`）为准，无需人工传 id；删除 `session_id` 文件则从零开始新会话。
+收尾 Top-3 `run-orca` + Top-1 `run-md` 真计算背书（挂夜，约一夜一案例）。**工作区 = 配置所在目录**（`log.jsonl`、`session_id`、`report.html`、`csv/` 及各阶段产物子目录均落在此处）；resume：重跑同一条命令即自动续跑（session id 持久化在工作区 `session_id` 文件，删除该文件则从零开始新会话）。
 
 ## 消融实验
 
-全部通过案例配置开关执行，不改代码（各开关回答的问题对照设计文档 §10.1）。复制案例 YAML 后修改 `ablations`：
+全部通过案例配置开关执行，不改代码（各开关回答的问题对照设计文档 §10.1）。开关含义（澄清时作为选项呈现，或直接对 skill 说）：
 
-```yaml
-ablations:
-  guardrails: false    # 关闭反模式护栏（SKILL.md 第三章）：护栏贡献多少？
-  consistency: false   # 关闭三模型一致性检查：不置信信号贡献多少？
-  bridge: false        # 关闭参数桥梁（微观结果不回流，用默认文献参数）：跨尺度桥梁贡献多少？
-```
+| 开关 | 关闭时回答的问题 |
+|------|----------------|
+| `guardrails: false` | 反模式护栏（SKILL.md 第三章）贡献多少？ |
+| `consistency: false` | 三模型一致性检查贡献多少？ |
+| `bridge: false` | 参数桥梁（微观结果不回流，用默认文献参数）贡献多少？ |
 
 三个开关全 `true` 即完整系统（主结果）。论文消融矩阵 7 组 × N=3、一夜一组约 3 周（设计文档 §10）；`runs/<case_id>/csv/` 汇总各案例图表数据绘制论文图表。
 

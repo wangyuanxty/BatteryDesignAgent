@@ -64,7 +64,21 @@ def test_minimal_case_end_to_end(tmp_path):
         pytest.skip("set BDA_E2E_FULL=1 to run the full e2e (~30-60 min)")
     case_dir = tmp_path / "minimal_smoke"
     case_dir.mkdir()
-    shutil.copy(ROOT / ".claude" / "skills" / "virtual-battery-factory" / "assets" / "cases" / "minimal_smoke.yaml", case_dir / "config.yaml")
+    # 最小冒烟配置由测试内联生成（与 SKILL.md 交互模式澄清后生成的配置同构）
+    (case_dir / "config.yaml").write_text(
+        "goal: \"设计一种添加剂，使 1C 放电容量不低于 2.0 Ah（最小冒烟验证）\"\n"
+        'system: "EC/EMC+LiPF6"\n'
+        "max_rounds: 3\n"
+        'seed_pool: ["FEC", "VC"]\n'
+        "ablations:\n"
+        "  guardrails: true\n"
+        "  consistency: true\n"
+        "  bridge: true\n"
+        "real_compute: false\n"
+        'base_params: "Chen2020"\n'
+        "start_stage: 1\n",
+        encoding="utf-8",
+    )
     r = subprocess.run(
         [sys.executable, str(ROOT / "run.py"), "--config", str(case_dir / "config.yaml")],
         capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=2700,
