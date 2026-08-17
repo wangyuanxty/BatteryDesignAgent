@@ -125,6 +125,17 @@ def _stage_badge(stage: int | None) -> str:
     return f'<span class="{cls}">{_STAGE_LABELS[stage]}</span>'
 
 
+def _stage_range_badge(lo: int, hi: int) -> str:
+    """轮卡片阶段范围徽章：单阶段沿用 _stage_badge；跨阶段显示 STAGE N–M（en dash）。
+    阶段编号与 _entry_stage / _STAGE_LABELS 同一体系（0=收尾）。"""
+    if lo == hi:
+        return _stage_badge(lo)
+    if lo not in _STAGE_LABELS or hi not in _STAGE_LABELS:
+        return ""
+    cls = "badge stage end" if lo == 0 else "badge stage"
+    return f'<span class="{cls}">STAGE {lo}–{hi}</span>'
+
+
 def _entry_stage(e: dict) -> int | None:
     """log 条目 → 阶段：endorse/final=收尾(0)；分子 propose/funnel=1；struct propose=2；
     evaluate 按条目内容推断（提及 struct/结构 → 含安全指标为 3，否则 2；否则视为材料轮=1）。"""
@@ -413,7 +424,7 @@ def _rounds_html(log: list[dict]) -> str:
         verdict = str(ev.get("verdict") or "") if ev else ""
         badge = _verdict_badge(verdict) if verdict else ""
         stages = [s for s in (_entry_stage(e) for e in entries) if s is not None]
-        stage_html = _stage_badge(max(stages)) if stages else ""
+        stage_html = _stage_range_badge(min(stages), max(stages)) if stages else ""
         subs = []
         prop = next((e for e in entries if e.get("action") == "propose"), None)
         if prop:

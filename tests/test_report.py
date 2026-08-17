@@ -121,12 +121,29 @@ def test_stage_badges_in_round_cards(tmp_path, full_case):
     """轮卡片带 STAGE 徽章：分子轮=STAGE 1；struct propose 轮=STAGE 2。"""
     html = _render(full_case)
     assert 'ROUND 01</span><span class="badge stage">STAGE 1</span>' in html
-    ws = _make_case(tmp_path)
+    # 独立工作区：与 full_case fixture 共享 tmp_path 会互相追加 log 条目
+    ws = _make_case(tmp_path / "iso")
     append_entry(ws, {"round": 2, "action": "propose", "candidates": [
         {"struct": {"Positive electrode thickness [m]": 6.84e-5},
          "name": "结构方案B", "role": "正极减薄10%"}]})
     html2 = _render(ws)
     assert 'ROUND 02</span><span class="badge stage">STAGE 2</span>' in html2
+
+
+def test_round_card_stage_range_badge(tmp_path):
+    """跨阶段轮：轮卡片徽章显示 STAGE 2–3 范围（en dash），单阶段轮仍为单标。"""
+    ws = _make_case(tmp_path)
+    append_entry(ws, {"round": 2, "action": "propose", "candidates": [
+        {"struct": {"Positive electrode thickness [m]": 6.84e-5},
+         "name": "结构方案B", "role": "正极减薄10%"}]})
+    append_entry(ws, {"round": 2, "action": "evaluate",
+                      "metrics": {"T_max_K": 315.0, "plated": False},
+                      "verdict": "pass", "note": "struct 方案结构安全评估"})
+    html = _render(ws)
+    assert 'ROUND 01</span><span class="badge stage">STAGE 1</span>' in html  # 单阶段轮=单标
+    assert 'ROUND 02</span><span class="badge stage">STAGE 2–3</span>' in html  # 跨阶段轮=范围
+    round02_tail = html.split("ROUND 02", 1)[1]
+    assert '<span class="badge stage">STAGE 3</span>' not in round02_tail  # 不再仅显示最大阶段
 
 
 def test_criteria_min_max_thresholds(tmp_path):
