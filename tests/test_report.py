@@ -106,6 +106,29 @@ def test_round_cards_grouped_and_numbered(tmp_path, full_case):
     assert "T_max 318" in html  # 摘要行 T_max
 
 
+def test_flow_overview_strip(tmp_path, full_case):
+    """概览区流程一览条：四阶段徽章 + 由 log 条目机械推导的计数/结论摘要。"""
+    html = _render(full_case)
+    assert "流程一览" in html
+    assert "阶段1 · 材料设计" in html
+    assert "阶段2 · 电芯设计" in html
+    assert "阶段3 · 安全评估" in html
+    assert "分子 propose 1 · funnel 2" in html
+    assert "背书 1 · 终审 1 · 结论 达标" in html
+
+
+def test_stage_badges_in_round_cards(tmp_path, full_case):
+    """轮卡片带 STAGE 徽章：分子轮=STAGE 1；struct propose 轮=STAGE 2。"""
+    html = _render(full_case)
+    assert 'ROUND 01</span><span class="badge stage">STAGE 1</span>' in html
+    ws = _make_case(tmp_path)
+    append_entry(ws, {"round": 2, "action": "propose", "candidates": [
+        {"struct": {"Positive electrode thickness [m]": 6.84e-5},
+         "name": "结构方案B", "role": "正极减薄10%"}]})
+    html2 = _render(ws)
+    assert 'ROUND 02</span><span class="badge stage">STAGE 2</span>' in html2
+
+
 def test_criteria_min_max_thresholds(tmp_path):
     ws = CaseWorkspace("case2", root=str(tmp_path))
     append_entry(ws, {"criteria": {

@@ -113,6 +113,51 @@ def _verdict_badge(verdict: str) -> str:
     return f'<span class="badge {cls}">{_html_escape(str(verdict))}</span>'
 
 
+# 三阶段流程 + 收尾（0=收尾；阶段编号与 SKILL.md 流程一致）
+_STAGE_LABELS = {0: "STAGE 收尾", 1: "STAGE 1", 2: "STAGE 2", 3: "STAGE 3"}
+
+
+def _stage_badge(stage: int | None) -> str:
+    """STAGE 小标（blueprint 风格：等宽 10.5px 边框徽章，沿用 .badge + --blue/--accent）。"""
+    if stage not in _STAGE_LABELS:
+        return ""
+    cls = "badge stage end" if stage == 0 else "badge stage"
+    return f'<span class="{cls}">{_STAGE_LABELS[stage]}</span>'
+
+
+def _entry_stage(e: dict) -> int | None:
+    """log 条目 → 阶段：endorse/final=收尾(0)；分子 propose/funnel=1；struct propose=2；
+    evaluate 按条目内容推断（提及 struct/结构 → 含安全指标为 3，否则 2；否则视为材料轮=1）。"""
+    action = e.get("action")
+    if action in ("endorse", "final"):
+        return 0
+    if action == "propose":
+        has_struct = any(
+            isinstance(c, dict) and c.get("struct") for c in _as_list(e.get("candidates"))
+        )
+        return 2 if has_struct else 1
+    if action == "funnel":
+        return 1
+    if action == "evaluate":
+        text = json.dumps(e, ensure_ascii=False)
+        if "struct" in text or "结构" in text:
+            metrics = e.get("metrics") or {}
+            has_safety = isinstance(metrics.get("T_max_K"), (int, float)) or "plated" in metrics
+            return 3 if has_safety else 2
+        return 1
+    return None
+
+
+def _plot_stage(filename: str) -> int | None:
+    """曲线文件名 → 阶段：discharge=2（电芯设计）、charge45=3（安全评估）；无法判定则不贴。"""
+    low = filename.lower()
+    if "discharge" in low:
+        return 2
+    if "charge" in low:
+        return 3
+    return None
+
+
 def _threshold_text(value) -> str:
     if isinstance(value, dict):
         parts = []
@@ -158,6 +203,47 @@ def _candidates_html(log: list[dict]) -> str:
         return '<p class="empty">暂无数据</p>'
     chips = "".join(f'<span class="chip mono">{_html_escape(c)}</span>' for c in names)
     return f'<div class="chips">{chips}</div>'
+
+
+def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]]) -> str:
+    """概览区流程一览条：四阶段徽章，各带由 log 条目 / cell 曲线机械推导的计数或结论摘要。
+
+    阶段1 材料设计=分子 propose/funnel；阶段2 电芯设计=struct propose/discharge 曲线；
+    阶段3 安全评估=charge45 曲线；收尾=endorse/final（含最终结论）。
+    """
+    mol_prop = struct_prop = funnel_n = endorse_n = final_n = 0
+    for e in log:
+        action = e.get("action")
+        if action == "funnel":
+            funnel_n += 1
+        elif action == "endorse":
+            endorse_n += 1
+        elif action == "final":
+            final_n += 1
+        elif action == "propose":
+            for c in _as_list(e.get("candidates")):
+                if isinstance(c, dict) and c.get("struct"):
+                    struct_prop += 1
+                else:
+                    mol_prop += 1
+    n_discharge = sum(1 for fname, _ in cell_files if _plot_stage(fname) == 2)
+    n_charge45 = sum(1 for fname, _ in cell_files if _plot_stage(fname) == 3)
+    finals = [e for e in log if e.get("action") == "final"]
+    verdict = str(finals[-1].get("verdict") or "") if finals else ""
+    close_sum = f"背书 {endorse_n} · 终审 {final_n}" + (f" · 结论 {verdict}" if verdict else "")
+    items = (
+        (1, "阶段1 · 材料设计", f"分子 propose {mol_prop} · funnel {funnel_n}"),
+        (2, "阶段2 · 电芯设计", f"结构 propose {struct_prop} · 放电曲线 {n_discharge}"),
+        (3, "阶段3 · 安全评估", f"4C 快充曲线 {n_charge45}"),
+        (0, "收尾", close_sum),
+    )
+    blocks = [
+        f'<div class="flow-item {"end" if stage == 0 else ""}">{_stage_badge(stage)}'
+        f'<div class="flow-name">{_html_escape(name)}</div>'
+        f'<div class="flow-count">{_html_escape(count)}</div></div>'
+        for stage, name, count in items
+    ]
+    return f'<div class="flow">{"".join(blocks)}</div>'
 
 
 def _kpi_compare(value, criteria: dict, key: str, direction: str) -> tuple[str, str]:
@@ -326,6 +412,8 @@ def _rounds_html(log: list[dict]) -> str:
         ev = next((e for e in entries if e.get("action") == "evaluate"), None)
         verdict = str(ev.get("verdict") or "") if ev else ""
         badge = _verdict_badge(verdict) if verdict else ""
+        stages = [s for s in (_entry_stage(e) for e in entries) if s is not None]
+        stage_html = _stage_badge(max(stages)) if stages else ""
         subs = []
         prop = next((e for e in entries if e.get("action") == "propose"), None)
         if prop:
@@ -348,7 +436,7 @@ def _rounds_html(log: list[dict]) -> str:
         open_attr = " open" if r == first_round else ""
         cards.append(
             f'<details class="round"{open_attr}><summary>'
-            f'<span class="round-no">ROUND {r:02d}</span>{badge}{sub}'
+            f'<span class="round-no">ROUND {r:02d}</span>{stage_html}{badge}{sub}'
             f'</summary><div class="round-body">{"".join(body)}</div></details>'
         )
     return "".join(cards)
@@ -491,10 +579,11 @@ def _plots_html(cell_files: list[tuple[str, dict]]) -> str:
         chips = f'<span class="chip">MODEL {_html_escape(model)}</span>'
         if isinstance(data.get("T_max_K"), (int, float)):
             chips += f'<span class="chip">T_max {_fmt_num(data["T_max_K"])} K</span>'
+        stage_html = _stage_badge(_plot_stage(fname))
         figures.append(
             "<figure class='plot'><figcaption>"
             f'<span class="eyebrow" style="margin:0">Plot {idx:02d}</span>'
-            f'<span class="fname">{_html_escape(fname)}</span>{chips}'
+            f'<span class="fname">{_html_escape(fname)}</span>{stage_html}{chips}'
             "</figcaption>"
             f'<div class="plot-wrap">{_svg_plot(fname, data)}<div class="tooltip" hidden></div></div>'
             "</figure>"
@@ -608,6 +697,7 @@ def render_report(case_dir: str, out_html: str = "report.html") -> str:
         "TITLE": f"{Path(case_dir).name} · 虚拟电池工厂设计报告",
         "HEADER": _header_html(case_dir, log, criteria),
         "CRITERIA_TABLE": _criteria_html(criteria),
+        "FLOW": _flow_html(log, cell_files),
         "CANDIDATES": _candidates_html(log),
         "ROUNDS": _rounds_html(log),
         "FUNNEL": _funnel_html(log),

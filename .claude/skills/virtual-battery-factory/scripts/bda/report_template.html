@@ -180,6 +180,8 @@ main{max-width:1120px;margin:0 auto;padding:34px clamp(14px,3vw,32px) 8px}
 .badge.ok{color:var(--ok);background:rgba(46,125,79,.08)}
 .badge.bad{color:var(--bad);background:rgba(179,64,42,.08)}
 .badge.mute{color:#6B8296;background:rgba(107,130,150,.08)}
+.badge.stage{color:var(--blue);background:rgba(30,90,138,.06)}
+.badge.stage.end{color:var(--accent);background:rgba(201,123,61,.08)}
 .chip{
   font-family:var(--mono);font-size:12px;background:#EEF3F8;
   border:1px solid var(--grid);border-radius:2px;padding:2px 9px;
@@ -191,6 +193,17 @@ main{max-width:1120px;margin:0 auto;padding:34px clamp(14px,3vw,32px) 8px}
 .chip.tag.seed{color:var(--blue);border-color:rgba(30,90,138,.45)}
 .chip.tag.free{color:var(--accent);border-color:rgba(201,123,61,.55)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+
+/* ---------- 概览区流程一览条 ---------- */
+.flow{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 0}
+.flow-item{
+  flex:1 1 180px;min-width:170px;
+  border:1px solid var(--grid);border-top:3px solid var(--blue);
+  background:#fff;border-radius:2px;padding:10px 14px;
+}
+.flow-item.end{border-top-color:var(--accent)}
+.flow-name{font-size:14px;font-weight:600;margin:7px 0 2px}
+.flow-count{font-family:var(--mono);font-size:11.5px;color:#5E768C}
 
 /* ---------- 迭代轨迹：轮次可折叠卡片 ---------- */
 details.round{
@@ -346,6 +359,8 @@ pre.term{
   <div class="eyebrow">SHEET 01 · OVERVIEW / 任务概览</div>
   <h2 id="overview-title">任务概览与达标标准</h2>
   {{CRITERIA_TABLE}}
+  <h3 style="font-size:14px;margin:22px 0 8px">流程一览</h3>
+  {{FLOW}}
   <h3 style="font-size:14px;margin:22px 0 8px">涉及候选</h3>
   {{CANDIDATES}}
 </section>
