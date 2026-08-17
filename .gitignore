@@ -9,3 +9,4 @@ runs/
 .coverage
 .claude/settings.json
 .vscode/
+.claude/skills/cad-skill/
