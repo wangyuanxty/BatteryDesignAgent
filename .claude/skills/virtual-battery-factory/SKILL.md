@@ -27,12 +27,11 @@ description: 虚拟电池工厂协议——四阶段电池设计闭环（材料�
   2. **起点判定**：目标是否涉及新材料/添加剂/电解质设计（含**电极修饰材料——包覆/掺杂剂**，其候选提出在阶段 1，尽管跳过分子漏斗）？——涉及 → `start_stage: 1`（全流程）；只涉及结构/配方参数（厚度、孔隙率、N/P 等）或"在现有体系上优化" → `start_stage: 2`（从阶段 2 开始，材料用体系基线参数）。把判定结果作为澄清选项请用户确认
   3. 材料体系：默认 EC/EMC + LiPF6
   4. 迭代预算：默认 30 轮
-  5. 消融开关：默认全 true（完整系统）
-  6. 真计算开关：默认 **false**（交互调试不要误烧一夜 CPU；用户明确要求真 DFT/MD 背书时再 true）
-  7. **结构图需求**（可选交付物）：是否需要 3D 电芯结构模型？需要 → 问结构形式（21700 卷绕 / 软包叠片 / 其他，推荐值按参数集体型推断）与表达方式（爆炸示意+真实厚度标注 / 比例夸大 / 3D 打印件，推荐爆炸示意）——**每次由用户澄清决定，不替用户定死**；用户还可自由提出"两种都出""只要剖面"等需求
+  5. 真计算开关：默认 **false**（交互调试不要误烧一夜 CPU；用户明确要求真 DFT/MD 背书时再 true）
+  6. **结构图需求**（可选交付物）：是否需要 3D 电芯结构模型？需要 → 问结构形式（21700 卷绕 / 软包叠片 / 其他，推荐值按参数集体型推断）与表达方式（爆炸示意+真实厚度标注 / 比例夸大 / 3D 打印件，推荐爆炸示意）——**每次由用户澄清决定，不替用户定死**；用户还可自由提出"两种都出""只要剖面"等需求
   澄清完毕：把答案（参考 `assets/examples.md` 的推荐设置）写成案例 YAML 存入工作区，log.jsonl 第 0 条写入最终 criteria，然后按第一节执行（交互模式下你直接以自身工具执行协议，无需 run.py）。
-  - **批量实验也用自然语言发起**：用户说"跑 N=3"、"跑消融矩阵"、"对 X 案例关掉 guardrails 跑 3 次"等时，你按指令生成各变体配置（写入 `runs/<id>/`）并**依次以 `run.py --config` 执行**（挂夜批量）；生成的配置即批量模式输入，同样无需用户碰 YAML。
-- **批量模式（实验期，`run.py` 驱动）**：系统提示注入了 `配置:` 路径与 `工作区:` 目录时，**不得提问**——直接按配置执行（阈值解析写 log 第 0 条后自动开跑）。此模式支撑论文的 N=3 重复与消融矩阵，必须零交互、全可复现。
+  - **批量实验也用自然语言发起**：用户说"跑 N=3"等时，你按指令生成各变体配置（写入 `runs/<id>/`）并**依次以 `run.py --config` 执行**（挂夜批量）；生成的配置即批量模式输入，同样无需用户碰 YAML。
+- **批量模式（实验期，`run.py` 驱动）**：系统提示注入了 `配置:` 路径与 `工作区:` 目录时，**不得提问**——直接按配置执行（阈值解析写 log 第 0 条后自动开跑）。此模式支撑论文的 N=3 重复，必须零交互、全可复现。
 - 判定依据：系统提示含 `配置:` 字段 = 批量模式；否则若处于对话中且用户提出电池设计目标或批量实验指令 = 交互模式。
 
 ## 一、任务流程（线性，无阶段 4）
@@ -43,7 +42,7 @@ description: 虚拟电池工厂协议——四阶段电池设计闭环（材料�
    - 检查 `.venv\Scripts\python.exe -c "import bda"` 能否成功；能 → 跳过本步
    - 不能 → 自己安装环境（Bash 执行，勿等用户）：建虚拟环境并 `pip install -e "<本skill目录>/scripts[dev,ml,host]"`（scripts/ 内 pyproject.toml 是**唯一安装定义**，仓库根无 pyproject）。ml 额外依赖（torch/mace-torch/chgnet）体积大，按阶段 1 需要再装亦可，但收尾 run-md 的 mace 引擎必须有 mace-torch
    - 外部二进制（xtb/orca/gmx）不在 pip 范围：缺失时对应命令会给出安装指引，按指引装或如实记录跳过
-1. 读取案例配置（字段：`goal` 设计目标、`system` 材料体系、`max_rounds` 迭代预算、`seed_pool` 种子池、`ablations` 消融开关、`base_params` 参数集、`real_compute` 真计算开关、`start_stage` 起点）。批量模式读系统提示注入的 `配置:` 路径（工作区=配置所在目录）；交互模式读你在第 〇 节澄清后写入工作区的配置。
+1. 读取案例配置（字段：`goal` 设计目标、`system` 材料体系、`max_rounds` 迭代预算、`seed_pool` 种子池、`base_params` 参数集、`real_compute` 真计算开关、`start_stage` 起点）。批量模式读系统提示注入的 `配置:` 路径（工作区=配置所在目录）；交互模式读你在第 〇 节澄清后写入工作区的配置。
 2. 若 `log.jsonl` 已存在（续跑/resume）：从最后一条记录恢复状态，不重复执行已完成步骤（以产物文件存在为准）。
 3. 从 `goal` 自然语言解析达标标准（指标名、阈值、单位），**按阶段分层**写入 `log.jsonl` 第 0 条再开跑：`{"criteria": {"stage1": {...}, "stage2": {...}, "stage3": {...}, "meta": {...}}}` —— `stage1` = 分子级目标与淘汰线（`max_energy_ev` 稳定性上限、`max_homo_ev` 氧化稳定性上限，目标含电压窗口时在此写明）；`stage2` = 电芯性能目标（`capacity_ah`、`energy_density_wh_kg` 等，阈值用 `{"min": ...}`/`{"max": ...}` 表达）；`stage3` = 安全目标（`T_max_K` 用 `{"max": ...}`、`plated: false`）；`meta` = 案例级参数（`max_rounds`、`real_compute` 等）。每阶段目标就是该阶段的判定依据，报告按阶段展示"目标 vs 达成"。阈值是本次实验的"合同"，落盘审计后报告与评审都以它为准，避免事后改判。
 
@@ -57,7 +56,7 @@ description: 虚拟电池工厂协议——四阶段电池设计闭环（材料�
    **包覆/掺杂剂候选（电极修饰材料）**：以分子形式提出（如正极包覆剂 Al₂O₃/Li₃PO₄、掺杂剂 ZrO₂），作用对象是电极界面/晶格——propose 条目的 candidates 与分子候选同构（smiles/name/role，role 注明"正极包覆剂"）。**无机离子固体跳过漏斗**：ML 势对带电/离子固体的松弛不可靠（同 LiBOB 硬淘汰先例），xtb 对周期性固体的单分子近似亦不适用——直接以参数桥梁进入阶段 2 老化评估，props 来源标注 `estimate`/文献，跳过原因写 funnel 条目 detail；有机包覆前驱体（如聚合物单体）照常走漏斗。**包覆/掺杂的电芯级收益只在老化协议可见**（单循环协议无信号）。**筛选语义（已定）**：这类候选在阶段 1 无分子级筛选——筛选责任整体下移到阶段 2 老化仿真（≈3 秒/100 圈，比 ML 势便宜，直接"装进电池看效果"即筛选）；前置粗筛仅靠两条软证据：提出仅限文献验证过的材料（propose 理由写明文献依据）+ 桥梁值标注 `estimate`/文献。**不设真 DFT 预筛**（表面能/键合强度）——漏斗内禁止真计算是铁律，不为这一类候选破例。
    **电极组分候选（正极活性材料发明）**：以组分形式提出（如 `Li(Ni0.7Mn0.05Co0.05Si0.1Mg0.1)O2`，NMC811 晶格上的位点替换），propose 条目的 candidates 用 `{"comp": {"formula": "...", "name": "NMC-SiMg"}, "role": "..."}` 对象记录。筛选用 `run-comp --in IN --out O`（CHGNet 周期弛豫——**须用带 CUDA torch 的环境执行**，如 `D:/anaconda/envs/py312/python.exe`；.venv 的 torch 为 CPU 版）：输出相对稳定性（vs NMC811 基线，粗代理）、平均电压（vs Li 金属，含 Li 金属参考）、容量代理。**口径如实声明**：电压自校准（NMC811 预测 ≈3.82 vs 文献 3.8 V）；fmax 0.1 严格收敛 300 步内常达不到（converged=false 但能量已达筛选精度）；相对稳定性仅看批内相对排序（同一组分两次弛豫能量差可达 ~1 eV/atom，勿作绝对量）。桥：组分候选的电压/容量经**自建参数集脚本**（agent 自建输入文件：模板 Chen2020 + OCP 常数近似 + 容量上限按 x 窗口覆盖）进阶段 2 仿真——OCP 常数近似为粗桥（estimate 口径，电压曲线形状为近似，能量密度趋势可信）。**真背书**：收尾用 `run-qe --in IN --out O`（Quantum ESPRESSO pw.x 周期 DFT：满锂 vc-relax + 去锂 relax + Li 金属参考 → 电压/能量；须 MSYS2 环境 `C:\msys64\mingw64\bin\pw.x.exe`——`winget install MSYS2.MSYS2` + `pacman -S mingw-w64-x86_64-quantum-espresso`，赝势用 conda-forge sssp 包目录）。CPU 小时级，仅收尾 Top 组分执行（漏斗内禁止，同 run-orca 铁律）。
    **溶剂/锂盐配方候选**：以 props 输运参数表达（如 `{"conductivity_S_m": 新值, "D_electrolyte_m2_s": 新值, "transport_number": 新值}` + 来源标注 `estimate`/文献），propose 条目的 candidates 用 `{"struct": {"Electrolyte conductivity [S.m-1]": 新值, ...}, "name": "溶剂方案H", "role": "..."}` 对象记录（struct 内键名即参数桥梁映射后的 PyBaMM 参数名），经参数桥梁写入 run-pyamm --params。配方候选与分子候选并列可见：在阶段 2/3 真实仿真并写 evaluate 对比，estimate 值不得冒充仿真输出。
-2. **参数桥梁**（协议规则，无 CLI 命令）。你直接把微观物性写成 PyBaMM 参数名，作为 `run-pyamm --params` 的输入——映射表（必须严格照此键名，含单位后缀）：扩散系数 → `"Electrolyte diffusivity [m2.s-1]"`、电导率 → `"Electrolyte conductivity [S.m-1]"`、迁移数 → `"Cation transference number"`；**包覆/掺杂到老化参数的桥**（须在带老化模型的体系上仿真）：包覆抑制 SEI 生长 → `"SEI kinetic rate constant [m.s-1]"`（ec reaction limited 动力学）或 `"SEI reaction exchange current density [A.m-2]"`（electron-migration limited），掺杂抑制颗粒开裂 → `"Positive electrode cracking rate"`/`"Negative electrode cracking rate"`（OKane2022 等带开裂模型的体系）。拼错参数名会被 `run-pyamm` 以 `unknown parameter name(s)` 拒绝——这是安全的兜底，按报错修正键名重跑即可，无需为此写工具。props 数值来源规则不变（种子池→文献值标注引用；自由生成→领域估计标注 `estimate`；估计值不得冒充仿真输出；Top-N 的 D/σ 由真 MD/文献背书复核）——人工转录是常规流程最高频的错误源，映射表加兜底校验让论文里每个数字都答得出"从哪来"。消融开关 `bridge: false` 的语义：跳过本步，不写这些参数，让 `run-pyamm` 用参数集默认值。
+2. **参数桥梁**（协议规则，无 CLI 命令）。你直接把微观物性写成 PyBaMM 参数名，作为 `run-pyamm --params` 的输入——映射表（必须严格照此键名，含单位后缀）：扩散系数 → `"Electrolyte diffusivity [m2.s-1]"`、电导率 → `"Electrolyte conductivity [S.m-1]"`、迁移数 → `"Cation transference number"`；**包覆/掺杂到老化参数的桥**（须在带老化模型的体系上仿真）：包覆抑制 SEI 生长 → `"SEI kinetic rate constant [m.s-1]"`（ec reaction limited 动力学）或 `"SEI reaction exchange current density [A.m-2]"`（electron-migration limited），掺杂抑制颗粒开裂 → `"Positive electrode cracking rate"`/`"Negative electrode cracking rate"`（OKane2022 等带开裂模型的体系）。拼错参数名会被 `run-pyamm` 以 `unknown parameter name(s)` 拒绝——这是安全的兜底，按报错修正键名重跑即可，无需为此写工具。props 数值来源规则不变（种子池→文献值标注引用；自由生成→领域估计标注 `estimate`；估计值不得冒充仿真输出；Top-N 的 D/σ 由真 MD/文献背书复核）——人工转录是常规流程最高频的错误源，映射表加兜底校验让论文里每个数字都答得出"从哪来"。
    命令：无——本步是协议规则（直接按映射表书写参数名），无对应 CLI 命令
 3. **阶段2 电芯设计**。把候选的电芯参数放进 PyBaMM 电化学模型，模拟 1C 恒流放电过程，得到电压曲线与放电容量——回答"这个材料装进电池行不行"。先用秒级的 SPMe 快速筛，对通过者再用分钟级的 DFN 精算（`run-pyamm --base <案例配置 base_params> --protocol 1C_discharge --mode spme`，随后按需 `--mode dfn`）——同一"代理优先"哲学在电芯尺度的应用；DFN 收敛失败会自动降级回 SPMe，不让数值刚性卡死流程。**结构方案也是候选**：目标含"结构可调"的案例中，每轮必须提出 2-4 个结构变体方案（厚度/孔隙率/N/P + 隔膜厚度与孔隙率（`"Separator thickness [m]"`、`"Separator porosity"`）+ 集流体厚度（`"Positive current collector thickness [m]"`、`"Negative current collector thickness [m]"`）的变更组合），与分子候选一样逐一仿真、与基线对比，propose 条目的 candidates 用 `{"struct": {"<PyBaMM 参数名>": 新值}, "name": "结构方案B", "role": "正极减薄10%"}` 对象记录；选择理由写入日志——结构探索与分子筛选同等可见。
    目标含耐久/老化（或本轮有包覆/掺杂候选）时执行老化协议：`run-pyamm --protocol aging_1C_100cyc --base <带老化模型体系> --mode spme`——100 圈 1C 充放循环，输出每圈容量轨迹与终态 SEI 厚度 `sei_thickness_nm_end`。**老化必须在老化体系上仿真**（Chen2020/OKane2022 等带 SEI 参数；ORegan2022 等无老化模型的体系会被 `bda error` 拒绝 → 如实记录 N/A，同 LFP 能量密度先例）。判定口径：`sei_thickness_nm_end` 越小越好（包覆效果直接可见）；容量轨迹在标准 SEI 模型下可能出现先爬升后饱和的非单调伪影（锂损失导致电压窗口偏移）——**如实标注，不得当作正常衰减**；包覆/掺杂与基线必须在**同一体系**上对比（不同体系的 SEI 参数不可比）。
@@ -89,7 +88,6 @@ description: 虚拟电池工厂协议——四阶段电池设计闭环（材料�
   - 综合达标 = 阶段 2/3 全部指标满足第 0 条 `stage2`/`stage3` 阈值
 - 回退路由（不达标时）：材料问题（电位窗不满足/HOMO-LUMO 不稳定/添加剂无效果）→ 回阶段1（换取代基、生成变体或换新候选）；结构/参数问题（容量不足、温升过高但材料指标可接受）→ 回阶段2（调整电芯参数或参数桥梁的 props 后重跑）；每轮回退原因写入 `evaluate` 条目的 verdict 或日志。症状对应尺度：电位窗/稳定性是分子属性（阶段 1 的职责），容量/温升是结构与参数属性（阶段 2 的职责）——回错尺度等于瞎折腾。
 - 预算：轮数上限 = `max_rounds`；预算耗尽仍未达标 → 如实写 `final` 条目（verdict 不达标、recommendation 说明），不得虚构达标。负结果也是结果——论文如实报告"预算内未达标"比美化数据有价值得多。
-- 消融开关按 `config.yaml` 的 `ablations` 执行：`guardrails: false` → 忽略本协议第三节；`consistency: false` → 跳过三模型一致性投票（协议规则）；`bridge: false` → 跳过参数桥梁用默认参数。消融是论文回答"每个组件贡献多少"的手段，开关必须只从配置生效——运行时自行增删步骤会毁掉消融的纯净性。
 - `real_compute: false` → 收尾跳过 `run-orca`/`run-md` 真计算背书（`endorse` 条目如实记录跳过原因，不得虚构 DFT/MD 数值）。
 
 ## 三、禁止事项与反模式（铁律）
@@ -104,7 +102,6 @@ description: 虚拟电池工厂协议——四阶段电池设计闭环（材料�
 
 - 铁律"不得编辑 JSON 中间文件"指**命令输出产物**（`--out` 文件与工作区产物）只读；Agent 自建的**输入文件**（run-pyamm params、run-md box 等）是新建文件，允许写
 - 失败必须如实记录：仿真失败、DFT 未收敛、候选被淘汰——全部原样写入日志与报告，不得美化或隐瞒
-- 消融实验只通过 `config.yaml` 的 `ablations` 开关执行，不得在运行中自行增删协议步骤
 - **报告以表格/图表优先**：候选对比写 evaluate 的 `comparison` 表、漏斗处置写 funnel 的 `dispositions` 表、诊断写一句 `note`——日志里避免一长串文字段落
 
 ## 四、仿真库命令速查

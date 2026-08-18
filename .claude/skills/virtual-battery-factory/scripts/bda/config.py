@@ -8,7 +8,6 @@ class CaseConfig:
     system: str
     max_rounds: int = 30
     seed_pool: list[str] = field(default_factory=list)
-    ablations: dict[str, bool] = field(default_factory=dict)
     base_params: str = "Chen2020"
     real_compute: bool = False
     start_stage: int = 1  # 1=全流程（阶段1 材料设计起）；2=从阶段2 结构设计起（材料用体系基线）
@@ -26,7 +25,6 @@ def load_case_config(path: str) -> CaseConfig:
         system=str(raw["system"]),
         max_rounds=int(raw.get("max_rounds", 30)),
         seed_pool=list(raw.get("seed_pool", [])),
-        ablations=dict(raw.get("ablations", {})),
         base_params=str(raw.get("base_params", "Chen2020")),
         real_compute=bool(raw.get("real_compute", False)),
         start_stage=int(raw.get("start_stage", 1)),
