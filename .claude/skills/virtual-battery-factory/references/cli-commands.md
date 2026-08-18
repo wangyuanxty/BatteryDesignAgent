@@ -118,5 +118,22 @@ bda run-comp --in IN --out OUT
   - 容量 = 0.7 Li × F/3.6 ÷ 摩尔质量（理论代理，NMC811 ≈194 mAh/g）
   - `rel_stability_ev_atom` 仅看批内相对排序（弛豫未严格收敛，同一组分两次弛豫能量差可达 ~1 eV/atom）
   - `converged=false` 常见（300 步 FIRE 未达 fmax 0.1）——能量已达筛选精度，如实标注
-  - 周期 DFT 真背书缺工具：如实标注"CHGNet 代理口径"
+  - 真背书：收尾用 `run-qe`（周期 DFT，见下节）——漏斗内一律为 CHGNet 代理口径
 - 报错：`TM fractions must sum to 1` → 修组分；`no transition-metal species` → 公式缺少 TM
+
+## run-qe — 周期 DFT 真背书（仅收尾 Top 组分）
+
+```
+bda run-qe --in IN --out OUT
+```
+
+- **环境**：MSYS2 的 QE（原生 Windows，非虚拟机）：`winget install MSYS2.MSYS2`，改 pacman 镜像（TUNA，见安装备注），`pacman -S mingw-w64-ucrt-x86_64-quantum-espresso`，pw.exe 在 `C:\msys64\ucrt64\bin\`；赝势用 conda-forge `sssp` 包目录（`D:\anaconda\envs\py312\share\sssp\efficiency`，可用环境变量 `QE_PSEUDO_DIR` 覆盖）
+- **两个已踩坑（本机已处理，勿重蹈）**：① MSYS2 原版 pw.exe 栈保留仅 2MB，计算初始化即栈溢出（0xC00000FD）——需用 pefile 打补丁复制为 `pw_stack4g.exe`（栈保留 4GB），runner 自动优先使用；② Fortran namelist 中反斜杠是转义符——runner 生成输入时已自动把 Windows 路径转正斜杠
+- 输入 `--in`：`{"candidates": [{"formula": "Li(Ni0.8Mn0.1Co0.1)O2", "name": "NMC811"}]}`
+- 输出：每候选 `{formula, realized_tm_counts, avg_voltage_v, e_full_ev, e_delith_ev, e_li_metal_ev, converged, wall_time_s}` —— 电压公式与 run-comp 一致（含 Li 金属参考）
+- 计算口径：ecutwfc 50 Ry / ecutrho 400（SSSP efficiency 标准）；nspin=2 铁磁初猜（Ni/Mn/Co）；满锂 vc-relax + 去锂固定晶胞 relax + bcc Li vc-relax；CPU 小时级（12 原子原胞 ~1 小时/态、48 原子超胞挂夜）——**仅收尾执行，漏斗内禁止**（同 run-orca 铁律）
+- 报错：
+  - `pw.x not found; install MSYS2 ...` → 按指引装 MSYS2 的 quantum-espresso 包
+  - `QE pseudopotential dir not found; ...` → 装 conda-forge sssp 包或设 QE_PSEUDO_DIR
+  - `no SSSP efficiency pseudopotential entry for element X` → 该元素不在内置赝势表（Li/Ni/Mn/Co/O/Si/Mg），补 _PSEUDO_FILES 映射
+  - `pw.x produced no total energy for ...` → 读工作目录 *.out 排查（SCF 不收敛常见：加 mixing_beta/换初始磁矩）
