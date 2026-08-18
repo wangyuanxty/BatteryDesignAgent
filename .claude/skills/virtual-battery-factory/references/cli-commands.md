@@ -4,11 +4,11 @@
 
 ## 通用约定
 
-- 调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`；全部 6 个子命令见 `-m bda --help`
+- 调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`；全部 7 个子命令见 `-m bda --help`
 - 参数桥梁为协议规则（PyBaMM 参数名映射表见 SKILL.md 第一节第 2 步），无对应 CLI 命令。
 - **必须用 Bash 工具执行仿真与 render 命令**：本环境 PowerShell 工具受 guardrail 限制（`$()` 子表达式、`Set-Location`、`&` 多操作等一律拦截且无法批准），若你只有 PowerShell 工具可用，说明会话工具白名单异常（续跑轮换了 session 即应恢复），先用 Bash 重试
 - JSON 即契约：所有输入/输出均为 UTF-8 JSON 文件，`--out` 指定输出路径；每一步可单独重跑
-- 同参数必复用（spec 5.2 不变式 3）：所有 `run-*` 命令先查 store 缓存，命中直接复用不重算。缓存目录 = `--out` 文件所在目录下的 `cache/`（键 = 命令参数组合：run-pyamm: params+protocol+base+mode+thermal+plating；run-mlp: smiles+model；run-xtb: smiles；run-orca: smiles+charge+mult+functional；run-md: box+t_ns+engine）。缓存文件损坏（非法 JSON / 非对象）按未命中处理并重写
+- 同参数必复用（spec 5.2 不变式 3）：所有 `run-*` 命令先查 store 缓存，命中直接复用不重算。缓存目录 = `--out` 文件所在目录下的 `cache/`（键 = 命令参数组合：run-pyamm: params+protocol+base+mode+thermal+plating；run-mlp: smiles+model；run-xtb: smiles；run-orca: smiles+charge+mult+functional；run-md: box+t_ns+engine；run-comp: candidates）。缓存文件损坏（非法 JSON / 非对象）按未命中处理并重写
 - 报错约定：参数/校验类失败打印 `bda error: <原因>` 到 stderr、退出码 1；输入文件缺失或 JSON 键缺失会以 Python traceback 终止——读输出最后几行定位原因，按提示修正后重跑
 - 环境依赖：`run-xtb` 需 xtb 二进制在 PATH；`run-orca` 需 orca 在 PATH；`run-md` 需 gmx 在 PATH 且 skill 内 `scripts/bda/simulators/data/opls/` 有对应 .itp 模板
 
@@ -103,3 +103,20 @@ bda render --case-dir CASE_DIR [--out OUT]
 - 无 log.jsonl → 渲染空报告；无对应条目 → 该节显示"暂无数据"
 - 报错：无自定义校验；log 行 JSON 解析失败 → traceback 指出行号
 - 使用位置：收尾最后一步；报告全部内容由 log.jsonl 确定性生成，无额外 LLM 调用
+
+## run-comp — 电极组分筛选（CHGNet 周期弛豫）
+
+```
+bda run-comp --in IN --out OUT
+```
+
+- **环境要求**：CUDA 版 torch（GPU 弛豫 ~20 秒/状态）；CPU 版 torch 弛豫不收敛（已实测）。本机 `.venv` 为 CPU torch，用 `D:/anaconda/envs/py312/python.exe -m bda run-comp ...`（py312 已装 chgnet/pymatgen/ase + torch 2.13.0+cu126）
+- 输入 `--in`：`{"candidates": [{"formula": "Li(Ni0.7Mn0.05Co0.05Si0.1Mg0.1)O2", "name": "NMC-SiMg"}]}` —— NMC811 晶格位点替换，TM 分数和须为 1
+- 输出：`{"baseline": {NMC811 能量 + Li 金属参考}, "candidates": [{formula, realized_tm_counts, avg_voltage_v, capacity_mah_g, e_full_ev, e_delith_ev, converged, rel_stability_ev_atom}], "calibration_note"}`
+- 口径（如实声明，写入报告）：
+  - 平均电压 = −[E(Li_x2)−E(Li_x1)−n_removed·E_Li]/n_removed（x∈[0.3,1]，含 Li 金属参考；NMC811 自校准 ≈3.82 vs 文献 3.8 V）
+  - 容量 = 0.7 Li × F/3.6 ÷ 摩尔质量（理论代理，NMC811 ≈194 mAh/g）
+  - `rel_stability_ev_atom` 仅看批内相对排序（弛豫未严格收敛，同一组分两次弛豫能量差可达 ~1 eV/atom）
+  - `converged=false` 常见（300 步 FIRE 未达 fmax 0.1）——能量已达筛选精度，如实标注
+  - 周期 DFT 真背书缺工具：如实标注"CHGNet 代理口径"
+- 报错：`TM fractions must sum to 1` → 修组分；`no transition-metal species` → 公式缺少 TM

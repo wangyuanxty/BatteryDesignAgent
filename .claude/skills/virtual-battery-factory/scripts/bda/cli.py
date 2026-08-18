@@ -78,6 +78,16 @@ def _cmd_run_xtb(args) -> int:
     return 0
 
 
+def _cmd_run_comp(args) -> int:
+    from bda.simulators.comp_runner import run_composition_screen
+    data = _load_json(args.in_file)
+    ws = _workspace_for(args.out)
+    key = {"cmd": "run-comp", "candidates": data["candidates"]}
+    out = _cached(ws, key, lambda: run_composition_screen(data))
+    _dump(args.out, out)
+    return 0
+
+
 def _cmd_run_orca(args) -> int:
     from bda.simulators.orca_runner import (DEFAULT_FUNCTIONAL, _multiplicity_for,
                                             orca_endorsement)
@@ -120,12 +130,13 @@ def main(argv: list[str] | None = None) -> int:
     p_mlp = sub.add_parser("run-mlp"); p_mlp.add_argument("--in", dest="in_file", required=True); p_mlp.add_argument("--model", default="mace"); p_mlp.add_argument("--out", required=True)
     p_xtb = sub.add_parser("run-xtb"); p_xtb.add_argument("--in", dest="in_file", required=True); p_xtb.add_argument("--out", required=True)
     p_orca = sub.add_parser("run-orca"); p_orca.add_argument("--in", dest="in_file", required=True); p_orca.add_argument("--out", required=True)
+    p_comp = sub.add_parser("run-comp"); p_comp.add_argument("--in", dest="in_file", required=True); p_comp.add_argument("--out", required=True)
     p_md = sub.add_parser("run-md"); p_md.add_argument("--box", required=True); p_md.add_argument("--engine", default="gromacs"); p_md.add_argument("--t-ns", type=float, default=10.0); p_md.add_argument("--out", required=True)
     p_render = sub.add_parser("render"); p_render.add_argument("--case-dir", required=True); p_render.add_argument("--out", default="report.html")
 
     handlers = {"run-pyamm": _cmd_run_pyamm, "run-mlp": _cmd_run_mlp,
-                "run-xtb": _cmd_run_xtb, "run-orca": _cmd_run_orca, "run-md": _cmd_run_md,
-                "render": _cmd_render}
+                "run-xtb": _cmd_run_xtb, "run-orca": _cmd_run_orca, "run-comp": _cmd_run_comp,
+                "run-md": _cmd_run_md, "render": _cmd_render}
     args = parser.parse_args(argv)
     try:
         return handlers[args.command](args)
