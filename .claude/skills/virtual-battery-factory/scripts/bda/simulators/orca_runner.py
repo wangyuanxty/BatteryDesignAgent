@@ -54,7 +54,8 @@ def _parse_orbital_energies(text: str) -> tuple[float | None, float | None]:
         return None, None
     homo = lumo = None
     for ev, occ in rows:
-        if occ >= 1.5:
+        # 占据阈值 0.5：闭壳层 occ=2.0、开壳层 occ=1.0 均视为占据（虚轨道=0.0）
+        if occ >= 0.5:
             homo = ev
             lumo = None
         elif homo is not None and lumo is None:

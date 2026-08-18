@@ -151,3 +151,23 @@ def test_input_template_serial_no_pal(tmp_path):
     assert "P_MOs" in text
     xyz = (tmp_path / "neutral.xyz").read_text(encoding="utf-8")
     assert xyz.splitlines()[0] == "3"  # 原子数行（水 = 3 原子）
+
+
+def test_parse_orbital_energies_open_shell():
+    """开壳层（occ=1.0，SPIN UP 块）：阈值 0.5 正确识别 HOMO/LUMO。"""
+    from bda.simulators.orca_runner import _parse_orbital_energies
+
+    text = (
+        "ORBITAL ENERGIES\n"
+        "----------------\n"
+        "                 SPIN UP ORBITALS\n"
+        "  NO   OCC          E(Eh)            E(eV)\n"
+        "   0   1.0000     -24.717759      -672.6044\n"
+        "   9   1.0000      -0.768349       -20.9078\n"
+        "  10   0.0000      -0.258000        -7.0206\n"
+        "                 SPIN DOWN ORBITALS\n"
+        "   0   1.0000     -24.000000      -653.0000\n"
+    )
+    homo, lumo = _parse_orbital_energies(text)
+    assert homo == -20.9078
+    assert lumo == -7.0206
