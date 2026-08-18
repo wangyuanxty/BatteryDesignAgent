@@ -590,9 +590,30 @@ def _funnel_entry_html(e: dict) -> str:
         f'<span class="chip">{lab} <b class="num">{_to_int(e.get(k))}</b></span>'
         for k, lab in (("passed", "PASS"), ("rejected", "REJECT"), ("disputed", "DISP."))
     )
+    table = ""
+    disp = _as_list(e.get("dispositions"))
+    if disp:
+        rows = []
+        for d in disp:
+            if isinstance(d, dict):
+                name = str(d.get("name") or "")
+                status = str(d.get("status") or "")
+                reason = str(d.get("reason") or "")
+                cls = {"rejected": "bad", "passed": "ok", "disputed": "warn"}.get(status, "mute")
+                badge = f'<span class="badge {cls}">{_html_escape(status)}</span>'
+                rows.append(
+                    f"<tr><td>{_html_escape(name)}</td><td>{badge}</td>"
+                    f"<td>{_html_escape(reason)}</td></tr>"
+                )
+            else:
+                rows.append(f"<tr><td>{_html_escape(str(d))}</td><td></td><td></td></tr>")
+        table = (
+            f'<table class="tbl"><tr><th>候选</th><th>处置</th><th>理由</th></tr>'
+            f'{"".join(rows)}</table>'
+        )
     detail = e.get("detail")
     detail_html = f"<p>{_html_escape(str(detail))}</p>" if detail else ""
-    return f'<div class="blk"><div class="blk-label">Funnel · 漏斗判定</div>{chips}{detail_html}</div>'
+    return f'<div class="blk"><div class="blk-label">Funnel · 漏斗判定</div>{chips}{table}{detail_html}</div>'
 
 
 def _evaluate_html(e: dict) -> str:
@@ -604,11 +625,48 @@ def _evaluate_html(e: dict) -> str:
     )
     verdict = e.get("verdict")
     verdict_html = _verdict_badge(str(verdict)) if verdict else '<span class="badge mute">N/A</span>'
+    cmp_table = ""
+    comp = _as_list(e.get("comparison"))
+    if comp:
+        keys: list[str] = []
+        for c in comp:
+            if isinstance(c, dict):
+                for k in (c.get("metrics") or {}):
+                    if k not in keys:
+                        keys.append(k)
+        if keys:
+            head = (
+                "<tr><th>候选</th>"
+                + "".join(f"<th>{_html_escape(str(k))}</th>" for k in keys)
+                + "<th>结论</th></tr>"
+            )
+            body = []
+            for c in comp:
+                if not isinstance(c, dict):
+                    body.append(f"<tr><td>{_html_escape(str(c))}</td></tr>")
+                    continue
+                name = str(c.get("name") or c.get("candidate") or "")
+                m = c.get("metrics") or {}
+                cells = f"<td>{_html_escape(name)}</td>"
+                for k in keys:
+                    if k not in m:
+                        cells += "<td class='num'>—</td>"
+                    elif isinstance(m[k], bool):
+                        cells += f"<td class='num'>{'无析锂' if not m[k] else '析锂风险'}</td>"
+                    else:
+                        cells += f"<td class='num'>{_html_escape(_fmt_num(m[k]))}</td>"
+                v = c.get("verdict")
+                cells += (
+                    f"<td>{_verdict_badge(str(v))}</td>" if v
+                    else '<td><span class="badge mute">—</span></td>'
+                )
+                body.append(f"<tr>{cells}</tr>")
+            cmp_table = f'<table class="tbl">{head}{"".join(body)}</table>'
     note = e.get("note")
     note_html = f'<p class="reason">{_html_escape(str(note))}</p>' if note else ""
     return (
         f'<div class="blk"><div class="blk-label">Evaluate · 评估 {verdict_html}</div>'
-        f'<table class="tbl"><tr><th>指标</th><th>数值</th></tr>{rows}</table>{note_html}</div>'
+        f'<table class="tbl"><tr><th>指标</th><th>数值</th></tr>{rows}</table>{cmp_table}{note_html}</div>'
     )
 
 
@@ -657,6 +715,140 @@ def _rounds_html(log: list[dict]) -> str:
             f'</summary><div class="round-body">{"".join(body)}</div></details>'
         )
     return "".join(cards)
+
+
+def _rounds_ov_html(log: list[dict]) -> str:
+    """迭代轨迹顶部轮次总览表：轮次/阶段/候选数/关键指标/结论（由 propose/evaluate 机械推导）。"""
+    groups: dict[int, list[dict]] = {}
+    for e in log:
+        r = e.get("round")
+        if r is None or _to_int(r) <= 0:
+            continue
+        if e.get("action") not in ("propose", "funnel", "evaluate"):
+            continue
+        groups.setdefault(_to_int(r), []).append(e)
+    if not groups:
+        return ""
+    rows = []
+    for r, entries in sorted(groups.items()):
+        ev = next((e for e in entries if e.get("action") == "evaluate"), None)
+        prop = next((e for e in entries if e.get("action") == "propose"), None)
+        stages = [s for s in (_entry_stage(e) for e in entries) if s is not None]
+        stage_html = _stage_range_badge(min(stages), max(stages)) if stages else ""
+        n_cand = len(_as_list(prop.get("candidates"))) if prop else 0
+        m = ev.get("metrics", {}) if ev else {}
+        ed = (
+            _fmt_num(m["energy_density_wh_kg"])
+            if isinstance(m.get("energy_density_wh_kg"), (int, float))
+            else "—"
+        )
+        cap = _fmt_num(m["capacity_ah"]) if isinstance(m.get("capacity_ah"), (int, float)) else "—"
+        tmax = _fmt_num(m["T_max_K"]) if isinstance(m.get("T_max_K"), (int, float)) else "—"
+        if isinstance(m.get("plated"), bool):
+            plated = (
+                '<span class="badge ok">无析锂</span>' if not m["plated"]
+                else '<span class="badge bad">析锂风险</span>'
+            )
+        else:
+            plated = '<span class="badge mute">—</span>'
+        verdict = str(ev.get("verdict") or "") if ev else ""
+        v_html = _verdict_badge(verdict) if verdict else '<span class="badge mute">—</span>'
+        rows.append(
+            f"<tr><td class='num'>R{_to_int(r):02d}</td><td>{stage_html}</td>"
+            f"<td class='num'>{n_cand}</td><td class='num'>{_html_escape(ed)}</td>"
+            f"<td class='num'>{_html_escape(cap)}</td><td class='num'>{_html_escape(tmax)}</td>"
+            f"<td>{plated}</td><td>{v_html}</td></tr>"
+        )
+    head = (
+        "<tr><th>轮次</th><th>阶段</th><th>候选数</th><th>能量密度 Wh/kg</th>"
+        "<th>容量 Ah</th><th>T_max K</th><th>析锂</th><th>结论</th></tr>"
+    )
+    return f'<div class="ov-head">轮次总览</div><table class="tbl ov">{head}{"".join(rows)}</table>'
+
+
+def _trend_bars(caption: str, rows: list[tuple[str, float]], threshold: tuple | None) -> str:
+    """逐轮指标柱状图（内联 SVG）；threshold = (数值, 标签) 画参考线。"""
+    W, H = 340, 200
+    pad_l, pad_r, pad_t, pad_b = 42, 12, 16, 28
+    vals = [v for _, v in rows if isinstance(v, (int, float))]
+    if not vals:
+        return ""
+    tvals = [threshold[0]] if threshold and isinstance(threshold[0], (int, float)) else []
+    lo, hi = min(vals + tvals), max(vals + tvals)
+    if lo > 0:
+        lo = 0.0
+    span = (hi - lo) or 1.0
+    n = len(rows)
+    gap = (W - pad_l - pad_r) / n
+    bw = min(46.0, gap * 0.6)
+    els = []
+    for i in range(3):
+        gy = pad_t + (H - pad_t - pad_b) * i / 2
+        els.append(f'<line class="grid" x1="{pad_l}" y1="{gy:.1f}" x2="{W - pad_r}" y2="{gy:.1f}"/>')
+        els.append(
+            f'<text x="{pad_l - 4}" y="{gy + 3:.1f}" text-anchor="end">{_fmt_num(hi - span * i / 2)}</text>'
+        )
+    els.append(f'<line class="axis" x1="{pad_l}" y1="{pad_t}" x2="{pad_l}" y2="{H - pad_b}"/>')
+    els.append(f'<line class="axis" x1="{pad_l}" y1="{H - pad_b}" x2="{W - pad_r}" y2="{H - pad_b}"/>')
+    for i, (label, v) in enumerate(rows):
+        x = pad_l + gap * i + (gap - bw) / 2
+        h = (v - lo) / span * (H - pad_t - pad_b)
+        y = H - pad_b - h
+        els.append(f'<rect class="bar" x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}"/>')
+        els.append(
+            f'<text x="{pad_l + gap * i + gap / 2:.1f}" y="{H - pad_b + 15:.1f}" '
+            f'text-anchor="middle">{_html_escape(str(label))}</text>'
+        )
+        els.append(
+            f'<text x="{pad_l + gap * i + gap / 2:.1f}" y="{y - 5:.1f}" '
+            f'text-anchor="middle">{_fmt_num(v)}</text>'
+        )
+    if threshold and isinstance(threshold[0], (int, float)):
+        ty = H - pad_b - (threshold[0] - lo) / span * (H - pad_t - pad_b)
+        els.append(f'<line class="thr" x1="{pad_l}" y1="{ty:.1f}" x2="{W - pad_r}" y2="{ty:.1f}"/>')
+        els.append(
+            f'<text class="t-label" x="{W - pad_r}" y="{ty - 5:.1f}" text-anchor="end">'
+            f'{_html_escape(str(threshold[1]))} {_fmt_num(threshold[0], sig=5)}</text>'
+        )
+    svg = (
+        f'<svg class="chart" viewBox="0 0 {W} {H}" role="img" aria-label="{_attr_escape(caption)}">'
+        f"<title>{_html_escape(caption)}</title>" + "".join(els) + "</svg>"
+    )
+    return f'<div class="trend"><div class="trend-caption">{_html_escape(caption)}</div>{svg}</div>'
+
+
+def _trends_html(log: list[dict], criteria: dict) -> str:
+    """逐轮能量密度/T_max 趋势图（evaluate metrics 机械推导，阈值线来自 criteria）。"""
+    evals = [e for e in log if e.get("action") == "evaluate"]
+    ed_rows: list[tuple[str, float]] = []
+    tmax_rows: list[tuple[str, float]] = []
+    for e in evals:
+        r = e.get("round")
+        label = f"R{_to_int(r):02d}" if r is not None else "R—"
+        m = e.get("metrics") or {}
+        if isinstance(m.get("energy_density_wh_kg"), (int, float)):
+            ed_rows.append((label, m["energy_density_wh_kg"]))
+        if isinstance(m.get("T_max_K"), (int, float)):
+            tmax_rows.append((label, m["T_max_K"]))
+    if not ed_rows and not tmax_rows:
+        return ""
+    thr = _flat_thresholds(criteria)
+    ed_thr = None
+    spec = thr.get("energy_density_wh_kg")
+    if isinstance(spec, dict) and "min" in spec:
+        ed_thr = (spec["min"], "目标 ≥")
+    tmax_thr = None
+    spec = thr.get("T_max_K")
+    if isinstance(spec, dict) and "max" in spec:
+        tmax_thr = (spec["max"], "上限 ≤")
+    charts = []
+    if ed_rows:
+        charts.append(_trend_bars("能量密度趋势（evaluate 逐轮）", ed_rows, ed_thr))
+    if tmax_rows:
+        charts.append(_trend_bars("T_max 趋势（evaluate 逐轮）", tmax_rows, tmax_thr))
+    if not charts:
+        return ""
+    return f'<div class="ov-head">趋势</div><div class="trends">{"".join(charts)}</div>'
 
 
 def _funnel_html(log: list[dict]) -> str:
@@ -916,6 +1108,8 @@ def render_report(case_dir: str, out_html: str = "report.html") -> str:
         "CRITERIA_TABLE": _criteria_html(criteria, log),
         "FLOW": _flow_html(log, cell_files, criteria),
         "CANDIDATES": _candidates_html(log),
+        "ROUNDS_OV": _rounds_ov_html(log),
+        "TRENDS": _trends_html(log, criteria),
         "ROUNDS": _rounds_html(log),
         "FUNNEL": _funnel_html(log),
         "PLOTS": _plots_html(cell_files),

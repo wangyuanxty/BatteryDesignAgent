@@ -228,6 +228,25 @@ main{max-width:1120px;margin:0 auto;padding:34px clamp(14px,3vw,32px) 8px}
 .stage-goal .tbl td.num{white-space:normal}
 .stage-goal .empty{margin:0}
 
+/* ---------- 迭代轨迹：轮次总览表与趋势图 ---------- */
+.ov-head{font-size:14px;font-weight:600;margin:20px 0 8px;color:var(--ink)}
+.tbl.ov{margin:2px 0 4px}
+.tbl.ov td.num{white-space:nowrap}
+.trends{display:flex;flex-wrap:wrap;gap:18px;margin:6px 0 4px}
+.trend{min-width:280px}
+.trend-caption{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  color:var(--blue);margin-bottom:4px;
+}
+.trend svg.chart{border:1px solid var(--grid);background:#fff;border-radius:2px}
+svg.chart text{font-family:var(--mono);font-size:10px;fill:var(--blue)}
+svg.chart .grid{stroke:var(--grid);stroke-width:1}
+svg.chart .axis{stroke:var(--ink);stroke-width:1;opacity:.55}
+svg.chart .bar{fill:var(--blue);fill-opacity:.85}
+svg.chart .thr{stroke:var(--bad);stroke-width:1.2;stroke-dasharray:4 3}
+svg.chart .t-label{fill:var(--bad)}
+.badge.warn{color:var(--accent);background:rgba(201,123,61,.08)}
+
 /* ---------- 迭代轨迹：轮次可折叠卡片 ---------- */
 details.round{
   border:1px solid var(--grid);border-left:3px solid var(--blue);
@@ -392,6 +411,8 @@ pre.term{
 <section id="trajectory" class="sheet" aria-labelledby="trajectory-title">
   <div class="eyebrow">SHEET 02 · TRAJECTORY / 迭代轨迹</div>
   <h2 id="trajectory-title">迭代轨迹</h2>
+  {{ROUNDS_OV}}
+  {{TRENDS}}
   {{ROUNDS}}
 </section>
 

@@ -301,6 +301,77 @@ def test_threshold_text_bool():
     assert _threshold_text(True) == "析锂允许"
 
 
+def test_funnel_dispositions_table(tmp_path):
+    """funnel 逐候选处置表（dispositions）以表格渲染，status 映射徽章颜色。"""
+    ws = CaseWorkspace("caseD", root=str(tmp_path))
+    append_entry(ws, {"criteria": {"stage1": {"max_homo_ev": -6.0}}})
+    append_entry(ws, {"round": 1, "action": "funnel", "passed": 2, "rejected": 1, "disputed": 1,
+                      "detail": "一句话判定依据",
+                      "dispositions": [
+                          {"name": "FEC", "status": "passed", "reason": "HOMO 远低于线"},
+                          {"name": "VC", "status": "rejected", "reason": "与FEC重叠"},
+                          {"name": "PS", "status": "disputed", "reason": "双模型能量最优但 HOMO 靠后"},
+                      ]})
+    html = _render(ws)
+    assert "候选" in html and "处置" in html and "理由" in html  # 表头
+    assert '<span class="badge ok">passed</span>' in html
+    assert '<span class="badge bad">rejected</span>' in html
+    assert '<span class="badge warn">disputed</span>' in html
+    assert "一句话判定依据" in html
+
+
+def test_evaluate_comparison_table(tmp_path):
+    """evaluate 多候选对比表（comparison）以 候选×指标×结论 表格渲染。"""
+    ws = CaseWorkspace("caseC", root=str(tmp_path))
+    append_entry(ws, {"criteria": {"stage2": {"energy_density_wh_kg": {"min": 300.0}}}})
+    append_entry(ws, {"round": 2, "action": "evaluate",
+                      "metrics": {"energy_density_wh_kg": 330.1, "T_max_K": 312.57, "plated": False},
+                      "verdict": "pass",
+                      "comparison": [
+                          {"name": "结构方案B", "metrics": {"energy_density_wh_kg": 313.6, "T_max_K": 312.75, "plated": False}, "verdict": "pass"},
+                          {"name": "结构方案D", "metrics": {"energy_density_wh_kg": 330.1, "T_max_K": 312.57, "plated": False}, "verdict": "pass"},
+                      ],
+                      "note": "D 负极加厚最优。"})
+    html = _render(ws)
+    assert "结构方案B" in html and "结构方案D" in html
+    assert "313.6" in html
+    assert "无析锂" in html  # 布尔指标按语义显示
+    assert "D 负极加厚最优。" in html
+
+
+def test_rounds_overview_table(tmp_path, full_case):
+    """迭代轨迹顶部轮次总览表：轮次/阶段/候选数/指标/结论。"""
+    html = _render(full_case)
+    assert "轮次总览" in html
+    assert "<th>能量密度 Wh/kg</th>" in html
+    assert "R01" in html and "R02" in html
+    assert "500" in html  # R2 evaluate 的 energy_density_Wh_kg 渲染
+    assert "无析锂" in html
+
+
+def test_trend_charts_with_threshold_lines(tmp_path):
+    """逐轮趋势柱状图：能量密度含目标线、T_max 含上限线。"""
+    ws = CaseWorkspace("caseT", root=str(tmp_path))
+    append_entry(ws, {"criteria": {
+        "stage2": {"energy_density_wh_kg": {"min": 300.0}},
+        "stage3": {"T_max_K": {"max": 333.15}},
+    }})
+    append_entry(ws, {"round": 1, "action": "evaluate",
+                      "metrics": {"energy_density_wh_kg": 327.0, "T_max_K": 312.62, "plated": False},
+                      "verdict": "pass"})
+    append_entry(ws, {"round": 2, "action": "evaluate",
+                      "metrics": {"energy_density_wh_kg": 330.1, "T_max_K": 312.57, "plated": False},
+                      "verdict": "pass"})
+    html = _render(ws)
+    assert "能量密度趋势" in html
+    assert "T_max 趋势" in html
+    assert 'class="bar"' in html
+    assert 'class="thr"' in html  # 阈值参考线
+    assert "目标 ≥ 300" in html
+    assert "上限 ≤ 333.15" in html
+    assert "R01" in html  # 柱标签
+
+
 def test_cell_curve_svg_rendered(tmp_path):
     ws = _make_case(tmp_path)
     t = [i * 10.0 for i in range(30)]

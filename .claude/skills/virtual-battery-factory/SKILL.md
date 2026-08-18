@@ -70,8 +70,8 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 
 - **第 0 条（开跑前写一次）**：`{"criteria": {"stage1": {...}, "stage2": {...}, "stage3": {...}, "meta": {...}}}` —— 按阶段分层的达标标准：`stage1` 分子级目标与淘汰线（`max_energy_ev`/`max_homo_ev`），`stage2` 电芯性能目标（`capacity_ah`/`energy_density_wh_kg` 等，阈值 `{"min": ...}`/`{"max": ...}`），`stage3` 安全目标（`T_max_K`/`plated`），`meta` 案例级参数（`max_rounds`/`real_compute`）。报告按阶段展示目标与达成（审计记录，报告首页展示）
 - **propose**：`{"action": "propose", "round": 1, "candidates": [{"smiles": "SMILES", "name": "FEC", "role": "氟代碳酸酯成膜剂"}, ...], "llm_reason": "生成理由"}` —— 每轮候选与决策理由；候选对象形式**必须写 `name`（常用缩写或化学名）与 `role`（一句话说明用途）**，纯 SMILES 字符串仍兼容
-- **funnel**：`{"action": "funnel", "passed": 3, "rejected": 2, "disputed": 1, "detail": "一句话说明判定依据"}` —— 阶段1 漏斗计数（passed/rejected/disputed 由你按淘汰线与三模型投票规则判定得出）
-- **evaluate**：`{"action": "evaluate", "round": 2, "metrics": {"capacity_ah": ..., "T_max_K": ..., "plated": false, ...}, "verdict": "pass"}` —— metrics 至少含数值键 `T_max_K` 与布尔键 `plated`（报告趋势图与 CSV 导出依赖这两个键）；verdict 取值自由（如 pass/fail），报告原样展示
+- **funnel**：`{"action": "funnel", "passed": 3, "rejected": 2, "disputed": 1, "detail": "一句话说明判定依据"}` —— 阶段1 漏斗计数（passed/rejected/disputed 由你按淘汰线与三模型投票规则判定得出）；候选多于 2 个时**必写**逐候选处置表 `dispositions`: `[{"name": "VC", "status": "rejected", "reason": "与FEC重叠"}]`（status ∈ passed/rejected/disputed，与计数口径一致；报告以表格展示）
+- **evaluate**：`{"action": "evaluate", "round": 2, "metrics": {"capacity_ah": ..., "T_max_K": ..., "plated": false, ...}, "verdict": "pass"}` —— metrics 至少含数值键 `T_max_K` 与布尔键 `plated`（报告趋势图与 CSV 导出依赖这两个键）；verdict 取值自由（如 pass/fail），报告原样展示。同一轮有多个候选对比时**必写**对比表 `comparison`: `[{"name": "结构方案B", "metrics": {...}, "verdict": "..."}]`（报告以 候选×指标×结论 表格展示）；`note` 只写**一句话**诊断结论，细节进 comparison
 - **endorse**：`{"action": "endorse", "candidates": [{"smiles": "SMILES", "endorsement": {...}}]}` —— endorsement 对象 = 该候选 `run-orca` 输出的 endorsement 键（Top-1 另附 `run-md` 输出键）
 - **final**：`{"action": "final", "recommendation": "最终推荐方案", "verdict": "达标/不达标"}` —— 收尾必写，含"预算耗尽未达标"情形
 
@@ -102,6 +102,7 @@ description: 虚拟电池工厂协议——三阶段电池设计闭环（材料�
 - 铁律"不得编辑 JSON 中间文件"指**命令输出产物**（`--out` 文件与工作区产物）只读；Agent 自建的**输入文件**（run-pyamm params、run-md box 等）是新建文件，允许写
 - 失败必须如实记录：仿真失败、DFT 未收敛、候选被淘汰——全部原样写入日志与报告，不得美化或隐瞒
 - 消融实验只通过 `config.yaml` 的 `ablations` 开关执行，不得在运行中自行增删协议步骤
+- **报告以表格/图表优先**：候选对比写 evaluate 的 `comparison` 表、漏斗处置写 funnel 的 `dispositions` 表、诊断写一句 `note`——日志里避免一长串文字段落
 
 ## 四、仿真库命令速查
 
