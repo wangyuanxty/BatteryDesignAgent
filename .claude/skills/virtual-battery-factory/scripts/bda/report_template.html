@@ -204,6 +204,29 @@ main{max-width:1120px;margin:0 auto;padding:34px clamp(14px,3vw,32px) 8px}
 .flow-item.end{border-top-color:var(--accent)}
 .flow-name{font-size:14px;font-weight:600;margin:7px 0 2px}
 .flow-count{font-family:var(--mono);font-size:11.5px;color:#5E768C}
+.flow-goal{
+  font-family:var(--mono);font-size:11px;color:#44586C;
+  margin-top:5px;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap;
+}
+.flow-goal .g-label{
+  color:#7C96AC;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+}
+.flow-goal b.goal-ok{color:var(--ok)}
+.flow-goal b.goal-bad{color:var(--bad)}
+
+/* ---------- 达标标准：按阶段分层 ---------- */
+.stage-goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:10px 0 4px}
+.stage-goal{
+  border:1px solid var(--grid);border-top:3px solid var(--blue);
+  background:#fff;border-radius:2px;padding:12px 14px 14px;min-width:0;
+}
+.stage-goal.meta{border-top-color:#6B8296}
+.stage-goal-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.stage-goal-name{font-size:13.5px;font-weight:600}
+.stage-goal .tbl{font-size:12px}
+.stage-goal .tbl td{padding:5px 8px}
+.stage-goal .tbl td.num{white-space:normal}
+.stage-goal .empty{margin:0}
 
 /* ---------- 迭代轨迹：轮次可折叠卡片 ---------- */
 details.round{
@@ -331,6 +354,7 @@ pre.term{
   .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .verdict-block{text-align:left}
   .stats{grid-template-columns:1fr}
+  .stage-goals{grid-template-columns:1fr}
   .nav-brand{display:none}
   .sheet{padding:22px 16px 26px}
 }

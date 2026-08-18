@@ -171,6 +171,8 @@ def _plot_stage(filename: str) -> int | None:
 
 
 def _threshold_text(value) -> str:
+    if isinstance(value, bool):
+        return "无析锂" if not value else "析锂允许"
     if isinstance(value, dict):
         parts = []
         if "min" in value:
@@ -181,32 +183,162 @@ def _threshold_text(value) -> str:
     return _fmt_num(value)
 
 
-def _criteria_html(criteria: dict) -> str:
+_STAGE_KEYS = ("stage1", "stage2", "stage3", "meta")
+_STAGE_NAMES = {"stage1": "材料设计", "stage2": "电芯设计", "stage3": "安全评估", "meta": "案例参数"}
+_STAGE1_UNITS = {"max_energy_ev": "eV", "max_homo_ev": "eV"}
+
+
+def _normalize_criteria(criteria: dict) -> dict[str, dict]:
+    """criteria → {"stage1"/"stage2"/"stage3"/"meta": {...}}。
+
+    新协议为显式分层（stageN/meta 键）；旧日志为扁平键（如 T_max_C），按键名归组：
+    电位窗/淘汰线（homo/energy_ev/voltage/window）→ stage1；容量/能量密度（capacity/density）→ stage2；
+    温度/析锂（t_max/temp/plat）→ stage3；其余 → meta。
+    """
+    norm: dict[str, dict] = {}
+    for k in _STAGE_KEYS:
+        v = criteria.get(k)
+        norm[k] = dict(v) if isinstance(v, dict) else {}
+    rest = {k: v for k, v in criteria.items() if k not in _STAGE_KEYS}
+    if rest:
+        legacy = {k: {} for k in _STAGE_KEYS}
+        for k, v in rest.items():
+            kl = str(k).lower()
+            if "homo" in kl or "energy_ev" in kl or "voltage" in kl or "window" in kl:
+                legacy["stage1"][k] = v
+            elif "capacity" in kl or "density" in kl:
+                legacy["stage2"][k] = v
+            elif "t_max" in kl or "temp" in kl or "plat" in kl:
+                legacy["stage3"][k] = v
+            else:
+                legacy["meta"][k] = v
+        for k in _STAGE_KEYS:
+            norm[k] = {**legacy[k], **norm[k]}
+    return norm
+
+
+def _flat_thresholds(criteria: dict) -> dict:
+    """stage1–3 阈值合并为扁平字典（KPI/达成列机械比较用；meta 不参与）。"""
+    norm = _normalize_criteria(criteria)
+    merged: dict = {}
+    for k in ("stage1", "stage2", "stage3"):
+        merged.update(norm[k])
+    return merged
+
+
+def _achieve_cell(value, spec) -> str:
+    """单指标达成格：数值 vs {"min"/"max"} 阈值 → ✓/✗ 徽章 + 达成值；无数据 → 破折号。"""
+    if isinstance(value, bool):
+        show = "无析锂" if not value else "析锂风险"
+        if isinstance(spec, bool):
+            mark = '<span class="badge ok">✓</span>' if value == spec else '<span class="badge bad">✗</span>'
+            return f"{show} {mark}"
+        return f'{show} <span class="badge mute">—</span>'
+    if isinstance(value, (int, float)):
+        show = _fmt_num(value)
+        if isinstance(spec, dict):
+            checks = []
+            if "min" in spec and isinstance(spec["min"], (int, float)):
+                checks.append(value >= spec["min"])
+            if "max" in spec and isinstance(spec["max"], (int, float)):
+                checks.append(value <= spec["max"])
+            if checks:
+                mark = '<span class="badge ok">✓</span>' if all(checks) else '<span class="badge bad">✗</span>'
+                return f"{show} {mark}"
+        return f'{show} <span class="badge mute">—</span>'
+    return '<span class="badge mute">—</span>'
+
+
+def _stage_achieve_badge(stage_key: str, stage_dict: dict, metrics: dict, funnel_latest: dict | None) -> str:
+    """阶段头部"达成"徽章：stage1 看漏斗；stage2/3 看指标对照；无数据 → mute。"""
+    if stage_key == "stage1":
+        if funnel_latest is None:
+            return '<span class="badge mute">未执行</span>'
+        n, m = _to_int(funnel_latest.get("passed")), _to_int(funnel_latest.get("disputed"))
+        cls = "ok" if (n > 0 and m == 0) else "bad"
+        return f'<span class="badge {cls}">达成 · PASS {n} · DISP {m}</span>'
+    verdicts: list[bool] = []
+    for k, spec in stage_dict.items():
+        v = metrics.get(k)
+        if isinstance(v, bool) and isinstance(spec, bool):
+            verdicts.append(v == spec)
+        elif isinstance(v, (int, float)) and isinstance(spec, dict) and ("min" in spec or "max" in spec):
+            if "min" in spec and isinstance(spec["min"], (int, float)):
+                verdicts.append(v >= spec["min"])
+            if "max" in spec and isinstance(spec["max"], (int, float)):
+                verdicts.append(v <= spec["max"])
+    if not verdicts:
+        return '<span class="badge mute">未执行</span>'
+    if all(verdicts):
+        return '<span class="badge ok">全部达成</span>'
+    return '<span class="badge bad">部分未达成</span>'
+
+
+def _criteria_html(criteria: dict, log: list[dict]) -> str:
     if not criteria:
         return (
             '<p class="empty">暂无数据</p>'
             '<p class="hint">log.jsonl 第 0 条未提供达标标准（criteria）。</p>'
         )
-    rows = []
-    for key, value in criteria.items():
-        if isinstance(value, dict):
-            threshold = _threshold_text(value)
-            meta_bits = [
-                f"{k}={_fmt_num(v)}" for k, v in value.items() if k not in ("min", "max")
-            ]
-            meta = " · ".join(meta_bits)
-        else:
-            threshold = _fmt_num(value)
-            meta = ""
-        rows.append(
-            "<tr>"
-            f"<th scope='row'>{_html_escape(str(key))}</th>"
-            f"<td class='num'>{_html_escape(threshold)}</td>"
-            f"<td class='crit-meta'>{_html_escape(meta)}</td>"
-            "</tr>"
+    norm = _normalize_criteria(criteria)
+    metrics = _latest_metrics(log)
+    funnels = [e for e in log if e.get("action") == "funnel"]
+    funnel_latest = funnels[-1] if funnels else None
+    blocks = []
+    for stage_key, name in (("stage1", "材料设计"), ("stage2", "电芯设计"),
+                            ("stage3", "安全评估"), ("meta", "案例参数")):
+        stage_dict = norm.get(stage_key, {})
+        if stage_key == "meta":
+            head = ('<div class="stage-goal-head"><span class="badge mute">META</span>'
+                    f'<span class="stage-goal-name">{name}</span></div>')
+            if not stage_dict:
+                table = '<p class="empty">未提供</p>'
+            else:
+                rows = "".join(
+                    "<tr>"
+                    f"<th scope='row'>{_html_escape(str(k))}</th>"
+                    f"<td class='num'>{_html_escape(_fmt_num(v))}</td>"
+                    "</tr>"
+                    for k, v in stage_dict.items()
+                )
+                table = f'<table class="tbl"><tr><th>参数</th><th>值</th></tr>{rows}</table>'
+            blocks.append(f'<div class="stage-goal meta">{head}{table}</div>')
+            continue
+        stage_num = int(stage_key[-1])
+        head = (
+            f'<div class="stage-goal-head">{_stage_badge(stage_num)}'
+            f'<span class="stage-goal-name">{name}</span>'
+            f"{_stage_achieve_badge(stage_key, stage_dict, metrics, funnel_latest)}</div>"
         )
-    head = "<tr><th>指标</th><th>阈值</th><th>说明</th></tr>"
-    return f'<table class="tbl">{head}{"".join(rows)}</table>'
+        if not stage_dict:
+            table = '<p class="empty">未设置单独目标（综合目标见其他阶段）</p>'
+            blocks.append(f'<div class="stage-goal">{head}{table}</div>')
+            continue
+        has_achieve = stage_key in ("stage2", "stage3")
+        head_cells = "<tr><th>指标</th><th>阈值</th>" + ("<th>达成</th>" if has_achieve else "") + "<th>说明</th></tr>"
+        rows = []
+        for k, v in stage_dict.items():
+            if stage_key == "stage1" and not isinstance(v, (dict, bool)):
+                unit = _STAGE1_UNITS.get(k, "")
+                threshold = f"≤ {_fmt_num(v)}" + (f" {unit}" if unit else "")
+            else:
+                threshold = _threshold_text(v)
+            meta = (
+                " · ".join(f"{mk}={_fmt_num(mv)}" for mk, mv in v.items() if mk not in ("min", "max"))
+                if isinstance(v, dict)
+                else ""
+            )
+            cells = (
+                f"<th scope='row'>{_html_escape(str(k))}</th>"
+                f"<td class='num'>{_html_escape(threshold)}</td>"
+            )
+            if has_achieve:
+                cells += f"<td class='num'>{_achieve_cell(metrics.get(k), v)}</td>"
+            cells += f"<td class='crit-meta'>{_html_escape(meta)}</td>"
+            rows.append(f"<tr>{cells}</tr>")
+        table = f'<table class="tbl">{head_cells}{"".join(rows)}</table>'
+        blocks.append(f'<div class="stage-goal">{head}{table}</div>')
+    return f'<div class="stage-goals">{"".join(blocks)}</div>'
 
 
 def _candidates_html(log: list[dict]) -> str:
@@ -217,8 +349,64 @@ def _candidates_html(log: list[dict]) -> str:
     return f'<div class="chips">{chips}</div>'
 
 
-def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]]) -> str:
-    """概览区流程一览条：四阶段徽章，各带由 log 条目 / cell 曲线机械推导的计数或结论摘要。
+def _goal_mark(ok: bool) -> str:
+    return '<b class="goal-ok">✓</b>' if ok else '<b class="goal-bad">✗</b>'
+
+
+def _goal_parts(stage_key: str, stage_dict: dict) -> str:
+    """阶段目标压缩文本：'E ≤ 0.0 eV · HOMO ≤ −6.0 eV' / '能量密度 ≥ 300 Wh/kg' 等。"""
+    labels = {
+        "max_energy_ev": "E", "max_homo_ev": "HOMO",
+        "energy_density_wh_kg": "能量密度", "capacity_ah": "容量", "T_max_K": "T_max",
+    }
+    units = {"max_energy_ev": "eV", "max_homo_ev": "eV", "energy_density_wh_kg": "Wh/kg", "T_max_K": "K"}
+    parts = []
+    for k, v in stage_dict.items():
+        if isinstance(v, bool):
+            parts.append(_threshold_text(v))
+            continue
+        if isinstance(v, str):
+            continue  # 自由文本规则（如 plating_rule）不进入压缩目标行
+        label = labels.get(k, str(k))
+        if isinstance(v, dict):
+            t = _threshold_text(v)
+            parts.append(f"{label} {t}" if t else f"{label} {_fmt_num(v)}")
+        else:
+            sign = "≤ " if stage_key == "stage1" else ""
+            unit = units.get(k, "")
+            parts.append(f"{label} {sign}{_fmt_num(v)}{' ' + unit if unit else ''}")
+    return " · ".join(parts) if parts else "未设置目标"
+
+
+def _flow_achieve(stage_key: str, stage_dict: dict, log: list[dict]) -> str:
+    """流程条达成摘要：stage1 看最新漏斗；stage2/3 看最新评估指标对照。"""
+    if stage_key == "stage1":
+        funnels = [e for e in log if e.get("action") == "funnel"]
+        if not funnels:
+            return "—"
+        f = funnels[-1]
+        n, m = _to_int(f.get("passed")), _to_int(f.get("disputed"))
+        return f"PASS {n} · DISP {m} {_goal_mark(n > 0 and m == 0)}"
+    metrics = _latest_metrics(log)
+    if not stage_dict or not metrics:
+        return "—"
+    parts = []
+    for k, v in stage_dict.items():
+        mv = metrics.get(k)
+        if isinstance(v, bool) and isinstance(mv, bool):
+            parts.append(f"{'无析锂' if not mv else '析锂风险'}{_goal_mark(mv == v)}")
+        elif isinstance(mv, (int, float)) and isinstance(v, dict) and ("min" in v or "max" in v):
+            ok = True
+            if "min" in v and isinstance(v["min"], (int, float)):
+                ok = ok and mv >= v["min"]
+            if "max" in v and isinstance(v["max"], (int, float)):
+                ok = ok and mv <= v["max"]
+            parts.append(f"{_fmt_num(mv)}{_goal_mark(ok)}")
+    return " · ".join(parts) if parts else "—"
+
+
+def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: dict) -> str:
+    """概览区流程一览条：四阶段徽章，各带计数/结论摘要 + 目标与达成（由 criteria 与 log 机械推导）。
 
     阶段1 材料设计=分子 propose/funnel；阶段2 电芯设计=struct propose/discharge 曲线；
     阶段3 安全评估=charge45 曲线；阶段4 真DFT/MD 验证=endorse/final（含最终结论）。
@@ -243,24 +431,36 @@ def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]]) -> str:
     finals = [e for e in log if e.get("action") == "final"]
     verdict = str(finals[-1].get("verdict") or "") if finals else ""
     close_sum = f"背书 {endorse_n} · 终审 {final_n}" + (f" · 结论 {verdict}" if verdict else "")
+    norm = _normalize_criteria(criteria)
     items = (
         (1, "阶段1 · 材料设计", f"分子 propose {mol_prop} · funnel {funnel_n}"),
         (2, "阶段2 · 电芯设计", f"结构 propose {struct_prop} · 放电曲线 {n_discharge}"),
         (3, "阶段3 · 安全评估", f"4C 快充曲线 {n_charge45}"),
         (4, "真DFT/MD 验证", close_sum),
     )
-    blocks = [
-        f'<div class="flow-item {"end" if stage == 4 else ""}">{_stage_badge(stage)}'
-        f'<div class="flow-name">{_html_escape(name)}</div>'
-        f'<div class="flow-count">{_html_escape(count)}</div></div>'
-        for stage, name, count in items
-    ]
+    blocks = []
+    for stage, name, count in items:
+        goal_html = ""
+        if stage in (1, 2, 3):
+            stage_key = f"stage{stage}"
+            stage_dict = norm.get(stage_key, {})
+            goal_html = (
+                f'<div class="flow-goal"><span class="g-label">目标</span>'
+                f"<span>{_html_escape(_goal_parts(stage_key, stage_dict))}</span></div>"
+                f'<div class="flow-goal"><span class="g-label">达成</span>'
+                f"<span>{_flow_achieve(stage_key, stage_dict, log)}</span></div>"
+            )
+        blocks.append(
+            f'<div class="flow-item {"end" if stage == 4 else ""}">{_stage_badge(stage)}'
+            f'<div class="flow-name">{_html_escape(name)}</div>'
+            f'<div class="flow-count">{_html_escape(count)}</div>{goal_html}</div>'
+        )
     return f'<div class="flow">{"".join(blocks)}</div>'
 
 
-def _kpi_compare(value, criteria: dict, key: str, direction: str) -> tuple[str, str]:
-    """关键结果 vs criteria 阈值的机械比较 → (颜色类, 阈值说明)。"""
-    spec = criteria.get(key)
+def _kpi_compare(value, thresholds: dict, key: str, direction: str) -> tuple[str, str]:
+    """关键结果 vs 扁平化阈值（stage1–3 合并）的机械比较 → (颜色类, 阈值说明)。"""
+    spec = thresholds.get(key)
     thr = spec.get(direction) if isinstance(spec, dict) else None
     if not isinstance(value, (int, float)) or not isinstance(thr, (int, float)):
         return "", ""
@@ -288,6 +488,7 @@ def _latest_metrics(log: list[dict]) -> dict:
 
 
 def _kpi_html(metrics: dict, criteria: dict) -> str:
+    thresholds = _flat_thresholds(criteria)
     items = []
     for key, label, unit, direction in (
         ("energy_density_wh_kg", "能量密度", "Wh/kg", "min"),
@@ -297,7 +498,7 @@ def _kpi_html(metrics: dict, criteria: dict) -> str:
         value = metrics.get(key) if isinstance(metrics.get(key), (int, float)) else None
         cls, sub = "", ""
         if direction and value is not None:
-            cls, sub = _kpi_compare(value, criteria, key, direction)
+            cls, sub = _kpi_compare(value, thresholds, key, direction)
         if key == "T_max_K" and value is not None:
             conv = f"≈ {value - 273.15:.1f} °C"
             sub = f"{sub} · {conv}" if sub else conv
@@ -316,11 +517,12 @@ def _kpi_html(metrics: dict, criteria: dict) -> str:
 def _header_html(case_dir: str, log: list[dict], criteria: dict) -> str:
     case_name = Path(case_dir).name or "case"
     goal = _read_goal(case_dir) or "（设计目标未记录于 config.yaml）"
+    meta_criteria = _normalize_criteria(criteria).get("meta", {})
     meta = []
-    if "max_rounds" in criteria:
-        meta.append(f"预算 {_fmt_num(criteria['max_rounds'])} 轮")
-    if "real_compute" in criteria:
-        meta.append("真计算开启" if criteria["real_compute"] is True else "真计算关闭")
+    if "max_rounds" in meta_criteria:
+        meta.append(f"预算 {_fmt_num(meta_criteria['max_rounds'])} 轮")
+    if "real_compute" in meta_criteria:
+        meta.append("真计算开启" if meta_criteria["real_compute"] is True else "真计算关闭")
     meta_html = "".join(f"<span>{_html_escape(m)}</span>" for m in meta)
 
     final_entries = [e for e in log if e.get("action") == "final"]
@@ -708,8 +910,8 @@ def render_report(case_dir: str, out_html: str = "report.html") -> str:
     parts = {
         "TITLE": f"{Path(case_dir).name} · 虚拟电池工厂设计报告",
         "HEADER": _header_html(case_dir, log, criteria),
-        "CRITERIA_TABLE": _criteria_html(criteria),
-        "FLOW": _flow_html(log, cell_files),
+        "CRITERIA_TABLE": _criteria_html(criteria, log),
+        "FLOW": _flow_html(log, cell_files, criteria),
         "CANDIDATES": _candidates_html(log),
         "ROUNDS": _rounds_html(log),
         "FUNNEL": _funnel_html(log),

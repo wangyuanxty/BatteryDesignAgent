@@ -224,6 +224,83 @@ def test_kpi_colors_and_threshold_compare(tmp_path):
     assert "°C" in html2  # T_max 机械换算摄氏
 
 
+def test_criteria_stage_layered_render(tmp_path):
+    """新协议分层 criteria：每阶段一个区块，带阶段徽章与达成列（目标 vs 达成）。"""
+    ws = CaseWorkspace("caseL", root=str(tmp_path))
+    append_entry(ws, {"criteria": {
+        "stage1": {"max_energy_ev": 0.0, "max_homo_ev": -6.0},
+        "stage2": {"capacity_ah": {"min": 4.0}, "energy_density_wh_kg": {"min": 300.0}},
+        "stage3": {"T_max_K": {"max": 333.15}, "plated": False},
+        "meta": {"max_rounds": 30, "real_compute": False},
+    }})
+    append_entry(ws, {"round": 1, "action": "funnel", "passed": 3, "rejected": 2, "disputed": 0})
+    append_entry(ws, {"round": 1, "action": "evaluate",
+                      "metrics": {"capacity_ah": 4.6, "energy_density_wh_kg": 366.9,
+                                  "T_max_K": 320.0, "plated": False},
+                      "verdict": "pass"})
+    html = _render(ws)
+    assert "材料设计" in html and "电芯设计" in html and "安全评估" in html  # 阶段区块名
+    assert "≤ 0 eV" in html and "≤ -6 eV" in html  # stage1 淘汰线（上限语义）
+    assert "≥ 300" in html and "≤ 333.15" in html  # stage2/3 阈值
+    assert '<span class="badge ok">✓</span>' in html  # 达成列达标行
+    assert "全部达成" in html  # stage2/3 头部聚合徽章
+    assert "无析锂" in html  # plated 阈值文本
+    assert "预算 30 轮" in html  # meta 区块渲染
+    assert "真计算关闭" in html
+
+
+def test_criteria_legacy_flat_grouped_by_stage(tmp_path):
+    """旧扁平 criteria 按键名归组：温度/析锂→stage3，空阶段如实提示。"""
+    ws = _make_case(tmp_path)  # criteria: {"T_max_C": 60, "plating_free": True}
+    html = _render(ws)
+    assert "安全评估" in html
+    assert "60" in html
+    assert "未设置单独目标" in html  # stage1/stage2 空 → 如实提示，不伪造
+
+
+def test_flow_goal_and_achieve_lines(tmp_path):
+    """流程一览条每阶段带 目标/达成 两行（由 criteria 与 log 机械推导）。"""
+    ws = CaseWorkspace("caseF", root=str(tmp_path))
+    append_entry(ws, {"criteria": {
+        "stage1": {"max_homo_ev": -6.0},
+        "stage2": {"energy_density_wh_kg": {"min": 300.0}},
+        "stage3": {"T_max_K": {"max": 333.15}, "plated": False},
+    }})
+    append_entry(ws, {"round": 1, "action": "funnel", "passed": 2, "rejected": 1, "disputed": 0})
+    append_entry(ws, {"round": 1, "action": "evaluate",
+                      "metrics": {"energy_density_wh_kg": 366.9, "T_max_K": 320.0, "plated": False},
+                      "verdict": "pass"})
+    html = _render(ws)
+    assert '<span class="g-label">目标</span>' in html
+    assert '<span class="g-label">达成</span>' in html
+    assert "HOMO ≤ -6 eV" in html
+    assert "能量密度 ≥ 300" in html
+    assert "PASS 2 · DISP 0" in html
+    assert '<b class="goal-ok">✓</b>' in html
+
+
+def test_criteria_stage_achieve_bad_and_missing(tmp_path):
+    """不达标行显示 ✗；无数据行显示破折号；无 funnel 的阶段头部为未执行。"""
+    ws = CaseWorkspace("caseB", root=str(tmp_path))
+    append_entry(ws, {"criteria": {
+        "stage2": {"energy_density_wh_kg": {"min": 300.0}},
+        "stage3": {"T_max_K": {"max": 333.15}, "plated": False},
+    }})
+    append_entry(ws, {"round": 1, "action": "evaluate",
+                      "metrics": {"energy_density_wh_kg": 137.1, "T_max_K": 400.0},
+                      "verdict": "fail"})
+    html = _render(ws)
+    assert '<span class="badge bad">✗</span>' in html
+    assert "部分未达成" in html
+    assert '<span class="badge mute">未执行</span>' in html  # stage1 无 funnel
+    assert '<span class="badge mute">—</span>' in html  # plated 无数据
+
+
+def test_threshold_text_bool():
+    assert _threshold_text(False) == "无析锂"
+    assert _threshold_text(True) == "析锂允许"
+
+
 def test_cell_curve_svg_rendered(tmp_path):
     ws = _make_case(tmp_path)
     t = [i * 10.0 for i in range(30)]
