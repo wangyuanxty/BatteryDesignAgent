@@ -229,11 +229,11 @@ def _entry_stage(e: dict) -> int | None:
 
 
 def _plot_stage(filename: str) -> int | None:
-    """曲线文件名 → 阶段：discharge=2（电芯设计）、charge45=3（安全评估）；无法判定则不贴。"""
+    """曲线文件名 → 阶段：discharge=2（电芯设计）、charge/aging=3（安全/老化评估）；无法判定则不贴。"""
     low = filename.lower()
     if "discharge" in low:
         return 2
-    if "charge" in low:
+    if "charge" in low or "aging" in low:
         return 3
     return None
 
@@ -943,25 +943,44 @@ def _load_cell_curves(case_dir: str) -> list[tuple[str, dict]]:
         except (json.JSONDecodeError, OSError):
             continue
         t = data.get("time_s")
-        if not isinstance(t, list) or len(t) < 2:
+        if isinstance(t, list) and len(t) >= 2:
+            if any(
+                isinstance(data.get(k), list) and len(data.get(k)) == len(t)
+                for k in ("voltage_v", "anode_potential_v")
+            ):
+                out.append((p.name, data))
             continue
-        if not any(
-            isinstance(data.get(k), list) and len(data.get(k)) == len(t)
-            for k in ("voltage_v", "anode_potential_v")
+        # 老化协议输出形态：cycle_numbers + capacity_ah_per_cycle
+        cn = data.get("cycle_numbers")
+        cap = data.get("capacity_ah_per_cycle")
+        if (
+            isinstance(cn, list)
+            and isinstance(cap, list)
+            and len(cn) == len(cap) >= 2
         ):
-            continue
-        out.append((p.name, data))
+            out.append((p.name, data))
     return out
 
 
 def _svg_plot(filename: str, data: dict) -> str:
-    """run-pyamm 输出 → 内联 SVG 曲线（网格 + 双序列 + 轴标注 + tooltip 数据）。"""
-    t = data["time_s"]
-    series = {
-        k: data[k]
-        for k in ("voltage_v", "anode_potential_v")
-        if isinstance(data.get(k), list) and len(data.get(k)) == len(t)
-    }
+    """run-pyamm 输出 → 内联 SVG 曲线（网格 + 序列 + 轴标注 + tooltip 数据）。
+
+    放电/快充协议：time_s 为横轴、voltage_v/anode_potential_v 双序列；
+    老化协议：cycle_numbers 为横轴、capacity_ah_per_cycle 单序列。
+    """
+    aging = isinstance(data.get("capacity_ah_per_cycle"), list) and isinstance(
+        data.get("cycle_numbers"), list
+    )
+    if aging:
+        t = data["cycle_numbers"]
+        series = {"capacity_ah_per_cycle": data["capacity_ah_per_cycle"]}
+    else:
+        t = data["time_s"]
+        series = {
+            k: data[k]
+            for k in ("voltage_v", "anode_potential_v")
+            if isinstance(data.get(k), list) and len(data.get(k)) == len(t)
+        }
     tmin, tmax = min(t), max(t)
     x0, x1 = _PAD_L, _VIEW_W - _PAD_R
     y0, y1 = _PAD_T, _VIEW_H - _PAD_B
@@ -979,7 +998,11 @@ def _svg_plot(filename: str, data: dict) -> str:
     elements.append(f'<line class="axis" x1="{x0}" y1="{y0}" x2="{x0}" y2="{y1}"/>')
     elements.append(f'<line class="axis" x1="{x0}" y1="{y1}" x2="{x1}" y2="{y1}"/>')
 
-    for key, cls in (("voltage_v", "s-voltage"), ("anode_potential_v", "s-anode")):
+    for key, cls in (
+        ("voltage_v", "s-voltage"),
+        ("anode_potential_v", "s-anode"),
+        ("capacity_ah_per_cycle", "s-voltage"),
+    ):
         vals = series.get(key)
         if vals is None:
             continue
@@ -993,7 +1016,7 @@ def _svg_plot(filename: str, data: dict) -> str:
             rows.append([round(t[i], 2), round(vals[i], 4)])
         elements.append(f'<path class="{cls}" d="M{" L".join(pts)}"/>')
         tooltip[f"{key}"] = rows
-        side = 1 if key == "voltage_v" else -1
+        side = 1 if key in ("voltage_v", "capacity_ah_per_cycle") else -1
         if side > 0:
             elements.append(f'<text x="{x0 - 6}" y="{y0 + 4}" text-anchor="end">{_fmt_num(vmax)}</text>')
             elements.append(f'<text x="{x0 - 6}" y="{y1 + 4}" text-anchor="end">{_fmt_num(vmin)}</text>')
@@ -1006,6 +1029,8 @@ def _svg_plot(filename: str, data: dict) -> str:
     if "anode_potential_v" in series:
         ly = y0 + (26 if "voltage_v" in series else 10)
         elements.append(f'<text x="{x0 + 4}" y="{ly}" fill="var(--accent)">-- anode_potential_v [V]</text>')
+    if "capacity_ah_per_cycle" in series:
+        elements.append(f'<text x="{x0 + 4}" y="{y0 + 10}" fill="var(--blue)">— capacity [Ah]</text>')
 
     t_max = data.get("T_max_K")
     if isinstance(t_max, (int, float)):
@@ -1018,7 +1043,7 @@ def _svg_plot(filename: str, data: dict) -> str:
         elements.append(
             f'<text x="{tx:.1f}" y="{y1 + 18}" text-anchor="{anchor}">{_fmt_num(tv)}</text>'
         )
-    elements.append(f'<text x="{(x0 + x1) / 2:.1f}" y="{_VIEW_H - 8}" text-anchor="middle">time [s]</text>')
+    elements.append(f'<text x="{(x0 + x1) / 2:.1f}" y="{_VIEW_H - 8}" text-anchor="middle">{"cycle" if aging else "time [s]"}</text>')
 
     model = str(data.get("model_used") or "N/A")
     label = f"{filename} 曲线（模型 {model}）"
@@ -1045,6 +1070,8 @@ def _plots_html(cell_files: list[tuple[str, dict]]) -> str:
         chips = f'<span class="chip">MODEL {_html_escape(model)}</span>'
         if isinstance(data.get("T_max_K"), (int, float)):
             chips += f'<span class="chip">T_max {_fmt_num(data["T_max_K"])} K</span>'
+        if isinstance(data.get("sei_thickness_nm_end"), (int, float)):
+            chips += f'<span class="chip">SEI_end {_fmt_num(data["sei_thickness_nm_end"])} nm</span>'
         stage_html = _stage_badge(_plot_stage(fname))
         figures.append(
             "<figure class='plot'><figcaption>"

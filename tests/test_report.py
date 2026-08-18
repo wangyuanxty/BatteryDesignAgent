@@ -444,6 +444,32 @@ def test_cell_curve_edge_shapes(tmp_path):
     assert "round_1_long_discharge.json" in html
 
 
+def test_aging_curve_rendered(tmp_path):
+    """老化协议输出（cycle_numbers + capacity_ah_per_cycle）渲染为容量轨迹曲线。"""
+    ws = _make_case(tmp_path)
+    cell = ws.path / "cell"
+    (cell / "round_4_aging_baseline.json").write_text(json.dumps({
+        "model_used": "SPMe", "protocol": "aging",
+        "cycle_numbers": [1, 50, 100],
+        "capacity_ah_per_cycle": [1.648, 1.976, 2.185],
+        "sei_thickness_nm_end": 449.1,
+    }), encoding="utf-8")
+    html = _render(ws)
+    assert '<svg class="plot"' in html
+    assert "round_4_aging_baseline.json" in html
+    assert "capacity [Ah]" in html
+    assert "cycle" in html  # 横轴标注
+    assert "SEI_end 449.1 nm" in html  # caption chip
+    assert '<span class="badge stage">STAGE 3</span>' in html  # aging → 阶段 3
+
+
+def test_plot_stage_aging_maps_to_3():
+    from bda.report import _plot_stage
+
+    assert _plot_stage("round_4_aging_baseline.json") == 3
+    assert _plot_stage("round_1_FEC_discharge.json") == 2
+
+
 def test_cell_non_curve_files_ignored(tmp_path):
     ws = _make_case(tmp_path)
     cell = ws.path / "cell"

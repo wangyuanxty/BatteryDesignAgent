@@ -1,8 +1,12 @@
+import numpy as np
 import pybamm
 
 PROTOCOLS = {
     "1C_discharge": {"kind": "discharge", "C_rate": 1.0, "t_end_s": 3600.0, "T_amb_K": 298.15},
     "4C_charge_45C": {"kind": "charge", "C_rate": 4.0, "t_end_s": 900.0, "T_amb_K": 318.15},
+    # 老化协议：N 圈 1C 恒流充放（SEI ec reaction limited + isothermal）；
+    # 电压上下限取参数集自身值。要求基参数集带 SEI 动力学参数（Chen2020/OKane2022 等）。
+    "aging_1C_100cyc": {"kind": "aging", "cycles": 100, "C_rate": 1.0, "T_amb_K": 298.15},
 }
 
 # Standard lithium plating parameter values (constant approximation of PyBaMM's
@@ -66,6 +70,49 @@ def _cell_volume_default(parameter_values: pybamm.ParameterValues) -> float | No
     return height * width * (l_pos + l_sep + l_neg)
 
 
+def _run_aging(parameter_values: pybamm.ParameterValues, p: dict, mode: str) -> dict:
+    """老化协议：N 圈 1C 恒流充放（SEI ec reaction limited + isothermal）。
+
+    输出 cycle_numbers / capacity_ah_per_cycle / sei_thickness_nm_end。
+    基参数集无 SEI 动力学参数时报错（老化必须用老化体系，如 Chen2020/OKane2022）。
+    """
+    sei_required = "SEI kinetic rate constant [m.s-1]"
+    if sei_required not in parameter_values:
+        raise ValueError(
+            f"base parameter set has no '{sei_required}'; the aging protocol requires "
+            "an aging-capable parameter set (e.g. Chen2020, OKane2022)"
+        )
+    v_min = float(parameter_values["Lower voltage cut-off [V]"])
+    v_max = float(parameter_values["Upper voltage cut-off [V]"])
+    exp = pybamm.Experiment(
+        [(
+            f"Discharge at {p['C_rate']:g}C until {v_min} V",
+            f"Charge at {p['C_rate']:g}C until {v_max} V",
+        )] * p["cycles"]
+    )
+    options = {"SEI": "ec reaction limited", "thermal": "isothermal"}
+    model = (
+        pybamm.lithium_ion.DFN(options=options)
+        if mode == "dfn"
+        else pybamm.lithium_ion.SPMe(options=options)
+    )
+    sol = pybamm.Simulation(model, experiment=exp, parameter_values=parameter_values).solve()
+    caps = [
+        float(sol.cycles[i]["Discharge capacity [A.h]"].entries[-1])
+        for i in range(len(sol.cycles))
+    ]
+    sei_end = float(np.asarray(
+        sol.cycles[-1]["Negative SEI thickness [m]"].entries[-1]
+    ).max())
+    return {
+        "model_used": "DFN" if mode == "dfn" else "SPMe",
+        "protocol": "aging",
+        "cycle_numbers": list(range(1, len(caps) + 1)),
+        "capacity_ah_per_cycle": caps,
+        "sei_thickness_nm_end": sei_end * 1e9,
+    }
+
+
 def run_simulation(
     params: dict,
     protocol: str,
@@ -86,6 +133,9 @@ def run_simulation(
         raise ValueError(f"unknown parameter name(s): {unknown_params}")
     parameter_values.update(params)
     parameter_values.update({"Ambient temperature [K]": p["T_amb_K"]}, check_already_exists=False)
+    if p["kind"] == "aging":
+        # 老化协议内部固定 isothermal + SEI，--thermal/--plating 不参与
+        return _run_aging(parameter_values, p, mode)
     if plating:
         parameter_values.update(PLATING_PARAM_DEFAULTS, check_already_exists=False)
     injected_defaults: dict = {}

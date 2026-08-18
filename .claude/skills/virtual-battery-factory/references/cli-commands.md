@@ -23,17 +23,19 @@ bda run-pyamm --params PARAMS --protocol PROTOCOL [--base BASE] [--mode MODE] [-
 ```
 
 - `--base`：PyBaMM 参数集名（默认 `Chen2020`）；**案例配置的 `base_params` 字段必须原样传给 `--base`**（如 `--base ORegan2022`）。参数桥梁映射表（SKILL.md 第一节第 2 步）的参数名为跨参数集共享名（`Electrolyte diffusivity [m2.s-1]` 等），故 `--params` 可直接配合任一参数集使用
-- `--protocol` 合法值：`1C_discharge`（1C 放电，3600 s，298.15 K）；`4C_charge_45C`（4C 充电，900 s，318.15 K）
+- `--protocol` 合法值：`1C_discharge`（1C 放电，3600 s，298.15 K）；`4C_charge_45C`（4C 充电，900 s，318.15 K）；`aging_1C_100cyc`（100 圈 1C 恒流充放，SEI ec reaction limited + isothermal，电压上下限取参数集自身值）
 - `--mode`：`spme`（默认）/ `dfn`；dfn 求解失败自动降级 SPMe 重试（输出 `model_used` 记 `"SPMe(fallback)"`）
-- `--thermal`：`lumped`（默认）/ `isothermal`；非 isothermal 时输出含 `T_max_K`
+- `--thermal`：`lumped`（默认）/ `isothermal`；非 isothermal 时输出含 `T_max_K`。老化协议内部固定 isothermal，`--thermal`/`--plating` 被忽略
 - `--plating`：启用析锂模块（Chen2020 参数集无析锂参数，运行时注入标准默认值），输出含 `anode_potential_v`
 - 输入 `--params`：`{"<PyBaMM 参数名>": 值}` —— 参数名会按所选参数集校验，通常按 SKILL.md 第一节第 2 步的参数名映射表书写
-- 输出键：`model_used`、`time_s`、`voltage_v`、`capacity_ah`、`T_max_K`（非 isothermal）、`anode_potential_v`（--plating）
+- 输出键：`model_used`、`time_s`、`voltage_v`、`capacity_ah`、`T_max_K`（非 isothermal）、`anode_potential_v`（--plating）；老化协议输出 `model_used`、`protocol: "aging"`、`cycle_numbers`、`capacity_ah_per_cycle`、`sei_thickness_nm_end`
 - 报错：
-  - `unknown protocol 'x'; legal: ['1C_discharge', '4C_charge_45C']` → 修正协议名
+  - `unknown protocol 'x'; legal: [...]` → 修正协议名
   - `unknown mode 'x'; legal: spme, dfn` → 修正模式名
   - `unknown parameter name(s): ['...']` → 参数名不在所选参数集内；对照 SKILL.md 第一节第 2 步的映射表检查键名与拼写
+  - `base parameter set has no 'SEI kinetic rate constant [m.s-1]'; ...` → 所选体系无老化模型（如 ORegan2022）；老化协议只能用带 SEI 参数的老化体系（Chen2020/OKane2022 等），无老化模型时如实记录 N/A
   - SPMe 求解失败（pybamm.SolverError traceback）→ 该参数组合无效，按 SKILL.md 第一节第 5 步回退调整
+- 老化协议注意事项：容量轨迹在标准 SEI 模型下可能出现先爬升后饱和的非单调伪影（锂损失导致电压窗口偏移）——报告/评估中如实标注，不得当作正常衰减；包覆/掺杂与基线须在同一体系上对比
 
 ## run-mlp — ML 势结构松弛
 

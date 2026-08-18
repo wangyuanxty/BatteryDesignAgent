@@ -89,3 +89,35 @@ def test_dfn_no_fallback_reraises(monkeypatch):
     monkeypatch.setattr(pybamm.Simulation, "solve", fake_solve)
     with pytest.raises(pybamm.SolverError):
         run_simulation({}, protocol="1C_discharge", mode="dfn", fallback=False)
+
+
+@pytest.mark.slow
+def test_aging_protocol_output_shape():
+    """老化协议：100 圈容量轨迹 + 终态 SEI 厚度；Chen2020（带 SEI 参数）可跑。"""
+    out = run_simulation({}, protocol="aging_1C_100cyc", base="Chen2020", mode="spme")
+    assert out["protocol"] == "aging"
+    assert len(out["cycle_numbers"]) == 100
+    assert len(out["capacity_ah_per_cycle"]) == 100
+    assert isinstance(out["sei_thickness_nm_end"], float)
+    assert out["sei_thickness_nm_end"] > 0.0
+
+
+@pytest.mark.slow
+def test_aging_protocol_rejects_sei_less_sets():
+    """无 SEI 参数的体系（ORegan2022）跑老化协议 → 明确报错（如实记录 N/A 的依据）。"""
+    with pytest.raises(ValueError, match="SEI kinetic rate constant"):
+        run_simulation({}, protocol="aging_1C_100cyc", base="ORegan2022", mode="spme")
+
+
+@pytest.mark.slow
+def test_aging_coating_param_moves_sei():
+    """包覆参数桥（SEI 动力学 ×0.1）→ 终态 SEI 厚度下降（包覆信号可见）。"""
+    import pybamm as _pybamm
+
+    base_k = float(_pybamm.ParameterValues("Chen2020")["SEI kinetic rate constant [m.s-1]"])
+    baseline = run_simulation({}, protocol="aging_1C_100cyc", base="Chen2020", mode="spme")
+    coated = run_simulation(
+        {"SEI kinetic rate constant [m.s-1]": base_k * 0.1},
+        protocol="aging_1C_100cyc", base="Chen2020", mode="spme",
+    )
+    assert coated["sei_thickness_nm_end"] < baseline["sei_thickness_nm_end"]
