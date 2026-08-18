@@ -102,7 +102,8 @@ def write_inputs(structure: Structure, workdir: str, prefix: str, relax_cell: bo
     }
     if mag:
         system["nspin"] = 2
-        system["starting_magnetization"] = mag
+        # QE 的 namelist 不支持 dict——统一标量初猜（全部元素 0.6，仅初始猜测）
+        system["starting_magnetization"] = 0.6
     electrons = {"conv_thr": 1.0e-7, "mixing_beta": 0.3}
     pw = PWInput(structure, pseudo=pseudo, control=control, system=system, electrons=electrons)
     os.makedirs(workdir, exist_ok=True)
