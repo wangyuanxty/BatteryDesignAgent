@@ -3,7 +3,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-INPUT_TEMPLATE = "! {functional} OPT\n%pal nprocs 4 end\n* xyz {charge} {mult}\n{xyz}\n*\n"
+INPUT_TEMPLATE = "! {functional} OPT\n%output Print[ P_MOs ] 1 end\n* xyzfile {charge} {mult} {name}.xyz\n"
 
 HARTREE_TO_EV = 27.2114
 
@@ -25,6 +25,42 @@ def _multiplicity_for(smiles: str, charge: int) -> int:
     mol = Chem.AddHs(mol)
     n_electrons = sum(atom.GetAtomicNum() for atom in mol.GetAtoms()) - charge
     return 1 if n_electrons % 2 == 0 else 2
+
+
+def _parse_orbital_energies(text: str) -> tuple[float | None, float | None]:
+    """ORCA 6 'ORBITAL ENERGIES' 块（P_OrbEnergies 输出）→ (HOMO eV, LUMO eV)。
+
+    行格式：NO  OCC  E(Eh)  E(eV)——HOMO=占据数 ≥1.5 的最后一个，LUMO=下一个。
+    """
+    lines = text.splitlines()
+    start = None
+    for i, l in enumerate(lines):
+        if l.strip() == "ORBITAL ENERGIES":
+            start = i
+            break
+    if start is None:
+        return None, None
+    rows = []
+    for l in lines[start + 1 : start + 400]:
+        parts = l.split()
+        if len(parts) >= 4 and parts[0].lstrip("-").isdigit():
+            try:
+                rows.append((float(parts[3]), float(parts[1])))  # (eV, occ)
+            except ValueError:
+                continue
+        elif rows:
+            break
+    if not rows:
+        return None, None
+    homo = lumo = None
+    for ev, occ in rows:
+        if occ >= 1.5:
+            homo = ev
+            lumo = None
+        elif homo is not None and lumo is None:
+            lumo = ev
+            break
+    return (homo if homo is not None else None, lumo if lumo is not None else None)
 
 
 def _orbital_energy_ev(tokens: list) -> float:
@@ -50,30 +86,40 @@ def _write_input(
     AllChem.EmbedMolecule(mol, randomSeed=seed)
     AllChem.MMFFOptimizeMolecule(mol)
     conf = mol.GetConformer()
-    lines = [str(mol.GetNumAtoms()), ""]
+    # ORCA 6：坐标用外部 .xyz 文件（* xyzfile 语法；旧 * xyz 内联块已移除）
+    lines = [str(mol.GetNumAtoms()), name]
     for atom in mol.GetAtoms():
         pos = conf.GetAtomPosition(atom.GetIdx())
         lines.append(f"{atom.GetSymbol()} {pos.x:.6f} {pos.y:.6f} {pos.z:.6f}")
-    xyz_block = "\n".join(lines)
+    (workdir / f"{name}.xyz").write_text("\n".join(lines) + "\n", encoding="utf-8")
     (workdir / f"{name}.inp").write_text(
-        INPUT_TEMPLATE.format(functional=functional, charge=charge, mult=mult, xyz=xyz_block),
+        INPUT_TEMPLATE.format(functional=functional, charge=charge, mult=mult, name=name),
         encoding="utf-8",
     )
 
 
 def _run_and_parse(workdir: Path, name: str) -> dict:
-    proc = subprocess.run(["orca", f"{name}.inp"], cwd=workdir, capture_output=True, text=True)
+    import os
+
+    env = dict(os.environ)
+    extra = []
+    orca_dir = os.path.dirname(shutil.which("orca") or "")
+    mpi_dir = r"C:\Program Files\Microsoft MPI\Bin"  # MS-MPI 的 mpiexec（%pal 需要）
+    if os.path.isdir(mpi_dir):
+        extra.append(mpi_dir)
+    if orca_dir:
+        extra.append(orca_dir)
+    env["PATH"] = os.pathsep.join(extra + [env.get("PATH", "")])
+    proc = subprocess.run(["orca", f"{name}.inp"], cwd=workdir, capture_output=True, text=True, env=env)
     if proc.returncode != 0:
         raise RuntimeError(f"ORCA failed: {proc.stderr[-300:]}")
-    out_text = (workdir / f"{name}.out").read_text(encoding="utf-8")
-    E, homo, lumo = None, None, None
+    # ORCA 6.1 输出走 stdout，不写 .out 文件（已实测）
+    out_text = proc.stdout
+    E = None
     for line in out_text.splitlines():
         if "FINAL SINGLE POINT ENERGY" in line:
             E = float(line.split()[-1])
-        if "E(HOMO)" in line:
-            homo = _orbital_energy_ev(line.split())
-        if "E(LUMO)" in line:
-            lumo = _orbital_energy_ev(line.split())
+    homo, lumo = _parse_orbital_energies(out_text)
     if E is None or homo is None or lumo is None:
         raise RuntimeError("failed to parse ORCA output")
     return {"E_hartree": E, "homo_ev": homo, "lumo_ev": lumo}

@@ -20,7 +20,7 @@ def test_write_input_embeds_charge_and_mult(tmp_path):
     import bda.simulators.orca_runner as r
     r._write_input(tmp_path, "cation", "O", 1, 2, "r2SCAN-3c", 42)
     text = (tmp_path / "cation.inp").read_text(encoding="utf-8")
-    assert "* xyz 1 2" in text
+    assert "* xyzfile 1 2 cation.xyz" in text
 
 def test_input_template_requests_geometry_optimization(tmp_path):
     """Spec decision 11: gas-phase geometry optimization, not a bare single point."""
@@ -79,50 +79,75 @@ def test_retry_varies_seed_and_reraises(monkeypatch):
 class _FakeCompletedProcess:
     returncode = 0
     stderr = ""
+    stdout = ""
 
 
 def _fake_run(*args, **kwargs):
-    return _FakeCompletedProcess()
+    p = _FakeCompletedProcess()
+    cwd = kwargs.get("cwd")
+    if cwd is not None:
+        from pathlib import Path
+        out_file = Path(cwd) / "neutral.out"
+        p.stdout = out_file.read_text(encoding="utf-8") if out_file.exists() else ""
+    return p
 
 
-def test_run_and_parse_converts_au_to_ev(tmp_path, monkeypatch):
+def test_run_and_parse_orbital_energies_block(tmp_path, monkeypatch):
+    """ORCA 6 解析：FINAL SINGLE POINT ENERGY + ORBITAL ENERGIES 块（eV 列）。"""
     import bda.simulators.orca_runner as r
 
     monkeypatch.setattr(r.subprocess, "run", _fake_run)
     (tmp_path / "neutral.out").write_text(
         "FINAL SINGLE POINT ENERGY      -76.1234567890\n"
-        "E(HOMO)   =    -0.269345 a.u.\n"
-        "E(LUMO)   =     0.067890 a.u.\n",
+        "ORBITAL ENERGIES\n"
+        "  NO   OCC          E(Eh)            E(eV)\n"
+        "   0   2.0000      -15.606757      -424.6795\n"
+        "   4   2.0000       -0.269345        -7.3288\n"
+        "   5   0.0000        0.067890         1.8473\n",
         encoding="utf-8",
     )
     out = r._run_and_parse(tmp_path, "neutral")
-    assert out["homo_ev"] == pytest.approx(-0.269345 * 27.2114)
-    assert out["lumo_ev"] == pytest.approx(0.067890 * 27.2114)
+    assert out["E_hartree"] == pytest.approx(-76.1234567890)
+    assert out["homo_ev"] == pytest.approx(-7.3288)
+    assert out["lumo_ev"] == pytest.approx(1.8473)
 
 
-def test_run_and_parse_accepts_ev_units(tmp_path, monkeypatch):
+def test_run_and_parse_rejects_missing_orbital_block(tmp_path, monkeypatch):
     import bda.simulators.orca_runner as r
 
     monkeypatch.setattr(r.subprocess, "run", _fake_run)
     (tmp_path / "neutral.out").write_text(
-        "FINAL SINGLE POINT ENERGY      -76.1234567890\n"
-        "E(HOMO)   =    -7.328841 eV\n"
-        "E(LUMO)   =     1.847318 eV\n",
+        "FINAL SINGLE POINT ENERGY      -76.1234567890\n",
         encoding="utf-8",
     )
-    out = r._run_and_parse(tmp_path, "neutral")
-    assert out["homo_ev"] == pytest.approx(-7.328841)
-    assert out["lumo_ev"] == pytest.approx(1.847318)
-
-
-def test_run_and_parse_rejects_missing_unit(tmp_path, monkeypatch):
-    import bda.simulators.orca_runner as r
-
-    monkeypatch.setattr(r.subprocess, "run", _fake_run)
-    (tmp_path / "neutral.out").write_text(
-        "FINAL SINGLE POINT ENERGY      -76.1234567890\n"
-        "E(HOMO)   =    -0.269345\n",
-        encoding="utf-8",
-    )
-    with pytest.raises(RuntimeError, match="cannot determine orbital energy unit"):
+    with pytest.raises(RuntimeError, match="failed to parse ORCA output"):
         r._run_and_parse(tmp_path, "neutral")
+
+
+def test_parse_orbital_energies_homo_lumo():
+    """ORCA 6 ORBITAL ENERGIES 块：占据 2.0 边界定 HOMO/LUMO。"""
+    from bda.simulators.orca_runner import _parse_orbital_energies
+
+    text = (
+        "ORBITAL ENERGIES\n"
+        "  NO   OCC          E(Eh)            E(eV)\n"
+        "   0   2.0000      -15.606757      -424.6795\n"
+        "   9   2.0000       -0.437206       -11.8970\n"
+        "  10   0.0000       -0.201234        -5.4759\n"
+    )
+    homo, lumo = _parse_orbital_energies(text)
+    assert homo == -11.8970
+    assert lumo == -5.4759
+    assert _parse_orbital_energies("no block here") == (None, None)
+
+
+def test_input_template_serial_no_pal(tmp_path):
+    """ORCA 6 适配：串行（无 %pal，MS-MPI 启动不可靠）+ xyzfile + P_OrbEnergies。"""
+    import bda.simulators.orca_runner as r
+
+    r._write_input(tmp_path, "neutral", "O", 0, 1, "r2SCAN-3c", 42)
+    text = (tmp_path / "neutral.inp").read_text(encoding="utf-8")
+    assert "%pal" not in text  # 串行（本机 %pal 4 启动不稳定，已实测）
+    assert "P_MOs" in text
+    xyz = (tmp_path / "neutral.xyz").read_text(encoding="utf-8")
+    assert xyz.splitlines()[0] == "3"  # 原子数行（水 = 3 原子）
