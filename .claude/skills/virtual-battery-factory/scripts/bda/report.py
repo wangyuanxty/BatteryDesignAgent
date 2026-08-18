@@ -255,7 +255,9 @@ def _stage_achieve_badge(stage_key: str, stage_dict: dict, metrics: dict, funnel
         if funnel_latest is None:
             return '<span class="badge mute">未执行</span>'
         n, m = _to_int(funnel_latest.get("passed")), _to_int(funnel_latest.get("disputed"))
-        cls = "ok" if (n > 0 and m == 0) else "bad"
+        # 分歧不是失败（协议："分歧是'该动脑子'的信号"），处置留痕于漏斗明细；
+        # 阶段 1 达成 = 有候选通过漏斗（passed > 0）
+        cls = "ok" if n > 0 else "bad"
         return f'<span class="badge {cls}">达成 · PASS {n} · DISP {m}</span>'
     verdicts: list[bool] = []
     for k, spec in stage_dict.items():
@@ -386,7 +388,8 @@ def _flow_achieve(stage_key: str, stage_dict: dict, log: list[dict]) -> str:
             return "—"
         f = funnels[-1]
         n, m = _to_int(f.get("passed")), _to_int(f.get("disputed"))
-        return f"PASS {n} · DISP {m} {_goal_mark(n > 0 and m == 0)}"
+        # 阶段 1 达成 = 有候选通过漏斗（分歧已处置，留痕于漏斗明细）
+        return f"PASS {n} · DISP {m} {_goal_mark(n > 0)}"
     metrics = _latest_metrics(log)
     if not stage_dict or not metrics:
         return "—"
