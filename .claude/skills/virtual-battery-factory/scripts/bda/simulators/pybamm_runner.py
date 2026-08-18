@@ -16,6 +16,55 @@ PLATING_PARAM_DEFAULTS = {
     "Exchange-current density for stripping [A.m-2]": 0.001,
 }
 
+# Legacy parameter sets (Prada2013, Ramadass2004) lack the cell-level geometry and
+# collector parameters required by the lumped thermal model, so system candidates
+# cannot run stage 2/3 without them. Inject standard defaults (constant
+# approximation of the Chen2020/ORegan2022 cell-level values) only when the chosen
+# set does not define the parameter itself — mirroring PLATING_PARAM_DEFAULTS.
+# "Cell volume [m3]" is NOT taken as a constant: it is derived mechanically from
+# each set's own electrode geometry (see _cell_volume_default).
+THERMAL_PARAM_DEFAULTS = {
+    "Cell cooling surface area [m2]": 0.00531,
+    "Total heat transfer coefficient [W.m-2.K-1]": 10.0,
+    "Positive current collector conductivity [S.m-1]": 36914000.0,
+    "Negative current collector conductivity [S.m-1]": 58411000.0,
+    "Positive current collector thickness [m]": 1.6e-05,
+    "Negative current collector thickness [m]": 1.2e-05,
+    "Positive current collector density [kg.m-3]": 2702.0,
+    "Negative current collector density [kg.m-3]": 8933.0,
+    "Positive current collector specific heat capacity [J.kg-1.K-1]": 897.0,
+    "Negative current collector specific heat capacity [J.kg-1.K-1]": 385.0,
+    # Electrode/separator densities and specific heats feed the lumped model's
+    # effective heat capacity. These are NMC811/graphite/polyolefin constants from
+    # ORegan2022 (densities) and Chen2020 (specific heats, 700 J/kg/K); for sets
+    # with other chemistries (e.g. Prada2013 LFP) they are approximations and the
+    # run output records them under "injected_defaults".
+    "Positive electrode density [kg.m-3]": 3699.0,
+    "Negative electrode density [kg.m-3]": 2060.0,
+    "Separator density [kg.m-3]": 1548.0,
+    "Positive electrode specific heat capacity [J.kg-1.K-1]": 700.0,
+    "Negative electrode specific heat capacity [J.kg-1.K-1]": 700.0,
+    "Separator specific heat capacity [J.kg-1.K-1]": 700.0,
+}
+
+
+def _cell_volume_default(parameter_values: pybamm.ParameterValues) -> float | None:
+    """Mechanical cell volume proxy for sets lacking "Cell volume [m3]":
+    electrode height x width x (positive + separator + negative layer thickness).
+    Returns None when any geometric parameter is missing."""
+    names = (
+        "Electrode height [m]",
+        "Electrode width [m]",
+        "Positive electrode thickness [m]",
+        "Separator thickness [m]",
+        "Negative electrode thickness [m]",
+    )
+    try:
+        height, width, l_pos, l_sep, l_neg = (float(parameter_values[n]) for n in names)
+    except Exception:
+        return None
+    return height * width * (l_pos + l_sep + l_neg)
+
 
 def run_simulation(
     params: dict,
@@ -39,6 +88,22 @@ def run_simulation(
     parameter_values.update({"Ambient temperature [K]": p["T_amb_K"]}, check_already_exists=False)
     if plating:
         parameter_values.update(PLATING_PARAM_DEFAULTS, check_already_exists=False)
+    injected_defaults: dict = {}
+    if thermal != "isothermal":
+        # Missing-only injection: sets that define their own values keep them.
+        for name, value in THERMAL_PARAM_DEFAULTS.items():
+            if name not in parameter_values:
+                injected_defaults[name] = value
+                parameter_values.update({name: value}, check_already_exists=False)
+        if "Cell volume [m3]" not in parameter_values:
+            volume = _cell_volume_default(parameter_values)
+            if volume is None:
+                raise ValueError(
+                    "base parameter set lacks 'Cell volume [m3]' and the electrode "
+                    "geometry needed to derive it; lumped thermal model cannot run"
+                )
+            injected_defaults["Cell volume [m3]"] = volume
+            parameter_values.update({"Cell volume [m3]": volume}, check_already_exists=False)
 
     options = {}
     if thermal != "isothermal":
@@ -70,6 +135,10 @@ def run_simulation(
         "time_s": sol["Time [s]"].entries.tolist(),
         "voltage_v": sol["Terminal voltage [V]"].entries.tolist(),
     }
+    if injected_defaults:
+        # Audit trail: which standard defaults the runner injected for this run
+        # (legacy parameter sets lacking lumped-thermal geometry/collector params).
+        out["injected_defaults"] = injected_defaults
     if p["kind"] == "discharge":
         out["capacity_ah"] = float(sol["Discharge capacity [A.h]"].entries[-1])
     else:

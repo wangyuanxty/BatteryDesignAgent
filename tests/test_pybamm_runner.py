@@ -30,6 +30,30 @@ def test_plating_returns_anode_potential():
     assert "anode_potential_v" in out
     assert len(out["anode_potential_v"]) == len(out["time_s"])
 
+
+def test_legacy_base_injects_thermal_defaults():
+    """Legacy sets (Prada2013/Ramadass2004) lack lumped-thermal geometry params;
+    the runner injects documented defaults (mirroring plating defaults) so system
+    candidates can run stages 2/3, and records them for the audit trail."""
+    for base in ("Prada2013", "Ramadass2004"):
+        out = run_simulation({}, protocol="1C_discharge", base=base, mode="spme",
+                             thermal="lumped", plating=True)
+        assert out["model_used"] == "SPMe"
+        assert len(out["time_s"]) == len(out["voltage_v"])
+        assert out["capacity_ah"] > 0.0
+        assert "T_max_K" in out
+        assert "anode_potential_v" in out
+        injected = out.get("injected_defaults") or {}
+        assert "Cell volume [m3]" in injected
+
+
+def test_modern_base_keeps_own_thermal_params():
+    """ORegan2022 defines its own thermal params; nothing must be injected."""
+    out = run_simulation({}, protocol="1C_discharge", base="ORegan2022", mode="spme",
+                         thermal="lumped", plating=True)
+    assert "injected_defaults" not in out
+    assert "T_max_K" in out
+
 def test_dfn_fallback_to_spme():
     # 极端薄电极使 DFN 数值刚性，通常触发求解困难；若未触发，跳过
     hard = {"Positive electrode thickness [m]": 1e-6}
