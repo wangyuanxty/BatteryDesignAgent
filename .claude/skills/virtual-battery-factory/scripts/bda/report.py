@@ -104,8 +104,34 @@ def _source_chip(c) -> str:
     return f'<span class="chip tag {cls}">{_html_escape(source.upper())}</span>' if source and cls else ""
 
 
+def _cand_component(c) -> str:
+    """候选所属部件（机械判定）：分子/配方→电解液、base→电芯体系、struct 按键名归部件。"""
+    t = _cand_type(c)
+    if t in ("分子", "配方"):
+        return "电解液"
+    if t == "体系":
+        return "电芯体系"
+    struct = c.get("struct") if isinstance(c, dict) else {}
+    comps = []
+    for k in struct:
+        ks = str(k)
+        if "Separator" in ks:
+            comps.append("隔膜")
+        elif "collector" in ks:
+            comps.append("集流体")
+        elif "Electrolyte" in ks:
+            comps.append("电解液")
+        elif "Positive electrode" in ks:
+            comps.append("正极")
+        elif "Negative electrode" in ks:
+            comps.append("负极")
+    if not comps:
+        return "结构"
+    return " + ".join(dict.fromkeys(comps))  # 去重保序
+
+
 def _cand_row(c) -> str:
-    """候选表格行：候选（名称+来源） | 类型 | 说明 | 内容（SMILES/体系/参数）。"""
+    """候选表格行：候选（名称+来源） | 部件 | 类型 | 说明 | 内容（SMILES/体系/参数）。"""
     if isinstance(c, dict):
         name = str(c.get("name") or "")
         role = str(c.get("role") or "")
@@ -115,12 +141,13 @@ def _cand_row(c) -> str:
         name, role, content, src = "", "", str(c), ""
     head = f"<b>{_html_escape(name)}</b>{src}" if name else f'<span class="sm">{_html_escape(content)}</span>'
     return (
-        f"<tr><td>{head}</td><td>{_html_escape(_cand_type(c))}</td>"
-        f"<td>{_html_escape(role)}</td><td class='mono'>{_html_escape(content)}</td></tr>"
+        f"<tr><td>{head}</td><td>{_html_escape(_cand_component(c))}</td>"
+        f"<td>{_html_escape(_cand_type(c))}</td><td>{_html_escape(role)}</td>"
+        f"<td class='mono'>{_html_escape(content)}</td></tr>"
     )
 
 
-_CAND_HEAD = "<tr><th>候选</th><th>类型</th><th>说明</th><th>内容</th></tr>"
+_CAND_HEAD = "<tr><th>候选</th><th>部件</th><th>类型</th><th>说明</th><th>内容</th></tr>"
 
 
 def _read_goal(case_dir: str) -> str | None:
@@ -397,7 +424,7 @@ def _candidates_html(log: list[dict]) -> str:
     if not order:
         return '<p class="empty">暂无数据</p>'
     rows = "".join(_cand_row(seen[k]) for k in order)
-    return f'<table class="tbl">{_CAND_HEAD}{rows}</table>'
+    return f'<table class="tbl cand">{_CAND_HEAD}{rows}</table>'
 
 
 def _goal_mark(ok: bool) -> str:
@@ -606,7 +633,7 @@ def _header_html(case_dir: str, log: list[dict], criteria: dict) -> str:
 def _propose_html(e: dict) -> str:
     cands = _as_list(e.get("candidates"))
     rows = "".join(_cand_row(c) for c in cands)
-    table = f'<table class="tbl">{_CAND_HEAD}{rows}</table>' if rows else ""
+    table = f'<table class="tbl cand">{_CAND_HEAD}{rows}</table>' if rows else ""
     reason = e.get("llm_reason")
     reason_html = f'<p class="reason">{_html_escape(str(reason))}</p>' if reason else ""
     return (

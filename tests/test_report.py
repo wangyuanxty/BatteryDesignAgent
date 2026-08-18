@@ -340,21 +340,28 @@ def test_evaluate_comparison_table(tmp_path):
 
 
 def test_candidates_and_propose_tables(tmp_path):
-    """候选以表格展示（候选/类型/说明/内容）：SHEET 01 总表与轮次卡片均含类型与参数。"""
+    """候选以表格展示（候选/部件/类型/说明/内容）：SHEET 01 总表与轮次卡片均含部件归属。"""
     ws = _make_case(tmp_path)
     append_entry(ws, {"round": 1, "action": "propose", "candidates": [
         {"smiles": "FC1COC(=O)O1", "name": "FEC", "role": "氟代碳酸酯成膜剂", "source": "seed"},
         {"struct": {"Positive electrode thickness [m]": 6.84e-05}, "name": "结构方案B", "role": "正极减薄10%"},
+        {"struct": {"Separator thickness [m]": 1e-05}, "name": "结构方案F", "role": "隔膜减薄"},
+        {"struct": {"Positive current collector thickness [m]": 1e-05, "Negative current collector thickness [m]": 8e-06}, "name": "结构方案G", "role": "集流体减薄"},
+        {"struct": {"Electrolyte conductivity [S.m-1]": 1.2}, "name": "溶剂方案H", "role": "高电导配方"},
         {"base": "Prada2013", "name": "体系LFP", "role": "LFP/石墨体系"},
     ]})
     html = _render(ws)
-    assert "<th>候选</th>" in html and "<th>类型</th>" in html and "<th>说明</th>" in html
-    assert "<td>分子</td>" in html
-    assert "<td>结构</td>" in html
-    assert "<td>体系</td>" in html
+    assert "<th>候选</th>" in html and "<th>部件</th>" in html and "<th>类型</th>" in html
+    assert "<td>分子</td>" in html and "<td>结构</td>" in html and "<td>体系</td>" in html
+    assert "<td>电解液</td>" in html  # 分子/配方 → 电解液
+    assert "<td>隔膜</td>" in html  # Separator → 隔膜
+    assert "<td>集流体</td>" in html  # collector → 集流体
+    assert "<td>正极</td>" in html  # Positive electrode → 正极
+    assert "<td>电芯体系</td>" in html  # base → 电芯体系
     assert "Positive electrode thickness [m] = 6.840e-05" in html  # struct 参数内容（科学计数）
     assert "Prada2013" in html  # 体系内容
     assert "氟代碳酸酯成膜剂" in html  # 角色说明
+    assert 'class="tbl cand"' in html  # 定列宽样式
 
 
 def test_rounds_overview_table(tmp_path, full_case):

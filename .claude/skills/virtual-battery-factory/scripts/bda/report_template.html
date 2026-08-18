@@ -170,6 +170,13 @@ main{max-width:1120px;margin:0 auto;padding:34px clamp(14px,3vw,32px) 8px}
 .tbl td.num{text-align:right;white-space:nowrap}
 .tbl tr:hover td{background:rgba(216,226,236,.35)}
 .crit-meta{font-size:11.5px;color:#5E768C;overflow-wrap:anywhere}
+/* 候选表格：定列宽，候选/部件/类型窄列，说明/内容宽列 */
+.tbl.cand{table-layout:fixed}
+.tbl.cand th:nth-child(1),.tbl.cand td:nth-child(1){width:16%}
+.tbl.cand th:nth-child(2),.tbl.cand td:nth-child(2){width:11%}
+.tbl.cand th:nth-child(3),.tbl.cand td:nth-child(3){width:9%}
+.tbl.cand th:nth-child(4),.tbl.cand td:nth-child(4){width:26%}
+.tbl.cand th:nth-child(5),.tbl.cand td:nth-child(5){width:38%}
 
 /* ---------- 徽章与标签 ---------- */
 .badge{
