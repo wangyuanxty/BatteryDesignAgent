@@ -339,6 +339,24 @@ def test_evaluate_comparison_table(tmp_path):
     assert "D 负极加厚最优。" in html
 
 
+def test_candidates_and_propose_tables(tmp_path):
+    """候选以表格展示（候选/类型/说明/内容）：SHEET 01 总表与轮次卡片均含类型与参数。"""
+    ws = _make_case(tmp_path)
+    append_entry(ws, {"round": 1, "action": "propose", "candidates": [
+        {"smiles": "FC1COC(=O)O1", "name": "FEC", "role": "氟代碳酸酯成膜剂", "source": "seed"},
+        {"struct": {"Positive electrode thickness [m]": 6.84e-05}, "name": "结构方案B", "role": "正极减薄10%"},
+        {"base": "Prada2013", "name": "体系LFP", "role": "LFP/石墨体系"},
+    ]})
+    html = _render(ws)
+    assert "<th>候选</th>" in html and "<th>类型</th>" in html and "<th>说明</th>" in html
+    assert "<td>分子</td>" in html
+    assert "<td>结构</td>" in html
+    assert "<td>体系</td>" in html
+    assert "Positive electrode thickness [m] = 6.840e-05" in html  # struct 参数内容（科学计数）
+    assert "Prada2013" in html  # 体系内容
+    assert "氟代碳酸酯成膜剂" in html  # 角色说明
+
+
 def test_rounds_overview_table(tmp_path, full_case):
     """迭代轨迹顶部轮次总览表：轮次/阶段/候选数/指标/结论。"""
     html = _render(full_case)

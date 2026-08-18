@@ -71,15 +71,56 @@ def _fmt_num(v, sig: int = 4) -> str:
     return str(v)
 
 
-def _candidate_names(log: list[dict]) -> list[str]:
-    names = []
-    for e in log:
-        for c in _as_list(e.get("candidates")):
-            if isinstance(c, dict):
-                names.append(str(c.get("smiles") or c.get("name") or c))
-            else:
-                names.append(str(c))
-    return sorted(set(names))
+def _cand_type(c) -> str:
+    """候选类型（机械判定）：smiles=分子、base=体系、struct 含电解液参数=配方、其余 struct=结构。"""
+    if not isinstance(c, dict):
+        return "分子"
+    if c.get("smiles"):
+        return "分子"
+    if c.get("base"):
+        return "体系"
+    if c.get("struct"):
+        if any("Electrolyte" in str(k) for k in c["struct"]):
+            return "配方"
+        return "结构"
+    return "分子"
+
+
+def _cand_content(c) -> str:
+    if not isinstance(c, dict):
+        return str(c)
+    if c.get("smiles"):
+        return str(c["smiles"])
+    if c.get("base"):
+        return str(c["base"])
+    if c.get("struct"):
+        return "；".join(f"{k} = {_fmt_num(v)}" for k, v in c["struct"].items())
+    return ""
+
+
+def _source_chip(c) -> str:
+    source = str(c.get("source") or "") if isinstance(c, dict) else ""
+    cls = "seed" if source.lower() == "seed" else "free" if source.lower() in ("free_gen", "free") else ""
+    return f'<span class="chip tag {cls}">{_html_escape(source.upper())}</span>' if source and cls else ""
+
+
+def _cand_row(c) -> str:
+    """候选表格行：候选（名称+来源） | 类型 | 说明 | 内容（SMILES/体系/参数）。"""
+    if isinstance(c, dict):
+        name = str(c.get("name") or "")
+        role = str(c.get("role") or "")
+        content = _cand_content(c)
+        src = _source_chip(c)
+    else:
+        name, role, content, src = "", "", str(c), ""
+    head = f"<b>{_html_escape(name)}</b>{src}" if name else f'<span class="sm">{_html_escape(content)}</span>'
+    return (
+        f"<tr><td>{head}</td><td>{_html_escape(_cand_type(c))}</td>"
+        f"<td>{_html_escape(role)}</td><td class='mono'>{_html_escape(content)}</td></tr>"
+    )
+
+
+_CAND_HEAD = "<tr><th>候选</th><th>类型</th><th>说明</th><th>内容</th></tr>"
 
 
 def _read_goal(case_dir: str) -> str | None:
@@ -344,11 +385,19 @@ def _criteria_html(criteria: dict, log: list[dict]) -> str:
 
 
 def _candidates_html(log: list[dict]) -> str:
-    names = _candidate_names(log)
-    if not names:
+    """SHEET 01 涉及候选：全部 propose/endorse 候选去重后的总表（首次出现顺序）。"""
+    seen: dict[str, object] = {}
+    order: list[str] = []
+    for e in log:
+        for c in _as_list(e.get("candidates")):
+            key = str(c.get("name") or c.get("smiles") or "") if isinstance(c, dict) else str(c)
+            if key and key not in seen:
+                seen[key] = c
+                order.append(key)
+    if not order:
         return '<p class="empty">暂无数据</p>'
-    chips = "".join(f'<span class="chip mono">{_html_escape(c)}</span>' for c in names)
-    return f'<div class="chips">{chips}</div>'
+    rows = "".join(_cand_row(seen[k]) for k in order)
+    return f'<table class="tbl">{_CAND_HEAD}{rows}</table>'
 
 
 def _goal_mark(ok: bool) -> str:
@@ -555,33 +604,14 @@ def _header_html(case_dir: str, log: list[dict], criteria: dict) -> str:
 
 
 def _propose_html(e: dict) -> str:
-    parts = []
-    for cand in _as_list(e.get("candidates")):
-        if isinstance(cand, dict):
-            smiles = str(cand.get("smiles") or "")
-            name = str(cand.get("name") or "")
-            role = str(cand.get("role") or "")
-            source = str(cand.get("source") or "")
-        else:
-            smiles, name, role, source = str(cand), "", "", ""
-        if name:
-            inner = f"<b>{_html_escape(name)}</b>"
-            if role:
-                inner += f" · {_html_escape(role)}"
-            if smiles:
-                inner += f' <span class="sm">{_html_escape(smiles)}</span>'
-        else:
-            inner = f'<span class="sm">{_html_escape(smiles)}</span>'
-        tag = ""
-        if source:
-            cls = "seed" if source.lower() == "seed" else "free" if source.lower() in ("free_gen", "free") else ""
-            tag = f'<span class="chip tag {cls}">{_html_escape(source.upper())}</span>'
-        parts.append(f'<span class="chip">{inner}</span>{tag}')
+    cands = _as_list(e.get("candidates"))
+    rows = "".join(_cand_row(c) for c in cands)
+    table = f'<table class="tbl">{_CAND_HEAD}{rows}</table>' if rows else ""
     reason = e.get("llm_reason")
     reason_html = f'<p class="reason">{_html_escape(str(reason))}</p>' if reason else ""
     return (
         '<div class="blk"><div class="blk-label">Propose · 候选方案</div>'
-        f'<div class="chips">{"".join(parts)}</div>{reason_html}</div>'
+        f"{table}{reason_html}</div>"
     )
 
 
