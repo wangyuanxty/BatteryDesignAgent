@@ -99,7 +99,7 @@ bda run-md --box BOX [--engine ENGINE] [--t-ns T_NS] --out OUT
 bda render --case-dir CASE_DIR [--out OUT]
 ```
 
-- 读取 `<case_dir>/log.jsonl`（第 0 条 criteria + 全部 action 条目），产出自包含 HTML（任务概览/迭代轨迹/漏斗统计/阶段 2/3 结果/收尾背书/最终推荐 六节），写入 `<case_dir>/<out>`（默认 `report.html`）
+- 读取 `<case_dir>/log.jsonl`（第 0 条 criteria + 全部 action 条目），产出自包含 HTML（任务概览/迭代轨迹/漏斗统计/阶段结果/真DFT/MD 验证背书/最终推荐/设计说明 七节），写入 `<case_dir>/<out>`（默认 `report.html`）
 - 无 log.jsonl → 渲染空报告；无对应条目 → 该节显示"暂无数据"
 - 报错：无自定义校验；log 行 JSON 解析失败 → traceback 指出行号
 - 使用位置：收尾最后一步；报告全部内容由 log.jsonl 确定性生成，无额外 LLM 调用
