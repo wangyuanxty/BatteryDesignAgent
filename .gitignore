@@ -10,3 +10,4 @@ runs/
 .claude/settings.json
 .vscode/
 .claude/skills/cad-skill/
+docs/backups/
