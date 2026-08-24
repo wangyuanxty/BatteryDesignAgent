@@ -1,28 +1,28 @@
-# 交付物格式：交付包索引 `delivery_index.md`（收尾必出，另出 PDF 发布版）
+# Deliverable Format: Delivery Package Index `delivery_index.md` (Required at close-out; also output a PDF release version)
 
-> 由 SKILL.md 第一节第 7 步收尾时按需 Read。索引是全部交付物的"封面 + 受控清单"，把散落的交付物组织为受控设计包；索引只登记**实际生成**的文件（先列目录确认，再逐一写行），不得登记计划中但未产出的文件。
+> Read on demand per SKILL.md Section 1, Step 7 at close-out. The index is the "cover + controlled list" of all deliverables, organizing the scattered deliverables into a controlled design package; the index registers only **actually generated** files (first list the directory to confirm, then write one row per file); it must not register files that are planned but not produced.
 
-- **封面信息（字段清单，缺一不可）**：
-  - 案例名（如 `ed300_4c`）
-  - 编号体系：`VBF-<案例ID大写>-<文档码>-<序号>`（案例ID大写时去掉非字母数字字符，如 `ed300_4c` → `ED3004C`；序号为该文档码下的两位流水号，从 `01` 起）
-  - 生成日期（`YYYY-MM-DD`）
-  - 签署栏：编制/审核/批准三栏，**留空**（供人工签字）
-- **文档码对照表（协议固定）**：
+- **Cover information (field list, none missing)**:
+  - Case name (e.g. `ed300_4c`)
+  - Numbering scheme: `VBF-<CASE-ID-UPPERCASE>-<DOC-CODE>-<SEQ-NO>` (for the uppercase case ID, remove non-alphanumeric characters, e.g. `ed300_4c` → `ED3004C`; the SEQ-NO is a two-digit serial number under that document code, starting from `01`)
+  - Generation date (`YYYY-MM-DD`)
+  - Signature block: prepared / reviewed / approved three fields, **left blank** (for manual signing)
+- **Document code reference table (fixed by protocol)**:
 
-  | 文档码 | 含义 | 对应文件 |
+  | Document code | Meaning | Corresponding file |
   |--------|------|---------|
-  | DS | 规格书 | `design_spec.md` |
-  | BOM | 物料清单 | `bom.xlsx` |
-  | DSH | Datasheet 技术参数表 | `datasheet.docx` |
-  | CALC | 计算书 | `calc.xlsx` |
-  | DVPR | 设计验证报告 | `dvpr.md` |
-  | DFMEA | 失效分析 | `dfmea.md` |
-  | CAD | 结构模型 | `cell_model.stl` |
+  | DS | Specification | `design_spec.md` |
+  | BOM | Bill of Materials | `bom.xlsx` |
+  | DSH | Datasheet technical parameter sheet | `datasheet.docx` |
+  | CALC | Calculation sheet | `calc.xlsx` |
+  | DVPR | Design verification report | `dvpr.md` |
+  | DFMEA | Failure analysis | `dfmea.md` |
+  | CAD | Structure model | `cell_model.stl` |
 
-- **文件清单表格式**（每个交付物一行，四列：文件名 / 编号 / 格式 / 来源说明）：
-  - 编号：`VBF-ED3004C-DS-01` 形式；同一文件的可编辑源与 PDF 发布版共用**同一编号**，在文件名与格式列区分
-  - 格式：`md` / `pdf` / `xlsx` / `docx` / `stl` / `png` / `html` 等实际扩展名
-  - 来源说明：该文件由哪一步/哪个工具产出（如"design_spec.md 按 deliverable-design-spec 规范生成"、"xlsx→pdf 由 openpyxl/reportlab 导出"）
-  - 附属文件（预览图、图例、报告等）也各占一行，编号用其归属文档码（如 `cell_model_preview.png` 归 CAD、`report.html` 归 DS）
-- **PDF 发布版**：用 reportlab（`.venv` 已装）一次性脚本生成 `delivery_index.pdf`，封面配色沿用工程蓝图纸风格 `#14283C`（深蓝底）/`#1E5A8A`（中蓝）/`#C97B3D`（铜橙强调），可简化；内页文件清单表与 md 版逐行一致
-- **zip 打包要求**：用 PowerShell `Compress-Archive` 把全部交付物 + `delivery_index.md` + `delivery_index.pdf` 打为 `delivery_package.zip`（放工作区根，不把 zip 自身打包进去）；打完后**必须校验**——解包列出 zip 内容，逐项对照文件清单表，缺一即补打
+- **File list table format** (one row per deliverable, four columns: file name / number / format / source description):
+  - Number: in the form `VBF-ED3004C-DS-01`; the editable source and the PDF release version of the same file share **the same number**, distinguished in the file name and format columns
+  - Format: the actual extension, e.g. `md` / `pdf` / `xlsx` / `docx` / `stl` / `png` / `html`
+  - Source description: which step/tool produced the file (e.g. "design_spec.md generated per the deliverable-design-spec spec", "xlsx→pdf exported by openpyxl/reportlab")
+  - Ancillary files (preview images, legends, reports, etc.) also each occupy one row, numbered with their owning document code (e.g. `cell_model_preview.png` belongs to CAD, `report.html` belongs to DS)
+- **PDF release version**: use reportlab (installed in `.venv`) with a one-off script to generate `delivery_index.pdf`; the cover colors follow the engineering blueprint style `#14283C` (deep blue background)/`#1E5A8A` (medium blue)/`#C97B3D` (copper orange accent), may be simplified; the inner file list table is row-by-row identical to the md version
+- **zip packaging requirement**: use PowerShell `Compress-Archive` to package all deliverables + `delivery_index.md` + `delivery_index.pdf` into `delivery_package.zip` (place it in the workspace root; do not include the zip itself); after packaging, **must verify** — unzip and list the zip contents, check item by item against the file list table, re-pack if anything is missing

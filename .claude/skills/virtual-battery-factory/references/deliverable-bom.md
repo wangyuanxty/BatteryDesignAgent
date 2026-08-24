@@ -1,11 +1,11 @@
-# 交付物格式：物料清单 `bom.md` 或 `bom.xlsx`（必出）
+# Deliverable Format: Bill of Materials `bom.md` or `bom.xlsx` (Required)
 
-> 由 SKILL.md 第一节第 7 步按需 Read。数值机械取自参数集/仿真结果/文献并逐行标注来源；缺失项如实写"未提供"；不得凭记忆写数。
+> Read on demand per SKILL.md Section 1, Step 7. Values are mechanically taken from the parameter set / simulation results / literature and annotated with their source line by line; missing items are honestly written as "Not provided"; no numbers are written from memory.
 
-- **双口径**：g/电芯 与 kg/kWh。
-- **行**：正极活性物质 / 正极导电剂 / 正极粘结剂、负极活性物质 / 负极导电剂 / 负极粘结剂、隔膜、电解液、正极集流体 Al、负极集流体 Cu；外壳与极耳（标注"未建模"）。
-- **公式**：
-  - 组分质量 = 涂层厚度 × 面积 × 体积分数 × 密度（体积分数取自参数集；导电剂/粘结剂无参数时用文献默认值并标注）
-  - kg/kWh = 组分质量 ÷ 电芯能量（kWh，来自仿真积分）
-  - 电解液质量 = 孔隙体积 × 电解液密度（缺参数时取 1.2 g/cm³ 文献值并标注）
-- **汇总行**：总质量、总能量、单位能量材料用量（kg/kWh 总计）。
+- **Dual caliber**: g/cell and kg/kWh.
+- **Rows**: positive electrode active material / positive electrode conductive additive / positive electrode binder, negative electrode active material / negative electrode conductive additive / negative electrode binder, separator, electrolyte, positive current collector Al, negative current collector Cu; enclosure and tabs (annotate "Not modeled").
+- **Formulas**:
+  - Component mass = coating thickness × area × volume fraction × density (volume fraction from the parameter set; when conductive additive/binder have no parameters, use literature default values with annotation)
+  - kg/kWh = component mass ÷ cell energy (kWh, from simulation integration)
+  - Electrolyte mass = pore volume × electrolyte density (when the parameter is missing, use the literature value 1.2 g/cm³ with annotation)
+- **Summary rows**: total mass, total energy, material usage per unit energy (kg/kWh total).

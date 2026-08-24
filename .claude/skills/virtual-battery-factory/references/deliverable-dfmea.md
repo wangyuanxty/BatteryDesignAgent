@@ -1,14 +1,14 @@
-# 交付物格式：设计失效模式分析 `dfmea.md`（必出，定性版）
+# Deliverable Format: Design FMEA `dfmea.md` (Required, qualitative version)
 
-> 由 SKILL.md 第一节第 7 步按需 Read。定性评级基于仿真风险信号；标注"定性版，基于仿真信号"；不得凭记忆写数。
+> Read on demand per SKILL.md Section 1, Step 7. Qualitative ratings are based on simulation risk signals; annotate "qualitative version, based on simulation signals"; no numbers are written from memory.
 
-- **格式**：Markdown 表格。每个失效模式一行：失效模式 / 失效原因 / 仿真信号（可检测性依据）/ 定性严重度 / 定性发生度 / 设计侧缓解建议。
-- **基于现有仿真信号可列的失效模式**：
-  | 失效模式 | 仿真信号来源 |
+- **Format**: Markdown table. One row per failure mode: failure mode / failure cause / simulation signal (detectability basis) / qualitative severity / qualitative occurrence / design-side mitigation recommendation.
+- **Failure modes that can be listed based on existing simulation signals**:
+  | Failure mode | Simulation signal source |
   |---------|-------------|
-  | 负极析锂（快充） | `anode_potential_v < 0 V` |
-  | 热失控风险（温升超限） | `T_max_K` vs 阈值 |
-  | 电解液氧化分解（电压窗口） | HOMO/IE-EA vs 电压窗口（收尾 DFT 背书口径） |
-  | 容量不足 | 1C `capacity_ah` vs 目标 |
-- **严重度/发生度**：S（高/中/低）、O（高/中/低）三级定性，依据 = 仿真数值偏离阈值的幅度；RPN 用 S×O 的简化定性矩阵即可（标注定性口径）。
-- **结论节**：最高风险项列表 + 缓解措施已在设计中落实的说明；完整 FMEA（含工艺/供应商失效）标注"N/A（纯仿真边界外）"。
+  | Negative electrode plating (fast charge) | `anode_potential_v < 0 V` |
+  | Thermal runaway risk (temperature rise exceeds limit) | `T_max_K` vs threshold |
+  | Electrolyte oxidative decomposition (voltage window) | HOMO/IE-EA vs voltage window (final DFT endorsement caliber) |
+  | Insufficient capacity | 1C `capacity_ah` vs target |
+- **Severity/occurrence**: S (high/medium/low), O (high/medium/low) three-level qualitative rating, basis = the magnitude of the simulation value deviating from the threshold; RPN can use a simplified qualitative matrix of S×O (annotate the qualitative caliber).
+- **Conclusion section**: list of highest-risk items + statement that mitigation measures have been implemented in the design; the complete FMEA (including process/supplier failures) is annotated "N/A (beyond pure simulation boundary)".

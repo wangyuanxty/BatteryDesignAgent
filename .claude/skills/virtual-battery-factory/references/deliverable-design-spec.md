@@ -1,21 +1,21 @@
-# 交付物格式：电芯设计规格书 `design_spec.md`（必出）
+# Deliverable Format: Cell Design Specification `design_spec.md` (Required)
 
-> 由 SKILL.md 第一节第 7 步按需 Read。数值机械取自参数集/仿真结果/文献并逐行标注来源；缺失项如实写"未提供"；不得凭记忆写数。
+> Read on demand per SKILL.md Section 1, Step 7. Values are mechanically taken from the parameter set / simulation results / literature and annotated with their source line by line; missing items are honestly written as "Not provided"; no numbers are written from memory.
 
-- **格式**：Markdown，表格为主。
-- **章节与字段**：
-  1. 基本规格：电化学体系、标称容量（Ah）、电压窗口（V）、电芯尺寸（高×宽×厚 mm；壳体厚度无参数时标注"未提供"）、电解液配方（含添加剂候选）、阳离子迁移数
-  2. 电极与隔膜：各层厚度（µm）、孔隙率、集流体材质与厚度、N/P 比（= 负极容量密度×厚度 ÷ 正极容量密度×厚度）
-  3. 工艺设计参数（下表，并入本章节）
-  4. 质量明细：各层质量与总质量（g，含公式口径说明）
-  5. 性能验证表：1C 容量、能量密度、4C 温升、析锂判定——每行附达标判定（✓/✗ vs 第 0 条 criteria）
-  6. 设计说明：本案例改了什么参数、为什么改（引用 evaluate 日志的推理）
+- **Format**: Markdown, primarily tables.
+- **Sections and fields**:
+  1. Basic specification: electrochemical system, nominal capacity (Ah), voltage window (V), cell dimensions (height × width × thickness mm; mark "Not provided" when shell thickness has no parameter), electrolyte formulation (including additive candidates), cation transference number
+  2. Electrode and separator: layer thicknesses (µm), porosity, current collector material and thickness, N/P ratio (= negative electrode capacity density × thickness ÷ positive electrode capacity density × thickness)
+  3. Process design parameters (table below, merged into this section)
+  4. Mass breakdown: mass of each layer and total mass (g, with formula-caliber note)
+  5. Performance verification table: 1C capacity, energy density, 4C temperature rise, plating determination — each row accompanied by the pass/fail determination (✓/✗ vs criteria item 0)
+  6. Design notes: which parameters were changed in this case and why (citing the reasoning from the evaluate log)
 
-### 工艺设计参数公式
+### Process Design Parameter Formulas
 
-| 参数 | 公式 | 单位注意 |
+| Parameter | Formula | Unit Notes |
 |------|------|---------|
-| 面密度 | 厚度 × (1−孔隙率) × 电极密度 | g/m² |
-| 压实密度 | 电极密度 × (1−孔隙率) | kg/m³ → g/cm³ 除 **1000**（常见千倍错误点） |
-| 注液量 | 孔隙体积 × 电解液密度 × 注液系数 | 电解液密度用文献值（如 1.2 g/cm³）标注 |
-| 化成建议 | 如"0.1C CC 至 4.2V、25℃、2 循环" | 标注"设计建议值，产线实值需调试" |
+| Areal density | thickness × (1 − porosity) × electrode density | g/m² |
+| Compaction density | electrode density × (1 − porosity) | kg/m³ → g/cm³ divide by **1000** (common thousand-fold error point) |
+| Electrolyte fill amount | pore volume × electrolyte density × fill factor | electrolyte density uses a literature value (e.g. 1.2 g/cm³) with annotation |
+| Formation recommendation | e.g. "0.1C CC to 4.2V, 25℃, 2 cycles" | annotate "design recommended value; actual production-line value requires tuning" |

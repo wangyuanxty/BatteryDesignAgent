@@ -1,14 +1,14 @@
-# 交付物格式：设计验证计划与报告 `dvpr.md`（必出，虚拟测试版）
+# Deliverable Format: Design Verification Plan and Report `dvpr.md` (Required, virtual test version)
 
-> 由 SKILL.md 第一节第 7 步按需 Read。数值机械取自仿真结果并逐行标注来源；未覆盖工况如实写"N/A（需物理实验）"；不得凭记忆写数。
+> Read on demand per SKILL.md Section 1, Step 7. Values are mechanically taken from simulation results and annotated with their source line by line; uncovered conditions are honestly written as "N/A (requires physical experiment)"; no numbers are written from memory.
 
-- **格式**：Markdown 表格。每个验证项目一行：项目 / 工况 / 结果数值 / 判定（vs criteria 或安全阈值）/ 来源。
-- **可产出的验证项目（以现有仿真协议为准）**：
-  | 项目 | 工况 | 结果来源 |
+- **Format**: Markdown table. One row per verification item: item / condition / result value / determination (vs criteria or safety threshold) / source.
+- **Verification items that can be produced (as per existing simulation protocols)**:
+  | Item | Condition | Result source |
   |------|------|---------|
-  | 1C 放电容量 | `run-pyamm --protocol 1C_discharge` | 仿真 |
-  | 4C 快充温升 | `run-pyamm --protocol 4C_charge_45C --thermal lumped` | 仿真 |
-  | 4C 快充析锂 | 同上 + `--plating`，负极电位 < 0 V 判定 | 仿真 |
-  | 电压窗口 | 参数集上下限 | 参数集 |
-- **明确标注 N/A 的项目**：针刺、过充至热失控、挤压、跌落、循环寿命（无老化模型）、倍率脉冲内阻——写"N/A（纯仿真边界外，需物理实验）"。
-- **结论节**：通过/未通过汇总 + 未覆盖项目清单（论文 limitations 直接引用）。
+  | 1C discharge capacity | `run-pyamm --protocol 1C_discharge` | simulation |
+  | 4C fast-charge temperature rise | `run-pyamm --protocol 4C_charge_45C --thermal lumped` | simulation |
+  | 4C fast-charge plating | same as above + `--plating`, determined by negative electrode potential < 0 V | simulation |
+  | Voltage window | parameter set upper/lower limits | parameter set |
+- **Items explicitly marked N/A**: nail penetration, overcharge to thermal runaway, crush, drop, cycle life (no aging model), rate-pulse internal resistance — write "N/A (beyond pure simulation boundary, requires physical experiment)".
+- **Conclusion section**: pass/fail summary + list of uncovered items (directly cited for paper limitations).

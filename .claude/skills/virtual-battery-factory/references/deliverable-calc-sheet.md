@@ -1,8 +1,8 @@
-# 交付物格式：设计计算书 `calc.xlsx`（推荐，用 xlsx 技能生成）
+# Deliverable Format: Design Calculation Sheet `calc.xlsx` (Recommended, generate with the xlsx skill)
 
-> 由 SKILL.md 第一节第 7 步按需 Read。数值机械取自参数集/仿真结果/文献并逐行标注来源；缺失项如实写"未提供"；不得凭记忆写数。
+> Read on demand per SKILL.md Section 1, Step 7. Values are mechanically taken from the parameter set / simulation results / literature and annotated with their source line by line; missing items are honestly written as "Not provided"; no numbers are written from memory.
 
-- **Sheet 结构**：输入参数 → 容量与能量 → 能量密度 → N/P 与质量 → 工艺参数。
-- 每格附公式与来源列。
-- 能量密度计算链与规格书口径一致（合同公式：放电能量 Wh ÷ 电芯质量 kg；质量 = Σ 层厚×面积×(1−孔隙率)×密度）。
-- 工艺参数公式与 `deliverable-design-spec.md` 的工艺节一致（面密度/压实密度除 1000/注液量/化成建议）。
+- **Sheet structure**: input parameters → capacity and energy → energy density → N/P and mass → process parameters.
+- Each cell is accompanied by a formula and a source column.
+- The energy density calculation chain is consistent with the specification-sheet caliber (contract formula: discharge energy Wh ÷ cell mass kg; mass = Σ layer thickness × area × (1 − porosity) × density).
+- Process parameter formulas are consistent with the process section of `deliverable-design-spec.md` (areal density / compaction density divide by 1000 / electrolyte fill amount / formation recommendation).

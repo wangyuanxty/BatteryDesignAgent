@@ -1,18 +1,18 @@
-# 交付物格式：技术参数表 `datasheet.md`（必出）
+# Deliverable Format: Technical Datasheet `datasheet.md` (Required)
 
-> 由 SKILL.md 第一节第 7 步按需 Read。数值机械取自参数集/仿真结果/文献并逐行标注来源；缺失项如实写"未提供"；不得凭记忆写数。
+> Read on demand per SKILL.md Section 1, Step 7. Values are mechanically taken from the parameter set / simulation results / literature and annotated with their source line by line; missing items are honestly written as "Not provided"; no numbers are written from memory.
 
-面向客户的标准字段：
+Standard customer-facing fields:
 
-| 字段 | 来源 |
+| Field | Source |
 |------|------|
-| 额定容量（Ah） | 参数集标称值 + 仿真验证值 |
-| 标称电压 / 电压窗口（V） | 参数集 |
-| 额定能量（Wh） | 仿真积分（V·I 对时间积分） |
-| 能量密度（Wh/kg） | 仿真 + 合同质量公式 |
-| 最大连续放电倍率 | 1C 仿真结果 |
-| 快充能力 | 4C 仿真温升与析锂结果 |
-| 工作温度范围 | 按仿真工况如实给出 |
-| 循环寿命 | **标注"未仿真（需老化模型）"——不得编造** |
-| 安全判定 | 析锂/温升判定结果 |
-| 尺寸与质量 | 参数集 + 质量公式 |
+| Rated capacity (Ah) | nominal value from parameter set + simulation-verified value |
+| Nominal voltage / voltage window (V) | parameter set |
+| Rated energy (Wh) | simulation integration (time integration of V·I) |
+| Energy density (Wh/kg) | simulation + contract-caliber mass formula |
+| Maximum continuous discharge rate | 1C simulation result |
+| Fast-charge capability | 4C simulation temperature rise and plating results |
+| Operating temperature range | honestly given per simulation conditions |
+| Cycle life | **annotate "Not simulated (requires aging model)" — must not fabricate** |
+| Safety determination | plating/temperature rise determination results |
+| Dimensions and mass | parameter set + mass formula |

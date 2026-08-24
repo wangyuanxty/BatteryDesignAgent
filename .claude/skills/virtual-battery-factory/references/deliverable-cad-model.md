@@ -1,10 +1,10 @@
-# 交付物格式：电芯结构模型 `cell_model.stl` + 预览图（可选，委托 cad-skill）
+# Deliverable Format: Cell Structure Model `cell_model.stl` + Preview Images (Optional, delegate to cad-skill)
 
-> 由 SKILL.md 第一节第 7 步按需 Read。用户澄清要求时产出。
+> Read on demand per SKILL.md Section 1, Step 7. Produce when the user clarifies the request.
 
-- **工具**：使用 **cad-skill**（CadQuery 参数化建模 + 无头渲染预览），按其渐进预览流程执行（Phase 1 基形 → 用户反馈 → Phase 2 细节 → Phase 3 交付）。**依赖声明**：cad-skill 为外部技能，需已安装（`.claude/skills/cad-skill/`，不入本仓库）且 CadQuery 可 pip 安装；若不可用，本可选交付物如实标注跳过。
-- **参数来源**：全部尺寸/层厚取自参数集（与 `deliverable-design-spec.md` 同一套数值），在脚本 PARAMETERS 段逐行注释来源；不得凭记忆写数。
-- **澄清已含（交互模式第 〇 节第 7 项）**：结构形式（21700 卷绕/软包叠片/其他）与表达方式（爆炸示意+真实厚度标注/比例夸大/打印件）——按用户选择执行，不擅自更改。
-- **真实厚度标注**：µm 级层厚在 mm 级模型中不可见，必须配套一份层厚标注表（层名 ↔ 真实厚度 ↔ 参数集来源），随模型一并交付。
-- **产物**：`cell_model.stl` + 多视角预览 PNG + 层厚标注表。
-- **边界**：本模型是结构示意（论文插图/演示），**不是**带公差的工程制造图纸——交付时如实注明。
+- **Tool**: use **cad-skill** (CadQuery parametric modeling + headless rendering preview), following its progressive preview workflow (Phase 1 base shape → user feedback → Phase 2 details → Phase 3 delivery). **Dependency declaration**: cad-skill is an external skill and must be installed (`.claude/skills/cad-skill/`, not part of this repository) and CadQuery must be installable via pip; if unavailable, this optional deliverable shall be honestly marked as skipped.
+- **Parameter source**: all dimensions/layer thicknesses are taken from the parameter set (the same set of values as `deliverable-design-spec.md`), annotated line by line in the PARAMETERS section of the script; no numbers are written from memory.
+- **Clarifications already covered (interaction mode, Section 0, Item 7)**: structural form (21700 wound / pouch stacked / other) and expression style (exploded diagram with real thickness annotations / proportionally exaggerated / print parts) — execute per the user's choice, do not change without authorization.
+- **Real thickness annotation**: µm-level layer thicknesses are not visible in mm-level models; a companion layer-thickness annotation table (layer name ↔ real thickness ↔ parameter set source) must be delivered together with the model.
+- **Deliverables**: `cell_model.stl` + multi-view preview PNGs + layer thickness annotation table.
+- **Boundary**: this model is a structural illustration (paper figure / demonstration), **not** a tolerance-bearing engineering manufacturing drawing — state this honestly at delivery.
