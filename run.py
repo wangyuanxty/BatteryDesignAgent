@@ -1,7 +1,7 @@
-"""Agent SDK 薄启动器：在本仓库起一次无头 Claude Code 会话，日志落盘 logs/。
+"""Thin Agent SDK launcher: start one headless Claude Code session in this repo, logs written to disk.
 
-用法：
-    python run.py "<任务描述>"    # 运行一次会话；控制台打印进度摘要，完整日志存 logs/
+Usage:
+    python run.py "<task description>"    # run one session; console prints progress summary, full log in logs/
 """
 
 import argparse
@@ -37,9 +37,9 @@ ALLOWED_TOOLS = ["Bash", "Read", "Write", "Edit", "Grep", "Glob", "Skill", "Task
 
 
 def _setup_logging(workspace: Path | None) -> logging.Logger:
-    """控制台只打一行摘要（INFO）；文件日志存完整内容（DEBUG），UTF-8 落盘。
+    """Console prints one-line summaries (INFO); file log stores full content (DEBUG), UTF-8.
 
-    有工作区 → 落盘工作区/run.log（批量时日志跟着任务走）；无 → 落盘 logs/run_<ts>.log。
+    With workspace → write to workspace/run.log (logs follow the task in batches); without → logs/run_<ts>.log.
     """
     if workspace is not None:
         workspace.mkdir(parents=True, exist_ok=True)
@@ -61,7 +61,7 @@ def _setup_logging(workspace: Path | None) -> logging.Logger:
 
 
 def _content_summary(content: str | list | None) -> str:
-    """消息内容压成单行文本（兼容 str、dict 块、dataclass ContentBlock）。"""
+    """Compress message content into a single line (handles str, dict blocks, dataclass ContentBlocks)."""
     if content is None:
         return ""
     if isinstance(content, str):
@@ -90,7 +90,7 @@ def _content_summary(content: str | list | None) -> str:
 
 
 def _tool_detail(block: ToolUseBlock | ServerToolUseBlock) -> str:
-    """工具输入摘要：常见字段取前 120 字符，其他取 JSON。"""
+    """Tool input summary: common fields truncated to 120 chars, others as JSON."""
     inp = block.input or {}
     for key in ("file_path", "command", "pattern", "url", "prompt"):
         if isinstance(inp.get(key), str):
@@ -99,7 +99,7 @@ def _tool_detail(block: ToolUseBlock | ServerToolUseBlock) -> str:
 
 
 def _brief(msg: Message) -> str:
-    """把一条 SDK 消息压成一行进度摘要。"""
+    """Compress one SDK message into a one-line progress summary."""
     if isinstance(msg, ResultMessage):
         cost = f"${msg.total_cost_usd:.4f}" if msg.total_cost_usd is not None else "$?"
         return f"[result] error={msg.is_error} cost={cost} {(msg.result or '')[:120]}"
@@ -126,7 +126,7 @@ def _brief(msg: Message) -> str:
 
 
 def _full(msg: Message) -> str:
-    """消息完整内容（仅文件日志，不截断）。"""
+    """Full message content (file log only, no truncation)."""
     if isinstance(msg, ResultMessage):
         return f"[result] error={msg.is_error} session={msg.session_id} result:\n{msg.result or ''}"
     if isinstance(msg, SystemMessage):
@@ -151,7 +151,7 @@ def _full(msg: Message) -> str:
 
 
 def _usage_summary(result: ResultMessage) -> str:
-    """按模型汇总 token 用量，返回一行文本。"""
+    """Summarize token usage per model into one text line."""
     parts: list[str] = []
     for name, usage in (result.model_usage or {}).items():
         parts.append(
@@ -164,17 +164,17 @@ def _usage_summary(result: ResultMessage) -> str:
 
 
 async def _query(log: logging.Logger, options: ClaudeAgentOptions, prompt: str) -> ResultMessage | None:
-    """运行一次 query，流式记录进度，返回最终结果消息。"""
+    """Run one query, stream progress to log, return the final result message."""
     final: Message | None = None
     try:
         async for msg in query(prompt=prompt, options=options):
             if isinstance(msg, SystemMessage) and msg.subtype == "thinking_tokens":
-                continue  # 思考 token 计数元数据，无信息量
-            log.debug(_full(msg))  # 文件日志：完整内容
-            log.info(_brief(msg))  # 控制台：一行摘要
+                continue  # thinking-token counter metadata only; not informative
+            log.debug(_full(msg))  # file log: full content
+            log.info(_brief(msg))  # console: one-line summary
             final = msg
     except Exception as exc:
-        # SDK 在 max_turns 耗尽时抛异常而非返回 ResultMessage；预算耗尽=设计内终止
+        # SDK raises instead of returning ResultMessage when max_turns exhausted; budget exhaustion = in-design termination
         if "maximum number of turns" in str(exc):
             log.info("turns exhausted (max_turns reached)")
             return None
@@ -183,17 +183,17 @@ async def _query(log: logging.Logger, options: ClaudeAgentOptions, prompt: str) 
 
 
 def _disable_auto_memory() -> None:
-    """禁用 SDK 会话的 auto-memory：领域事实已固化进 skill references/facts.md，
-    实验会话不得加载会话外记忆（可复现性 + C1 对照纯净性）。"""
+    """Disable SDK session auto-memory: domain facts are already fixed in the skill's references;
+    experiment sessions must not load out-of-session memory (reproducibility + C1 control purity)."""
     os.environ["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
 
 
-# C1 bare 模式禁读的协议文件（SKILL.md / assets 示例），cli-commands.md（工具用法）放行
+# Protocol files blocked in C1 bare mode (SKILL.md / assets examples); cli-commands.md (tool usage) allowed
 _BLOCKED_PROTOCOL = ("SKILL.md", "examples.md")
 
 
 async def _bare_guard(input: dict, tool_use_id: str | None, context) -> dict:
-    """PreToolUse 回调：C1 裸 LLM 模式下拦截对 skill 协议文件的读取（Read/Bash/Grep/Glob）。"""
+    """PreToolUse callback: in C1 bare-LLM mode, intercept reads of skill protocol files (Read/Bash/Grep/Glob)."""
     probe = " ".join(str(v) for v in (input.get("tool_input") or {}).values())
     for blocked in _BLOCKED_PROTOCOL:
         if blocked in probe:
@@ -201,7 +201,7 @@ async def _bare_guard(input: dict, tool_use_id: str | None, context) -> dict:
                 "hookSpecificOutput": {
                     "hookEventName": "PreToolUse",
                     "permissionDecision": "deny",
-                    "permissionDecisionReason": f"C1 裸 LLM 对照模式禁止读取协议文件（{blocked}）",
+                    "permissionDecisionReason": f"C1 bare-LLM control mode forbids reading protocol files ({blocked})",
                 }
             }
     return {}
@@ -216,7 +216,7 @@ async def _run(
     hooks: dict | None = None,
     model: str | None = None,
 ) -> int:
-    """跑一次会话，返回进程退出码。"""
+    """Run one session, return the process exit code."""
     options = ClaudeAgentOptions(
         system_prompt=system,
         skills=skills,
@@ -232,7 +232,7 @@ async def _run(
     )
     result = await _query(log, options, prompt)
     if result is None:
-        # 正常终止（含 max_turns 预算耗尽）：agent 已按协议写 log.jsonl，退出码 0
+        # Normal termination (incl. max_turns budget exhaustion): agent already wrote log.jsonl per protocol; exit 0
         log.info("session finished")
         return 0
     if result.is_error:
@@ -247,41 +247,41 @@ def main(argv: list[str] | None = None) -> int:
     _disable_auto_memory()
     parser = argparse.ArgumentParser(
         prog="run.py",
-        description="无头 Claude Code 会话（本仓库，项目 settings，bypassPermissions）",
+        description="Headless Claude Code session (this repo, project settings, bypassPermissions)",
     )
-    parser.add_argument("prompt", nargs="?", help="任务描述，例如：python run.py \"设计一款能量密度提升20%%的电池…\"")
-    parser.add_argument("--max-turns", type=int, default=300, help="最大对话轮数（默认 1000）")
-    parser.add_argument("--workspace", default=None, help="工作区目录（产物落点）；不传=agent 自行决定")
-    parser.add_argument("--model", default=os.environ.get("ANTHROPIC_MODEL") or "", help="模型覆盖（鲁棒性实验用，如 deepseek-v4-pro；默认=ANTHROPIC_MODEL 或会话默认）")
+    parser.add_argument("prompt", nargs="?", help="Task description, e.g.: python run.py \"design a battery with 20%% higher energy density...\"")
+    parser.add_argument("--max-turns", type=int, default=300, help="Maximum conversation turns (default 1000)")
+    parser.add_argument("--workspace", default=None, help="Workspace directory (artifact destination); unset = agent decides")
+    parser.add_argument("--model", default=os.environ.get("ANTHROPIC_MODEL") or "", help="Model override (robustness experiments, e.g. deepseek-v4-pro; default = ANTHROPIC_MODEL or session default)")
     parser.add_argument(
         "--bare",
         action="store_true",
-        help="C1 裸 LLM 对照：不加载 skill、无协议规则，只给工具说明与目标",
+        help="C1 bare-LLM control: no skill, no protocol rules; only tool docs and objective",
     )
     parser.add_argument(
         "--override",
         default=None,
-        help="system prompt 覆盖（消融 B 用：如 '结构变体数量不做强制要求'）——系统层指令，覆盖 skill 规则",
+        help="system prompt override (ablation B, e.g. 'architecture variant count not enforced') — system-level instruction, overrides skill rules",
     )
     args = parser.parse_args(argv)
     if not args.prompt:
-        parser.error('需要任务描述，例如：python run.py "设计一款能量密度提升20%的电池…"')
+        parser.error('Task description required, e.g.: python run.py "design a battery with 20% higher energy density..."')
     if args.max_turns is not None and args.max_turns <= 0:
-        parser.error("--max-turns 必须为正整数")
+        parser.error("--max-turns must be a positive integer")
     ws = Path(args.workspace).resolve() if args.workspace else None
     if args.bare:
-        # C1 裸 LLM：工具说明 + 目标，无协议规则（不含漏斗/回退/criteria/审计要求）；
-        # 真 DFT/MD 代码禁用（背书是协议流程的一部分，C1 无协议不需要）
+        # C1 bare LLM: tool docs + objective, no protocol rules (no funnel/fallback/criteria/audit requirements);
+        # true DFT/MD commands disabled (endorsement is part of protocol flow; C1 has no protocol, does not need it)
         os.environ["BDA_DISABLE_TRUE_COMPUTE"] = "1"
         system = (
-            "你是电池设计智能体。可用工具：Bash/Read/Write/Edit/Grep/Glob。\n"
-            "仿真工具库 bda：`.venv\\Scripts\\python.exe -m bda <子命令>`"
-            "（子命令见 `-m bda --help`，完整用法参考 "
-            ".claude/skills/virtual-battery-factory/references/cli-commands.md）。\n"
-            f"目标：{args.prompt}"
+            "You are a battery design agent. Available tools: Bash/Read/Write/Edit/Grep/Glob.\n"
+            "Simulation tool library bda: `.venv\\Scripts\\python.exe -m bda <subcommand>`"
+            " (subcommands per `-m bda --help`; full usage reference: "
+            ".claude/skills/virtual-battery-factory/references/cli-commands.md).\n"
+            f"Objective: {args.prompt}"
         )
         if ws:
-            system += f"\n工作区：{ws}"
+            system += f"\nWorkspace: {ws}"
         from claude_agent_sdk import HookMatcher
 
         log = _setup_logging(ws)
@@ -296,10 +296,10 @@ def main(argv: list[str] | None = None) -> int:
                 model=args.model or None,
             )
         )
-    prompt = f"headless 会话：无用户在场，跳过澄清提问（SKILL.md 零交互执行规则），参数从任务文本解析、缺省用默认值，写入 log.jsonl 第 0 条。\n任务：{args.prompt}"
+    prompt = f"headless session: no user present, skip clarification questions (SKILL.md zero-interaction rule), parse parameters from the task text, use defaults for unspecified ones, write to log.jsonl entry 0.\nTask: {args.prompt}"
     if ws:
-        prompt = f"工作区：{ws}\n" + prompt
-    system = f"你是电池设计智能体。本任务中：{args.override}" if args.override else None
+        prompt = f"Workspace: {ws}\n" + prompt
+    system = f"You are a battery design agent. In this task: {args.override}" if args.override else None
     log = _setup_logging(ws)
     return asyncio.run(_run(log, prompt, args.max_turns, system=system, model=args.model or None))
 
