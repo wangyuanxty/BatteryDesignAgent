@@ -1,0 +1,24 @@
+{
+  "Lower voltage cut-off [V]": 2.5,
+  "Upper voltage cut-off [V]": 4.7,
+  "Positive electrode OCP [V]": "bda.simulators.lnmo_parameters.lnmo_ocp",
+  "Positive electrode OCP [V] (from stoich)": "bda.simulators.lnmo_parameters.lnmo_ocp",
+  "Positive electrode OCP stoich limits": [
+    0.0,
+    1.0
+  ],
+  "Positive electrode stoichiometry limits for reaction [0.0, 1.0]": [
+    0.9,
+    0.3
+  ],
+  "Positive electrode density [kg.m-3]": 4400.0,
+  "Positive electrode conductivity [S.m-1]": 1.0,
+  "Positive electrode diffusivity [m2.s-1]": 1e-12,
+  "Positive electrode reaction rate constant [m.s-1]": 1e-09,
+  "Positive electrode molar mass [kg.mol-1]": 0.1503,
+  "Positive electrode maximum concentration [mol.m-3]": 43000.0,
+  "Positive electrode number of electrons transferred": 1.0,
+  "Positive electrode specific heat capacity [J.kg-1.K-1]": 900.0,
+  "Nominal cell capacity [A.h]": 4.5,
+  "Positive electrode active material volume fraction": 0.665
+}

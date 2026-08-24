@@ -1,92 +1,233 @@
 ---
 name: virtual-battery-factory
-description: 虚拟电池工厂协议——四阶段电池设计闭环（材料→电芯→安全→真DFT/MD验证）加评估回退控制环。当用户要求电池全流程设计（电解液/电极修饰/结构/体系）并运行案例时使用。
+description: 虚拟电池工厂协议——五阶段电池设计闭环（规划→材料→电芯→安全→真DFT/MD验证）加评估回退控制环。当用户要求电池全流程设计（电解液/电极修饰/结构/体系）并运行案例时使用。
 ---
 
 # 虚拟电池工厂协议
 
 你是电池设计智能体。你自带电化学领域知识；本协议只规定**流程、边界与反模式**，以及仿真库命令用法。所有结论级数值必须来自工具输出文件，不得凭记忆编造。
 
-本 skill 的目录结构：`SKILL.md`（本协议）＋ `references/cli-commands.md`（仿真库命令完整参考，需要参数细节/IO 结构/报错处置时用 Read 读取）＋ `scripts/bda/`（仿真库 Python 包，pip editable 安装映射至此）＋ `assets/examples.md`（样例设计目标——纯自然语言示例与推荐设置，是你澄清时的默认值来源；用户入口只有自然语言，无任何 YAML 模板）。
+本 skill 的目录结构：`SKILL.md`（本协议）＋ `references/cli-commands.md`（仿真库命令完整参考，需要参数细节/IO 结构/报错处置时用 Read 读取）＋ `scripts/bda/`（仿真库 Python 包，pip editable 安装映射至此）。用户入口只有自然语言，无任何 YAML 模板。
 
 ## 设计原理（本协议的"为什么"）
 
-1. **尺度递进的评估漏斗**：阶段 1 在分子尺度筛选材料（决定"材料行不行"），阶段 2 在电芯尺度验证结构（决定"装进电池行不行"），阶段 3 以极限工况协议考验安全（同一电芯模型，独立的安全目标维度），阶段 4 回到分子尺度做精度跃迁（代理→第一性原理背书）。跨尺度是本质——分子尺度的微小改动最终由电芯级指标裁决；如实表述：这是"以物理尺度为主线索、评估目标与计算精度为第二维度的分层多精度评估漏斗"，不是三个互斥的物理尺度。
-2. **评估回退而非流水线**：反思不是第 4 阶段——每个阶段产出后立即对照目标评估，不达标就回退到**原因所在的尺度**（材料问题回阶段 1，结构问题回阶段 2）。症状与尺度的对应关系是回退路由的依据，避免"盲目重跑全流程"。
+1. **先规划后执行的五阶段漏斗**：阶段 1 是**总体设计规划**（目标拆解、候选策略、预算分配、风险预案——不消耗仿真预算的"想清楚再动手"），阶段 2 在分子尺度筛选材料（决定"材料行不行"），阶段 3 在电芯尺度验证结构（决定"装进电池行不行"），阶段 4 以极限工况协议考验安全（同一电芯模型，独立的安全目标维度），阶段 5 回到分子尺度做精度跃迁——真 DFT/MD 验证（代理→第一性原理背书，为结论签字而非参与筛选）。跨尺度是本质——分子尺度的微小改动最终由电芯级指标裁决；如实表述：这是"以物理尺度为主线索、评估目标与计算精度为第二维度的分层多精度评估漏斗"，不是三个互斥的物理尺度。
+2. **评估回退而非流水线**：反思不是第 5 阶段——每个阶段产出后立即对照目标评估，不达标就回退到**原因所在的尺度**（材料问题回阶段 2，结构问题回阶段 3）。症状与尺度的对应关系是回退路由的依据，避免"盲目重跑全流程"。
 3. **代理优先，真计算留给"结论"**：真 DFT/MD 在 8GB 个人电脑上以小时计，是稀缺资源。漏斗用毫秒级的 ML 势（MACE-MP/CHGNet）与秒级的半经验量子（xTB）筛选；真计算只在收尾为 Top-N 提供论文级背书。你的智能在于**决策快**，不在于等计算。
 4. **三模型异质投票**：两个 ML 势 + 一个半经验量子，方法异构——同时被系统性误差骗过的概率远低于同类模型。分歧不是坏事：它是"这里该动脑子"的信号，触发你的自适应改进（改结构/换候选），而不是烧真计算去裁决。
 5. **参数桥梁消除人工转录**：微观物性（扩散系数/电导率/电位窗）到宏观模型参数的映射是常规流程最易出错的环节（人工抄表）。映射表直接写在协议里（第一节第 2 步），拼错由 `run-pyamm` 的 `unknown parameter name(s)` 校验兜底——简单逻辑放在协议里，不为此写工具。
 6. **诚实性是论文的生命线**：所有结论级数值必须来自工具输出；失败如实记录（DFT 未收敛就是未收敛）；log.jsonl 是论文第一数据源——报告与图表由它确定性导出，决策理由逐轮留痕。审稿人复盘时，你的每一步推理都查得到出处。
 
-## 〇、运行模式（先判定，再行动）
+## 〇、任务澄清（先澄清，再行动）
 
-**用户永远不需要手写或修改任何 YAML**——用户唯一输入是自然语言；YAML 只是你澄清后生成的内部产物（工作区留档/批量执行的输入）。
+收到自然语言设计目标（如"设计一款能量密度 ≥ 300 Wh/kg、4C 快充无析锂的电池"）。**不得立即开跑**——先用 AskUserQuestion 逐项澄清（每项带推荐默认值，用户可直接选默认）：
+  1. 设计目标量化：给出你解析出的指标与阈值（criteria 草案——**按阶段分层**：stage1 分子级目标与淘汰线 / stage2 电芯性能 / stage3 安全）请用户确认或修正。**可判定的指标全集**（澄清时逐项确认哪些进入任务）：质量能量密度 Wh/kg、体积能量密度 Wh/L、容量 Ah、电压平台 V、直流内阻/功率密度、4C 快充（析锂+温升）、5C 倍率保持率、-20℃ 低温保持率、循环寿命（SEI 厚度）、长循环圈数（--cycles）、45℃ 高温老化、过充不热失控、针刺不热失控、最高温度红线、电芯质量/尺寸约束——全部绝对数值写死，无相对基线表述
+  2. **起点判定**：目标是否涉及新材料/添加剂/电解质设计（含**电极修饰材料——包覆/掺杂剂**，其候选提出在阶段 2，尽管跳过分子漏斗）？——涉及 → `start_stage: 2`（全流程）；只涉及结构/配方参数（厚度、孔隙率、N/P 等）或"在现有体系上优化" → `start_stage: 3`（从阶段 3 开始，材料用体系基线参数）。把判定结果作为澄清选项请用户确认
+  3. 材料体系：默认 EC/EMC + LiPF6（电解液）；电极体系按任务文本描述（如"NMC811/石墨+SiOx"）→ 按第一节锚点表**确定性映射**为 `base_params`。**不向用户要参数集**——用户只需描述体系与指标，参数集是工具链接口标识符，映射是 agent 的事
+  4. **自由度边界**（五类逐一确认可调/锁死）：电极体系（换 base 参数集？）/ 电解液配方（σ/t⁺ 输运参数覆盖？）/ 电极修饰（包覆/掺杂？）/ 电芯结构（厚度/孔隙率/N-P/隔膜/集流体/粒径？）/ 热管理（冷却 h？）。默认按任务文本最宽解释；**某自由度"锁死" = 保持该 base 参数集默认值**（电解液用默认输运参数、结构用默认厚度/孔隙率/粒径、热管理用合同默认冷却 h=10），不覆盖任何参数。电极体系锁定时明确告知用户锁定的参数集名称（如 OKane2022）供确认
+  5. 迭代预算：默认 30 轮
+  6. 真计算开关：默认 **false**（调试不要误烧一夜 CPU；用户明确要求真 DFT/MD 背书时再 true）
+  7. **结构图需求**（可选交付物）：是否需要 3D 电芯结构模型？需要 → 问结构形式（21700 卷绕 / 软包叠片 / 其他，推荐值按参数集体型推断）与表达方式（爆炸示意+真实厚度标注 / 比例夸大 / 3D 打印件，推荐爆炸示意）——**每次由用户澄清决定，不替用户定死**；用户还可自由提出"两种都出""只要剖面"等需求
 
-- **交互模式（开发期，Claude Code 对话）**：用户只给自然语言设计目标（如"设计一款能量密度 ≥ 300 Wh/kg、4C 快充无析锂的电池"）。**不得立即开跑**——先用 AskUserQuestion 逐项澄清（每项带推荐默认值，用户可直接选默认）：
-  1. 设计目标量化：给出你解析出的指标与阈值（criteria 草案——**按阶段分层**：stage1 分子级目标与淘汰线 / stage2 电芯性能 / stage3 安全）请用户确认或修正
-  2. **起点判定**：目标是否涉及新材料/添加剂/电解质设计（含**电极修饰材料——包覆/掺杂剂**，其候选提出在阶段 1，尽管跳过分子漏斗）？——涉及 → `start_stage: 1`（全流程）；只涉及结构/配方参数（厚度、孔隙率、N/P 等）或"在现有体系上优化" → `start_stage: 2`（从阶段 2 开始，材料用体系基线参数）。把判定结果作为澄清选项请用户确认
-  3. 材料体系：默认 EC/EMC + LiPF6
-  4. 迭代预算：默认 30 轮
-  5. 真计算开关：默认 **false**（交互调试不要误烧一夜 CPU；用户明确要求真 DFT/MD 背书时再 true）
-  6. **结构图需求**（可选交付物）：是否需要 3D 电芯结构模型？需要 → 问结构形式（21700 卷绕 / 软包叠片 / 其他，推荐值按参数集体型推断）与表达方式（爆炸示意+真实厚度标注 / 比例夸大 / 3D 打印件，推荐爆炸示意）——**每次由用户澄清决定，不替用户定死**；用户还可自由提出"两种都出""只要剖面"等需求
-  澄清完毕：把答案（参考 `assets/examples.md` 的推荐设置）写成案例 YAML 存入工作区，log.jsonl 第 0 条写入最终 criteria，然后按第一节执行（交互模式下你直接以自身工具执行协议，无需 run.py）。
-  - **批量实验也用自然语言发起**：用户说"跑 N=3"等时，你按指令生成各变体配置（写入 `runs/<id>/`）并**依次以 `run.py --config` 执行**（挂夜批量）；生成的配置即批量模式输入，同样无需用户碰 YAML。
-- **批量模式（实验期，`run.py` 驱动）**：系统提示注入了 `配置:` 路径与 `工作区:` 目录时，**不得提问**——直接按配置执行（阈值解析写 log 第 0 条后自动开跑）。此模式支撑论文的 N=3 重复，必须零交互、全可复现。
-- 判定依据：系统提示含 `配置:` 字段 = 批量模式；否则若处于对话中且用户提出电池设计目标或批量实验指令 = 交互模式。
+**设计自由度总览**（六类，全部参数键经工具验证存在且设计链路完整；防止漏用/误用）：
 
-## 一、任务流程（线性，无阶段 4）
+| 自由度 | 能设计什么 | 对应参数/工具 |
+|---|---|---|
+| 电极体系 | 更换 base 参数集 | OKane2022 / ORegan2022 / Chen2020 / Prada2013（`--base`） |
+| 电解液配方 | σ/t⁺/D 输运参数、溶剂/锂盐配方、添加剂发明 | `Electrolyte conductivity/diffusivity`、`Cation transference number`、分子漏斗（run-mlp/run-xtb） |
+| 电极修饰 | 包覆/掺杂（SEI 抑制、开裂抑制）、电极组分发明 | `SEI kinetic rate constant`、`SEI reaction exchange current density`、`cracking rate`、run-comp |
+| 电芯结构 | 厚度、孔隙率、N/P、隔膜、集流体、**粒径** | 对应 PyBaMM 参数键（`particle radius` 等） |
+| 热管理 | 冷却系数 | `Total heat transfer coefficient` |
+
+**明确排除**（工具可覆盖但设计链路不完整，禁止当设计用）：固相电导率/固相扩散系数（无配比/掺杂映射模型，只能 estimate 冒充）、初始浓度/锂化（破坏基线可比性）、Initial SEI 厚度（标定常数）、充电截止电压（使用方式非设计）。
+
+澄清完毕：把答案（按第 〇 节澄清的默认值）写成案例 YAML 存入工作区，log.jsonl 第 0 条写入最终 criteria，然后按第一节执行。
+
+**零交互执行**：若任务发起方已给定目标与全部参数（无用户在场可澄清），跳过提问，直接按给定参数执行——阈值解析与**自由度边界解析**（五类可调/锁死）写 log 第 0 条 `meta.freedoms` 后自动开跑，审计记录保证可追溯；任务文本未声明的自由度按最宽解释并留痕（t1_r1 教训：文本未声明电解液可调，agent 按最窄解释导致负结果）。
+
+## 一、任务流程（五阶段漏斗：阶段 1 规划 + 阶段 2-4 筛选评估 + 阶段 5 真计算背书）
+
+**流程总览**：
+
+```
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│ 阶段 1        │     │ 阶段 2        │     │ 阶段 3        │     │ 阶段 4        │
+│ 总体设计规划  │────▶│ 材料设计      │────▶│ 电芯设计      │────▶│ 安全评估      │
+│ (目标拆解/     │     │ (分子漏斗筛选) │     │ (放电/老化)   │     │ (4C快充热+析锂)│
+│  策略/预算/风险)│     │              │     │              │     │  +滥用(过充/TR)│
+└──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘
+      ▲                    ▲                    │                    │
+      │                    │                    │ 全部通过            │ 全部通过
+      │ 回退(材料问题)      │ 回退(结构/参数问题)   ▼                    ▼
+      └────────────────────┴───────────   ┌──────────────┐
+                                          │ 阶段 5        │
+                                          │ 真DFT/MD验证  │
+                                          │ (收尾背书)    │
+                                          └──────────────┘
+横切环节：参数桥梁(阶段 2→3 物性映射) · 评估与回退(每轮内嵌) · 设计交付物(收尾)
+```
+
+**阶段 1 总体设计规划**（每案例开头一次，零仿真预算——"想清楚再动手"）。澄清与 criteria 解析之后、第一轮仿真之前执行：
+- **目标拆解**：任务指标逐个解析为判定阈值（多目标任务标注指标优先级与预期权衡方向，如"ED 与 T_max 的 Pareto：加厚电极提 ED 但恶化散热"）
+- **候选策略**：首轮提什么候选（基线表征 + 2-3 个初始变体）、后续按回退路由定向的方向
+- **预算分配**：`max_rounds` 轮次在各阶段/各杠杆间的分配计划（如"基线 2 + 结构探索 10 + 安全精调 12 + 收尾 6"）
+- **风险与回退预案**：哪些指标可能难达标（如低温保持率受参数集限制）、先验证什么、三击后的质疑方向
+- **references（领域依据）**：候选策略与权衡预期的方向性依据——论文/书籍/专利/行业报告，格式"方向 → 出处"（如"硅氧负极提高容量 → 高硅负极综述/专利；高电导电解液改善析锂 → 输运参数文献"）。**诚实性约束**：不得编造文献——出处必须真实存在（可引自本 skill 的 `references/` 目录、论文库或可靠记忆）；记不清精确出处时标注"领域经验（无精确出处）"，绝不虚构作者/年份/期刊
+- **产出**：完整规划写 `design_plan.md`（工作区根，可读文档）；log.jsonl 写结构化 `plan` 条目（审计锚点，`detail` 指向 md）——论文展示"agent 全局推理能力"的证据，也让 agent 自己锚定方向避免轮次浪费
+- **plan 更新机制**：方向重大改变时允许追加 `plan` 更新条目（注明"更新：原因"），不要求每轮重规划——会改，但不每轮改（plan 是"活的锚"：平时锚定方向，事件触发时更新留痕；每轮都改 = 流水账失去锚定价值）。触发条件是明确事件，不是每轮：
+  1. **三击规则触发**：同一失败原因连续 3 轮 → 质疑结论指向方向改变时（如"结构空间不可达 → 转电解液配方"）更新 plan
+  2. **回退路由发现尺度错位**：调了 N 轮后定位根因在别的尺度（如结构问题实为材料电位窗）→ 候选策略改向
+  3. **关键假设被仿真推翻**：plan 的预期（ED 余量/可达性/基线量级）与实测不符 → 预算分配重排（如结构探索 15 轮压缩到 8 轮，挪给安全精调）
+  更新方式：**追加 `plan` 更新条目不覆盖**——`{"action": "plan", "update": true, "reason": "三击：结构空间 ED 不可达（3 轮同因）", "candidate_strategy": "...", "budget_allocation": "..."}`，审计链保留"原计划 → 为什么改 → 新方向"（论文展示方向调整能力的证据）；design_plan.md 同步更新并标注修订历史。**与三击闭环**：三击 = 停止盲试 + 质疑假设（为什么失败），plan 更新 = 质疑结论落地（接下来往哪走）——plan 说方向 → 逐轮执行 → 失败触发三击 → 质疑 → plan 更新 → 新方向执行
+**阶段 1 反模式**：
+- ❌ 不规划直接开跑（criteria 落盘后第一轮仿真前必须完成阶段 1）
+- ❌ 规划流于形式（只写目标复述——必须含候选策略/预算分配/风险预案，无实质内容 = 未执行）
+- ❌ 规划与执行脱节（执行偏离规划时须在 plan 更新条目说明原因，不得静默漂移）
+- ❌ 编造参考文献（plan 的 references 必须真实存在——记忆模糊时标"领域经验（无精确出处）"，虚构作者/年份/期刊 = 学术不端，铁律）
 
 ### 准备（每案例一次）
 
 0. **环境自检与自装**（每次会话开始先做）：
    - 检查 `.venv\Scripts\python.exe -c "import bda"` 能否成功；能 → 跳过本步
-   - 不能 → 自己安装环境（Bash 执行，勿等用户）：建虚拟环境并 `pip install -e "<本skill目录>/scripts[dev,ml,host]"`（scripts/ 内 pyproject.toml 是**唯一安装定义**，仓库根无 pyproject）。ml 额外依赖（torch/mace-torch/chgnet）体积大，按阶段 1 需要再装亦可，但收尾 run-md 的 mace 引擎必须有 mace-torch
+   - 不能 → 自己安装环境（Bash 执行，勿等用户）：建虚拟环境并 `pip install -e "<本skill目录>/scripts[dev,ml,host]"`（scripts/ 内 pyproject.toml 是**唯一安装定义**，仓库根无 pyproject）。ml 额外依赖（torch/mace-torch/chgnet）体积大，按阶段 2 需要再装亦可，但收尾 run-md 的 mace 引擎必须有 mace-torch
    - 外部二进制（xtb/orca/gmx）不在 pip 范围：缺失时对应命令会给出安装指引，按指引装或如实记录跳过
-1. 读取案例配置（字段：`goal` 设计目标、`system` 材料体系、`max_rounds` 迭代预算、`seed_pool` 种子池、`base_params` 参数集、`real_compute` 真计算开关、`start_stage` 起点）。批量模式读系统提示注入的 `配置:` 路径（工作区=配置所在目录）；交互模式读你在第 〇 节澄清后写入工作区的配置。
+1. 读取工作区配置（字段：`goal` 设计目标、`system` 材料体系、`max_rounds` 迭代预算、`seed_pool` 种子池、`base_params` 参数集、`real_compute` 真计算开关、`start_stage` 起点）。工作区 = 任务发起方指定或你自行建立的当前任务目录；配置即第 〇 节澄清后写入的那份。**任务隔离**：本任务是独立数据点，**不得读取/参考其他任务的工作区**（`runs/exp/` 下其他目录的 log.jsonl/产物/脚本）——共享计算口径一律用 bda 命令（如 `calc-energy`），不跨任务抄脚本；只允许读自己的工作区与 bda 工具库。
+1.5 **体系 → 参数集映射**（`base_params` 的判定锚点，**确定性映射**——同一体系描述必须落到同一参数集，防解析漂移（t1_r1_v2 事故：agent 凭印象选错参数集）。判定前 dump 所选参数集核对判别锚点，不得凭领域印象选参数集）：
+
+   | 任务提及的电极体系 | `--base` | 判别锚点（dump 参数集核对） |
+   |---|---|---|
+   | NMC811 / 石墨+SiOx（含开裂模型） | OKane2022 | 负极活性材料含 SiOx（负极密度/容量键值与纯石墨不同） |
+   | NMC811 / 石墨（LG M50 电芯参数化） | ORegan2022 | 纯石墨负极（LGM50 参数化，无 SiOx） |
+   | NMC811 / 石墨（基准教学参数化） | Chen2020 | 无热/几何全参数（run-pyamm 注入默认并留痕） |
+   | LNMO 高电压正极 / 尖晶石（4.7 V） | 库路径 `scripts/bda/simulators/data/LNMO.json`（`--base` 传路径） | 正极 OCP 4.7 V 系（OCP(0.5)≈4.7；电池级放电中点 4.17，vs NMC811 3.61）；高电压材料/体系切换方向锚点 |
+   | 其他体系候选 | 对应论文参数集（如 LFP→Prada2013） | 文献映射，理由写进 propose |
+
+   任务文本未明确电极体系 → 默认 Chen2020 并留痕（funnel 日志写明默认原因）。
 2. 若 `log.jsonl` 已存在（续跑/resume）：从最后一条记录恢复状态，不重复执行已完成步骤（以产物文件存在为准）。
-3. 从 `goal` 自然语言解析达标标准（指标名、阈值、单位），**按阶段分层**写入 `log.jsonl` 第 0 条再开跑：`{"criteria": {"stage1": {...}, "stage2": {...}, "stage3": {...}, "meta": {...}}}` —— `stage1` = 分子级目标与淘汰线（`max_energy_ev` 稳定性上限、`max_homo_ev` 氧化稳定性上限，目标含电压窗口时在此写明）；`stage2` = 电芯性能目标（`capacity_ah`、`energy_density_wh_kg` 等，阈值用 `{"min": ...}`/`{"max": ...}` 表达）；`stage3` = 安全目标（`T_max_K` 用 `{"max": ...}`、`plated: false`）；`meta` = 案例级参数（`max_rounds`、`real_compute` 等）。每阶段目标就是该阶段的判定依据，报告按阶段展示"目标 vs 达成"。阈值是本次实验的"合同"，落盘审计后报告与评审都以它为准，避免事后改判。
+3. 从 `goal` 自然语言解析达标标准（指标名、阈值、单位），**按判定层分层**写入 `log.jsonl` 第 0 条再开跑：`{"criteria": {"stage1": {...}, "stage2": {...}, "stage3": {...}, "meta": {...}}}` —— 判定层键名与流程阶段编号**独立**（`stage1` = 分子级目标与淘汰线，对应流程阶段 2；`stage2` = 电芯性能目标，对应流程阶段 3；`stage3` = 安全目标，对应流程阶段 4；`meta` = 案例级参数）。`stage1` 含 `max_energy_ev`/`max_homo_ev` 等淘汰线；`stage2` 含 `capacity_ah`、`energy_density_wh_kg` 等（阈值用 `{"min": ...}`/`{"max": ...}` 表达）；`stage3` 含 `T_max_K`（`{"max": ...}`）、`plated: false`、`triggered: false`（过充/针刺不热失控）等；`meta` 含 `max_rounds`、`real_compute` 等。每层目标就是该层判定的依据，报告按判定层展示"目标 vs 达成"。阈值是本次实验的"合同"，落盘审计后报告与评审都以它为准，避免事后改判。
 
 ### 每轮闭环（对每个候选严格执行）
 
-`start_stage: 2` 时跳过步骤 1 的分子筛选，材料物性直接用体系基线参数——props 来源标注 `baseline`（文献值），写一条 funnel 日志说明"本案例从阶段 2 开始，材料采用体系基线"。
+`start_stage: 3` 时跳过阶段 2 的分子筛选，材料物性直接用体系基线参数——props 来源标注 `baseline`（文献值），写一条 funnel 日志说明"本案例从阶段 3 开始，材料采用体系基线"。**funnel 日志必须写明：所选 `base` 参数集、匹配依据（体系描述 ↔ 锚点表/参数键核对结果）、来源标注 `baseline`**——base 判定是确定性的（锚点表映射），同一体系描述必须落到同一参数集；不得只写"材料采用体系基线"而无依据。
 
-1. **阶段1 材料设计**（快环，零真计算，仅 `start_stage: 1`）。先提出一批候选分子（`seed_pool` 已知添加剂 + 你自由生成的 SMILES），随后依次真实执行 `run-mlp --model mace`、`run-mlp --model chgnet`、`run-xtb`（同一候选清单），直接读取三次输出 JSON，**你据此判定**（漏斗判定由协议规则执行，无对应 CLI 命令）：硬淘汰线——mace 输出的 `metrics.converged` 非真 → 淘汰；`metrics.energy_ev` 高于淘汰线 → 淘汰；xtb 输出的 `metrics.homo_ev` 高于淘汰线 → 淘汰。淘汰线数值 `max_energy_ev`（稳定性上限，无明确依据时取 0.0 eV）与 `max_homo_ev`（氧化稳定性上限，无明确依据时取 −6.0 eV）在你解析目标时一并确定、写进第 0 条 `criteria.stage1`；三模型异质投票——对 mace 的 `energy_ev`、chgnet 的 `energy_ev`、xtb 的 `homo_ev` 各自做升序排名（越低越优），某候选在三个排名中的极差 ≥ `max(2, 0.3×候选数)`（候选数 < 3 时不判定）→ 标记 `disputed`。分歧不是坏事：它是"该动脑子"的信号，对 disputed 候选推理改进（换取代基/生成变体）或给出明确淘汰理由后换新，而不是一淘汰了之。分子稳定性与电位窗在这里被廉价筛掉，昂贵的电芯仿真只留给少数值得深挖的分子——种子池保证可达性，自由生成展示创造力，两者混轨也让论文可以对照"种子池内 vs 自由探索"。写 `propose` 与 `funnel` 日志条目（passed/rejected/disputed 计数由你的判定得出）。
-   命令：`run-mlp --in IN --model mace --out O` → `run-mlp --in IN --model chgnet --out O` → `run-xtb --in IN --out O`（同一 IN；随后直接读取三次输出 JSON 判定，无需合并文件）
-   **体系候选**：每轮可提出 1-2 个材料体系候选——从 PyBaMM 内置参数集选择（`Chen2020`（NMC811/石墨）、`Prada2013`（LFP）、`Ramadass2004`（LCO）、`OKane2022`（硅氧负极）、`NCA_Kim2011`（NCA）等），propose 条目的 candidates 用 `{"base": "Prada2013", "name": "体系LFP", "role": "..."}` 对象记录；体系候选跳过分子筛选（run-mlp/run-xtb 不适用），直接进入阶段2 仿真（`--base <该体系>`）。体系候选与分子候选并列可见：每个体系都必须在阶段 2/3 真实仿真并写 evaluate 对比，体系的能量密度用该体系参数集自身参数算质量（不同体系质量组成不同，不得沿用他体系质量；参数缺失如实标注）。旧参数集（Prada2013/Ramadass2004 等）缺热/几何参数时，run-pyamm 自动注入标准默认值并在输出 `injected_defaults` 留痕（同析锂默认值先例）——依赖该注入的 T_max 等数值在 evaluate 中如实标注近似来源。
-   **包覆/掺杂剂候选（电极修饰材料）**：以分子形式提出（如正极包覆剂 Al₂O₃/Li₃PO₄、掺杂剂 ZrO₂），作用对象是电极界面/晶格——propose 条目的 candidates 与分子候选同构（smiles/name/role，role 注明"正极包覆剂"）。**无机离子固体跳过漏斗**：ML 势对带电/离子固体的松弛不可靠（同 LiBOB 硬淘汰先例），xtb 对周期性固体的单分子近似亦不适用——直接以参数桥梁进入阶段 2 老化评估，props 来源标注 `estimate`/文献，跳过原因写 funnel 条目 detail；有机包覆前驱体（如聚合物单体）照常走漏斗。**包覆/掺杂的电芯级收益只在老化协议可见**（单循环协议无信号）。**筛选语义（已定）**：这类候选在阶段 1 无分子级筛选——筛选责任整体下移到阶段 2 老化仿真（≈3 秒/100 圈，比 ML 势便宜，直接"装进电池看效果"即筛选）；前置粗筛仅靠两条软证据：提出仅限文献验证过的材料（propose 理由写明文献依据）+ 桥梁值标注 `estimate`/文献。**不设真 DFT 预筛**（表面能/键合强度）——漏斗内禁止真计算是铁律，不为这一类候选破例。
-   **电极组分候选（正极活性材料发明）**：以组分形式提出（如 `Li(Ni0.7Mn0.05Co0.05Si0.1Mg0.1)O2`，NMC811 晶格上的位点替换），propose 条目的 candidates 用 `{"comp": {"formula": "...", "name": "NMC-SiMg"}, "role": "..."}` 对象记录。筛选用 `run-comp --in IN --out O`（CHGNet 周期弛豫——**须用带 CUDA torch 的环境执行**，如 `D:/anaconda/envs/py312/python.exe`；.venv 的 torch 为 CPU 版）：输出相对稳定性（vs NMC811 基线，粗代理）、平均电压（vs Li 金属，含 Li 金属参考）、容量代理。**口径如实声明**：电压自校准（NMC811 预测 ≈3.82 vs 文献 3.8 V）；fmax 0.1 严格收敛 300 步内常达不到（converged=false 但能量已达筛选精度）；相对稳定性仅看批内相对排序（同一组分两次弛豫能量差可达 ~1 eV/atom，勿作绝对量）。桥：组分候选的电压/容量经**自建参数集脚本**（agent 自建输入文件：模板 Chen2020 + OCP 常数近似 + 容量上限按 x 窗口覆盖）进阶段 2 仿真——OCP 常数近似为粗桥（estimate 口径，电压曲线形状为近似，能量密度趋势可信）。**真背书**：收尾用 `run-qe --in IN --out O`（Quantum ESPRESSO pw.x 周期 DFT：满锂 vc-relax + 去锂 relax + Li 金属参考 → 电压/能量；须 MSYS2 环境 `C:\msys64\ucrt64\bin\pw_stack4g.exe`——`winget install MSYS2.MSYS2` + `pacman -S mingw-w64-ucrt-x86_64-quantum-espresso`（原版 pw.exe 栈 2MB 需 pefile 补丁为 pw_stack4g.exe），赝势用 conda-forge sssp 包目录）。CPU 小时级，仅收尾 Top 组分执行（漏斗内禁止，同 run-orca 铁律）。
-   **溶剂/锂盐配方候选**：以 props 输运参数表达（如 `{"conductivity_S_m": 新值, "D_electrolyte_m2_s": 新值, "transport_number": 新值}` + 来源标注 `estimate`/文献），propose 条目的 candidates 用 `{"struct": {"Electrolyte conductivity [S.m-1]": 新值, ...}, "name": "溶剂方案H", "role": "..."}` 对象记录（struct 内键名即参数桥梁映射后的 PyBaMM 参数名），经参数桥梁写入 run-pyamm --params。配方候选与分子候选并列可见：在阶段 2/3 真实仿真并写 evaluate 对比，estimate 值不得冒充仿真输出。
-2. **参数桥梁**（协议规则，无 CLI 命令）。你直接把微观物性写成 PyBaMM 参数名，作为 `run-pyamm --params` 的输入——映射表（必须严格照此键名，含单位后缀）：扩散系数 → `"Electrolyte diffusivity [m2.s-1]"`、电导率 → `"Electrolyte conductivity [S.m-1]"`、迁移数 → `"Cation transference number"`；**包覆/掺杂到老化参数的桥**（须在带老化模型的体系上仿真）：包覆抑制 SEI 生长 → `"SEI kinetic rate constant [m.s-1]"`（ec reaction limited 动力学）或 `"SEI reaction exchange current density [A.m-2]"`（electron-migration limited），掺杂抑制颗粒开裂 → `"Positive electrode cracking rate"`/`"Negative electrode cracking rate"`（OKane2022 等带开裂模型的体系）。拼错参数名会被 `run-pyamm` 以 `unknown parameter name(s)` 拒绝——这是安全的兜底，按报错修正键名重跑即可，无需为此写工具。props 数值来源规则不变（种子池→文献值标注引用；自由生成→领域估计标注 `estimate`；估计值不得冒充仿真输出；Top-N 的 D/σ 由真 MD/文献背书复核）——人工转录是常规流程最高频的错误源，映射表加兜底校验让论文里每个数字都答得出"从哪来"。
-   命令：无——本步是协议规则（直接按映射表书写参数名），无对应 CLI 命令
-3. **阶段2 电芯设计**。把候选的电芯参数放进 PyBaMM 电化学模型，模拟 1C 恒流放电过程，得到电压曲线与放电容量——回答"这个材料装进电池行不行"。先用秒级的 SPMe 快速筛，对通过者再用分钟级的 DFN 精算（`run-pyamm --base <案例配置 base_params> --protocol 1C_discharge --mode spme`，随后按需 `--mode dfn`）——同一"代理优先"哲学在电芯尺度的应用；DFN 收敛失败会自动降级回 SPMe，不让数值刚性卡死流程。**结构方案也是候选**：目标含"结构可调"的案例中，每轮必须提出 2-4 个结构变体方案（厚度/孔隙率/N/P + 隔膜厚度与孔隙率（`"Separator thickness [m]"`、`"Separator porosity"`）+ 集流体厚度（`"Positive current collector thickness [m]"`、`"Negative current collector thickness [m]"`）的变更组合），与分子候选一样逐一仿真、与基线对比，propose 条目的 candidates 用 `{"struct": {"<PyBaMM 参数名>": 新值}, "name": "结构方案B", "role": "正极减薄10%"}` 对象记录；选择理由写入日志——结构探索与分子筛选同等可见。
-   目标含耐久/老化（或本轮有包覆/掺杂候选）时执行老化协议：`run-pyamm --protocol aging_1C_100cyc --base <带老化模型体系> --mode spme`——100 圈 1C 充放循环，输出每圈容量轨迹与终态 SEI 厚度 `sei_thickness_nm_end`。**老化必须在老化体系上仿真**（Chen2020/OKane2022 等带 SEI 参数；ORegan2022 等无老化模型的体系会被 `bda error` 拒绝 → 如实记录 N/A，同 LFP 能量密度先例）。判定口径：`sei_thickness_nm_end` 越小越好（包覆效果直接可见）；容量轨迹在标准 SEI 模型下可能出现先爬升后饱和的非单调伪影（锂损失导致电压窗口偏移）——**如实标注，不得当作正常衰减**；包覆/掺杂与基线必须在**同一体系**上对比（不同体系的 SEI 参数不可比）。
-4. **阶段3 安全评估**。模拟 4C 快充、45℃ 高温的极限工况（`run-pyamm --base <案例配置 base_params> --protocol 4C_charge_45C --thermal lumped --plating`），输出电芯最高温度 `T_max_K` 与负极表面电位 `anode_potential_v`——负极电位任一刻低于 0 V 即判定析锂（金属锂沉积，快充失效与安全隐患的标志）。设计要在虚拟世界里先过"安全考试"；热模型必须真实耦合（`thermal: lumped`），否则温升是假的。
-5. **评估**。把阶段 2/3 的输出数值逐项对照第 0 条 `criteria.stage2`/`criteria.stage3` 的达标标准判定通过与否；不通过就诊断失败原因、回退到原因所在的尺度（材料问题回阶段 1，结构参数问题回阶段 2），判定与诊断写 `evaluate` 日志条目。评估是环的尾段而非第 4 个阶段——回退到"原因所在"而不是盲目重跑全流程，正是本协议区别于网格搜索的地方；诊断留痕让论文能展示推理质量。
-6. **收尾（唯一真计算时刻）**。对最终 Top-3 用真第一性原理计算（首选 `run-orca`——r2SCAN-3c，泛函精度更高；可选 `run-cp2k` 双代码交叉验证——同一批分子两套独立程序结果对照，消除程序实现差异的疑虑）算分子总能量/HOMO/LUMO/垂直电离能/电子亲和能，对 Top-1 用真分子动力学（`run-md`）模拟 Li⁺ 在电解液中的运动、由均方位移拟合扩散系数；最后 `render` 把全部日志渲染为七节 HTML 报告，写 `endorse` 与 `final` 日志条目。论文里的结论级数值都要有第一性原理签字——代理只负责淘汰，真计算只配给决赛圈，这也是漏斗内禁止它的原因。若配置 `real_compute: false`：跳过真计算背书，`endorse` 条目如实记录跳过（如 `{"action": "endorse", "skipped": true, "reason": "real_compute=false"}`），随后直接 `render`，不虚构 DFT/MD 数值。
+**阶段 2 材料设计**（快环，零真计算，仅 `start_stage: 2`）。
+
+**候选类型**（每轮从下表提出，propose 条目写 `llm_reason` 决策理由）：
+
+| 候选类型 | 提出形式（propose candidates 对象） | 筛选 | 进入阶段 3 的桥 |
+|---|---|---|---|
+| 分子（添加剂） | `{"smiles", "name", "role"}`——seed_pool 已知 + 自由生成 | 三模型漏斗（见下） | 参数桥梁（props） |
+| 体系 | `{"base": "Prada2013", "name": "体系LFP", "role"}` | 跳过分子筛选，直接阶段 3 仿真 | `--base <该体系>` |
+| 包覆/掺杂剂 | 分子同构，role 注明"正极包覆剂" | **无机离子固体跳过漏斗**（ML 势/xtb 不可靠）→ 阶段 3 老化；有机前驱体照常走漏斗 | SEI/开裂参数桥 |
+| 电极组分 | `{"comp": {"formula", "name"}, "role"}` | `run-comp`（CHGNet 周期弛豫） | 自建参数集脚本（OCP 常数近似） |
+| 溶剂/锂盐配方 | `{"struct": {<PyBaMM 参数名>: 新值}, "name", "role"}` | 无分子筛选 | 参数桥梁（输运参数） |
+
+**分子候选漏斗流程**（硬淘汰线 + 三模型异质投票）：
+```
+1. 依次真实执行 run-mlp(mace) → run-mlp(chgnet) → run-xtb（同一候选清单）
+2. 硬淘汰线（对照第 0 条 criteria.stage1）：
+   - mace 的 metrics.converged 非真 → 淘汰
+   - metrics.energy_ev > max_energy_ev（默认 0.0 eV）→ 淘汰
+   - xtb 的 metrics.homo_ev > max_homo_ev（默认 −6.0 eV）→ 淘汰
+3. 三模型异质投票：对 energy_ev(mace/chgnet) 与 homo_ev(xtb) 各自升序排名，
+   某候选三排名极差 ≥ max(2, 0.3×候选数) → 标记 disputed
+   （候选数 < 3 不判定）
+4. disputed 处置：推理改进（换取代基/生成变体）或给出明确淘汰理由后换新
+5. 写 propose 与 funnel 日志（passed/rejected/disputed 计数）
+```
+- 命令：`run-mlp --in IN --model mace --out O` → `run-mlp --in IN --model chgnet --out O` → `run-xtb --in IN --out O`（同一 IN，直接读三次输出 JSON 判定）
+- 种子池保证可达性，自由生成展示创造力，两者混轨
+
+**关键须知**（对应候选类型）：
+- 体系候选：每个体系必须在阶段 3/4 真实仿真并 evaluate 对比；能量密度用该体系参数集自身算质量（`calc-energy`）；旧参数集缺热/几何参数时 run-pyamm 注入默认值并输出 `injected_defaults` 留痕，依赖注入的 T_max 在 evaluate 中标注近似来源
+- 包覆/掺杂：**电芯级收益只在老化协议可见**（单循环无信号）；筛选责任下移到阶段 3 老化（≈3 秒/100 圈）；前置粗筛仅两条软证据（文献验证过的材料 + 桥梁值标 estimate）；不设真 DFT 预筛
+- 电极组分：电压自校准（NMC811 ≈3.82 vs 文献 3.8 V）；`converged=false` 但能量达筛选精度不算失败；rel_stability 仅看批内排序；真背书用 `run-qe`（仅收尾 Top 组分，漏斗内禁止，须 MSYS2 环境 `C:\msys64\ucrt64\bin\pw_stack4g.exe`，赝势用 conda-forge sssp 包目录）
+- 配方候选：estimate 值不得冒充仿真输出
+**阶段 2 反模式**：
+- ❌ 组分结构位点放不全（Li 3b/TM 3a/O 6c 面内位置，只放 (0,0,z) 线 → 非物理结构、电压 20-50 V）
+- ❌ 组分电压漏 Li 金属参考项（V 需 −n·E_Li，漏掉 → 电压为负/量级错）
+- ❌ 用 .venv（CPU torch）跑 run-comp——须 `D:/anaconda/envs/py312`（CUDA）
+- ❌ 把 `converged=false` 当筛选失败（fmax 0.1 严格收敛 300 步常达不到，能量已达筛选精度）；`rel_stability` 仅看批内排序，勿作绝对量
+- ❌ 对带电/离子固体（包覆/掺杂无机物）跑 ML 势/xtb——跳过漏斗直接进阶段 3 老化，跳过原因写 funnel
+
+**参数桥梁**（横切：阶段 2 物性 → 阶段 3 参数，协议规则，无 CLI 命令）。把微观物性写成 PyBaMM 参数名，作为 `run-pyamm --params` 的输入。
+
+**映射表**（必须严格照此键名，含单位后缀）：
+
+| 微观物性 | PyBaMM 参数名（--params 键） |
+|---|---|
+| 扩散系数 | `"Electrolyte diffusivity [m2.s-1]"` |
+| 电导率 | `"Electrolyte conductivity [S.m-1]"` |
+| 迁移数 | `"Cation transference number"` |
+| 包覆抑制 SEI 生长（ec reaction limited） | `"SEI kinetic rate constant [m.s-1]"` |
+| 包覆抑制 SEI 生长（electron-migration limited） | `"SEI reaction exchange current density [A.m-2]"` |
+| 掺杂抑制颗粒开裂 | `"Positive electrode cracking rate"` / `"Negative electrode cracking rate"`（OKane2022 等带开裂模型体系） |
+
+**规则**：
+- 拼错参数名会被 `run-pyamm` 以 `unknown parameter name(s)` 拒绝——安全兜底，按报错修正键名重跑
+- props 数值来源：种子池→文献值标注引用；自由生成→领域估计标注 `estimate`；估计值不得冒充仿真输出；Top-N 的 D/σ 由真 MD/文献背书复核
+- **先列后跑**：提交 `--params` 前，把全部覆盖参数 + 单位 + 来源（文献/estimate/基线默认）列在 propose 理由里——参数跑前定死，禁止"跑完再补说明"
+- 仿真失败必须原样读取并记录错误（错误是重跑情报：`unknown parameter` → 改键名；求解器报错 → 查工况/参数合法性），不得吞掉错误直接重试同一命令
+**阶段 3 电芯设计**。把候选的电芯参数放进 PyBaMM 电化学模型，模拟 1C 恒流放电过程，得到电压曲线与放电容量——回答"这个材料装进电池行不行"。先用秒级的 SPMe 快速筛，对通过者再用分钟级的 DFN 精算（`run-pyamm --base <案例配置 base_params> --protocol 1C_discharge --mode spme`，随后按需 `--mode dfn`）——同一"代理优先"哲学在电芯尺度的应用；DFN 收敛失败会自动降级回 SPMe，不让数值刚性卡死流程。**开局天花板评估**（基线表征时执行，决定是否需要材料设计——agent 自己分析，不等任务文本点名）：对现有体系做结构+配方最优估计（薄集流体/薄隔膜/最优孔隙率/高输运电解液组合下的理论 ED 与 4C 安全极限），对照任务目标——目标超天花板 → **主动升级进入阶段 2 材料设计**（发明添加剂/换体系候选），不得只在电芯内部调参硬凑；天花板评估结论写 funnel 日志（评估了哪些杠杆、极限值、与目标的缺口）。**结构方案也是候选**：目标含"结构可调"的案例中，每轮必须提出 2-4 个结构变体方案（厚度/孔隙率/N/P + 隔膜厚度与孔隙率（`"Separator thickness [m]"`、`"Separator porosity"`）+ 集流体厚度（`"Positive current collector thickness [m]"`、`"Negative current collector thickness [m]"`）+ 颗粒粒径（`"Positive particle radius [m]"`、`"Negative particle radius [m]"`，小粒径→抗析锂/高倍率，T1 实测 +14.6 贡献）的变更组合），与分子候选一样逐一仿真、与基线对比，propose 条目的 candidates 用 `{"struct": {"<PyBaMM 参数名>": 新值}, "name": "结构方案B", "role": "正极减薄10%"}` 对象记录；选择理由写入日志——结构探索与分子筛选同等可见。
+   目标含耐久/老化（或本轮有包覆/掺杂候选）时执行老化协议：`run-pyamm --protocol aging_1C_100cyc --base <带老化模型体系> --mode spme`——100 圈 1C 充放循环，输出每圈容量轨迹与终态 SEI 厚度 `sei_thickness_nm_end`。**其他场景协议**：倍率场景（电动工具/混动）用 `5C_discharge`（高倍率必须 `--mode dfn`，SPMe 在 5C 下严重低估容量；保持率 = 5C 容量 ÷ 同参数 1C 容量，机械计算后落盘）；低温场景（极寒/户外）用 `lowT_discharge`（-20℃ 容量 ÷ 25℃ 容量）；长循环用 `aging_1C_100cyc --cycles 500`；高温老化用 `aging_1C_100cyc_45C`（45℃ SEI 生长加速）。**老化必须在老化体系上仿真**（Chen2020/OKane2022 等带 SEI 参数；ORegan2022 等无老化模型的体系会被 `bda error` 拒绝 → 如实记录 N/A，同 LFP 能量密度先例）。判定口径：`sei_thickness_nm_end` 越小越好（包覆效果直接可见）；容量轨迹在标准 SEI 模型下可能出现先爬升后饱和的非单调伪影（锂损失导致电压窗口偏移）——**如实标注，不得当作正常衰减**；包覆/掺杂与基线必须在**同一体系**上对比（不同体系的 SEI 参数不可比）。**信号量级参考（实测）**：Chen2020 体系 SEI 动力学 ×0.1 → 100 圈终态 SEI 449→385 nm——判包覆效果时以此量级校准；Chen2020 初始态是放电态（正极 27% 锂化），首圈容量偏低属已知，不比首圈。
+**阶段 3 反模式**：
+- ❌ 在无老化模型体系上跑老化协议（ORegan2022 无 SEI 参数 → `bda error` 如实记录 N/A，不换体系硬跑）
+- ❌ 把容量轨迹伪影当正常衰减（标准 SEI 模型先爬升后饱和——如实标注，可靠指标是 `sei_thickness_nm_end`）
+- ❌ 不同体系的 SEI/开裂参数直接对比（必须在同一体系上比）
+- ❌ 沿用他体系的质量/能量密度口径（各体系参数集质量组成不同——用 `calc-energy` 按本体系参数算）
+- ❌ Chen2020 体系比首圈容量（初始态是放电态、正极 27% 锂化，首圈偏低属已知）
+
+**阶段 4 安全评估**。模拟 4C 快充、45℃ 高温的极限工况（`run-pyamm --base <案例配置 base_params> --protocol 4C_charge_45C --thermal lumped --plating`），输出电芯最高温度 `T_max_K` 与负极表面电位 `anode_potential_v`——负极电位任一刻低于 0 V 即判定析锂（金属锂沉积，快充失效与安全隐患的标志）。设计要在虚拟世界里先过"安全考试"；热模型必须真实耦合（`thermal: lumped`），否则温升是假的。**滥用场景**（目标含过充/针刺/热安全时）：过充用 `run-pyamm --protocol overcharge`（充电至上限+0.5 V），热失控用 `run-tr --sim <过充输出>`（自动读取 T_max_K 作初始温度，三副反应 ODE 判定 triggered）——过充后是否热失控是机械判定，不得凭直觉。
+
+**阶段 4 反模式**：
+- ❌ `thermal` 不设 `lumped` 跑安全评估（温升是假的）
+- ❌ 析锂判定方向搞反（`anode_potential_v` < 0 V 才 `plated=true`，正值 = 无析锂）
+- ❌ 过充/针刺/热失控判定凭直觉——一律 `run-pyamm --protocol overcharge` + `run-tr --sim <过充输出>` 机械判定（`triggered` 字段），不手工推断"会不会热失控"
+**评估与回退**（横切：每轮内嵌）。把阶段 3/4 的输出数值逐项对照第 0 条 `criteria.stage2`/`criteria.stage3` 的达标标准判定通过与否；不通过就诊断失败原因、回退到原因所在的尺度（材料问题回阶段 2，结构参数问题回阶段 3），判定与诊断写 `evaluate` 日志条目。评估是环的尾段而非独立阶段（阶段 5 是真计算背书，不参与每轮筛选判定）——回退到"原因所在"而不是盲目重跑全流程，正是本协议区别于网格搜索的地方；诊断留痕让论文能展示推理质量。
+**阶段 5 真DFT/MD 验证**（收尾背书，唯一真计算时刻）。对最终 Top-3 用真第一性原理计算（首选 `run-orca`——r2SCAN-3c，泛函精度更高；可选 `run-cp2k` 双代码交叉验证——同一批分子两套独立程序结果对照，消除程序实现差异的疑虑）算分子总能量/HOMO/LUMO/垂直电离能/电子亲和能，对 Top-1 用真分子动力学（`run-md`）模拟 Li⁺ 在电解液中的运动、由均方位移拟合扩散系数；最后 `render` 把全部日志渲染为七节 HTML 报告，写 `endorse` 与 `final` 日志条目。论文里的结论级数值都要有第一性原理签字——代理只负责淘汰，真计算只配给决赛圈，这也是漏斗内禁止它的原因。若配置 `real_compute: false`：跳过真计算背书，`endorse` 条目如实记录跳过（如 `{"action": "endorse", "skipped": true, "reason": "real_compute=false"}`），随后直接 `render`，不虚构 DFT/MD 数值。
    命令：`run-orca --in IN --out O`（Top-3 首选）→ [`run-cp2k --in IN --out O`（同批交叉验证，可选）] → `run-md --box B [--engine gromacs|mace] [--t-ns T] --out O`（Top-1）→ `render --case-dir D [--out O]`
-7. **设计交付物（行业标准文件）**：收尾产出电池设计行业标准文件——电芯设计规格书 `design_spec.md`、物料清单 `bom.xlsx`、技术参数表 `datasheet.md`、设计计算书 `calc.xlsx`、设计验证报告 `dvpr.md`（虚拟测试版）、设计失效模式分析 `dfmea.md`（定性版）、电芯结构模型 `cell_model.stl`+预览图（可选，用户澄清要求时委托 cad-skill 产出）。**每种文件的格式与内容要求分别见 `references/deliverable-{design-spec,bom,datasheet,calc-sheet,dvpr,dfmea,cad-model,package}.md`（按需 Read 对应文件）**。**行业双格式规则**：源头用可编辑格式（Excel 用于 BOM/计算书/DVP&R/DFMEA，Word 用于规格书/Datasheet 起草），收尾统一导出 **PDF 发布版**（用 xlsx/docx/pdf 技能；若技能不可用，用等效库 openpyxl/python-docx/reportlab 生成）——正式交付物是 PDF，可编辑源文件一并保留。所有数值机械取自参数集/仿真结果/文献并逐行标注来源，缺失项如实写"未提供"。工程制造图纸（带公差）与材料规格书、产线工艺卡属纯仿真边界外，报告中如实说明。收尾最后生成**交付包索引 `delivery_index.md`（及 PDF 发布版）**：封面信息（案例名、编号体系 `VBF-<案例ID大写>-<文档码>-<序号>`、生成日期、签署栏留空）、文件清单表（每个交付物一行：文件名 / 编号 / 格式 / 来源说明），并把全部交付物与索引打包为一个 `delivery_package.zip`。文档码：DS=规格书、BOM=物料清单、DSH=Datasheet、CALC=计算书、DVPR=验证报告、DFMEA=失效分析、CAD=结构模型（格式规范见 `references/deliverable-package.md`）。
+   **阶段 5 反模式**：
+   - ❌ 漏斗内跑真计算（`run-orca`/`run-cp2k`/`run-qe`/`run-md` 铁律：仅收尾决赛圈）
+   - ❌ `real_compute: false` 时虚构 DFT/MD 数值（`endorse` 如实记录跳过）
+   - ❌ 跳过 `endorse`/`final` 条目直接收尾（审计链断裂）
+   **收尾前自查 7 种 AI 研究失败模式**（写 `final` 前逐项过一遍，命中即修正，不得带病收尾）：① 仿真失败被包装成达标（报错被当成成功）② 幻觉数值（日志中找不到来源文件/键）③ 捷径依赖（只测了有利工况，回避不利条件）④ bug 被叙述成新发现（异常行为被写成设计成果）⑤ 参数放宽过关（阈值被悄悄调松）⑥ 单位/口径错误（K/℃、Wh/kg 口径混用）⑦ 早期结论锁死（后面数据与初判矛盾时仍坚持初判）。
+**设计交付物**（收尾，行业标准文件）：收尾产出电池设计行业标准文件——电芯设计规格书 `design_spec.md`、物料清单 `bom.xlsx`、技术参数表 `datasheet.md`、设计计算书 `calc.xlsx`、设计验证报告 `dvpr.md`（虚拟测试版）、设计失效模式分析 `dfmea.md`（定性版）、电芯结构模型 `cell_model.stl`+预览图（可选，用户澄清要求时委托 cad-skill 产出）。**每种文件的格式与内容要求分别见 `references/deliverable-{design-spec,bom,datasheet,calc-sheet,dvpr,dfmea,cad-model}.md`（按需 Read 对应文件）**。**行业双格式规则**：源头用可编辑格式（Excel 用于 BOM/计算书/DVP&R/DFMEA，Word 用于规格书/Datasheet 起草），收尾统一导出 **PDF 发布版**（用 xlsx/docx/pdf 技能；若技能不可用，用等效库 openpyxl/python-docx/reportlab 生成）——正式交付物是 PDF，可编辑源文件一并保留。所有数值机械取自参数集/仿真结果/文献并逐行标注来源，缺失项如实写"未提供"。工程制造图纸（带公差）与材料规格书、产线工艺卡属纯仿真边界外，报告中如实说明。**全部交付物平铺在工作区 `deliverables/` 目录**（不打包 zip），收尾生成**交付索引 `delivery_index.md`（及 PDF 发布版）**放在同目录：封面信息（案例名、编号体系 `VBF-<案例ID大写>-<文档码>-<序号>`、生成日期、签署栏留空）+ 文件清单表（每个交付物一行：文件名 / 编号 / 格式 / 来源说明）。文档码：DS=规格书、BOM=物料清单、DSH=Datasheet、CALC=计算书、DVPR=验证报告、DFMEA=失效分析、CAD=结构模型（格式规范见 `references/deliverable-package.md`）。
 
 ### log.jsonl 条目 schema（每轮必须按此写入）
 
-追加式，每行一条 UTF-8 JSON（格式与 `bda.store.append_entry` 写入一致）：
+追加式，每行一条 UTF-8 JSON。**写日志除 evaluate 外一律调用 `bda.store.append_entry(ws, entry)`**（追加 + flush + UTF-8 序列化，勿自建脚本写文件——实测 agent 自建 append_log.py 导致格式/路径漂移）；**evaluate 是唯一例外：必须走 `bda log-evaluate` 命令落条目**（verdict/evidence 由代码机械生成，见下）；工作区用 `CaseWorkspace(case_id, root)`（相对路径基于仓库根解析，勿依赖当前目录）：
 
-- **第 0 条（开跑前写一次）**：`{"criteria": {"stage1": {...}, "stage2": {...}, "stage3": {...}, "meta": {...}}}` —— 按阶段分层的达标标准：`stage1` 分子级目标与淘汰线（`max_energy_ev`/`max_homo_ev`），`stage2` 电芯性能目标（`capacity_ah`/`energy_density_wh_kg` 等，阈值 `{"min": ...}`/`{"max": ...}`），`stage3` 安全目标（`T_max_K`/`plated`），`meta` 案例级参数（`max_rounds`/`real_compute`）。报告按阶段展示目标与达成（审计记录，报告首页展示）
+- **第 0 条（开跑前写一次）**：`{"criteria": {"stage1": {...}, "stage2": {...}, "stage3": {...}, "meta": {...}}}` —— 按阶段分层的达标标准：`stage1` 分子级目标与淘汰线（`max_energy_ev`/`max_homo_ev`），`stage2` 电芯性能目标（`capacity_ah`/`energy_density_wh_kg` 等，阈值 `{"min": ...}`/`{"max": ...}`），`stage3` 安全目标（`T_max_K`/`plated`），`meta` 案例级参数（`max_rounds`/`real_compute`）。报告按阶段展示目标与达成（审计记录，报告首页展示）。**阈值数值必须与任务文本逐字一致**——任务文本的数值就是合同，不加任何"基线/锚定"概念（那是论文方法节的解说，agent 不需要）；判定只问"是否 ≥ / ≤ 数值"，不问"相对谁"
+- **plan**：`{"action": "plan", "objective_breakdown": "目标拆解与多目标权衡预期", "candidate_strategy": "首轮候选与后续方向", "budget_allocation": "轮次分配", "risk_and_fallback": "风险与回退预案", "detail": "design_plan.md"}` —— 阶段 1 规划落条目（审计锚点，完整文档指向 design_plan.md）；方向重大改变时追加 plan 更新条目
 - **propose**：`{"action": "propose", "round": 1, "candidates": [{"smiles": "SMILES", "name": "FEC", "role": "氟代碳酸酯成膜剂"}, ...], "llm_reason": "生成理由"}` —— 每轮候选与决策理由；候选对象形式**必须写 `name`（常用缩写或化学名）与 `role`（一句话说明用途）**，纯 SMILES 字符串仍兼容
-- **funnel**：`{"action": "funnel", "passed": 3, "rejected": 2, "disputed": 1, "detail": "一句话说明判定依据"}` —— 阶段1 漏斗计数（passed/rejected/disputed 由你按淘汰线与三模型投票规则判定得出）；候选多于 2 个时**必写**逐候选处置表 `dispositions`: `[{"name": "VC", "status": "rejected", "reason": "与FEC重叠"}]`（status ∈ passed/rejected/disputed，与计数口径一致；报告以表格展示）
-- **evaluate**：`{"action": "evaluate", "round": 2, "metrics": {"capacity_ah": ..., "T_max_K": ..., "plated": false, ...}, "verdict": "pass"}` —— metrics 至少含数值键 `T_max_K` 与布尔键 `plated`（报告趋势图与 CSV 导出依赖这两个键）；verdict 取值自由（如 pass/fail），报告原样展示。同一轮有多个候选对比时**必写**对比表 `comparison`: `[{"name": "结构方案B", "metrics": {...}, "verdict": "..."}]`（报告以 候选×指标×结论 表格展示）；`note` 只写**一句话**诊断结论，细节进 comparison
+- **funnel**：`{"action": "funnel", "passed": 3, "rejected": 2, "disputed": 1, "detail": "一句话说明判定依据"}` —— 阶段2 漏斗计数（passed/rejected/disputed 由你按淘汰线与三模型投票规则判定得出）；候选多于 2 个时**必写**逐候选处置表 `dispositions`: `[{"name": "VC", "status": "rejected", "reason": "与FEC重叠"}]`（status ∈ passed/rejected/disputed，与计数口径一致；报告以表格展示）
+- **evaluate**：**评估一律经 `bda log-evaluate` 落条目**（`--case-dir <案例目录> --round N --outputs <仿真输出文件...> [--candidate 名] [--note 一句话诊断]`）——命令读取第 0 条 criteria 与输出文件，**代码机械判定 verdict（pass/fail）并生成 evidence（指向文件:键）**，agent 不得手写 verdict、不得自行 append_entry 写 evaluate。条目形如 `{"action": "evaluate", "round": 2, "metrics": {...}, "verdict": "pass", "evidence": [{"metric": "...", "value": ..., "threshold": {...}, "source": "文件:键"}, ...], "note": "..."}` —— metrics 至少含数值键 `T_max_K` 与布尔键 `plated`（报告趋势图与 CSV 导出依赖这两个键）；`plated` 由 `anode_potential_v` 时序 min<0 自动推导，无需手填。**每个被评估的候选都必须落一条**（同一轮多个候选 → 同 round 多次调用）——不允许"对话里评估了、日志只有散文引用"（V1-V3 事故）。输出文件缺某 criteria 指标 → 命令标注 `unchecked` 并在 note 追加说明，此时 verdict 按已检查指标判定，缺口可见。同一轮多个候选对比时**必写**对比表 `comparison`: `[{"name": "结构方案B", "metrics": {...}, "verdict": "..."}]`（报告以 候选×指标×结论 表格展示）；`note` 只写**一句话**诊断结论，细节进 comparison
 - **endorse**：`{"action": "endorse", "candidates": [{"smiles": "SMILES", "endorsement": {...}}]}` —— endorsement 对象 = 该候选 `run-orca` 输出的 endorsement 键（Top-1 另附 `run-md` 输出键）
-- **final**：`{"action": "final", "recommendation": "最终推荐方案", "verdict": "达标/不达标"}` —— 收尾必写，含"预算耗尽未达标"情形
+- **final**：`{"action": "final", "recommendation": "最终推荐方案", "verdict": "达标/不达标"}` —— 收尾必写，含"预算耗尽未达标"情形；三击规则触发时必附 `escalation`: `{"rule": "three-strike", "strikes": [{"round": N, "candidate": "名", "失败指标": 数值}], "questions": [{"假设": "体系/边界/指标", "结论": "...", "为什么继续/停止": "..."}], "decision": "换方向继续 / 按负结果收尾"}` —— 逐层记录质疑过程（三击规则条款），不得只写"停止调参"
+
+**结论级数值来源标注**（所有条目通用）：每个结论级数值须可溯源——`sourced`（工具输出直接值，注明文件+键）、`inferred`（由输出机械推导，注明算式）、`estimated`（领域估计，必须显式标 `estimate` 且不得冒充仿真输出）。
 
 ## 二、评估标准
 
-- 阈值由你从案例目标自然语言解析（`config.yaml` 的 `goal`），解析结果写入 log.jsonl 第 0 条后**直接开跑**，不等待人工确认——批量模式下无人可确认，审计记录（第 0 条）保证即使解析错了也可事后追溯与复核，而不是流程中途卡住等人。
+- 阈值由你从案例目标自然语言解析（`goal`），解析结果写入 log.jsonl 第 0 条后**直接开跑**，不等待人工确认——零交互执行时无人可确认，审计记录（第 0 条）保证即使解析错了也可事后追溯与复核，而不是流程中途卡住等人。
+- **判定只看数值**：达标判定 = 工具输出数值对第 0 条阈值的"≥/≤"比较，**不问"相对谁"**——"基线/锚定/换体系贡献分解"是论文方法节的解说（docs 锚定表承载），不是 agent 流程的判定对象；agent 用了哪个体系/结构/材料是它的设计事实（log 如实记录），不存在"换锚违规"这一概念。禁止通过改阈值、换口径、删失败日志来让不达标变达标（见判定边界成对声明）。
+- **criteria 预注册不可事后改判**：第 0 条落盘即"合同"，不得因结果好坏修改阈值；结果不利时放宽判据 = 作弊。若确需修正（如解析错误），追加新条目说明原因，不覆盖原条目。
 - 达标判定只看工具输出 JSON 中的数值；任何换算必须由工具输出值机械推导（例：T_max_C = T_max_K − 273.15；能量密度 Wh/kg = 放电能量 Wh ÷ 电芯质量 kg，质量由各层厚度×面积×(1−孔隙率)×密度求和）——换算凭直觉做，单位错误（K/℃、eV/hartree）就会污染论文数据，机械推导可逐行核查。
+- **判定附证据，无证据不许结案**：每个 verdict（pass/fail）必须带 `evidence` 证据链——每条指认"哪个输出文件的哪个键、数值、对照哪个阈值"，如 `{"metric": "energy_density_wh_kg", "value": 462.6, "threshold": {"min": 446.2}, "source": "r4_V2_1c_dfn.json:energy_density_wh_kg"}`。判定必须可由第三方从日志重放（审计可复核，等价于评估者与执行者分离）；写 `final` 前检查：每个 pass 判定都有 evidence，缺证据的 pass 不算数。**verdict 与 evidence 由 `bda log-evaluate` 机械生成**（见 log.jsonl schema 的 evaluate 条目）——数值与阈值比较发生在代码里，杜绝"对话里评估过、日志里只有口头结论"的审计缺口。
+- **轮次结论引用必须可追溯**：推理文本（`llm_reason`/`note`）提到"第 N 轮结论"时，日志中必须有同 round 的 evaluate 条目背书——引用日志中不存在的轮次结论视为审计违规（v3 事故：round 2 引用"第 1 轮结论"，但 round 1 无 evaluate 条目）。收尾 `verify-deliverables` 检查"每个 propose 轮必须有同轮 evaluate"，缺失即 FAIL。
+- **判定边界成对声明**：达标标准与"必须 NOT 做"成对——不得通过删失败日志、放宽阈值、换口径、只测有利工况来让不达标变达标。
 - 各阶段判定要点（内嵌回退规则）：
-  - 阶段1：漏斗 `passed` 且无 `disputed`（或 disputed 经推理改进后一致）——对照第 0 条 `criteria.stage1`（淘汰线与分子级目标），淘汰线与三模型投票判定由你执行（见第一节第 1 步）
-  - 阶段2：`capacity_ah`/`energy_density_wh_kg` 对照第 0 条 `criteria.stage2` 阈值；老化（目标含耐久时）：`sei_thickness_nm_end` 越小越好（包覆/掺杂直接指标），容量轨迹形态如实标注（见第一节阶段 2 老化协议）
-  - 阶段3：析锂——`anode_potential_v` 任一值 < 0 V 即 `plated = true`；温升——`T_max_K` 对照第 0 条 `criteria.stage3` 阈值
-  - 综合达标 = 阶段 2/3 全部指标满足第 0 条 `stage2`/`stage3` 阈值
-- 回退路由（**永远开启，无开关、不可关闭**——协议固有机制，不是可选项）：材料问题（电位窗不满足/HOMO-LUMO 不稳定/添加剂无效果）→ 回阶段1（换取代基、生成变体或换新候选）；结构/参数问题（容量不足、温升过高但材料指标可接受）→ 回阶段2（调整电芯参数或参数桥梁的 props 后重跑）；每轮回退原因写入 `evaluate` 条目的 verdict 或日志。症状对应尺度：电位窗/稳定性是分子属性（阶段 1 的职责），容量/温升是结构与参数属性（阶段 2 的职责）——回错尺度等于瞎折腾。
+  - 阶段2：漏斗 `passed` 且无 `disputed`（或 disputed 经推理改进后一致）——对照第 0 条 `criteria.stage1`（淘汰线与分子级目标），淘汰线与三模型投票判定由你执行（见第一节第 1 步）
+  - 阶段3：`capacity_ah`/`energy_density_wh_kg` 对照第 0 条 `criteria.stage2` 阈值；老化（目标含耐久时）：`sei_thickness_nm_end` 越小越好（包覆/掺杂直接指标），容量轨迹形态如实标注（见第一节阶段 3 老化协议）
+  - 阶段4：析锂——`anode_potential_v` 任一值 < 0 V 即 `plated = true`；温升——`T_max_K` 对照第 0 条 `criteria.stage3` 阈值
+  - 综合达标 = 阶段 3/4 全部指标满足第 0 条 `stage2`/`stage3` 阈值
+- 回退路由（**永远开启，无开关、不可关闭**——协议固有机制，不是可选项）：材料问题（电位窗不满足/HOMO-LUMO 不稳定/添加剂无效果）→ 回阶段2（换取代基、生成变体或换新候选）；结构/参数问题（容量不足、温升过高但材料指标可接受）→ 回阶段3（调整电芯参数或参数桥梁的 props 后重跑）；每轮回退原因写入 `evaluate` 条目的 verdict 或日志。**材料瓶颈升级**（跨尺度前向路径，与回退互补）：评估显示缺口是材料属性（现有体系 ED 天花板不足/输运极限/电位窗不满足，见阶段 3 开局天花板评估）→ 从电芯尺度**升级**进入阶段 2 材料设计（发明/换体系），而不是继续调结构硬凑——"缺口归因"决定回退（同级）还是升级（跨尺度）。症状对应尺度：电位窗/稳定性是分子属性（阶段 2 的职责），容量/温升是结构与参数属性（阶段 3 的职责）——回错尺度等于瞎折腾。
+- **回退必须带失败证据包**：evaluate 条目写清"哪个指标没过、数值 vs 阈值、对应输出文件路径"——重跑是**有情报的重跑**（带着失败上下文定向修正），不是盲重试。
+- **三击规则**：同一候选/同一失败原因连续 3 次回退仍失败 → 停止盲试调参，升级质疑，而不是第 4 次盲试。**三击不是失败判据**——它是"换思考层级"的触发器，质疑后可能换方向继续，也可能才真正判负。质疑至少三层，逐层写进日志（final 的 `escalation` 字段，见下）：
+  1. **模型/体系假设**：该体系在此工况下是否物理可达（如"ORegan2022 在此工况下是否物理可达"）
+  2. **任务边界假设**：任务文本对可调自由度的限制是否过严/过宽——被排除的杠杆（如电解液 σ/t⁺、电极修饰、冷却设计）是否其实属于任务允许范围；边界有歧义时如实记录"按 X 边界执行"并注明歧义点
+  3. **指标假设**：目标是否在给定边界内物理不可达——此时如实报告负结果，不得放宽阈值，但 final 必须注明"若放宽 X 至 Y 可达"（如 t1_r1 的 T_max→336 K 或降 3C）
+  质疑结论为"边界内不可达"才按负结果收尾；结论为"边界误读/可换方向"则换方向继续。升级判断必须写明"质疑了什么假设 → 结论 → 为什么继续/停止"，**不得只写"停止调参，按负结果收尾"**（t1_r1 教训：三击后未质疑任务边界——电解液 σ 杠杆被"不更换材料体系"锁死而从未被质疑，root cause 自己写着 σ_e(T) 是关键却未问边界）。
 - 预算：轮数上限 = `max_rounds`；预算耗尽仍未达标 → 如实写 `final` 条目（verdict 不达标、recommendation 说明），不得虚构达标。负结果也是结果——论文如实报告"预算内未达标"比美化数据有价值得多。
 - `real_compute: false` → 收尾跳过 `run-orca`/`run-md` 真计算背书（`endorse` 条目如实记录跳过原因，不得虚构 DFT/MD 数值）。
 
@@ -106,18 +247,22 @@ description: 虚拟电池工厂协议——四阶段电池设计闭环（材料�
 
 ## 四、仿真库命令速查
 
-调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`。**完整参数/IO 结构/报错处置见 `references/cli-commands.md`（需要细节时用 Read 读取）**——特别是 run-pyamm 的 `--base` 传参规则，首次运行前必读。
+调用形式（Bash 工具，仓库根目录）：`.venv\Scripts\python.exe -m bda <子命令> ...`。**完整参数/IO 结构/报错处置见 `references/cli-commands.md`（需要细节时用 Read 读取）**——特别是 run-pyamm 的 `--base` 传参规则，首次运行前必读。**读输出契约**：每次调用后必须确认输出完整（`--out` 文件生成、关键键存在、错误信息可读）再进入下一步——"命令跑过"不等于"结果可用"，输出缺键/报错时如实记录并修正后重跑。
 
 | 子命令 | 用途 | 使用位置 |
 |--------|------|---------|
-| `run-mlp --in IN [--model mace\|chgnet] --out OUT` | ML 势结构松弛（能量/收敛） | 阶段1，mace 与 chgnet 各一次 |
-| `run-xtb --in IN --out OUT` | 半经验单点（HOMO/LUMO） | 阶段1 |
-| `run-comp --in IN --out OUT` | 电极组分筛选（CHGNet 周期弛豫：稳定性/电压/容量） | 阶段1，需 CUDA torch 环境 |
+| `run-mlp --in IN [--model mace\|chgnet] --out OUT` | ML 势结构松弛（能量/收敛） | 阶段2，mace 与 chgnet 各一次 |
+| `run-xtb --in IN --out OUT` | 半经验单点（HOMO/LUMO） | 阶段2 |
+| `run-comp --in IN --out OUT` | 电极组分筛选（CHGNet 周期弛豫：稳定性/电压/容量） | 阶段2，需 CUDA torch 环境 |
 | `run-qe --in IN --out OUT` | 周期 DFT 真背书（QE pw.x：电压/能量，含 Li 金属参考） | 仅收尾 Top 组分（漏斗内禁止） |
-| `run-pyamm --params P --protocol X [--base B] [--mode M] [--thermal T] [--plating] --out O` | 电芯仿真（放电/快充/老化/热/析锂，DFN 自动降级） | 阶段2/3 |
+| `run-pyamm --params P --protocol X [--base B] [--mode M] [--thermal T] [--plating] [--cycles N] --out O` | 电芯仿真（协议：1C_discharge / 4C_charge_45C / 5C_discharge / lowT_discharge / overcharge / aging_1C_100cyc / aging_1C_100cyc_45C；--cycles 覆盖老化圈数；高倍率建议 DFN） | 阶段3/4 |
+| `calc-energy --sim S [--params P] [--base B] --out O` | 合同口径能量密度（ED = ∫V·I₁C dt / Σ层厚×(1−ε)×密度×面积；电解液不计入）+ 体积能量密度 Wh/L + 直流内阻 DCR + 功率密度 + 平台电压 + 总厚度 | 阶段3 判定/报告，所有任务共用同一公式 |
 | `run-orca --in IN --out OUT` | 真 DFT 背书（r2SCAN-3c，气相优化+HOMO/LUMO/IE/EA） | 仅收尾 Top-3 首选 |
 | `run-cp2k --in IN --out OUT` | 真 DFT 交叉验证（CP2K PBE-D3，与 run-orca 同构输出） | 仅收尾 Top-3 可选 |
 | `run-md --box B [--engine gromacs\|mace] [--t-ns T] --out O` | 真 MD 扩散背书（MSD→D，漂移检测） | 仅收尾 Top-1 |
+| `run-tr [--sim S] [--mass-kg M] [--t-init T] [--x0 X] [--t-max T] [--mcp M] [--hA H] [--t-amb T] [--q-nail W] --out O` | 热失控三副反应 ODE（SEI 分解/负极-电解液/正极-电解液 + 冷却；针刺=q-nail 热源；--sim 读取 run-pyamm 输出 T_max_K 自动耦合过充→热失控；**--mass-kg 必传**（calc-energy 的 mass_kg）→ mcp = 质量×900，否则 mcp 固定 1000 对小电芯系统性失真——t7_r1 事故：40g 电芯被当 1kg 判定） | 阶段4 安全（滥用场景） |
+| `log-evaluate --case-dir D --round N --outputs F... [--candidate 名] [--note 诊断]` \| `--batch-file B.json` | 评估落条目：读第 0 条 criteria 与输出文件，代码机械判定 verdict 并生成 evidence（plated 由 anode_potential_v 自动推导）。**同一轮多候选用批量模式**（一次命令落所有候选：`--batch-file` = `[{"candidate","outputs","note"?,"round"?}]`，每候选一条 evaluate） | 每次评估必用（同轮多候选一次批量） |
 | `render --case-dir D [--out O]` | log.jsonl → 自包含 HTML 报告（七节） | 收尾最后一步 |
+| `verify-deliverables --case-dir D` | 交付物协议合规检查（7 类齐全/PDF 非空/xlsx 可解析/索引含 VBF 编号/审计链完整——每 propose 轮有同轮 evaluate） | 交付物收尾必跑 |
 
 通用纪律（细节见 references）：同参数必复用（run-* 先查 `--out` 同目录 `cache/`）；`bda error: ...` 到 stderr + 退出码 1 = 参数/校验失败，读原因修正重跑；必须用 Bash 工具执行（PowerShell 受 guardrail 限制）。

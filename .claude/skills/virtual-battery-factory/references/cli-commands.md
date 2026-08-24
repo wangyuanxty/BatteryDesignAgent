@@ -12,18 +12,26 @@
 - 报错约定：参数/校验类失败打印 `bda error: <原因>` 到 stderr、退出码 1；输入文件缺失或 JSON 键缺失会以 Python traceback 终止——读输出最后几行定位原因，按提示修正后重跑
 - 环境依赖：`run-xtb` 需 xtb 二进制在 PATH；`run-orca` 需 orca 在 PATH；`run-md` 需 gmx 在 PATH 且 skill 内 `scripts/bda/simulators/data/opls/` 有对应 .itp 模板
 
-## 阶段1 漏斗判定（无对应 CLI 命令）
+## 阶段2 漏斗判定（无对应 CLI 命令）
 
 漏斗判定（硬淘汰线 + 三模型异质投票）由协议规则执行，见 SKILL.md 第一节第 1 步——依次真实执行 `run-mlp --model mace`、`run-mlp --model chgnet`、`run-xtb`（同一候选清单）后，直接读取三次输出 JSON 判定，无对应 CLI 命令、无需合并文件。
 
 ## run-pyamm — 电芯仿真
 
 ```
-bda run-pyamm --params PARAMS --protocol PROTOCOL [--base BASE] [--mode MODE] [--thermal THERMAL] [--plating] --out OUT
+bda run-pyamm --params PARAMS --protocol PROTOCOL [--base BASE] [--mode MODE] [--thermal THERMAL] [--plating] [--cycles N] --out OUT
 ```
 
 - `--base`：PyBaMM 参数集名（默认 `Chen2020`）；**案例配置的 `base_params` 字段必须原样传给 `--base`**（如 `--base ORegan2022`）。参数桥梁映射表（SKILL.md 第一节第 2 步）的参数名为跨参数集共享名（`Electrolyte diffusivity [m2.s-1]` 等），故 `--params` 可直接配合任一参数集使用
-- `--protocol` 合法值：`1C_discharge`（1C 放电，3600 s，298.15 K）；`4C_charge_45C`（4C 充电，900 s，318.15 K）；`aging_1C_100cyc`（100 圈 1C 恒流充放，SEI ec reaction limited + isothermal，电压上下限取参数集自身值）
+- `--protocol` 合法值：
+  - `1C_discharge`（1C 放电，3600 s，298.15 K）
+  - `4C_charge_45C`（4C 充电，900 s，318.15 K）
+  - `5C_discharge`（5C 高倍率放电，720 s——倍率场景；**高倍率建议 `--mode dfn`**，SPMe 在 5C 下严重低估容量）
+  - `lowT_discharge`（1C 放电，-20 ℃/253.15 K——低温场景）
+  - `overcharge`（先 1C 放至下限，再 0.5C 充至上限+0.5 V——过充场景，输出含 T_max_K）
+  - `aging_1C_100cyc`（100 圈 1C 恒流充放，SEI ec reaction limited + isothermal，电压上下限取参数集自身值）
+  - `aging_1C_100cyc_45C`（同上，但 45 ℃/318.15 K 高温老化）
+- `--cycles`：覆盖老化协议圈数（默认 100）
 - `--mode`：`spme`（默认）/ `dfn`；dfn 求解失败自动降级 SPMe 重试（输出 `model_used` 记 `"SPMe(fallback)"`）
 - `--thermal`：`lumped`（默认）/ `isothermal`；非 isothermal 时输出含 `T_max_K`。老化协议内部固定 isothermal，`--thermal`/`--plating` 被忽略
 - `--plating`：启用析锂模块（Chen2020 参数集无析锂参数，运行时注入标准默认值），输出含 `anode_potential_v`
@@ -47,7 +55,7 @@ bda run-mlp --in IN [--model MODEL] --out OUT
 - 输入 `--in`：`{"candidates": [{"smiles": "SMILES"}]}`
 - 输出：`{"candidates": [{"smiles": "SMILES", "metrics": {"energy_ev": f, "converged": bool}, "model": "mace"}]}`
 - 报错：`invalid SMILES: '...'` → 修正 SMILES；`unknown model 'x'; legal: mace, chgnet` → 修正模型名；`failed to embed 3D structure for ...` → 该 SMILES 无法构象嵌入，换候选
-- 使用位置：阶段1，每个模型各跑一次（mace 与 chgnet）
+- 使用位置：阶段2，每个模型各跑一次（mace 与 chgnet）
 
 ## run-xtb — 半经验量子单点
 
@@ -137,3 +145,81 @@ bda run-qe --in IN --out OUT
   - `QE pseudopotential dir not found; ...` → 装 conda-forge sssp 包或设 QE_PSEUDO_DIR
   - `no SSSP efficiency pseudopotential entry for element X` → 该元素不在内置赝势表（Li/Ni/Mn/Co/O/Si/Mg），补 _PSEUDO_FILES 映射
   - `pw.x produced no total energy for ...` → 读工作目录 *.out 排查（SCF 不收敛常见：加 mixing_beta/换初始磁矩）
+
+## log-evaluate — 评估落条目（verdict/evidence 机械判定）
+
+```
+bda log-evaluate --case-dir D --round N --outputs F... [--candidate 名] [--note 诊断]
+```
+
+- **为什么存在**：v3 事故——agent 在对话里评估 V1-V3（数值都真实）却从不落日志，报告轮卡片 propose-only 却引用"第 1 轮结论"。本命令把"评估发生 → 条目存在"变成机械保证：verdict 由代码对照第 0 条 criteria 计算，agent 不得手写 verdict、不得自行 append_entry 写 evaluate
+- **前置**：`--case-dir` 的 log.jsonl 必须有第 0 条 criteria（开跑前预注册）；缺失 → `bda error` + 退出码 1（不可判定的评估直接拒绝）
+- **输入 `--outputs`**：仿真输出 JSON 文件路径（`--case-dir` 相对、仓库根相对或绝对均可），多个可并列；标量键（int/float/bool）全部提取进 `metrics`（后文件覆盖前文件）
+- **plated 自动推导**：输出无 `plated` 键但含 `anode_potential_v` 时序 → `min < 0` 判定析锂，evidence 来源标注 `anode_potential_v (min=X.XXXV<0 推导)`——与人工判定口径一致
+- **verdict 规则**：阈值形态 `{"min": n}`（大于等于）/ `{"max": n}` / 布尔等值 / 标量（视为 min）；已检查指标全部通过 → `pass`，否则 `fail`；输出缺某 criteria 指标 → 记 `unchecked` 并在 note 追加"未检查 criteria: ..."（阶段未到属合法缺失，verdict 按已检查指标判定）
+- **输出条目**：`{"action": "evaluate", "round": N, "metrics": {...标量}, "verdict": "pass"|"fail", "evidence": [{"metric", "value", "threshold", "verdict", "source": "文件:键"}, ...], "candidate"?, "unchecked"?, "note"?}`——evidence 来源为 case 相对路径（审计日志跨机器可重放）
+- **同轮多候选**：每个被评估的候选落一条（同 round 多次调用，`--candidate` 区分）；报告按 round 合并展示
+- **报错**：
+  - `log.jsonl 第 0 条 criteria 未找到` → 先写 criteria 再评估
+  - `输出文件不存在：...` → 检查路径（相对 case-dir 的 cell/ 目录）
+  - `输出文件中没有任何 criteria 指标` → 输出文件键与 criteria 完全不匹配，检查是否传错了文件
+  - 阈值 dict 有边界但 value 非数值 → 判 fail（不可判形态一律不过，宁可 fail 不可假 pass）
+
+## verify-deliverables — 交付物协议合规检查
+
+```
+bda verify-deliverables --case-dir D
+```
+
+- **检查项（全部机械判定）**：① 7 类交付物齐全（design_spec/bom/datasheet/calc/dvpr/dfmea/delivery_index，每类源文件 + PDF 发布版）② PDF 非空（>1KB）③ xlsx 可解析且无空 sheet ④ delivery_index 含 VBF 编号清单（≥5 个）⑤ **审计链完整：每个 propose 轮必须有同 round 的 evaluate 条目**（log-evaluate 协议前提——评估发生却不落日志，报告结论无审计背书）
+- **输出**：逐项 `[PASS]/[FAIL]` + 汇总 `ALL PASS`/`HAS FAILURES`；退出码 0/1
+- **报错处置**：FAIL 即协议未满足，按 detail 修正后重跑（如"缺评估的 propose 轮: R01" → 补 log-evaluate 落条目）；`log.jsonl 缺失` → 协议运行必须有日志
+
+## calc-energy — 合同口径能量密度（所有任务共用同一公式）
+
+```
+bda calc-energy --sim S [--params P] [--base B] --out O
+```
+
+- **公式（合同口径，杜绝跨任务抄先例）**：`ED = ∫V·I_1C dt / Σ(层厚×(1−孔隙率)×密度×面积)`
+  - 放电能量 = `voltage_v`×`time_s` 的梯形积分 × I_1C，÷3600 得 Wh；I_1C = `Nominal cell capacity [A.h]` × 1（恒流）
+  - 面积 = `Electrode height [m]` × `Electrode width [m]`
+  - 层：正/负极活性层（乘孔隙率因子）、正/负集流体（无孔隙因子）、隔膜——全部由 `--base`（默认 Chen2020）或 `--params` 覆盖的参数集取值
+  - **电解液不计入质量**（参数集缺密度）——输出 `electrolyte_included: false` 如实标注
+- **输入**：`--sim` = 放电仿真输出 JSON（必须含 `voltage_v` 列表、`time_s` 列表、`capacity_ah` 标量）；`--params` 可选，覆盖参数集（run-pyamm 用的同款 params 文件）
+- **输出**：`{capacity_ah, energy_wh, mass_kg, energy_density_wh_kg, volume_m3, energy_density_wh_l, thickness_m, midpoint_voltage_v, dcr_ohm, power_density_w_kg, layer_kg_m2（各层 kg/m²）, area_m2, electrolyte_included: false, note}`
+  - `energy_density_wh_l` = 能量/体积（体积 = Σ层厚×面积，合同口径不含电解液/外壳）
+  - `midpoint_voltage_v` = 放电时间中点电压（平台电压近似）；`dcr_ohm` = 直流内阻（起始 OCV 与 10% 放电处压差 ÷ I_1C）；`power_density_w_kg` = V_OC²/(4·DCR) ÷ 质量
+  - 判定与报告都以此文件的 `energy_density_wh_kg` 为准
+- **报错**：`bda error: ...` + 退出码 1——参数键缺失（`KeyError`）、`--sim` 不是合法 JSON、数值类型不符；先查 `--sim` 是否指向 1C 放电输出、`--base` 是否有对应键
+
+## run-tr — 热失控三副反应 ODE（阶段4 滥用场景）
+
+```
+bda run-tr [--sim S] [--t-init T] [--x0 X] [--t-max T] [--mcp M] [--hA H] [--t-amb T] [--q-nail W] --out OUT
+```
+
+- **模型**：零维集总热平衡 + 三副反应 Arrhenius 动力学（SEI 分解 / 负极-电解液 / 正极-电解液），scipy BDF 刚性积分；反应物一次消耗保证能量守恒（T_max 有界）
+- **触发判定（机械）**：dT/dt > 1 K/s（温升拐点）或 T ≥ 573 K（300℃ 红线）→ `triggered: true` + `trigger_time_s`
+- **过充→热失控自动耦合**：`--sim` 传 run-pyamm 输出（如 overcharge 协议），自动读取其 `T_max_K` 作为初始温度
+- **针刺**：`--q-nail` 短路产热源（W）
+- **输出键**：`triggered`、`trigger_time_s`、`T_max_K`、`T_final_K`、`dTdt_max_K_s`、`T_series_K`、`t_series_s`、`params`
+- **报错**：`--sim` 文件缺 `T_max_K` 键 → 应传 run-pyamm 输出 JSON
+
+## run-cp2k — 分子真 DFT 交叉验证（仅收尾 Top-3，可选）
+
+```
+bda run-cp2k --in IN --out OUT
+```
+
+- **与 run-orca 同构输出**（同一批分子两套独立程序结果对照，消除程序实现差异的疑虑）：`{"candidates": [{"smiles": ..., "endorsement": {E_hartree, homo_ev, lumo_ev, ie_ev, ea_ev, converged}}]}`——`ie_ev`/`ea_ev` 为阳/阴离子态在中性优化几何上的**垂直**单点值（与 run-orca 口径一致）
+- **方法**：PBE + D3(BJ) 色散校正、DZVP-MOLOPT-SR-GTH 短程基组 + GTH-PBE 赝势（H/C/O/F/N/S/P/B/Li）、20 Å 真空盒孤立分子（PERIODIC NONE + Poisson MT）；中性态 GEO_OPT，离子态 ENERGY 单点
+- **环境**：MSYS2 `pacman -S mingw-w64-ucrt-x86_64-cp2k`；数据文件 `C:\cp2k-data`（BASIS_MOLOPT/GTH_POTENTIALS/dftd3.dat，从 cp2k/cp2k GitHub data/ 下载，可用环境变量 `CP2K_DATA_DIR` 覆盖）
+- **两个已踩坑（runner 已自动处理）**：① MSYS2 原版 cp2k.ssmp.exe 栈保留 2MB，大分子初始化即溢出——runner 自动优先用 pefile 补丁版 `cp2k_stack4g.exe`；② DBCSR 在 SCF 启动时直读 `/proc/self/statm`（Windows CRTL 无路径翻译）——runner 自动在 `C:\proc\self\statm` 放静态页面数文件，且经 MSYS2 bash 执行、OMP_NUM_THREADS 限 8（32 线程易内存吃满崩溃）、OMP_STACKSIZE 512M
+- **代价**：CPU 分钟级/小分子（FEC 级 10 原子 ≈ 15-40 分钟/分子）——**仅收尾 Top-3 执行，漏斗内禁止**（同 run-orca 铁律；`real_compute: false` 时跳过）
+- **报错**：
+  - `cp2k not found; install: ...` → 按指引装 MSYS2 的 cp2k 包
+  - `CP2K data dir not found; ...` → 下载数据文件到 `C:\cp2k-data` 或设 CP2K_DATA_DIR
+  - `invalid SMILES: ...` / `failed to embed 3D structure ...` → RDKit 无法解析/生成构象，检查 SMILES
+  - `cp2k produced no total energy` → 读工作目录 *.out 排查（SCF 不收敛常见：加大 EPS_SCF 容差或 MAX_SCF）
+  - 单候选失败不中断整体：该候选输出 `{"smiles": ..., "error": "..."}`，其余候选正常返回

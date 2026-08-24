@@ -1,232 +1,310 @@
-"""Agent SDK 薄启动器：加载虚拟电池工厂协议（SKILL.md）并运行案例。
+"""Agent SDK 薄启动器：在本仓库起一次无头 Claude Code 会话，日志落盘 logs/。
 
 用法：
-    python run.py --config <案例配置 YAML 路径>   # 运行/续跑案例（工作区=该文件所在目录）
-    python run.py --smoke-test                  # 连通性冒烟
-
---config 直接加载所给路径的 YAML（文件名不限于 config.yaml）；
-工作区为其所在目录，session_id 与 log.jsonl 等产物均落在此目录。
-
-环境引导（_bootstrap_env，密钥永不打印/落盘）：
-    - ANTHROPIC_BASE_URL 缺省指向 DeepSeek Anthropic 兼容端点
-      https://api.deepseek.com/anthropic（可用环境变量覆盖指向其他代理）
-    - 凭证取 ANTHROPIC_AUTH_TOKEN / ANTHROPIC_API_KEY，否则读 .env 的
-      DEEPSEEK_API_KEY 作为 ANTHROPIC_AUTH_TOKEN
-    - ANTHROPIC_MODEL 缺省 deepseek-v4-pro
-
-会话恢复：session id 开跑前即写入工作区（--config 所在目录）的 session_id
-文件；首跑以 session_id= 传给 SDK 固定 id。续跑时轮换为新 session id 并
-改用"从断点恢复、不得重复已完成步骤"提示词——实测 --resume/--fork-session
-均丢弃 --allowedTools（Bash 工具丢失），--session-id 对已存在 id 报
-already in use；断点状态以工作区 log.jsonl 与产物文件为准。
+    python run.py "<任务描述>"    # 运行一次会话；控制台打印进度摘要，完整日志存 logs/
 """
 
 import argparse
 import asyncio
+import json
+import logging
 import os
-import shutil
 import sys
-import uuid
+import time
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import Any
 
-from dotenv import load_dotenv
-
-if TYPE_CHECKING:
-    from bda.config import CaseConfig
+from claude_agent_sdk import (
+    AssistantMessage,
+    ClaudeAgentOptions,
+    Message,
+    ResultMessage,
+    ServerToolResultBlock,
+    ServerToolUseBlock,
+    SystemMessage,
+    TextBlock,
+    ThinkingBlock,
+    ToolResultBlock,
+    ToolUseBlock,
+    UserMessage,
+    query,
+)
 
 REPO_ROOT = Path(__file__).resolve().parent
-SKILL_PATH = REPO_ROOT / ".claude" / "skills" / "virtual-battery-factory" / "SKILL.md"
-SESSION_FILE = "session_id"
+LOG_DIR = REPO_ROOT / "logs"
 
-DEFAULT_BASE_URL = "https://api.deepseek.com/anthropic"
-DEFAULT_MODEL = "deepseek-v4-pro"
-ALLOWED_TOOLS = ["Bash", "Read", "Write", "Edit", "Grep", "Glob"]
-
-SYSTEM_EXTRA = """
-你是虚拟电池工厂协议的执行者。当前案例配置与工作区：
-{case_context}
-每次运行结束时把本轮决策追加写入工作区 log.jsonl（第 0 条为达标标准）。
-"""
+ALLOWED_TOOLS = ["Bash", "Read", "Write", "Edit", "Grep", "Glob", "Skill", "Task", "Agent"]
 
 
-def _bootstrap_env() -> None:
-    """确保 ANTHROPIC_* 环境变量就绪；密钥只在进程环境内传递。"""
-    os.environ.setdefault("ANTHROPIC_BASE_URL", DEFAULT_BASE_URL)
-    os.environ.setdefault("ANTHROPIC_MODEL", DEFAULT_MODEL)
-    _bootstrap_git_bash()
-    if os.environ.get("ANTHROPIC_AUTH_TOKEN") or os.environ.get("ANTHROPIC_API_KEY"):
-        return
-    for env_file in (REPO_ROOT / ".env", Path.cwd() / ".env"):
-        if env_file.exists():
-            load_dotenv(env_file)
-            break
-    key = os.environ.get("DEEPSEEK_API_KEY")
-    if key:
-        os.environ["ANTHROPIC_AUTH_TOKEN"] = key
-        return
-    raise RuntimeError(
-        "未找到 API 凭证：请在 .env 设置 DEEPSEEK_API_KEY，"
-        "或设置 ANTHROPIC_AUTH_TOKEN / ANTHROPIC_API_KEY 环境变量"
-    )
+def _setup_logging(workspace: Path | None) -> logging.Logger:
+    """控制台只打一行摘要（INFO）；文件日志存完整内容（DEBUG），UTF-8 落盘。
 
-
-def _bootstrap_git_bash() -> None:
-    """Windows：设置 CLAUDE_CODE_GIT_BASH_PATH，保证 SDK 会话有 Bash 工具。
-
-    回归依据（e2e 实测，CLI 2.1.233）：SDK 子进程若找不到 Git Bash，
-    BashTool 不可用（"Git Bash not found; BashTool will be unavailable"），
-    会话只剩受限 PowerShell 工具，仿真与 render 命令被 guardrail 拦截
-    且无批准通道。显式设置该环境变量后 Bash 工具恢复可用。
+    有工作区 → 落盘工作区/run.log（批量时日志跟着任务走）；无 → 落盘 logs/run_<ts>.log。
     """
-    if sys.platform != "win32" or os.environ.get("CLAUDE_CODE_GIT_BASH_PATH"):
-        return
-    candidates = [
-        r"C:\Program Files\Git\bin\bash.exe",
-        r"C:\Program Files (x86)\Git\bin\bash.exe",
-    ]
-    git = shutil.which("git")
-    if git:
-        git_dir = Path(git).resolve().parent
-        candidates.append(str(git_dir / "bash.exe"))
-        candidates.append(str(git_dir.parent.parent / "bin" / "bash.exe"))
-    for candidate in candidates:
-        if Path(candidate).is_file():
-            os.environ["CLAUDE_CODE_GIT_BASH_PATH"] = candidate
-            return
-
-
-def _resolve_session(case_dir: Path) -> str | None:
-    p = case_dir / SESSION_FILE
-    return p.read_text(encoding="utf-8").strip() if p.exists() else None
-
-
-def _ensure_session_id(case_dir: Path) -> str:
-    """首跑前持久化 session id：中断后重跑同命令可续跑同一案例。"""
-    existing = _resolve_session(case_dir)
-    if existing:
-        return existing
-    sid = str(uuid.uuid4())
-    (case_dir / SESSION_FILE).write_text(sid, encoding="utf-8")
-    return sid
-
-
-def _rotate_session_id(case_dir: Path) -> str:
-    """续跑时轮换 session id：以新会话 + 断点恢复提示词继续。
-
-    实测（CLI 2.1.233）：--resume / --fork-session 均丢弃 --allowedTools
-    （Bash 工具丢失，仅剩受限 PowerShell，render 等 CLI 命令无法执行），
-    --session-id 对已存在的 id 直接报 "already in use"。因此续跑唯一可靠
-    路径 = 新会话；断点状态以工作区产物（log.jsonl）为准（SKILL.md 准备节）。
-    """
-    sid = str(uuid.uuid4())
-    (case_dir / SESSION_FILE).write_text(sid, encoding="utf-8")
-    return sid
-
-
-def _build_system(config_path: Path, cfg: "CaseConfig") -> str:
-    case_dir = config_path.parent
-    case_context = (
-        f"目标: {cfg.goal}\n"
-        f"体系: {cfg.system}\n"
-        f"预算: {cfg.max_rounds} 轮\n"
-        f"种子池: {cfg.seed_pool}\n"
-        f"参数集: {cfg.base_params}\n"
-        f"real_compute: {cfg.real_compute}\n"
-        f"start_stage: {cfg.start_stage}\n"
-        f"配置: {config_path}\n"
-        f"工作区: {case_dir}"
-    )
-    return SKILL_PATH.read_text(encoding="utf-8") + SYSTEM_EXTRA.format(case_context=case_context)
-
-
-async def _run(config_path: Path, resume_session: str | None) -> int:
-    from claude_agent_sdk import ClaudeAgentOptions, query
-    from bda.config import load_case_config
-    from bda.store import CaseWorkspace
-
-    case_dir = config_path.parent
-    CaseWorkspace(case_dir.name, str(case_dir.parent))
-    cfg = load_case_config(str(config_path))
-    system = _build_system(config_path, cfg)
-    resuming = resume_session is not None
-    if resuming:
-        # 续跑 = 新会话（轮换 session id，工具白名单完整）+ 断点恢复提示词；
-        # 详见 _rotate_session_id 的回归依据。
-        session_id = _rotate_session_id(case_dir)
+    if workspace is not None:
+        workspace.mkdir(parents=True, exist_ok=True)
+        log_path = workspace / "run.log"
     else:
-        # 首跑：预生成并持久化 session id（--session-id 固定 id）。
-        session_id = _ensure_session_id(case_dir)
+        LOG_DIR.mkdir(exist_ok=True)
+        log_path = LOG_DIR / f"run_{time.strftime('%Y%m%d_%H%M%S')}.log"
+    log = logging.getLogger("run")
+    log.setLevel(logging.DEBUG)
+    file_handler = logging.FileHandler(log_path, encoding="utf-8")
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%H:%M:%S"))
+    log.addHandler(file_handler)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(logging.Formatter("%(message)s"))
+    log.addHandler(console_handler)
+    return log
+
+
+def _content_summary(content: str | list | None) -> str:
+    """消息内容压成单行文本（兼容 str、dict 块、dataclass ContentBlock）。"""
+    if content is None:
+        return ""
+    if isinstance(content, str):
+        return content.replace("\n", " ").strip()
+    parts: list[str] = []
+    for b in content:
+        if isinstance(b, dict):
+            btype = b.get("type")
+            if btype == "text":
+                parts.append(str(b.get("text", "")))
+            elif btype == "tool_result":
+                parts.append(f"[tool_result]{_content_summary(b.get('content'))}")
+            else:
+                parts.append(f"[{btype}]")
+        elif isinstance(b, TextBlock):
+            parts.append(b.text)
+        elif isinstance(b, ThinkingBlock):
+            parts.append("[thinking]")
+        elif isinstance(b, (ToolUseBlock, ServerToolUseBlock)):
+            parts.append(f"[tool:{b.name}]")
+        elif isinstance(b, (ToolResultBlock, ServerToolResultBlock)):
+            parts.append(f"[tool_result]{_content_summary(b.content)}")
+        else:
+            parts.append(repr(b))
+    return " ".join(parts)
+
+
+def _tool_detail(block: ToolUseBlock | ServerToolUseBlock) -> str:
+    """工具输入摘要：常见字段取前 120 字符，其他取 JSON。"""
+    inp = block.input or {}
+    for key in ("file_path", "command", "pattern", "url", "prompt"):
+        if isinstance(inp.get(key), str):
+            return f" {key}={inp[key][:120]!r}"
+    return f" {json.dumps(inp, ensure_ascii=False)[:120]}"
+
+
+def _brief(msg: Message) -> str:
+    """把一条 SDK 消息压成一行进度摘要。"""
+    if isinstance(msg, ResultMessage):
+        cost = f"${msg.total_cost_usd:.4f}" if msg.total_cost_usd is not None else "$?"
+        return f"[result] error={msg.is_error} cost={cost} {(msg.result or '')[:120]}"
+    if isinstance(msg, SystemMessage):
+        return f"[system:{msg.subtype}] {json.dumps(msg.data, ensure_ascii=False)[:200]}"
+    if isinstance(msg, UserMessage):
+        return f"[user] {_content_summary(msg.content)[:500]}"
+    if isinstance(msg, AssistantMessage):
+        parts: list[str] = []
+        for block in msg.content:
+            if isinstance(block, TextBlock):
+                parts.append(block.text[:500])
+            elif isinstance(block, ThinkingBlock):
+                parts.append("[thinking]")
+            elif isinstance(block, (ToolUseBlock, ServerToolUseBlock)):
+                detail = _tool_detail(block)
+                parts.append(f"[tool:{block.name}]{detail}")
+            elif isinstance(block, ToolResultBlock):
+                parts.append(f"[tool_result]{_content_summary(block.content)[:300]}")
+            elif isinstance(block, ServerToolResultBlock):
+                parts.append(f"[tool_result]{json.dumps(block.content, ensure_ascii=False)[:300]}")
+        return f"[assistant] {' '.join(parts)[:1000]}"
+    return f"[{type(msg).__name__}]"
+
+
+def _full(msg: Message) -> str:
+    """消息完整内容（仅文件日志，不截断）。"""
+    if isinstance(msg, ResultMessage):
+        return f"[result] error={msg.is_error} session={msg.session_id} result:\n{msg.result or ''}"
+    if isinstance(msg, SystemMessage):
+        return f"[system:{msg.subtype}] {json.dumps(msg.data, ensure_ascii=False)}"
+    if isinstance(msg, UserMessage):
+        return f"[user]\n{_content_summary(msg.content)}"
+    if isinstance(msg, AssistantMessage):
+        blocks: list[str] = []
+        for block in msg.content:
+            if isinstance(block, TextBlock):
+                blocks.append(f"<text>\n{block.text}\n</text>")
+            elif isinstance(block, ThinkingBlock):
+                blocks.append(f"<thinking>\n{block.thinking}\n</thinking>")
+            elif isinstance(block, (ToolUseBlock, ServerToolUseBlock)):
+                blocks.append(f"<tool_use name={block.name}>\n{json.dumps(block.input, ensure_ascii=False)}\n</tool_use>")
+            elif isinstance(block, ToolResultBlock):
+                blocks.append(f"<tool_result error={block.is_error}>\n{block.content}\n</tool_result>")
+            elif isinstance(block, ServerToolResultBlock):
+                blocks.append(f"<server_tool_result>\n{json.dumps(block.content, ensure_ascii=False)}\n</server_tool_result>")
+        return "[assistant]\n" + "\n".join(blocks)
+    return f"[{type(msg).__name__}]"
+
+
+def _usage_summary(result: ResultMessage) -> str:
+    """按模型汇总 token 用量，返回一行文本。"""
+    parts: list[str] = []
+    for name, usage in (result.model_usage or {}).items():
+        parts.append(
+            f"{name}: in={usage.get('inputTokens', 0)} out={usage.get('outputTokens', 0)} "
+            f"cache_read={usage.get('cacheReadInputTokens', 0)} cache_write={usage.get('cacheCreationInputTokens', 0)}"
+        )
+    if not parts and result.usage:
+        parts.append(str(result.usage))
+    return " | ".join(parts) or "no usage data"
+
+
+async def _query(log: logging.Logger, options: ClaudeAgentOptions, prompt: str) -> ResultMessage | None:
+    """运行一次 query，流式记录进度，返回最终结果消息。"""
+    final: Message | None = None
+    try:
+        async for msg in query(prompt=prompt, options=options):
+            if isinstance(msg, SystemMessage) and msg.subtype == "thinking_tokens":
+                continue  # 思考 token 计数元数据，无信息量
+            log.debug(_full(msg))  # 文件日志：完整内容
+            log.info(_brief(msg))  # 控制台：一行摘要
+            final = msg
+    except Exception as exc:
+        # SDK 在 max_turns 耗尽时抛异常而非返回 ResultMessage；预算耗尽=设计内终止
+        if "maximum number of turns" in str(exc):
+            log.info("turns exhausted (max_turns reached)")
+            return None
+        raise
+    return final if isinstance(final, ResultMessage) else None
+
+
+def _disable_auto_memory() -> None:
+    """禁用 SDK 会话的 auto-memory：领域事实已固化进 skill references/facts.md，
+    实验会话不得加载会话外记忆（可复现性 + C1 对照纯净性）。"""
+    os.environ["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
+
+
+# C1 bare 模式禁读的协议文件（SKILL.md / assets 示例），cli-commands.md（工具用法）放行
+_BLOCKED_PROTOCOL = ("SKILL.md", "examples.md")
+
+
+async def _bare_guard(input: dict, tool_use_id: str | None, context) -> dict:
+    """PreToolUse 回调：C1 裸 LLM 模式下拦截对 skill 协议文件的读取（Read/Bash/Grep/Glob）。"""
+    probe = " ".join(str(v) for v in (input.get("tool_input") or {}).values())
+    for blocked in _BLOCKED_PROTOCOL:
+        if blocked in probe:
+            return {
+                "hookSpecificOutput": {
+                    "hookEventName": "PreToolUse",
+                    "permissionDecision": "deny",
+                    "permissionDecisionReason": f"C1 裸 LLM 对照模式禁止读取协议文件（{blocked}）",
+                }
+            }
+    return {}
+
+
+async def _run(
+    log: logging.Logger,
+    prompt: str,
+    max_turns: int | None,
+    system: str | None = None,
+    skills: list[str] | None = None,
+    hooks: dict | None = None,
+    model: str | None = None,
+) -> int:
+    """跑一次会话，返回进程退出码。"""
     options = ClaudeAgentOptions(
         system_prompt=system,
-        permission_mode="acceptEdits",
+        skills=skills,
+        hooks=hooks,
+        permission_mode="bypassPermissions",
+        effort="max",
+        enable_file_checkpointing=True,
         allowed_tools=ALLOWED_TOOLS,
-        session_id=session_id,
+        setting_sources=["project"],
+        max_turns=max_turns,
         cwd=str(REPO_ROOT),
+        model=model or None,
     )
-    prompt = (
-        "继续执行设计任务（续跑）：先检查工作区 log.jsonl 与产物文件，"
-        "从断点恢复，不得重复已完成步骤。"
-        if resuming
-        else f"开始执行设计任务：{cfg.goal}"
-    )
-    final = None
-    async for msg in query(prompt=prompt, options=options):
-        final = msg
-    if final is None or final.is_error:
-        print(f"error: {getattr(final, 'errors', 'no result message')}", file=sys.stderr)
-        print(getattr(final, "result", "") or "", file=sys.stderr)
+    result = await _query(log, options, prompt)
+    if result is None:
+        # 正常终止（含 max_turns 预算耗尽）：agent 已按协议写 log.jsonl，退出码 0
+        log.info("session finished")
+        return 0
+    if result.is_error:
+        log.error("error: %s", getattr(result, "errors", "unknown error"))
         return 1
-    (case_dir / SESSION_FILE).write_text(final.session_id, encoding="utf-8")
-    print(f"session_id: {final.session_id}")
-    print(final.result or "")
+    log.info("tokens: %s", _usage_summary(result))
+    log.info("result:\n%s", result.result or "")
     return 0
 
 
-async def _smoke() -> str:
-    from claude_agent_sdk import ClaudeAgentOptions, query
-
-    system = SKILL_PATH.read_text(encoding="utf-8")
-    options = ClaudeAgentOptions(
-        system_prompt=system,
-        permission_mode="acceptEdits",
-        cwd=str(REPO_ROOT),
-    )
-    final = None
-    async for msg in query(prompt="回复 smoke ok", options=options):
-        final = msg
-    if final is None:
-        raise RuntimeError("smoke query returned no result message")
-    if final.is_error:
-        raise RuntimeError(f"smoke query failed: {final.errors}")
-    return final.result or ""
-
-
 def main(argv: list[str] | None = None) -> int:
+    _disable_auto_memory()
     parser = argparse.ArgumentParser(
         prog="run.py",
-        description="虚拟电池工厂 Agent SDK 薄启动器",
+        description="无头 Claude Code 会话（本仓库，项目 settings，bypassPermissions）",
     )
-    parser.add_argument("--config", help="案例配置 YAML 路径（工作区为其所在目录）")
-    parser.add_argument("--smoke-test", action="store_true", help="连通性冒烟测试")
+    parser.add_argument("prompt", nargs="?", help="任务描述，例如：python run.py \"设计一款能量密度提升20%%的电池…\"")
+    parser.add_argument("--max-turns", type=int, default=300, help="最大对话轮数（默认 1000）")
+    parser.add_argument("--workspace", default=None, help="工作区目录（产物落点）；不传=agent 自行决定")
+    parser.add_argument("--model", default=os.environ.get("ANTHROPIC_MODEL") or "", help="模型覆盖（鲁棒性实验用，如 deepseek-v4-pro；默认=ANTHROPIC_MODEL 或会话默认）")
+    parser.add_argument(
+        "--bare",
+        action="store_true",
+        help="C1 裸 LLM 对照：不加载 skill、无协议规则，只给工具说明与目标",
+    )
+    parser.add_argument(
+        "--override",
+        default=None,
+        help="system prompt 覆盖（消融 B 用：如 '结构变体数量不做强制要求'）——系统层指令，覆盖 skill 规则",
+    )
     args = parser.parse_args(argv)
-    _bootstrap_env()
-    if args.smoke_test:
-        print(asyncio.run(_smoke()))
-        return 0
-    if not args.config:
-        parser.error("--config is required (or use --smoke-test)")
-    config_path = Path(args.config).resolve()
-    if not config_path.is_file():
-        print(f"config not found: {config_path}", file=sys.stderr)
-        return 1
-    case_dir = config_path.parent
-    return asyncio.run(_run(config_path, _resolve_session(case_dir)))
+    if not args.prompt:
+        parser.error('需要任务描述，例如：python run.py "设计一款能量密度提升20%的电池…"')
+    if args.max_turns is not None and args.max_turns <= 0:
+        parser.error("--max-turns 必须为正整数")
+    ws = Path(args.workspace).resolve() if args.workspace else None
+    if args.bare:
+        # C1 裸 LLM：工具说明 + 目标，无协议规则（不含漏斗/回退/criteria/审计要求）；
+        # 真 DFT/MD 代码禁用（背书是协议流程的一部分，C1 无协议不需要）
+        os.environ["BDA_DISABLE_TRUE_COMPUTE"] = "1"
+        system = (
+            "你是电池设计智能体。可用工具：Bash/Read/Write/Edit/Grep/Glob。\n"
+            "仿真工具库 bda：`.venv\\Scripts\\python.exe -m bda <子命令>`"
+            "（子命令见 `-m bda --help`，完整用法参考 "
+            ".claude/skills/virtual-battery-factory/references/cli-commands.md）。\n"
+            f"目标：{args.prompt}"
+        )
+        if ws:
+            system += f"\n工作区：{ws}"
+        from claude_agent_sdk import HookMatcher
+
+        log = _setup_logging(ws)
+        return asyncio.run(
+            _run(
+                log,
+                "",
+                args.max_turns,
+                system=system,
+                skills=[],
+                hooks={"PreToolUse": [HookMatcher(matcher="Read|Bash|Grep|Glob", hooks=[_bare_guard])]},
+                model=args.model or None,
+            )
+        )
+    prompt = f"headless 会话：无用户在场，跳过澄清提问（SKILL.md 零交互执行规则），参数从任务文本解析、缺省用默认值，写入 log.jsonl 第 0 条。\n任务：{args.prompt}"
+    if ws:
+        prompt = f"工作区：{ws}\n" + prompt
+    system = f"你是电池设计智能体。本任务中：{args.override}" if args.override else None
+    log = _setup_logging(ws)
+    return asyncio.run(_run(log, prompt, args.max_turns, system=system, model=args.model or None))
 
 
 if __name__ == "__main__":
-    try:
-        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    except AttributeError:
-        pass
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     raise SystemExit(main())

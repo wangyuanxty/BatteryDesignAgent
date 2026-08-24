@@ -1,0 +1,16 @@
+{
+  "capacity_ah": 4.611786235987937,
+  "energy_wh": 16.056938661328367,
+  "mass_kg": 0.04907733177620001,
+  "energy_density_wh_kg": 327.1762763010511,
+  "layer_kg_m2": {
+    "positive_electrode": 0.185963526,
+    "negative_electrode": 0.131634,
+    "positive_cc": 0.043232,
+    "negative_cc": 0.107196,
+    "separator": 0.00984528
+  },
+  "area_m2": 0.10270000000000001,
+  "electrolyte_included": false,
+  "note": "电解液不计入质量（参数集缺密度）"
+}

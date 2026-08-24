@@ -57,7 +57,9 @@ def test_water_endorsement():
     assert out["homo_ev"] < 0.0
     assert out["ie_ev"] > 0.0
     assert -40.0 < out["homo_ev"] < -1.0
-    assert -40.0 < out["lumo_ev"] < 0.0
+    # LUMO 可为正（中性分子未占据态能量可正可负，实测 r2SCAN-3c/H2O 约 +1.85 eV）——
+    # 物理断言是能级序 homo < lumo，而非 lumo 必须为负
+    assert out["homo_ev"] < out["lumo_ev"]
 
 def test_retry_varies_seed_and_reraises(monkeypatch):
     import bda.simulators.orca_runner as r

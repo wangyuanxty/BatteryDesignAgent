@@ -181,23 +181,23 @@ def _verdict_badge(verdict: str) -> str:
     return f'<span class="badge {cls}">{_html_escape(str(verdict))}</span>'
 
 
-# 四阶段流程（1–3=漏斗阶段，4=真DFT/MD 验证；阶段编号与 SKILL.md 流程一致。
-# 阶段 4 沿用 .badge.stage.end 铜色样式区分。）
-_STAGE_LABELS = {1: "STAGE 1", 2: "STAGE 2", 3: "STAGE 3", 4: "STAGE 4"}
+# 五阶段流程（1=规划，2–4=漏斗阶段，5=真DFT/MD 验证；阶段编号与 SKILL.md 流程一致。
+# 阶段 5 沿用 .badge.stage.end 铜色样式区分。）
+_STAGE_LABELS = {1: "STAGE 1 规划", 2: "STAGE 2 材料", 3: "STAGE 3 电芯", 4: "STAGE 4 安全", 5: "STAGE 5 真DFT/MD"}
 
 
 def _stage_badge(stage: int | None) -> str:
     """STAGE 小标（blueprint 风格：等宽 10.5px 边框徽章，沿用 .badge + --blue/--accent）。"""
     if stage not in _STAGE_LABELS:
         return ""
-    cls = "badge stage end" if stage == 4 else "badge stage"
+    cls = "badge stage end" if stage == 5 else "badge stage"
     return f'<span class="{cls}">{_STAGE_LABELS[stage]}</span>'
 
 
 def _stage_range_badge(lo: int, hi: int) -> str:
     """轮卡片阶段范围徽章：单阶段沿用 _stage_badge；跨阶段显示 STAGE N–M（en dash）。
-    范围仅由数字阶段（1–4）构成，阶段 4（真DFT/MD 验证）可参与范围（如 STAGE 3–4）；
-    endorse/final 条目不进轮卡片，阶段 4 在流程一览条中单独显示。"""
+    范围仅由数字阶段（1–5）构成，阶段 5（真DFT/MD 验证）可参与范围（如 STAGE 4–5）；
+    endorse/final 条目不进轮卡片，阶段 5 在流程一览条中单独显示。"""
     if lo == hi:
         return _stage_badge(lo)
     if lo not in _STAGE_LABELS or hi not in _STAGE_LABELS:
@@ -206,35 +206,42 @@ def _stage_range_badge(lo: int, hi: int) -> str:
 
 
 def _entry_stage(e: dict) -> int | None:
-    """log 条目 → 阶段：endorse/final=4（真DFT/MD 验证）；分子 propose/funnel=1；struct propose=2；
-    evaluate 按条目内容推断（提及 struct/结构 → 含安全指标为 3，否则 2；否则视为材料轮=1）。"""
+    """log 条目 → 流程阶段：plan=1（总体设计规划）；分子 propose/funnel=2（材料）；
+    struct propose=3（电芯）；evaluate 按内容推断（安全指标=4，结构=3，否则=2）；
+    endorse/final=5（真DFT/MD 验证）。"""
     action = e.get("action")
+    if action == "plan":
+        return 1
     if action in ("endorse", "final"):
-        return 4
+        return 5
     if action == "propose":
         has_struct = any(
             isinstance(c, dict) and c.get("struct") for c in _as_list(e.get("candidates"))
         )
-        return 2 if has_struct else 1
+        return 3 if has_struct else 2
     if action == "funnel":
-        return 1
+        return 2
     if action == "evaluate":
+        # 先看结构化 metrics（安全指标=阶段4，结构覆盖=阶段3），文本兜底——不靠"结构"字样碰巧命中
+        # （实测：agent 日志 evaluate 条目无"结构"字样，曾误判为材料轮=2）
+        metrics = e.get("metrics") or {}
+        has_safety = isinstance(metrics.get("T_max_K"), (int, float)) or "plated" in metrics
+        if has_safety:
+            return 4
         text = json.dumps(e, ensure_ascii=False)
         if "struct" in text or "结构" in text:
-            metrics = e.get("metrics") or {}
-            has_safety = isinstance(metrics.get("T_max_K"), (int, float)) or "plated" in metrics
-            return 3 if has_safety else 2
-        return 1
+            return 3
+        return 2
     return None
 
 
 def _plot_stage(filename: str) -> int | None:
-    """曲线文件名 → 阶段：discharge=2（电芯设计）、charge/aging=3（安全/老化评估）；无法判定则不贴。"""
+    """曲线文件名 → 阶段：discharge=3（电芯设计）、charge/aging=4（安全/老化评估）；无法判定则不贴。"""
     low = filename.lower()
     if "discharge" in low:
-        return 2
-    if "charge" in low or "aging" in low:
         return 3
+    if "charge" in low or "aging" in low:
+        return 4
     return None
 
 
@@ -324,7 +331,7 @@ def _stage_achieve_badge(stage_key: str, stage_dict: dict, metrics: dict, funnel
             return '<span class="badge mute">未执行</span>'
         n, m = _to_int(funnel_latest.get("passed")), _to_int(funnel_latest.get("disputed"))
         # 分歧不是失败（协议："分歧是'该动脑子'的信号"），处置留痕于漏斗明细；
-        # 阶段 1 达成 = 有候选通过漏斗（passed > 0）
+        # 阶段 2 达成 = 有候选通过漏斗（passed > 0）
         cls = "ok" if n > 0 else "bad"
         return f'<span class="badge {cls}">达成 · PASS {n} · DISP {m}</span>'
     verdicts: list[bool] = []
@@ -464,7 +471,7 @@ def _flow_achieve(stage_key: str, stage_dict: dict, log: list[dict]) -> str:
             return "—"
         f = funnels[-1]
         n, m = _to_int(f.get("passed")), _to_int(f.get("disputed"))
-        # 阶段 1 达成 = 有候选通过漏斗（分歧已处置，留痕于漏斗明细）
+        # 阶段 2 达成 = 有候选通过漏斗（分歧已处置，留痕于漏斗明细）
         return f"PASS {n} · DISP {m} {_goal_mark(n > 0)}"
     metrics = _latest_metrics(log)
     if not stage_dict or not metrics:
@@ -485,12 +492,13 @@ def _flow_achieve(stage_key: str, stage_dict: dict, log: list[dict]) -> str:
 
 
 def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: dict) -> str:
-    """概览区流程一览条：四阶段徽章，各带计数/结论摘要 + 目标与达成（由 criteria 与 log 机械推导）。
+    """概览区流程一览条：五阶段徽章，各带计数/结论摘要 + 目标与达成（由 criteria 与 log 机械推导）。
 
-    阶段1 材料设计=分子 propose/funnel；阶段2 电芯设计=struct propose/discharge 曲线；
-    阶段3 安全评估=charge45 曲线；阶段4 真DFT/MD 验证=endorse/final（含最终结论）。
+    阶段1 总体设计规划=plan 条目；阶段2 材料设计=分子 propose/funnel（判定层 stage1）；
+    阶段3 电芯设计=struct propose/discharge 曲线（判定层 stage2）；
+    阶段4 安全评估=charge45 曲线（判定层 stage3）；阶段5 真DFT/MD 验证=endorse/final（含最终结论）。
     """
-    mol_prop = struct_prop = funnel_n = endorse_n = final_n = 0
+    mol_prop = struct_prop = funnel_n = endorse_n = final_n = plan_n = 0
     for e in log:
         action = e.get("action")
         if action == "funnel":
@@ -499,29 +507,34 @@ def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: di
             endorse_n += 1
         elif action == "final":
             final_n += 1
+        elif action == "plan":
+            plan_n += 1
         elif action == "propose":
             for c in _as_list(e.get("candidates")):
                 if isinstance(c, dict) and c.get("struct"):
                     struct_prop += 1
                 else:
                     mol_prop += 1
-    n_discharge = sum(1 for fname, _ in cell_files if _plot_stage(fname) == 2)
-    n_charge45 = sum(1 for fname, _ in cell_files if _plot_stage(fname) == 3)
+    n_discharge = sum(1 for fname, _ in cell_files if _plot_stage(fname) == 3)
+    n_charge45 = sum(1 for fname, _ in cell_files if _plot_stage(fname) == 4)
     finals = [e for e in log if e.get("action") == "final"]
     verdict = str(finals[-1].get("verdict") or "") if finals else ""
     close_sum = f"背书 {endorse_n} · 终审 {final_n}" + (f" · 结论 {verdict}" if verdict else "")
     norm = _normalize_criteria(criteria)
+    # 流程阶段 → 判定层键映射（编号独立，阶段 2/3/4 分别对应判定层 stage1/2/3）
+    stage_to_key = {2: "stage1", 3: "stage2", 4: "stage3"}
     items = (
-        (1, "阶段1 · 材料设计", f"分子 propose {mol_prop} · funnel {funnel_n}"),
-        (2, "阶段2 · 电芯设计", f"结构 propose {struct_prop} · 放电曲线 {n_discharge}"),
-        (3, "阶段3 · 安全评估", f"4C 快充曲线 {n_charge45}"),
-        (4, "真DFT/MD 验证", close_sum),
+        (1, "阶段1 · 总体设计规划", f"plan {plan_n} · design_plan.md"),
+        (2, "阶段2 · 材料设计", f"分子 propose {mol_prop} · funnel {funnel_n}"),
+        (3, "阶段3 · 电芯设计", f"结构 propose {struct_prop} · 放电曲线 {n_discharge}"),
+        (4, "阶段4 · 安全评估", f"4C 快充曲线 {n_charge45}"),
+        (5, "阶段5 · 真DFT/MD 验证", close_sum),
     )
     blocks = []
     for stage, name, count in items:
         goal_html = ""
-        if stage in (1, 2, 3):
-            stage_key = f"stage{stage}"
+        if stage in (2, 3, 4):
+            stage_key = stage_to_key[stage]
             stage_dict = norm.get(stage_key, {})
             goal_html = (
                 f'<div class="flow-goal"><span class="g-label">目标</span>'
@@ -530,7 +543,7 @@ def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: di
                 f"<span>{_flow_achieve(stage_key, stage_dict, log)}</span></div>"
             )
         blocks.append(
-            f'<div class="flow-item {"end" if stage == 4 else ""}">{_stage_badge(stage)}'
+            f'<div class="flow-item {"end" if stage == 5 else ""}">{_stage_badge(stage)}'
             f'<div class="flow-name">{_html_escape(name)}</div>'
             f'<div class="flow-count">{_html_escape(count)}</div>{goal_html}</div>'
         )
@@ -1202,7 +1215,10 @@ def render_report(case_dir: str, out_html: str = "report.html") -> str:
         "NOTES": _notes_html(log),
     }
     html = _fill_template(parts)
-    out_path = Path(case_dir) / out_html
+    out_p = Path(out_html)
+    # out 语义：纯文件名 → 相对 case_dir（默认 report.html）；含目录（绝对/完整相对）→ 完整路径
+    # （实测：完整相对路径曾被拼成 case_dir/完整路径 双重目录）
+    out_path = Path(case_dir) / out_html if out_p.parent == Path(".") else out_p
     out_path.write_text(html, encoding="utf-8")
     return str(out_path)
 

@@ -25,7 +25,7 @@ def test_run_pyamm_base_flag_passed_through(tmp_path, monkeypatch):
 
     seen = {}
 
-    def fake_run(params, protocol, base="Chen2020", mode="spme", fallback=True,
+    def fake_run(params, protocol, base="Chen2020", mode="spme", fallback=True, cycles=None,
                  thermal="lumped", plating=False):
         seen.update(params=params, protocol=protocol, base=base, mode=mode,
                     thermal=thermal, plating=plating)
@@ -50,7 +50,7 @@ def test_run_pyamm_base_defaults_to_chen2020(tmp_path, monkeypatch):
 
     seen = {}
 
-    def fake_run(params, protocol, base="Chen2020", mode="spme", fallback=True,
+    def fake_run(params, protocol, base="Chen2020", mode="spme", fallback=True, cycles=None,
                  thermal="lumped", plating=False):
         seen["base"] = base
         return {"model_used": "SPMe", "time_s": [0.0, 1.0],
@@ -75,7 +75,7 @@ def _run_pyamm_cli(tmp_path, monkeypatch, params_file):
     import bda.simulators.pybamm_runner as pr
     calls = []
 
-    def fake_run(params, protocol, base="Chen2020", mode="spme", fallback=True,
+    def fake_run(params, protocol, base="Chen2020", mode="spme", fallback=True, cycles=None,
                  thermal="lumped", plating=False):
         calls.append((params, protocol, base, mode, thermal, plating))
         return {"model_used": "SPMe", "time_s": [0.0, 1.0],
@@ -274,7 +274,7 @@ def test_module_entrypoint_runs(monkeypatch, tmp_path):
 
     import bda.simulators.pybamm_runner as pr
 
-    def fake_run(params, protocol, base="Chen2020", mode="spme", fallback=True,
+    def fake_run(params, protocol, base="Chen2020", mode="spme", fallback=True, cycles=None,
                  thermal="lumped", plating=False):
         return {"model_used": "SPMe", "time_s": [0.0, 1.0],
                 "voltage_v": [4.2, 3.5], "capacity_ah": 1.0}

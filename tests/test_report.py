@@ -25,7 +25,8 @@ def _make_case(tmp_path):
     ws = CaseWorkspace("case1", root=str(tmp_path))
     append_entry(ws, {"round": 0, "criteria": {"T_max_C": 60, "plating_free": True}})
     append_entry(ws, {"round": 1, "action": "propose", "candidates": ["FEC"], "llm_reason": "seed"})
-    append_entry(ws, {"round": 1, "action": "evaluate", "metrics": {"T_max_K": 325.0, "plated": False}, "verdict": "pass"})
+    # 分子轮 evaluate 无安全指标（T_max/plated 是结构/安全轮的）；带安全指标会被 _entry_stage 判为阶段 3
+    append_entry(ws, {"round": 1, "action": "evaluate", "metrics": {"energy_density_Wh_kg": 400}, "verdict": "pass"})
     return ws
 
 
@@ -113,35 +114,56 @@ def test_flow_overview_strip(tmp_path, full_case):
     """概览区流程一览条：四阶段徽章 + 由 log 条目机械推导的计数/结论摘要。"""
     html = _render(full_case)
     assert "流程一览" in html
-    assert "阶段1 · 材料设计" in html
-    assert "阶段2 · 电芯设计" in html
-    assert "阶段3 · 安全评估" in html
+    assert "阶段2 · 材料设计" in html
+    assert "阶段3 · 电芯设计" in html
+    assert "阶段4 · 安全评估" in html
     assert "真DFT/MD 验证" in html  # 收尾流程项更名为真DFT/MD 验证
-    assert '<span class="badge stage end">STAGE 4</span>' in html
+    assert '<span class="badge stage end">STAGE 5 真DFT/MD</span>' in html
     assert "分子 propose 1 · funnel 2" in html
     assert "背书 1 · 终审 1 · 结论 达标" in html
 
 
-def test_closing_phase_badge_is_stage_4(tmp_path, full_case):
-    """endorse/final 对应徽章为 STAGE 4（end 铜色样式）；说明性文字为"真DFT/MD 验证"。"""
+def test_closing_phase_badge_is_stage_5(tmp_path, full_case):
+    """endorse/final 对应徽章为 STAGE 5（end 铜色样式）；说明性文字为"真DFT/MD 验证"。"""
     html = _render(full_case)
-    assert '<span class="badge stage end">STAGE 4</span>' in html
+    assert '<span class="badge stage end">STAGE 5 真DFT/MD</span>' in html
     assert "真DFT/MD 验证" in html
     assert "收尾" not in html
-    assert '<span class="badge stage">STAGE 1</span>' in html  # 数字阶段徽章不受影响
+    assert '<span class="badge stage">STAGE 1 规划</span>' in html  # 数字阶段徽章不受影响
 
 
 def test_stage_badges_in_round_cards(tmp_path, full_case):
     """轮卡片带 STAGE 徽章：分子轮=STAGE 1；struct propose 轮=STAGE 2。"""
     html = _render(full_case)
-    assert 'ROUND 01</span><span class="badge stage">STAGE 1</span>' in html
+    assert 'ROUND 01</span><span class="badge stage">STAGE 2 材料</span>' in html
     # 独立工作区：与 full_case fixture 共享 tmp_path 会互相追加 log 条目
     ws = _make_case(tmp_path / "iso")
     append_entry(ws, {"round": 2, "action": "propose", "candidates": [
         {"struct": {"Positive electrode thickness [m]": 6.84e-5},
          "name": "结构方案B", "role": "正极减薄10%"}]})
     html2 = _render(ws)
-    assert 'ROUND 02</span><span class="badge stage">STAGE 2</span>' in html2
+    assert 'ROUND 02</span><span class="badge stage">STAGE 3 电芯</span>' in html2
+
+
+def test_entry_stage_evaluate_safety_metric_without_keyword():
+    """evaluate 条目无'结构'字样、metrics 含安全指标 → 判阶段 3（先看 metrics，不靠文本碰巧命中）。"""
+    e = {"action": "evaluate", "metrics": {"T_max_K": 315.0, "plated": False}, "verdict": "pass"}
+    assert _entry_stage(e) == 4
+    e2 = {"action": "evaluate", "metrics": {"energy_density_Wh_kg": 500}, "verdict": "pass"}
+    assert _entry_stage(e2) == 2  # 无结构/安全指标 → 兜底材料轮
+
+
+def test_round_card_stage_range_badge_without_struct_keyword(tmp_path):
+    """真实 agent 日志的 evaluate（无'结构'字样）也须显示 STAGE 2–3 而非 1–2。"""
+    ws = _make_case(tmp_path)
+    append_entry(ws, {"round": 2, "action": "propose", "candidates": [
+        {"struct": {"Positive electrode thickness [m]": 6.84e-5},
+         "name": "结构方案B", "role": "正极减薄10%"}]})
+    append_entry(ws, {"round": 2, "action": "evaluate",
+                      "metrics": {"T_max_K": 315.0, "plated": False},
+                      "verdict": "pass"})
+    html = _render(ws)
+    assert 'ROUND 02</span><span class="badge stage">STAGE 3–4</span>' in html
 
 
 def test_round_card_stage_range_badge(tmp_path):
@@ -154,16 +176,16 @@ def test_round_card_stage_range_badge(tmp_path):
                       "metrics": {"T_max_K": 315.0, "plated": False},
                       "verdict": "pass", "note": "struct 方案结构安全评估"})
     html = _render(ws)
-    assert 'ROUND 01</span><span class="badge stage">STAGE 1</span>' in html  # 单阶段轮=单标
-    assert 'ROUND 02</span><span class="badge stage">STAGE 2–3</span>' in html  # 跨阶段轮=范围
+    assert 'ROUND 01</span><span class="badge stage">STAGE 2 材料</span>' in html  # 单阶段轮=单标
+    assert 'ROUND 02</span><span class="badge stage">STAGE 3–4</span>' in html  # 跨阶段轮=范围
     round02_tail = html.split("ROUND 02", 1)[1]
-    assert '<span class="badge stage">STAGE 3</span>' not in round02_tail  # 不再仅显示最大阶段
+    assert '<span class="badge stage">STAGE 3 电芯</span>' not in round02_tail  # 不再仅显示最大阶段
 
 
-def test_stage_badge_helpers_closing_phase_is_stage_4():
-    """阶段 4（真DFT/MD 验证）沿用 end 铜色样式；范围徽章可含 4（如 STAGE 3–4）。"""
-    assert _stage_badge(4) == '<span class="badge stage end">STAGE 4</span>'
-    assert _stage_badge(1) == '<span class="badge stage">STAGE 1</span>'
+def test_stage_badge_helpers_closing_phase_is_stage_5():
+    """阶段 4（真DFT/MD 验证）沿用 end 铜色样式；范围徽章可含 5（如 STAGE 4–5）。"""
+    assert _stage_badge(5) == '<span class="badge stage end">STAGE 5 真DFT/MD</span>'
+    assert _stage_badge(1) == '<span class="badge stage">STAGE 1 规划</span>'
     assert _stage_badge(None) == ""
     assert _stage_badge(0) == ""  # 0 不再是有效阶段键
     assert _stage_range_badge(4, 4) == _stage_badge(4)  # 单阶段 4 沿用 end 徽章
@@ -172,12 +194,12 @@ def test_stage_badge_helpers_closing_phase_is_stage_4():
     assert _stage_range_badge(0, 4) == ""  # 无效阶段混入不产出范围
 
 
-def test_entry_stage_maps_endorse_final_to_stage_4():
-    """endorse/final 映射到阶段 4（真DFT/MD 验证）；其余阶段映射不变。"""
-    assert _entry_stage({"action": "endorse"}) == 4
-    assert _entry_stage({"action": "final"}) == 4
-    assert _entry_stage({"action": "propose", "candidates": ["FEC"]}) == 1
-    assert _entry_stage({"action": "funnel"}) == 1
+def test_entry_stage_maps_endorse_final_to_stage_5():
+    """endorse/final 映射到阶段 5（真DFT/MD 验证）；其余阶段映射不变。"""
+    assert _entry_stage({"action": "endorse"}) == 5
+    assert _entry_stage({"action": "final"}) == 5
+    assert _entry_stage({"action": "propose", "candidates": ["FEC"]}) == 2
+    assert _entry_stage({"action": "funnel"}) == 2
 
 
 def test_criteria_min_max_thresholds(tmp_path):
@@ -460,14 +482,14 @@ def test_aging_curve_rendered(tmp_path):
     assert "capacity [Ah]" in html
     assert "cycle" in html  # 横轴标注
     assert "SEI_end 449.1 nm" in html  # caption chip
-    assert '<span class="badge stage">STAGE 3</span>' in html  # aging → 阶段 3
+    assert '<span class="badge stage">STAGE 3 电芯</span>' in html  # aging → 阶段 3
 
 
 def test_plot_stage_aging_maps_to_3():
     from bda.report import _plot_stage
 
-    assert _plot_stage("round_4_aging_baseline.json") == 3
-    assert _plot_stage("round_1_FEC_discharge.json") == 2
+    assert _plot_stage("round_4_aging_baseline.json") == 4
+    assert _plot_stage("round_1_FEC_discharge.json") == 3
 
 
 def test_cell_non_curve_files_ignored(tmp_path):

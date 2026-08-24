@@ -4,9 +4,20 @@ import pybamm
 PROTOCOLS = {
     "1C_discharge": {"kind": "discharge", "C_rate": 1.0, "t_end_s": 3600.0, "T_amb_K": 298.15},
     "4C_charge_45C": {"kind": "charge", "C_rate": 4.0, "t_end_s": 900.0, "T_amb_K": 318.15},
+    # 倍率放电：5C 恒流放电（电动工具/混动场景）。容量保持率 = 5C 容量 ÷ 同参数 1C 容量，
+    # 由 agent 机械计算后落盘供 log-evaluate 判定。
+    "5C_discharge": {"kind": "discharge", "C_rate": 5.0, "t_end_s": 720.0, "T_amb_K": 298.15},
+    # 低温放电：-20 ℃（253.15 K）1C 放电（极寒场景）。低温容量保持率 = -20℃ 容量 ÷ 25℃ 容量。
+    "lowT_discharge": {"kind": "discharge", "C_rate": 1.0, "t_end_s": 3600.0, "T_amb_K": 253.15},
+    # 过充协议：先 1C 放到下限，再以 C_rate 充电至 上限+0.5V（过充场景）。
+    # 输出含 T_max_K 与过充段电压曲线；过充后是否热失控由 thermal_runaway 模块耦合判定。
+    "overcharge": {"kind": "overcharge", "C_rate": 0.5, "t_end_s": 7200.0, "T_amb_K": 298.15, "cutoff_add_v": 0.5},
     # 老化协议：N 圈 1C 恒流充放（SEI ec reaction limited + isothermal）；
     # 电压上下限取参数集自身值。要求基参数集带 SEI 动力学参数（Chen2020/OKane2022 等）。
+    # cycles 可通过 run-pyamm --cycles 覆盖（默认 100）。
     "aging_1C_100cyc": {"kind": "aging", "cycles": 100, "C_rate": 1.0, "T_amb_K": 298.15},
+    # 高温老化：45 ℃（318.15 K）1C 循环（高温存储/循环场景，SEI 生长加速）。
+    "aging_1C_100cyc_45C": {"kind": "aging", "cycles": 100, "C_rate": 1.0, "T_amb_K": 318.15},
 }
 
 # Standard lithium plating parameter values (constant approximation of PyBaMM's
@@ -121,13 +132,31 @@ def run_simulation(
     fallback: bool = True,
     thermal: str = "lumped",
     plating: bool = False,
+    cycles: int | None = None,
 ) -> dict:
     if protocol not in PROTOCOLS:
         raise ValueError(f"unknown protocol '{protocol}'; legal: {sorted(PROTOCOLS)}")
     if mode not in ("spme", "dfn"):
         raise ValueError(f"unknown mode '{mode}'; legal: spme, dfn")
-    p = PROTOCOLS[protocol]
-    parameter_values = pybamm.ParameterValues(base)
+    p = dict(PROTOCOLS[protocol])
+    if cycles is not None and p["kind"] == "aging":
+        p["cycles"] = cycles
+    if base.endswith(".json"):
+        # 自定义参数集（如高电压 LNMO）：Chen2020 基底 + JSON 覆盖键
+        # （JSON 为扁平覆盖键集，见 data/LNMO.json；OCP 等函数键手动解析为 Python 函数）
+        import json as _json
+        from pathlib import Path as _Path
+
+        from bda.simulators.lnmo_parameters import lnmo_ocp
+
+        extra = _json.loads(_Path(base).read_text(encoding="utf-8"))
+        for key in ("Positive electrode OCP [V]", "Positive electrode OCP [V] (from stoich)"):
+            if isinstance(extra.get(key), str):
+                extra[key] = lnmo_ocp
+        parameter_values = pybamm.ParameterValues("Chen2020")
+        parameter_values.update(extra, check_already_exists=False)
+    else:
+        parameter_values = pybamm.ParameterValues(base)
     unknown_params = sorted(name for name in params if name not in parameter_values)
     if unknown_params:
         raise ValueError(f"unknown parameter name(s): {unknown_params}")
@@ -162,8 +191,25 @@ def run_simulation(
         options["lithium plating"] = "irreversible"
 
     def _solve(model):
-        sim = pybamm.Simulation(model, parameter_values=parameter_values)
-        sim.solve([0, p["t_end_s"]])
+        # Experiment 驱动：C_rate 真实生效（此前只影响 capacity 口径，4C 协议实际跑
+        # 默认 1C 放电；agent 传负电流时与默认满电初始条件冲突，触发
+        # "Maximum voltage non-positive at initial conditions"）。电压事件由实验处理。
+        # 充电从空电开始：默认满电初始会让充电步骤立即不可行，故先 1C 放到 v_min 再充。
+        v_min = float(parameter_values["Lower voltage cut-off [V]"])
+        v_max = float(parameter_values["Upper voltage cut-off [V]"])
+        if p["kind"] in ("charge", "overcharge"):
+            # 过充协议：充电截止 = 上限 + cutoff_add_v（默认 +0.5 V）
+            v_cut = v_max + p.get("cutoff_add_v", 0.0)
+            exp = pybamm.Experiment(
+                [
+                    f"Discharge at 1C until {v_min} V",
+                    f"Charge at {p['C_rate']:g}C until {v_cut:g} V",
+                ]
+            )
+        else:
+            exp = pybamm.Experiment([f"Discharge at {p['C_rate']:g}C until {v_min} V"])
+        sim = pybamm.Simulation(model, experiment=exp, parameter_values=parameter_values)
+        sim.solve()
         return sim.solution
 
     model_used = "DFN" if mode == "dfn" else "SPMe"
@@ -190,9 +236,12 @@ def run_simulation(
         # (legacy parameter sets lacking lumped-thermal geometry/collector params).
         out["injected_defaults"] = injected_defaults
     if p["kind"] == "discharge":
-        out["capacity_ah"] = float(sol["Discharge capacity [A.h]"].entries[-1])
+        out["capacity_ah"] = float(sol.cycles[-1]["Discharge capacity [A.h]"].entries[-1])
     else:
-        out["capacity_ah"] = float(sol["Time [s]"].entries[-1]) * p["C_rate"] / 3600.0
+        # 充电容量 = 最后一段（充电段）时长 × C_rate（恒流）
+        cyc = sol.cycles[-1]
+        t_cyc = cyc["Time [s]"].entries
+        out["capacity_ah"] = float(t_cyc[-1] - t_cyc[0]) * p["C_rate"] / 3600.0
     if thermal != "isothermal":
         out["T_max_K"] = float(sol["Volume-averaged cell temperature [K]"].entries.max())
     if plating:
