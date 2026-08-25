@@ -17,3 +17,12 @@ calibration/lgm50t/extracted/
 calibration/lgm50t/*.zip
 # pip sdist build products
 .claude/skills/virtual-battery-factory/scripts/build/
+
+# manuscript / docs / data (per repo policy)
+paper/
+data/
+docs/
+references/
+superpowers/
+calibration/lgm50t/cache/
+texput.log
