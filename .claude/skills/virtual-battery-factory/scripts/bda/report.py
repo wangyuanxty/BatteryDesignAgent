@@ -611,8 +611,6 @@ def _header_html(case_dir: str, log: list[dict], criteria: dict) -> str:
     goal = _read_goal(case_dir) or "（设计目标未记录于 config.yaml）"
     meta_criteria = _normalize_criteria(criteria).get("meta", {})
     meta = []
-    if "max_rounds" in meta_criteria:
-        meta.append(f"预算 {_fmt_num(meta_criteria['max_rounds'])} 轮")
     if "real_compute" in meta_criteria:
         meta.append("真计算开启" if meta_criteria["real_compute"] is True else "真计算关闭")
     meta_html = "".join(f"<span>{_html_escape(m)}</span>" for m in meta)
@@ -1136,7 +1134,7 @@ def _endorse_html(log: list[dict]) -> str:
 
 
 def _final_html(log: list[dict]) -> str:
-    fallback = '<p class="empty">暂无推荐（预算耗尽或未达标）</p>'
+    fallback = '<p class="empty">暂无推荐（未达标）</p>'
     entries = [e for e in log if e.get("action") == "final"]
     if not entries:
         return fallback

@@ -41,7 +41,9 @@ def calc_energy(params_json: str, discharge_json: str, base: str) -> dict:
     dis = json.loads(Path(discharge_json).read_text(encoding="utf-8-sig"))
     v = np.asarray(dis["voltage_v"])
     t = np.asarray(dis["time_s"])
-    energy_wh = float(np.trapezoid(v * i_1c, t) / 3600.0)
+    # 兼容 numpy 2（np.trapezoid）与 1.x（np.trapz 旧名）
+    _trapz = getattr(np, "trapezoid", np.trapz)
+    energy_wh = float(_trapz(v * i_1c, t) / 3600.0)
     pos_el = _layer(
         float(pv["Positive electrode thickness [m]"]),
         float(pv["Positive electrode porosity"]),

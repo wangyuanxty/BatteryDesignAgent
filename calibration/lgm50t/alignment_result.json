@@ -1,0 +1,8 @@
+{
+ "rmse_mv": 20.6,
+ "mean_ape_pct": 0.43,
+ "max_ape_pct": 1.93,
+ "real_cap_mah": 4878.9,
+ "sim_cap_mah": 4857.0,
+ "cap_diff_pct": 0.45
+}

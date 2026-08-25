@@ -79,7 +79,7 @@ def test_render_missing_sections_show_placeholders(tmp_path):
     ws = _make_case(tmp_path)
     html = _render(ws)
     assert "暂无数据" in html
-    assert "暂无推荐（预算耗尽或未达标）" in html
+    assert "暂无推荐（未达标）" in html
 
 
 def test_export_csv(tmp_path):
@@ -267,7 +267,7 @@ def test_criteria_stage_layered_render(tmp_path):
     assert '<span class="badge ok">✓</span>' in html  # 达成列达标行
     assert "全部达成" in html  # stage2/3 头部聚合徽章
     assert "无析锂" in html  # plated 阈值文本
-    assert "预算 30 轮" in html  # meta 区块渲染
+    assert "预算" not in html  # max_rounds 机制已移除，meta 区块不渲染预算
     assert "真计算关闭" in html
 
 
@@ -604,7 +604,7 @@ def test_verdict_variants(tmp_path):
     ws4 = _make_case(tmp_path)
     append_entry(ws4, {"action": "final"})
     html4 = _render(ws4)
-    assert "暂无推荐（预算耗尽或未达标）" in html4  # 空 final 条目如实回退
+    assert "暂无推荐（未达标）" in html4  # 空 final 条目如实回退
 
 
 def test_propose_dict_candidates_with_name_and_role(tmp_path):

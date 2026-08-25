@@ -188,24 +188,6 @@ def _disable_auto_memory() -> None:
     os.environ["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
 
 
-# Protocol files blocked in C1 bare mode (SKILL.md / assets examples); cli-commands.md (tool usage) allowed
-_BLOCKED_PROTOCOL = ("SKILL.md", "examples.md")
-
-
-async def _bare_guard(input: dict, tool_use_id: str | None, context) -> dict:
-    """PreToolUse callback: in C1 bare-LLM mode, intercept reads of skill protocol files (Read/Bash/Grep/Glob)."""
-    probe = " ".join(str(v) for v in (input.get("tool_input") or {}).values())
-    for blocked in _BLOCKED_PROTOCOL:
-        if blocked in probe:
-            return {
-                "hookSpecificOutput": {
-                    "hookEventName": "PreToolUse",
-                    "permissionDecision": "deny",
-                    "permissionDecisionReason": f"C1 bare-LLM control mode forbids reading protocol files ({blocked})",
-                }
-            }
-    return {}
-
 
 async def _run(
     log: logging.Logger,
@@ -215,6 +197,8 @@ async def _run(
     skills: list[str] | None = None,
     hooks: dict | None = None,
     model: str | None = None,
+    plugins: list[str] | None = None,
+    allowed_tools: list[str] | None = None,
 ) -> int:
     """Run one session, return the process exit code."""
     options = ClaudeAgentOptions(
@@ -224,8 +208,9 @@ async def _run(
         permission_mode="bypassPermissions",
         effort="max",
         enable_file_checkpointing=True,
-        allowed_tools=ALLOWED_TOOLS,
+        allowed_tools=allowed_tools or ALLOWED_TOOLS,
         setting_sources=["project"],
+        plugins=plugins,
         max_turns=max_turns,
         cwd=str(REPO_ROOT),
         model=model or None,
@@ -254,11 +239,6 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--workspace", default=None, help="Workspace directory (artifact destination); unset = agent decides")
     parser.add_argument("--model", default=os.environ.get("ANTHROPIC_MODEL") or "", help="Model override (robustness experiments, e.g. deepseek-v4-pro; default = ANTHROPIC_MODEL or session default)")
     parser.add_argument(
-        "--bare",
-        action="store_true",
-        help="C1 bare-LLM control: no skill, no protocol rules; only tool docs and objective",
-    )
-    parser.add_argument(
         "--override",
         default=None,
         help="system prompt override (ablation B, e.g. 'architecture variant count not enforced') — system-level instruction, overrides skill rules",
@@ -269,33 +249,6 @@ def main(argv: list[str] | None = None) -> int:
     if args.max_turns is not None and args.max_turns <= 0:
         parser.error("--max-turns must be a positive integer")
     ws = Path(args.workspace).resolve() if args.workspace else None
-    if args.bare:
-        # C1 bare LLM: tool docs + objective, no protocol rules (no funnel/fallback/criteria/audit requirements);
-        # true DFT/MD commands disabled (endorsement is part of protocol flow; C1 has no protocol, does not need it)
-        os.environ["BDA_DISABLE_TRUE_COMPUTE"] = "1"
-        system = (
-            "You are a battery design agent. Available tools: Bash/Read/Write/Edit/Grep/Glob.\n"
-            "Simulation tool library bda: `.venv\\Scripts\\python.exe -m bda <subcommand>`"
-            " (subcommands per `-m bda --help`; full usage reference: "
-            ".claude/skills/virtual-battery-factory/references/cli-commands.md).\n"
-            f"Objective: {args.prompt}"
-        )
-        if ws:
-            system += f"\nWorkspace: {ws}"
-        from claude_agent_sdk import HookMatcher
-
-        log = _setup_logging(ws)
-        return asyncio.run(
-            _run(
-                log,
-                "",
-                args.max_turns,
-                system=system,
-                skills=[],
-                hooks={"PreToolUse": [HookMatcher(matcher="Read|Bash|Grep|Glob", hooks=[_bare_guard])]},
-                model=args.model or None,
-            )
-        )
     prompt = f"headless session: no user present, skip clarification questions (SKILL.md zero-interaction rule), parse parameters from the task text, use defaults for unspecified ones, write to log.jsonl entry 0.\nTask: {args.prompt}"
     if ws:
         prompt = f"Workspace: {ws}\n" + prompt

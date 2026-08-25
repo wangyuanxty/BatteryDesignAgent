@@ -11,3 +11,9 @@ runs/
 .vscode/
 .claude/skills/cad-skill/
 docs/backups/
+
+# calibration raw dataset (Zenodo LG M50T extracted members — ignorable, re-downloadable)
+calibration/lgm50t/extracted/
+calibration/lgm50t/*.zip
+# pip sdist build products
+.claude/skills/virtual-battery-factory/scripts/build/

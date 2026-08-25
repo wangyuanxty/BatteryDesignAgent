@@ -3,6 +3,7 @@ import pybamm
 
 PROTOCOLS = {
     "1C_discharge": {"kind": "discharge", "C_rate": 1.0, "t_end_s": 3600.0, "T_amb_K": 298.15},
+    "0.1C_discharge": {"kind": "discharge", "C_rate": 0.1, "t_end_s": 36000.0, "T_amb_K": 298.15},
     "4C_charge_45C": {"kind": "charge", "C_rate": 4.0, "t_end_s": 900.0, "T_amb_K": 318.15},
     # 倍率放电：5C 恒流放电（电动工具/混动场景）。容量保持率 = 5C 容量 ÷ 同参数 1C 容量，
     # 由 agent 机械计算后落盘供 log-evaluate 判定。

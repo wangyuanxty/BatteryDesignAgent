@@ -158,6 +158,17 @@ def verify_deliverables(case_dir: Path) -> dict:
         }
     )
 
+    # 6. 收尾审计链：final 条目必须存在（收尾判词的审计尾）
+    #    （t6_r1_flash 事故：交付验证 ALL PASS 但 log.jsonl 缺 final — 收尾未落判词）
+    has_final = any(e.get("action") == "final" for e in log_entries)
+    checks.append(
+        {
+            "check": "收尾审计链完整（final 条目存在）",
+            "pass": has_final,
+            "detail": "final 条目存在" if has_final else "log.jsonl 缺 final 条目（收尾未落判词）",
+        }
+    )
+
     return {"case_dir": str(case_dir), "checks": checks, "all_pass": all(c["pass"] for c in checks)}
 
 
