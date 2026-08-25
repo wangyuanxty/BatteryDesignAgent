@@ -19,8 +19,8 @@ calibration/lgm50t/*.zip
 .claude/skills/virtual-battery-factory/scripts/build/
 
 # user-requested ignores (2026-08-26)
-paper/
-data/
-docs/
-references/
-superpower/
+/paper/
+/data/
+/docs/
+/references/
+/superpower/

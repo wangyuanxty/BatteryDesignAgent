@@ -10,7 +10,7 @@
 - JSON is the contract: all inputs/outputs are UTF-8 JSON files; `--out` specifies the output path; each step can be rerun independently.
 - Same parameters must be reused (spec 5.2 invariant 3): all `run-*` commands check the store cache first, reusing on hit without recomputation. Cache directory = `cache/` under the `--out` file's directory (key = command parameter combination: run-pyamm: params+protocol+base+mode+thermal+plating; run-mlp: smiles+model; run-xtb: smiles; run-orca: smiles+charge+mult+functional; run-md: box+t_ns+engine; run-comp: candidates). Corrupt cache files (invalid JSON / non-object) are treated as misses and rewritten.
 - Error convention: parameter/validation failures print `bda error: <reason>` to stderr with exit code 1; missing input files or missing JSON keys terminate with a Python traceback — read the last few output lines to locate the cause, fix per the hint, and rerun.
-- Environment dependencies: `run-xtb` needs the xtb binary on PATH; `run-orca` needs orca on PATH; `run-md` needs gmx on PATH and a corresponding .itp template in the skill's `scripts/bda/simulators/data/opls/`.
+- Environment dependencies: `run-xtb` needs the xtb binary on PATH; `run-orca` needs orca on PATH; `run-cp2k` needs the MSYS2 CP2K binary (`C:\msys64\ucrt64\bin\cp2k_stack4g.exe`, stack-patched) and the CP2K data files under `C:\cp2k-data` (BASIS_MOLOPT / GTH_POTENTIALS / dftd3.dat); `run-qe` needs the MSYS2 pw.x (`C:\msys64\ucrt64\bin\pw_stack4g.exe`) and conda-forge SSSP pseudopotentials; `run-md` gromacs engine needs gmx on PATH and the .itp templates in the skill's `scripts/bda/simulators/data/opls/`, while the mace engine needs only mace-torch (no GROMACS, no templates).
 
 ## Stage 2 funnel judgment (no CLI command)
 
@@ -25,6 +25,7 @@ bda run-pyamm --params PARAMS --protocol PROTOCOL [--base BASE] [--mode MODE] [-
 - `--base`: PyBaMM parameter-set name (default `Chen2020`); **the case configuration's `base_params` field must be passed verbatim to `--base`** (e.g., `--base ORegan2022`). Parameter names from the parameter bridge mapping table (SKILL.md Section 1, Step 2) are cross-set shared names (`Electrolyte diffusivity [m2.s-1]`, etc.), so `--params` works directly with any parameter set.
 - `--protocol` legal values:
   - `1C_discharge` (1C discharge, 3600 s, 298.15 K)
+  - `0.1C_discharge` (0.1C low-rate discharge, 36000 s, 298.15 K — real-data alignment calibers)
   - `4C_charge_45C` (4C charge, 900 s, 318.15 K)
   - `5C_discharge` (5C high-rate discharge, 720 s — rate scenarios; **high rate recommends `--mode dfn`** — SPMe severely underestimates capacity at 5C)
   - `lowT_discharge` (1C discharge, -20 °C/253.15 K — low-temperature scenarios)
