@@ -496,11 +496,11 @@ def _run_mace_md(box: dict, t_ns: float) -> dict:
         dyn = Langevin(atoms, timestep=1.0 * units.fs, temperature_K=298.15, friction=0.01)
         dyn.attach(lambda: frames.append(atoms.copy()), interval=_NSTXOUT)
         dyn.attach(lambda: energies.append(atoms.get_potential_energy()), interval=_NSTXOUT)
-        # chunked run with progress reporting (10% granularity, ETA) — observability
+        # chunked run with progress reporting (1% granularity, ETA) — observability
         import time as _time
 
         _t0 = _time.time()
-        chunk = max(1, steps // 10)
+        chunk = max(1, steps // 100)
         done = 0
         while done < steps:
             n = min(chunk, steps - done)
