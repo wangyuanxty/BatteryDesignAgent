@@ -454,10 +454,12 @@ def _energy_drift_ok(workdir: Path) -> tuple[bool, str]:
 
 
 def _mace_calculator():
-    """MACE-MP-0 medium calculator on CPU (separate factory so tests can mock)."""
+    """MACE-MP-0 medium calculator (CUDA when available, else CPU; separate
+    factory so tests can mock)."""
+    import torch
     from mace.calculators import mace_mp
 
-    return mace_mp(model="medium", device="cpu")
+    return mace_mp(model="medium", device="cuda" if torch.cuda.is_available() else "cpu")
 
 
 def _run_mace_md(box: dict, t_ns: float) -> dict:
