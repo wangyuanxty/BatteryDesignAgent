@@ -71,19 +71,32 @@ def _fmt_num(v, sig: int = 4) -> str:
     return str(v)
 
 
+def _variant_dict(c) -> dict:
+    """struct/params → dict (params may be a JSON string; parse it)."""
+    v = c.get("struct") or c.get("params")
+    if isinstance(v, str):
+        try:
+            v = json.loads(v)
+        except (json.JSONDecodeError, TypeError):
+            return {}
+    return v if isinstance(v, dict) else {}
+
+
 def _cand_type(c) -> str:
-    """候选类型（机械判定）：smiles=分子、base=体系、struct 含电解液参数=配方、其余 struct=结构。"""
+    """CandidateType (mechanical): smiles=molecule; base only=system;
+    struct/params variants: electrolyte keys=formulation, else structure."""
     if not isinstance(c, dict):
-        return "分子"
+        return "Molecule"
     if c.get("smiles"):
-        return "分子"
+        return "Molecule"
+    variant = _variant_dict(c)
+    if variant:
+        if any("electrolyte" in str(k).lower() or "transference" in str(k).lower() for k in variant):
+            return "Formulation"
+        return "Structure"
     if c.get("base"):
-        return "体系"
-    if c.get("struct"):
-        if any("Electrolyte" in str(k) for k in c["struct"]):
-            return "配方"
-        return "结构"
-    return "分子"
+        return "System"
+    return "Molecule"
 
 
 def _cand_content(c) -> str:
@@ -93,8 +106,9 @@ def _cand_content(c) -> str:
         return str(c["smiles"])
     if c.get("base"):
         return str(c["base"])
-    if c.get("struct"):
-        return "；".join(f"{k} = {_fmt_num(v)}" for k, v in c["struct"].items())
+    variant = _variant_dict(c)
+    if variant:
+        return "; ".join(f"{k} = {_fmt_num(v)}" for k, v in variant.items())
     return ""
 
 
@@ -105,33 +119,34 @@ def _source_chip(c) -> str:
 
 
 def _cand_component(c) -> str:
-    """候选所属部件（机械判定）：分子/配方→电解液、base→电芯体系、struct 按键名归部件。"""
+    """CandidateComponent (mechanical): molecule/formulation→Electrolyte;
+    system→Cell system; struct/params keys→component."""
     t = _cand_type(c)
-    if t in ("分子", "配方"):
-        return "电解液"
-    if t == "体系":
-        return "电芯体系"
-    struct = c.get("struct") if isinstance(c, dict) else {}
+    if t in ("Molecule", "Formulation"):
+        return "Electrolyte"
+    if t == "System":
+        return "Cell system"
+    struct = _variant_dict(c) if isinstance(c, dict) else {}
     comps = []
     for k in struct:
         ks = str(k)
         if "Separator" in ks:
-            comps.append("隔膜")
+            comps.append("Separator")
         elif "collector" in ks:
-            comps.append("集流体")
+            comps.append("Current collector")
         elif "Electrolyte" in ks:
-            comps.append("电解液")
+            comps.append("Electrolyte")
         elif "Positive electrode" in ks:
-            comps.append("正极")
+            comps.append("Cathode")
         elif "Negative electrode" in ks:
-            comps.append("负极")
+            comps.append("Anode")
     if not comps:
-        return "结构"
-    return " + ".join(dict.fromkeys(comps))  # 去重保序
+        return "Structure"
+    return " + ".join(dict.fromkeys(comps))  # dedupe, keep order
 
 
 def _cand_row(c) -> str:
-    """候选表格行：候选（名称+来源） | 部件 | 类型 | 说明 | 内容（SMILES/体系/参数）。"""
+    """Candidate table row: candidate (name+source) | component | type | role | content."""
     if isinstance(c, dict):
         name = str(c.get("name") or "")
         role = str(c.get("role") or "")
@@ -147,7 +162,7 @@ def _cand_row(c) -> str:
     )
 
 
-_CAND_HEAD = "<tr><th>候选</th><th>部件</th><th>类型</th><th>说明</th><th>内容</th></tr>"
+_CAND_HEAD = "<tr><th>Candidate</th><th>Component</th><th>Type</th><th>Role</th><th>Content</th></tr>"
 
 
 def _read_goal(case_dir: str) -> str | None:
@@ -181,9 +196,9 @@ def _verdict_badge(verdict: str) -> str:
     return f'<span class="badge {cls}">{_html_escape(str(verdict))}</span>'
 
 
-# 五阶段流程（1=规划，2–4=漏斗阶段，5=真DFT/MD 验证；阶段编号与 SKILL.md 流程一致。
+# 五阶段流程（1=规划，2–4=漏斗阶段，5=True DFT/MD endorsement；阶段编号与 SKILL.md 流程一致。
 # 阶段 5 沿用 .badge.stage.end 铜色样式区分。）
-_STAGE_LABELS = {1: "STAGE 1 规划", 2: "STAGE 2 材料", 3: "STAGE 3 电芯", 4: "STAGE 4 安全", 5: "STAGE 5 真DFT/MD"}
+_STAGE_LABELS = {1: "STAGE 1 Plan", 2: "STAGE 2 Materials", 3: "STAGE 3 Cell", 4: "STAGE 4 Safety", 5: "STAGE 5 True DFT/MD"}
 
 
 def _stage_badge(stage: int | None) -> str:
@@ -196,8 +211,8 @@ def _stage_badge(stage: int | None) -> str:
 
 def _stage_range_badge(lo: int, hi: int) -> str:
     """轮卡片阶段范围徽章：单阶段沿用 _stage_badge；跨阶段显示 STAGE N–M（en dash）。
-    范围仅由数字阶段（1–5）构成，阶段 5（真DFT/MD 验证）可参与范围（如 STAGE 4–5）；
-    endorse/final 条目不进轮卡片，阶段 5 在流程一览条中单独显示。"""
+    范围仅由数字阶段（1–5）构成，阶段 5（True DFT/MD endorsement）可参与范围（如 STAGE 4–5）；
+    endorse/final 条目不进轮卡片，阶段 5 在Flow overview条中单独显示。"""
     if lo == hi:
         return _stage_badge(lo)
     if lo not in _STAGE_LABELS or hi not in _STAGE_LABELS:
@@ -206,9 +221,9 @@ def _stage_range_badge(lo: int, hi: int) -> str:
 
 
 def _entry_stage(e: dict) -> int | None:
-    """log 条目 → 流程阶段：plan=1（总体设计规划）；分子 propose/funnel=2（材料）；
-    struct propose=3（电芯）；evaluate 按内容推断（安全指标=4，结构=3，否则=2）；
-    endorse/final=5（真DFT/MD 验证）。"""
+    """log 条目 → 流程阶段：plan=1（总体设计规划）；mol. propose/funnel=2（材料）；
+    struct propose=3（电芯）；evaluate 按内容推断（安全Metric=4，结构=3，否则=2）；
+    endorse/final=5（True DFT/MD endorsement）。"""
     action = e.get("action")
     if action == "plan":
         return 1
@@ -222,7 +237,7 @@ def _entry_stage(e: dict) -> int | None:
     if action == "funnel":
         return 2
     if action == "evaluate":
-        # 先看结构化 metrics（安全指标=阶段4，结构覆盖=阶段3），文本兜底——不靠"结构"字样碰巧命中
+        # 先看结构化 metrics（安全Metric=阶段4，结构覆盖=阶段3），文本兜底——不靠"结构"字样碰巧命中
         # （实测：agent 日志 evaluate 条目无"结构"字样，曾误判为材料轮=2）
         metrics = e.get("metrics") or {}
         has_safety = isinstance(metrics.get("T_max_K"), (int, float)) or "plated" in metrics
@@ -236,7 +251,7 @@ def _entry_stage(e: dict) -> int | None:
 
 
 def _plot_stage(filename: str) -> int | None:
-    """曲线文件名 → 阶段：discharge=3（电芯设计）、charge/aging=4（安全/老化评估）；无法判定则不贴。"""
+    """曲线文件名 → 阶段：discharge=3（Cell design）、charge/aging=4（安全/老化评估）；无法判定则不贴。"""
     low = filename.lower()
     if "discharge" in low:
         return 3
@@ -247,7 +262,7 @@ def _plot_stage(filename: str) -> int | None:
 
 def _threshold_text(value) -> str:
     if isinstance(value, bool):
-        return "无析锂" if not value else "析锂允许"
+        return "No plating" if not value else "Plating allowed"
     if isinstance(value, dict):
         parts = []
         if "min" in value:
@@ -259,7 +274,7 @@ def _threshold_text(value) -> str:
 
 
 _STAGE_KEYS = ("stage1", "stage2", "stage3", "meta")
-_STAGE_NAMES = {"stage1": "材料设计", "stage2": "电芯设计", "stage3": "安全评估", "meta": "案例参数"}
+_STAGE_NAMES = {"stage1": "Materials design", "stage2": "Cell design", "stage3": "Safety assessment", "meta": "Case parameters"}
 _STAGE1_UNITS = {"max_energy_ev": "eV", "max_homo_ev": "eV"}
 
 
@@ -267,7 +282,7 @@ def _normalize_criteria(criteria: dict) -> dict[str, dict]:
     """criteria → {"stage1"/"stage2"/"stage3"/"meta": {...}}。
 
     新协议为显式分层（stageN/meta 键）；旧日志为扁平键（如 T_max_C），按键名归组：
-    电位窗/淘汰线（homo/energy_ev/voltage/window）→ stage1；容量/能量密度（capacity/density）→ stage2；
+    电位窗/淘汰线（homo/energy_ev/voltage/window）→ stage1；容量/Energy density（capacity/density）→ stage2；
     温度/析锂（t_max/temp/plat）→ stage3；其余 → meta。
     """
     norm: dict[str, dict] = {}
@@ -293,7 +308,7 @@ def _normalize_criteria(criteria: dict) -> dict[str, dict]:
 
 
 def _flat_thresholds(criteria: dict) -> dict:
-    """stage1–3 阈值合并为扁平字典（KPI/达成列机械比较用；meta 不参与）。"""
+    """stage1–3 Threshold合并为扁平字典（KPI/Achieved列机械比较用；meta 不参与）。"""
     norm = _normalize_criteria(criteria)
     merged: dict = {}
     for k in ("stage1", "stage2", "stage3"):
@@ -302,9 +317,9 @@ def _flat_thresholds(criteria: dict) -> dict:
 
 
 def _achieve_cell(value, spec) -> str:
-    """单指标达成格：数值 vs {"min"/"max"} 阈值 → ✓/✗ 徽章 + 达成值；无数据 → 破折号。"""
+    """单MetricAchieved格：数值 vs {"min"/"max"} Threshold → ✓/✗ 徽章 + Achieved值；无数据 → 破折号。"""
     if isinstance(value, bool):
-        show = "无析锂" if not value else "析锂风险"
+        show = "No plating" if not value else "Plating risk"
         if isinstance(spec, bool):
             mark = '<span class="badge ok">✓</span>' if value == spec else '<span class="badge bad">✗</span>'
             return f"{show} {mark}"
@@ -325,15 +340,15 @@ def _achieve_cell(value, spec) -> str:
 
 
 def _stage_achieve_badge(stage_key: str, stage_dict: dict, metrics: dict, funnel_latest: dict | None) -> str:
-    """阶段头部"达成"徽章：stage1 看漏斗；stage2/3 看指标对照；无数据 → mute。"""
+    """阶段头部"Achieved"徽章：stage1 看漏斗；stage2/3 看Metric对照；无数据 → mute。"""
     if stage_key == "stage1":
         if funnel_latest is None:
-            return '<span class="badge mute">未执行</span>'
+            return '<span class="badge mute">Not run</span>'
         n, m = _to_int(funnel_latest.get("passed")), _to_int(funnel_latest.get("disputed"))
         # 分歧不是失败（协议："分歧是'该动脑子'的信号"），处置留痕于漏斗明细；
-        # 阶段 2 达成 = 有候选通过漏斗（passed > 0）
+        # 阶段 2 Achieved = 有候选通过漏斗（passed > 0）
         cls = "ok" if n > 0 else "bad"
-        return f'<span class="badge {cls}">达成 · PASS {n} · DISP {m}</span>'
+        return f'<span class="badge {cls}">Achieved · PASS {n} · DISP {m}</span>'
     verdicts: list[bool] = []
     for k, spec in stage_dict.items():
         v = metrics.get(k)
@@ -345,31 +360,31 @@ def _stage_achieve_badge(stage_key: str, stage_dict: dict, metrics: dict, funnel
             if "max" in spec and isinstance(spec["max"], (int, float)):
                 verdicts.append(v <= spec["max"])
     if not verdicts:
-        return '<span class="badge mute">未执行</span>'
+        return '<span class="badge mute">Not run</span>'
     if all(verdicts):
-        return '<span class="badge ok">全部达成</span>'
-    return '<span class="badge bad">部分未达成</span>'
+        return '<span class="badge ok">All achieved</span>'
+    return '<span class="badge bad">Partially achieved</span>'
 
 
 def _criteria_html(criteria: dict, log: list[dict]) -> str:
     if not criteria:
         return (
-            '<p class="empty">暂无数据</p>'
-            '<p class="hint">log.jsonl 第 0 条未提供达标标准（criteria）。</p>'
+            '<p class="empty">No data</p>'
+            '<p class="hint">No criteria recorded (log.jsonl entry 0 missing).</p>'
         )
     norm = _normalize_criteria(criteria)
     metrics = _latest_metrics(log)
     funnels = [e for e in log if e.get("action") == "funnel"]
     funnel_latest = funnels[-1] if funnels else None
     blocks = []
-    for stage_key, name in (("stage1", "材料设计"), ("stage2", "电芯设计"),
-                            ("stage3", "安全评估"), ("meta", "案例参数")):
+    for stage_key, name in (("stage1", "Materials design"), ("stage2", "Cell design"),
+                            ("stage3", "Safety assessment"), ("meta", "Case parameters")):
         stage_dict = norm.get(stage_key, {})
         if stage_key == "meta":
             head = ('<div class="stage-goal-head"><span class="badge mute">META</span>'
                     f'<span class="stage-goal-name">{name}</span></div>')
             if not stage_dict:
-                table = '<p class="empty">未提供</p>'
+                table = '<p class="empty">Not provided</p>'
             else:
                 rows = "".join(
                     "<tr>"
@@ -378,7 +393,7 @@ def _criteria_html(criteria: dict, log: list[dict]) -> str:
                     "</tr>"
                     for k, v in stage_dict.items()
                 )
-                table = f'<table class="tbl"><tr><th>参数</th><th>值</th></tr>{rows}</table>'
+                table = f'<table class="tbl"><tr><th>Parameter</th><th>Value</th></tr>{rows}</table>'
             blocks.append(f'<div class="stage-goal meta">{head}{table}</div>')
             continue
         stage_num = int(stage_key[-1])
@@ -388,11 +403,11 @@ def _criteria_html(criteria: dict, log: list[dict]) -> str:
             f"{_stage_achieve_badge(stage_key, stage_dict, metrics, funnel_latest)}</div>"
         )
         if not stage_dict:
-            table = '<p class="empty">未设置单独目标（综合目标见其他阶段）</p>'
+            table = '<p class="empty">No separate targets (see other stages)</p>'
             blocks.append(f'<div class="stage-goal">{head}{table}</div>')
             continue
         has_achieve = stage_key in ("stage2", "stage3")
-        head_cells = "<tr><th>指标</th><th>阈值</th>" + ("<th>达成</th>" if has_achieve else "") + "<th>说明</th></tr>"
+        head_cells = "<tr><th>Metric</th><th>Threshold</th>" + ("<th>Achieved</th>" if has_achieve else "") + "<th>Note</th></tr>"
         rows = []
         for k, v in stage_dict.items():
             if stage_key == "stage1" and not isinstance(v, (dict, bool)):
@@ -429,7 +444,7 @@ def _candidates_html(log: list[dict]) -> str:
                 seen[key] = c
                 order.append(key)
     if not order:
-        return '<p class="empty">暂无数据</p>'
+        return '<p class="empty">No data</p>'
     rows = "".join(_cand_row(seen[k]) for k in order)
     return f'<table class="tbl cand">{_CAND_HEAD}{rows}</table>'
 
@@ -439,10 +454,10 @@ def _goal_mark(ok: bool) -> str:
 
 
 def _goal_parts(stage_key: str, stage_dict: dict) -> str:
-    """阶段目标压缩文本：'E ≤ 0.0 eV · HOMO ≤ −6.0 eV' / '能量密度 ≥ 300 Wh/kg' 等。"""
+    """阶段目标压缩文本：'E ≤ 0.0 eV · HOMO ≤ −6.0 eV' / 'Energy density ≥ 300 Wh/kg' 等。"""
     labels = {
         "max_energy_ev": "E", "max_homo_ev": "HOMO",
-        "energy_density_wh_kg": "能量密度", "capacity_ah": "容量", "T_max_K": "T_max",
+        "energy_density_wh_kg": "Energy density", "capacity_ah": "Capacity", "T_max_K": "T_max",
     }
     units = {"max_energy_ev": "eV", "max_homo_ev": "eV", "energy_density_wh_kg": "Wh/kg", "T_max_K": "K"}
     parts = []
@@ -460,18 +475,18 @@ def _goal_parts(stage_key: str, stage_dict: dict) -> str:
             sign = "≤ " if stage_key == "stage1" else ""
             unit = units.get(k, "")
             parts.append(f"{label} {sign}{_fmt_num(v)}{' ' + unit if unit else ''}")
-    return " · ".join(parts) if parts else "未设置目标"
+    return " · ".join(parts) if parts else "No targets"
 
 
 def _flow_achieve(stage_key: str, stage_dict: dict, log: list[dict]) -> str:
-    """流程条达成摘要：stage1 看最新漏斗；stage2/3 看最新评估指标对照。"""
+    """流程条Achieved摘要：stage1 看最新漏斗；stage2/3 看最新评估Metric对照。"""
     if stage_key == "stage1":
         funnels = [e for e in log if e.get("action") == "funnel"]
         if not funnels:
             return "—"
         f = funnels[-1]
         n, m = _to_int(f.get("passed")), _to_int(f.get("disputed"))
-        # 阶段 2 达成 = 有候选通过漏斗（分歧已处置，留痕于漏斗明细）
+        # 阶段 2 Achieved = 有候选通过漏斗（分歧已处置，留痕于漏斗明细）
         return f"PASS {n} · DISP {m} {_goal_mark(n > 0)}"
     metrics = _latest_metrics(log)
     if not stage_dict or not metrics:
@@ -480,7 +495,7 @@ def _flow_achieve(stage_key: str, stage_dict: dict, log: list[dict]) -> str:
     for k, v in stage_dict.items():
         mv = metrics.get(k)
         if isinstance(v, bool) and isinstance(mv, bool):
-            parts.append(f"{'无析锂' if not mv else '析锂风险'}{_goal_mark(mv == v)}")
+            parts.append(f"{'No plating' if not mv else 'Plating risk'}{_goal_mark(mv == v)}")
         elif isinstance(mv, (int, float)) and isinstance(v, dict) and ("min" in v or "max" in v):
             ok = True
             if "min" in v and isinstance(v["min"], (int, float)):
@@ -492,11 +507,11 @@ def _flow_achieve(stage_key: str, stage_dict: dict, log: list[dict]) -> str:
 
 
 def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: dict) -> str:
-    """概览区流程一览条：五阶段徽章，各带计数/结论摘要 + 目标与达成（由 criteria 与 log 机械推导）。
+    """概览区Flow overview条：五阶段徽章，各带计数/结论摘要 + 目标与Achieved（由 criteria 与 log 机械推导）。
 
-    阶段1 总体设计规划=plan 条目；阶段2 材料设计=分子 propose/funnel（判定层 stage1）；
-    阶段3 电芯设计=struct propose/discharge 曲线（判定层 stage2）；
-    阶段4 安全评估=charge45 曲线（判定层 stage3）；阶段5 真DFT/MD 验证=endorse/final（含最终结论）。
+    阶段1 总体设计规划=plan 条目；阶段2 Materials design=mol. propose/funnel（判定层 stage1）；
+    阶段3 Cell design=struct propose/discharge 曲线（判定层 stage2）；
+    阶段4 Safety assessment=charge45 曲线（判定层 stage3）；阶段5 True DFT/MD endorsement=endorse/final（含最终结论）。
     """
     mol_prop = struct_prop = funnel_n = endorse_n = final_n = plan_n = 0
     for e in log:
@@ -519,16 +534,16 @@ def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: di
     n_charge45 = sum(1 for fname, _ in cell_files if _plot_stage(fname) == 4)
     finals = [e for e in log if e.get("action") == "final"]
     verdict = str(finals[-1].get("verdict") or "") if finals else ""
-    close_sum = f"背书 {endorse_n} · 终审 {final_n}" + (f" · 结论 {verdict}" if verdict else "")
+    close_sum = f"Endorse {endorse_n} · Final {final_n}" + (f" · Verdict {verdict}" if verdict else "")
     norm = _normalize_criteria(criteria)
     # 流程阶段 → 判定层键映射（编号独立，阶段 2/3/4 分别对应判定层 stage1/2/3）
     stage_to_key = {2: "stage1", 3: "stage2", 4: "stage3"}
     items = (
-        (1, "阶段1 · 总体设计规划", f"plan {plan_n} · design_plan.md"),
-        (2, "阶段2 · 材料设计", f"分子 propose {mol_prop} · funnel {funnel_n}"),
-        (3, "阶段3 · 电芯设计", f"结构 propose {struct_prop} · 放电曲线 {n_discharge}"),
-        (4, "阶段4 · 安全评估", f"4C 快充曲线 {n_charge45}"),
-        (5, "阶段5 · 真DFT/MD 验证", close_sum),
+        (1, "Stage 1 · Overall planning", f"plan {plan_n} · design_plan.md"),
+        (2, "Stage 2 · Materials design", f"mol. propose {mol_prop} · funnel {funnel_n}"),
+        (3, "Stage 3 · Cell design", f"struct. propose {struct_prop} · discharge curves {n_discharge}"),
+        (4, "Stage 4 · Safety assessment", f"4C charge curves {n_charge45}"),
+        (5, "Stage 5 · True DFT/MD endorsement", close_sum),
     )
     blocks = []
     for stage, name, count in items:
@@ -537,9 +552,9 @@ def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: di
             stage_key = stage_to_key[stage]
             stage_dict = norm.get(stage_key, {})
             goal_html = (
-                f'<div class="flow-goal"><span class="g-label">目标</span>'
+                f'<div class="flow-goal"><span class="g-label">Goal</span>'
                 f"<span>{_html_escape(_goal_parts(stage_key, stage_dict))}</span></div>"
-                f'<div class="flow-goal"><span class="g-label">达成</span>'
+                f'<div class="flow-goal"><span class="g-label">Achieved</span>'
                 f"<span>{_flow_achieve(stage_key, stage_dict, log)}</span></div>"
             )
         blocks.append(
@@ -551,14 +566,14 @@ def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: di
 
 
 def _kpi_compare(value, thresholds: dict, key: str, direction: str) -> tuple[str, str]:
-    """关键结果 vs 扁平化阈值（stage1–3 合并）的机械比较 → (颜色类, 阈值说明)。"""
+    """关键结果 vs 扁平化Threshold（stage1–3 合并）的机械比较 → (颜色类, Threshold说明)。"""
     spec = thresholds.get(key)
     thr = spec.get(direction) if isinstance(spec, dict) else None
     if not isinstance(value, (int, float)) or not isinstance(thr, (int, float)):
         return "", ""
     ok = (value >= thr) if direction == "min" else (value <= thr)
     sign = "≥" if direction == "min" else "≤"
-    return ("ok" if ok else "bad"), f"阈值 {sign} {_fmt_num(thr, sig=5)}"
+    return ("ok" if ok else "bad"), f"Threshold {sign} {_fmt_num(thr, sig=5)}"
 
 
 def _kpi_item(label: str, value, unit: str, cls: str, sub: str) -> str:
@@ -583,9 +598,9 @@ def _kpi_html(metrics: dict, criteria: dict) -> str:
     thresholds = _flat_thresholds(criteria)
     items = []
     for key, label, unit, direction in (
-        ("energy_density_wh_kg", "能量密度", "Wh/kg", "min"),
-        ("capacity_ah", "放电容量", "Ah", None),
-        ("T_max_K", "最高温度", "K", "max"),
+        ("energy_density_wh_kg", "Energy density", "Wh/kg", "min"),
+        ("capacity_ah", "Capacity", "Ah", None),
+        ("T_max_K", "Max temperature", "K", "max"),
     ):
         value = metrics.get(key) if isinstance(metrics.get(key), (int, float)) else None
         cls, sub = "", ""
@@ -598,31 +613,31 @@ def _kpi_html(metrics: dict, criteria: dict) -> str:
     plated = metrics.get("plated")
     if isinstance(plated, bool):
         if not plated:
-            items.append(_kpi_item("析锂判定", "无析锂", "", "ok", "负极电位全程 ≥ 0 V"))
+            items.append(_kpi_item("Plating", "No plating", "", "ok", "anode potential stayed ≥ 0 V"))
         else:
-            items.append(_kpi_item("析锂判定", "析锂风险", "", "bad", "负极电位曾 < 0 V"))
+            items.append(_kpi_item("Plating", "Plating risk", "", "bad", "anode potential dropped below 0 V"))
     else:
-        items.append(_kpi_item("析锂判定", None, "", "mute", "未提供"))
+        items.append(_kpi_item("Plating", None, "", "mute", "Not provided"))
     return f'<div class="kpi-grid">{"".join(items)}</div>'
 
 
 def _header_html(case_dir: str, log: list[dict], criteria: dict) -> str:
     case_name = Path(case_dir).name or "case"
-    goal = _read_goal(case_dir) or "（设计目标未记录于 config.yaml）"
+    goal = _read_goal(case_dir) or "(Goal not recorded in config.yaml)"
     meta_criteria = _normalize_criteria(criteria).get("meta", {})
     meta = []
     if "real_compute" in meta_criteria:
-        meta.append("真计算开启" if meta_criteria["real_compute"] is True else "真计算关闭")
+        meta.append("Real compute on" if meta_criteria["real_compute"] is True else "Real compute off")
     meta_html = "".join(f"<span>{_html_escape(m)}</span>" for m in meta)
 
     final_entries = [e for e in log if e.get("action") == "final"]
     verdict = str(final_entries[-1].get("verdict") or "") if final_entries else ""
     if not verdict:
-        verdict, vcls = "未判定", "neutral"
+        verdict, vcls = "Not adjudicated", "neutral"
     else:
         vcls = _verdict_class(verdict)
     verdict_html = (
-        '<div class="verdict-block"><div class="eyebrow light">Conclusion · 结论</div>'
+        '<div class="verdict-block"><div class="eyebrow light">Conclusion</div>'
         f'<div class="verdict {vcls}">{_html_escape(verdict)}</div></div>'
     )
 
@@ -648,7 +663,7 @@ def _propose_html(e: dict) -> str:
     reason = e.get("llm_reason")
     reason_html = f'<p class="reason">{_html_escape(str(reason))}</p>' if reason else ""
     return (
-        '<div class="blk"><div class="blk-label">Propose · 候选方案</div>'
+        '<div class="blk"><div class="blk-label">Propose · Candidates</div>'
         f"{table}{reason_html}</div>"
     )
 
@@ -676,12 +691,12 @@ def _funnel_entry_html(e: dict) -> str:
             else:
                 rows.append(f"<tr><td>{_html_escape(str(d))}</td><td></td><td></td></tr>")
         table = (
-            f'<table class="tbl"><tr><th>候选</th><th>处置</th><th>理由</th></tr>'
+            f'<table class="tbl"><tr><th>Candidate</th><th>Disposition</th><th>Reason</th></tr>'
             f'{"".join(rows)}</table>'
         )
     detail = e.get("detail")
     detail_html = f"<p>{_html_escape(str(detail))}</p>" if detail else ""
-    return f'<div class="blk"><div class="blk-label">Funnel · 漏斗判定</div>{chips}{table}{detail_html}</div>'
+    return f'<div class="blk"><div class="blk-label">Funnel · Screening</div>{chips}{table}{detail_html}</div>'
 
 
 def _evaluate_html(e: dict) -> str:
@@ -704,9 +719,9 @@ def _evaluate_html(e: dict) -> str:
                         keys.append(k)
         if keys:
             head = (
-                "<tr><th>候选</th>"
+                "<tr><th>Candidate</th>"
                 + "".join(f"<th>{_html_escape(str(k))}</th>" for k in keys)
-                + "<th>结论</th></tr>"
+                + "<th>Verdict</th></tr>"
             )
             body = []
             for c in comp:
@@ -720,7 +735,7 @@ def _evaluate_html(e: dict) -> str:
                     if k not in m:
                         cells += "<td class='num'>—</td>"
                     elif isinstance(m[k], bool):
-                        cells += f"<td class='num'>{'无析锂' if not m[k] else '析锂风险'}</td>"
+                        cells += f"<td class='num'>{'No plating' if not m[k] else 'Plating risk'}</td>"
                     else:
                         cells += f"<td class='num'>{_html_escape(_fmt_num(m[k]))}</td>"
                 v = c.get("verdict")
@@ -733,8 +748,8 @@ def _evaluate_html(e: dict) -> str:
     note = e.get("note")
     note_html = f'<p class="reason">{_html_escape(str(note))}</p>' if note else ""
     return (
-        f'<div class="blk"><div class="blk-label">Evaluate · 评估 {verdict_html}</div>'
-        f'<table class="tbl"><tr><th>指标</th><th>数值</th></tr>{rows}</table>{cmp_table}{note_html}</div>'
+        f'<div class="blk"><div class="blk-label">Evaluate {verdict_html}</div>'
+        f'<table class="tbl"><tr><th>Metric</th><th>Value</th></tr>{rows}</table>{cmp_table}{note_html}</div>'
     )
 
 
@@ -748,7 +763,7 @@ def _rounds_html(log: list[dict]) -> str:
             continue
         groups.setdefault(_to_int(r), []).append(e)
     if not groups:
-        return '<p class="empty">暂无数据</p>'
+        return '<p class="empty">No data</p>'
     cards = []
     first_round = min(groups)
     for r, entries in sorted(groups.items()):
@@ -760,12 +775,12 @@ def _rounds_html(log: list[dict]) -> str:
         subs = []
         prop = next((e for e in entries if e.get("action") == "propose"), None)
         if prop:
-            subs.append(f"{len(_as_list(prop.get('candidates')))} 候选")
+            subs.append(f"{len(_as_list(prop.get('candidates')))} candidates")
         m = ev.get("metrics", {}) if ev else {}
         if isinstance(m.get("T_max_K"), (int, float)):
             subs.append(f"T_max {_fmt_num(m['T_max_K'])} K")
         if isinstance(m.get("plated"), bool):
-            subs.append("无析锂" if not m["plated"] else "析锂风险")
+            subs.append("No plating" if not m["plated"] else "Plating risk")
         sub = f'<span class="round-sub">{" · ".join(subs)}</span>' if subs else ""
         body = []
         for e in entries:
@@ -786,7 +801,7 @@ def _rounds_html(log: list[dict]) -> str:
 
 
 def _rounds_ov_html(log: list[dict]) -> str:
-    """迭代轨迹顶部轮次总览表：轮次/阶段/候选数/关键指标/结论（由 propose/evaluate 机械推导）。"""
+    """迭代轨迹顶部Round overview表：轮次/阶段/候选数/关键Metric/结论（由 propose/evaluate 机械推导）。"""
     groups: dict[int, list[dict]] = {}
     for e in log:
         r = e.get("round")
@@ -814,8 +829,8 @@ def _rounds_ov_html(log: list[dict]) -> str:
         tmax = _fmt_num(m["T_max_K"]) if isinstance(m.get("T_max_K"), (int, float)) else "—"
         if isinstance(m.get("plated"), bool):
             plated = (
-                '<span class="badge ok">无析锂</span>' if not m["plated"]
-                else '<span class="badge bad">析锂风险</span>'
+                '<span class="badge ok">No plating</span>' if not m["plated"]
+                else '<span class="badge bad">Plating risk</span>'
             )
         else:
             plated = '<span class="badge mute">—</span>'
@@ -828,14 +843,14 @@ def _rounds_ov_html(log: list[dict]) -> str:
             f"<td>{plated}</td><td>{v_html}</td></tr>"
         )
     head = (
-        "<tr><th>轮次</th><th>阶段</th><th>候选数</th><th>能量密度 Wh/kg</th>"
-        "<th>容量 Ah</th><th>T_max K</th><th>析锂</th><th>结论</th></tr>"
+        "<tr><th>Round</th><th>Stage</th><th>Cands</th><th>Energy density Wh/kg</th>"
+        "<th>Capacity Ah</th><th>T_max K</th><th>Plating</th><th>Verdict</th></tr>"
     )
-    return f'<div class="ov-head">轮次总览</div><table class="tbl ov">{head}{"".join(rows)}</table>'
+    return f'<div class="ov-head">Round overview</div><table class="tbl ov">{head}{"".join(rows)}</table>'
 
 
 def _trend_bars(caption: str, rows: list[tuple[str, float]], threshold: tuple | None) -> str:
-    """逐轮指标柱状图（内联 SVG）；threshold = (数值, 标签) 画参考线。"""
+    """逐轮Metric柱状图（内联 SVG）；threshold = (数值, 标签) 画参考线。"""
     W, H = 340, 200
     pad_l, pad_r, pad_t, pad_b = 42, 12, 16, 28
     vals = [v for _, v in rows if isinstance(v, (int, float))]
@@ -886,7 +901,7 @@ def _trend_bars(caption: str, rows: list[tuple[str, float]], threshold: tuple | 
 
 
 def _trends_html(log: list[dict], criteria: dict) -> str:
-    """逐轮能量密度/T_max 趋势图（evaluate metrics 机械推导，阈值线来自 criteria）。"""
+    """逐轮Energy density/T_max Trends图（evaluate metrics 机械推导，Threshold线来自 criteria）。"""
     evals = [e for e in log if e.get("action") == "evaluate"]
     ed_rows: list[tuple[str, float]] = []
     tmax_rows: list[tuple[str, float]] = []
@@ -904,33 +919,33 @@ def _trends_html(log: list[dict], criteria: dict) -> str:
     ed_thr = None
     spec = thr.get("energy_density_wh_kg")
     if isinstance(spec, dict) and "min" in spec:
-        ed_thr = (spec["min"], "目标 ≥")
+        ed_thr = (spec["min"], "Target ≥")
     tmax_thr = None
     spec = thr.get("T_max_K")
     if isinstance(spec, dict) and "max" in spec:
-        tmax_thr = (spec["max"], "上限 ≤")
+        tmax_thr = (spec["max"], "Limit ≤")
     charts = []
     if ed_rows:
-        charts.append(_trend_bars("能量密度趋势（evaluate 逐轮）", ed_rows, ed_thr))
+        charts.append(_trend_bars("Energy density trend (per evaluate round)", ed_rows, ed_thr))
     if tmax_rows:
-        charts.append(_trend_bars("T_max 趋势（evaluate 逐轮）", tmax_rows, tmax_thr))
+        charts.append(_trend_bars("T_max trend (per evaluate round)", tmax_rows, tmax_thr))
     if not charts:
         return ""
-    return f'<div class="ov-head">趋势</div><div class="trends">{"".join(charts)}</div>'
+    return f'<div class="ov-head">Trends</div><div class="trends">{"".join(charts)}</div>'
 
 
 def _funnel_html(log: list[dict]) -> str:
     entries = [e for e in log if e.get("action") == "funnel"]
     if not entries:
-        return '<p class="empty">暂无数据</p>'
+        return '<p class="empty">No data</p>'
     totals = {k: sum(_to_int(e.get(k)) for e in entries) for k in ("passed", "rejected", "disputed")}
     stats = (
         f'<div class="stat pass"><div class="stat-num">{totals["passed"]}</div>'
-        '<div class="stat-label">Passed · 通过</div></div>'
+        '<div class="stat-label">Passed</div></div>'
         f'<div class="stat rej"><div class="stat-num">{totals["rejected"]}</div>'
-        '<div class="stat-label">Rejected · 淘汰</div></div>'
+        '<div class="stat-label">Rejected</div></div>'
         f'<div class="stat dis"><div class="stat-num">{totals["disputed"]}</div>'
-        '<div class="stat-label">Disputed · 分歧</div></div>'
+        '<div class="stat-label">Disputed</div></div>'
     )
     details = []
     for e in entries:
@@ -1057,7 +1072,7 @@ def _svg_plot(filename: str, data: dict) -> str:
     elements.append(f'<text x="{(x0 + x1) / 2:.1f}" y="{_VIEW_H - 8}" text-anchor="middle">{"cycle" if aging else "time [s]"}</text>')
 
     model = str(data.get("model_used") or "N/A")
-    label = f"{filename} 曲线（模型 {model}）"
+    label = f"{filename} curves (model {model}）"
     return (
         f'<svg class="plot" viewBox="0 0 {_VIEW_W} {_VIEW_H}" role="img" '
         f'aria-label="{_attr_escape(label)}" '
@@ -1071,9 +1086,9 @@ def _svg_plot(filename: str, data: dict) -> str:
 def _plots_html(cell_files: list[tuple[str, dict]]) -> str:
     if not cell_files:
         return (
-            '<p class="empty">暂无数据</p>'
-            '<p class="hint">cell/ 目录下未发现 run-pyamm 曲线输出'
-            "（含 time_s 与 voltage_v / anode_potential_v 的 JSON）。</p>"
+            '<p class="empty">No data</p>'
+            '<p class="hint">No run-pyamm curve output found in cell/'
+            " (JSON with time_s and voltage_v / anode_potential_v).</p>"
         )
     figures = []
     for idx, (fname, data) in enumerate(cell_files, start=1):
@@ -1098,21 +1113,21 @@ def _plots_html(cell_files: list[tuple[str, dict]]) -> str:
 def _endorse_html(log: list[dict]) -> str:
     entries = [e for e in log if e.get("action") == "endorse"]
     if not entries:
-        return '<p class="empty">暂无数据</p>'
+        return '<p class="empty">No data</p>'
     blocks = []
     for e in entries:
         if e.get("skipped"):
-            reason = str(e.get("reason") or "未说明原因")
+            reason = str(e.get("reason") or "reason not recorded")
             names = " · ".join(
                 str(c.get("name") or c.get("smiles") or c) if isinstance(c, dict) else str(c)
                 for c in _as_list(e.get("candidates"))
             )
             names_html = (
-                f'<br><span class="reason">候选：{_html_escape(names)}</span>' if names else ""
+                f'<br><span class="reason">Candidates: {_html_escape(names)}</span>' if names else ""
             )
             blocks.append(
                 '<div class="skipped"><span class="badge mute">Skipped</span> '
-                f'真计算背书已跳过<span class="reason"> — {_html_escape(reason)}</span>'
+                f'True-compute endorsement skipped<span class="reason"> — {_html_escape(reason)}</span>'
                 f"{names_html}</div>"
             )
             continue
@@ -1134,7 +1149,7 @@ def _endorse_html(log: list[dict]) -> str:
 
 
 def _final_html(log: list[dict]) -> str:
-    fallback = '<p class="empty">暂无推荐（未达标）</p>'
+    fallback = '<p class="empty">No recommendation (not achieved)</p>'
     entries = [e for e in log if e.get("action") == "final"]
     if not entries:
         return fallback
@@ -1147,7 +1162,7 @@ def _final_html(log: list[dict]) -> str:
     if rec:
         parts.append(f'<blockquote class="final-quote">{_html_escape(rec)}</blockquote>')
     if verdict:
-        parts.append(f'<div class="final-verdict">结论 {_verdict_badge(verdict)}</div>')
+        parts.append(f'<div class="final-verdict">Conclusion {_verdict_badge(verdict)}</div>')
     return "".join(parts)
 
 
@@ -1169,7 +1184,7 @@ def _notes_html(log: list[dict]) -> str:
             f'<span class="chip">{rl}</span><p>{_html_escape(text)}</p></div>'
         )
     if not blocks:
-        return '<p class="empty">暂无数据</p>'
+        return '<p class="empty">No data</p>'
     return "".join(blocks)
 
 
@@ -1198,7 +1213,7 @@ def render_report(case_dir: str, out_html: str = "report.html") -> str:
         criteria = {}
     cell_files = _load_cell_curves(case_dir)
     parts = {
-        "TITLE": f"{Path(case_dir).name} · 虚拟电池工厂设计报告",
+        "TITLE": f"{Path(case_dir).name} · Virtual Battery Factory Design Report",
         "HEADER": _header_html(case_dir, log, criteria),
         "CRITERIA_TABLE": _criteria_html(criteria, log),
         "FLOW": _flow_html(log, cell_files, criteria),

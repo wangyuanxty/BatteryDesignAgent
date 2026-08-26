@@ -35,6 +35,7 @@ def test_all_pass(tmp_path):
     for r in (1, 2):
         append_entry(ws, {"action": "propose", "round": r, "candidates": []})
         append_entry(ws, {"action": "evaluate", "round": r, "metrics": {}, "verdict": "pass"})
+    append_entry(ws, {"action": "final", "recommendation": "R", "verdict": "pass"})
     report = verify_deliverables(tmp_path)
     assert report["all_pass"] is True
 
