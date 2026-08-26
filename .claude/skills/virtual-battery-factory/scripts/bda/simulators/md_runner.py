@@ -494,7 +494,23 @@ def _run_mace_md(box: dict, t_ns: float) -> dict:
         dyn = Langevin(atoms, timestep=1.0 * units.fs, temperature_K=298.15, friction=0.01)
         dyn.attach(lambda: frames.append(atoms.copy()), interval=_NSTXOUT)
         dyn.attach(lambda: energies.append(atoms.get_potential_energy()), interval=_NSTXOUT)
-        dyn.run(steps)
+        # chunked run with progress reporting (10% granularity, ETA) — observability
+        import time as _time
+
+        _t0 = _time.time()
+        chunk = max(1, steps // 10)
+        done = 0
+        while done < steps:
+            n = min(chunk, steps - done)
+            dyn.run(n)
+            done += n
+            elapsed = _time.time() - _t0
+            eta = elapsed / done * (steps - done)
+            print(
+                f"[md] {done / steps * 100:5.1f}%  {done}/{steps} steps  "
+                f"elapsed={elapsed / 3600:.2f}h  eta={eta / 3600:.2f}h",
+                flush=True,
+            )
         trj = workdir / "traj.xyz"
         ase_write(str(trj), frames, format="xyz")
         # MACE trajectory positions are plain A and unwrapped (no trjconv step),
