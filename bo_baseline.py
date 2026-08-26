@@ -41,10 +41,11 @@ TMAX_PENALTY_PER_K = 5.0   # 每超温 1K 惩罚（Wh/kg）
 class BOSearch:
     """C2 BO 搜索：评估器 = 与 agent 协议模式同源的仿真 + 合同口径能量密度。"""
 
-    def __init__(self, base: str, workspace: Path, task: str = "t1"):
+    def __init__(self, base: str, workspace: Path, task: str = "t1", tmax_limit: float = 333.15):
         self.base = base
         self.workspace = workspace
         self.task = task
+        self.tmax_limit = tmax_limit
         self.workspace.mkdir(parents=True, exist_ok=True)
         self.tmp = tempfile.TemporaryDirectory()
 
@@ -72,8 +73,8 @@ class BOSearch:
         plated = bool(min(sim4c["anode_potential_v"]) < 0.0)
 
         penalties = {}
-        if t_max > T_MAX_LIMIT_K:
-            penalties["tmax"] = (t_max - T_MAX_LIMIT_K) * TMAX_PENALTY_PER_K
+        if t_max > self.tmax_limit:
+            penalties["tmax"] = (t_max - self.tmax_limit) * TMAX_PENALTY_PER_K
         if plated:
             penalties["plated"] = PLATED_PENALTY
 
@@ -215,10 +216,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--smoke", action="store_true", help="冒烟：budget=5 快速验证链路")
     parser.add_argument("--task", default="t1", choices=["t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8"],
                         help="任务选择：T1/T5 ED+4C安全 / T2/T6/T7 含SEI / T3/T8 含5C / T4 低温+Wh/L / T6 平台 4.1V / T7 针刺")
+    parser.add_argument("--tmax-limit", type=float, default=333.15,
+                        help="T_max 惩罚上限 K（对齐版：T6 用 323.15 = 50 °C 红线）")
     args = parser.parse_args(argv)
     budget = 5 if args.smoke else args.budget
     ws = Path(args.workspace)
-    search = BOSearch(args.base, ws, task=args.task)
+    search = BOSearch(args.base, ws, task=args.task, tmax_limit=args.tmax_limit)
     try:
         trajectory = run_bo(search, budget, args.seed, args.smoke)
     except Exception as e:
