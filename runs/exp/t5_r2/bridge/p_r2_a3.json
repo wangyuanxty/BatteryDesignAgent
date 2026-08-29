@@ -1,0 +1,8 @@
+{
+  "Positive current collector thickness [m]": 8e-06,
+  "Negative current collector thickness [m]": 6e-06,
+  "Separator thickness [m]": 8e-06,
+  "Positive electrode thickness [m]": 1.134e-04,
+  "Negative electrode thickness [m]": 1.278e-04,
+  "Nominal cell capacity [A.h]": 7.5
+}

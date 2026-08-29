@@ -1,0 +1,17 @@
+[
+  {"candidate": "V3A+k15", "round": 4,
+   "outputs": ["runs/exp/t2_r2/cell/r3_vA_calc_dfn.json", "runs/exp/t2_r2/derived/r3_vA_retention.json", "runs/exp/t2_r2/cell/r3_vA_4c_dfn.json", "runs/exp/t2_r2/cell/r3_vA_k15_aging100.json", "runs/exp/t2_r2/derived/r3_vA_k15_sei500.json"],
+   "note": "Full criteria pass: ED 522.45, 4C no plating (+0.041 V), lowT 99.62%, SEI@100 56.8 nm, SEI@500 214.8 nm. (4C/ED evidence from k-free params file - k inert in non-aging protocols.)"},
+  {"candidate": "V3B+k15", "round": 4,
+   "outputs": ["runs/exp/t2_r2/cell/r3_vB_calc_dfn.json", "runs/exp/t2_r2/derived/r3_vB_retention.json", "runs/exp/t2_r2/cell/r3_vB_4c_dfn.json", "runs/exp/t2_r2/cell/r3_vB_k15_aging100.json", "runs/exp/t2_r2/derived/r3_vB_k15_sei500.json"],
+   "note": "Full criteria pass: ED 502.14, 4C no plating (+0.043 V), lowT 99.60%, SEI@100 48.6 nm, SEI@500 186.3 nm."},
+  {"candidate": "V3C+k15", "round": 4,
+   "outputs": ["runs/exp/t2_r2/cell/r3_vC_calc.json", "runs/exp/t2_r2/derived/r3_vC_retention.json", "runs/exp/t2_r2/cell/r3_vC_4c_dfn.json", "runs/exp/t2_r2/cell/r3_vC_k15_aging100.json", "runs/exp/t2_r2/derived/r3_vC_k15_sei500.json"],
+   "note": "Full criteria pass: ED ~440, 4C no plating (+0.037 V), lowT 99.61%, SEI@100 44.5 nm, SEI@500 168.7 nm. Lowest T_max but lower ED/charge acceptance, kept as alternate."},
+  {"candidate": "V3A+k2e15", "round": 4,
+   "outputs": ["runs/exp/t2_r2/cell/r3_vA_calc_dfn.json", "runs/exp/t2_r2/derived/r3_vA_retention.json", "runs/exp/t2_r2/cell/r3_vA_4c_dfn.json", "runs/exp/t2_r2/cell/r3_vA_k2e15_aging100.json", "runs/exp/t2_r2/derived/r3_vA_k2e15_sei500.json"],
+   "note": "Full criteria pass with relaxed coating (k=2e-15): ED 522.45, 4C no plating, lowT 99.62%, SEI@100 99.9 nm, SEI@500 330.1 nm. SELECTED FINALIST (highest ED + charge acceptance, SEI margin ok)."},
+  {"candidate": "V3B+k2e15", "round": 4,
+   "outputs": ["runs/exp/t2_r2/cell/r3_vB_calc_dfn.json", "runs/exp/t2_r2/derived/r3_vB_retention.json", "runs/exp/t2_r2/cell/r3_vB_4c_dfn.json", "runs/exp/t2_r2/cell/r3_vB_k2e15_aging100.json", "runs/exp/t2_r2/derived/r3_vB_k2e15_sei500.json"],
+   "note": "Full criteria pass with relaxed coating: ED 502.14, 4C no plating, lowT 99.60%, SEI@100 86.1 nm, SEI@500 289.1 nm. Alternate."}
+]

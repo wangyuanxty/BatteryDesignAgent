@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": {"max": 0.0},
+      "max_homo_ev": {"max": -6.0}
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 327.18},
+      "sei_thickness_nm_end": {"max": 500},
+      "sei_500cyc_nm": {"max": 550},
+      "lowT_retention": {"min": 0.90}
+    },
+    "stage3": {
+      "plated": false,
+      "T_max_K": {"max": 333.15}
+    },
+    "meta": {
+      "real_compute": false,
+      "base": "Chen2020",
+      "start_stage": 3,
+      "electrode_system": "NMC811/graphite (task text named no system -> deterministic default Chen2020 with record)",
+      "aging_cycles": [100, 500],
+      "T_max_redline": "333.15 K (60 C) documented default red line for grid storage (task text silent)",
+      "freedoms": {
+        "electrode_system": "adjustable (widest interpretation; start Chen2020)",
+        "electrolyte_formulation": "adjustable (Electrolyte conductivity/diffusivity, Cation transference number overrides)",
+        "electrode_modification": "adjustable (SEI kinetic rate constant, SEI reaction exchange current density, cracking rate)",
+        "cell_architecture": "adjustable (thickness/porosity/N-P/separator/current collector/particle radius)",
+        "thermal_management": "adjustable (Total heat transfer coefficient; default h=10 contract value)",
+        "excluded_levers": ["solid-phase conductivity/diffusivity", "initial concentration/lithiation", "Initial SEI thickness", "charge cut-off voltage"]
+      },
+      "task_text": "Design a battery for grid energy storage: energy density >= 327.18 Wh/kg, support 4C fast charge (no lithium plating), anode SEI thickness <= 500 nm after 100 cycles of 1C cycling, discharge capacity retention >= 90% at -20C, SEI <= 550 nm after 500 cycles."
+    }
+  }
+}

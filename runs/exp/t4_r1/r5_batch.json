@@ -1,0 +1,23 @@
+[
+  {
+    "candidate": "S4 V3+antip+kflat (Stage4 exam)",
+    "outputs": [
+      "cell/r5_s4_4c45C_dfn.json"
+    ],
+    "note": "flat kappa kills depletion collapse: anode -0.0034V (vs S1 -0.0119V) near-miss but still plated; T_max 357.6K>333.15K (h=10)"
+  },
+  {
+    "candidate": "S5 S4+h60 (Stage4 exam)",
+    "outputs": [
+      "cell/r5_s5_4c45C_dfn.json"
+    ],
+    "note": "h=60: T_max 334.4K still 1.3K above limit; colder cell polarizes more -> anode -0.0331V worse"
+  },
+  {
+    "candidate": "S6 S4+h80 (Stage4 exam)",
+    "outputs": [
+      "cell/r5_s6_4c45C_dfn.json"
+    ],
+    "note": "h=80: T_max 331.08K PASSES but anode -0.0376V plated: T-dependent D_e still collapses at anode (salt depletion); gap = D_e, not kappa alone"
+  }
+]

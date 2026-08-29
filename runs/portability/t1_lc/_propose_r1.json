@@ -1,0 +1,8 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {"base": "Chen2020", "name": "Baseline Chen2020", "role": "baseline characterization: 1C discharge ED, 4C charge plating/T_max, overcharge 4.7V thermal-runaway"}
+  ],
+  "llm_reason": "Task names no electrode system -> deterministic default Chen2020 (NMC811/graphite). Round 1 establishes the gap on all four metrics before any architecture/material intervention."
+}

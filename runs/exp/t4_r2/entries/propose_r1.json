@@ -1,0 +1,8 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {"struct": {}, "name": "baseline-Chen2020", "role": "baseline characterization: Chen2020 defaults, no overrides (start_stage=3, materials use system baseline)"}
+  ],
+  "llm_reason": "start_stage=3 (no new materials in task text): first round establishes the full baseline profile across all entry-0 criteria (1C discharge + calc-energy contract ED, lowT discharge with true cold soak, 4C/45C safety with plating) before any variant. Cold-soak measurement procedure: lowT runs use Initial temperature [K]=253.15 so the -20C retention measures a genuinely cold-soaked discharge (the parameter-set default initial temperature 298.15 would mask cold loss - warm-start artifact); 25C reference keeps 298.15. This is a measurement-procedure choice, design params identical; recorded here and in funnel entry."
+}

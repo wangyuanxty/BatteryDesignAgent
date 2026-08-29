@@ -1,0 +1,4 @@
+[
+  {"candidate": "V11-combo", "outputs": ["cell/r5_v11_1c_dfn.json", "cell/r5_v11_5c_dfn.json", "cell/r5_v11_4c_dfn.json", "cell/r5_v11_energy.json", "cell/r5_v11_derived.json"], "note": "DFN judge-grade: all five criteria pass - capacity 3.884 Ah, retention 98.47%, power density 168.4 kW/kg, T_max 329.85 K (4C charge), anode min +37.9 mV (no plating). 4C CC-charge acceptance 0.726 Ah before 4.2 V ceiling (effective ~5.1C vs nominal)."},
+  {"candidate": "V12-HiP-final", "outputs": ["cell/r5_v12_1c_dfn.json", "cell/r5_v12_5c_dfn.json", "cell/r5_v12_4c_dfn.json", "cell/r5_v12_energy.json", "cell/r5_v12_derived.json"], "note": "DFN judge-grade champion: all five criteria pass with largest joint margin - capacity 4.318 Ah, retention 98.62%, power density 181.6 kW/kg, T_max 329.75 K (4C charge), anode min +41.7 mV (no plating), 4C CC-charge acceptance 0.811 Ah (best; effective ~4.6C vs nominal)."}
+]

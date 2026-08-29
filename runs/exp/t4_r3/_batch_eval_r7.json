@@ -1,0 +1,24 @@
+[
+  {
+    "candidate": "V17_ok_h60_elx_plus_DFN",
+    "round": 7,
+    "outputs": [
+      "cell/r7_V17_1c_lowT_dfn.json",
+      "cell/r7_V17_1c_25C_dfn.json",
+      "cell/r7_V17_4C_45C_dfn.json",
+      "cell/r7_V17_energy.json",
+      "bridge/r7_V17_lowT_retention.json"
+    ]
+  },
+  {
+    "candidate": "V18_ok_h50_elx_plus_DFN",
+    "round": 7,
+    "outputs": [
+      "cell/r7_V18_1c_lowT_dfn.json",
+      "cell/r7_V18_1c_25C_dfn.json",
+      "cell/r7_V18_4C_45C_dfn.json",
+      "cell/r7_V18_energy.json",
+      "bridge/r7_V18_lowT_retention.json"
+    ]
+  }
+]

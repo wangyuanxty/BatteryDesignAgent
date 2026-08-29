@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "stage1": {},
+    "stage2": {
+      "energy_density_wh_l": {"min": 950.0},
+      "midpoint_voltage_v": {"min": 4.1},
+      "sei_thickness_nm_end": {"max": 500.0}
+    },
+    "stage3": {
+      "T_max_K": {"max": 323.15},
+      "plated": false
+    },
+    "meta": {
+      "case_id": "t6_lc",
+      "task": "Design a battery for a smartphone: volumetric energy density >= 950 Wh/L, support 4C fast charge (no lithium plating), maximum temperature <= 50C, anode SEI thickness <= 500 nm after 100 cycles, voltage plateau >= 4.1 V.",
+      "real_compute": false,
+      "start_stage": 3,
+      "base_params": "Chen2020 (default, no explicit electrode system in task text; voltage plateau >=4.1 V exceeds NMC811 ceiling -> escalate to high-voltage LNMO system data/LNMO.json)",
+      "ablation": {
+        "exploration_force": true,
+        "ceiling_escalation": true,
+        "funnel_voting": true
+      },
+      "freedoms": {
+        "electrode_system": "adjustable (task text does not lock; voltage plateau requirement forces high-voltage cathode)",
+        "electrolyte_formulation": "adjustable (widest interpretation)",
+        "electrode_modification": "adjustable (widest interpretation)",
+        "cell_architecture": "adjustable (widest interpretation)",
+        "thermal_management": "adjustable (widest interpretation)"
+      },
+      "units_note": "50 C = 323.15 K; plateau = calc-energy midpoint_voltage_v; ED volumetric = calc-energy energy_density_wh_l (contract caliber, electrolyte/casing excluded)"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "Negative particle radius [m]": 3.0e-06,
+  "Positive particle radius [m]": 4.5e-06,
+  "Electrolyte conductivity [S.m-1]": 1.6,
+  "Cation transference number": 0.4,
+  "Negative electrode thickness [m]": 9.5e-05,
+  "Total heat transfer coefficient [W.m-2.K-1]": 50.0,
+  "Nominal cell capacity [A.h]": 5.6
+}

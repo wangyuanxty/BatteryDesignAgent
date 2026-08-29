@@ -1,0 +1,5 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false (default per protocol; task did not request true DFT/MD endorsement). No true-compute values claimed anywhere in this case; all conclusion-grade numbers come from proxy/contract tool outputs (run-pyamm/calc-energy/log-evaluate)."
+}

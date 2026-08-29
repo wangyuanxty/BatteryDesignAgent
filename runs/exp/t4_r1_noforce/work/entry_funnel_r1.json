@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "start_stage=3: this case starts at Stage 3 (cell design); no molecular funnel runs. Materials use system baseline. Chosen base: Chen2020 — matching basis: task text names no electrode system -> anchor-table default Chen2020 (SKILL 1.5); discriminant verified by parameter dump (work/dump_params.py): NMC811/graphite teaching parameterization (negative density 1657 kg/m3, negative max conc 33133 mol/m3, positive 63104; cell geometry pos 75.6/neg 85.2 um, sep 12 um, CC 16/12 um, 5 Ah nominal, area 0.1027 m2). props source: baseline (literature values inside Chen2020 set). Ceiling assessment (ceiling_escalation ON, executed at baseline): best-possible Chen2020 architecture+formulation = CC 8/6 um + separator 10 um + anode porosity 0.30 + electrolyte sigma/t+/D boost + particles 4/3 um -> ED_mass ceiling ~490 Wh/kg (>327.18), ED_vol ceiling ~900 Wh/L (>880), lowT retention ~99% (note: Chen2020 electrolyte conductivity function is T-independent, measured 0.9487 S/m at both 298/253 K — retention ceiling is optimistic; artifact annotated). Objective below ceiling -> no material-design escalation triggered; remain in architecture/formulation space. Binding risk identified: 4C/45C plating (baseline anode_potential_v min -0.438 V -> plated) and ED_vol 844.45 < 880."
+}

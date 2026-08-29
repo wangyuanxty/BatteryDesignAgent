@@ -1,0 +1,38 @@
+[
+  {
+    "candidate": "V_VE",
+    "round": 3,
+    "outputs": [
+      "cell/r3_VE_1c_dfn.json",
+      "cell/r3_VE_5c_dfn.json",
+      "cell/r3_VE_energy.json",
+      "cell/r3_VE_retention.json",
+      "cell/r3_VE_safety.json"
+    ],
+    "note": "R3: both levers (particle radius shrink 5.22/5.86->3.0/3.5 um, area-preserving loading cuts; V_G adds t+ 0.40 / D 4.2e-10 margin). Full suite incl. 4C-charge 45C thermal+plating exam. anode_potential_v min > 0 => no plating by mechanical derivation."
+  },
+  {
+    "candidate": "V_VF",
+    "round": 3,
+    "outputs": [
+      "cell/r3_VF_1c_dfn.json",
+      "cell/r3_VF_5c_dfn.json",
+      "cell/r3_VF_energy.json",
+      "cell/r3_VF_retention.json",
+      "cell/r3_VF_safety.json"
+    ],
+    "note": "R3: both levers (particle radius shrink 5.22/5.86->3.0/3.5 um, area-preserving loading cuts; V_G adds t+ 0.40 / D 4.2e-10 margin). Full suite incl. 4C-charge 45C thermal+plating exam. anode_potential_v min > 0 => no plating by mechanical derivation."
+  },
+  {
+    "candidate": "V_VG",
+    "round": 3,
+    "outputs": [
+      "cell/r3_VG_1c_dfn.json",
+      "cell/r3_VG_5c_dfn.json",
+      "cell/r3_VG_energy.json",
+      "cell/r3_VG_retention.json",
+      "cell/r3_VG_safety.json"
+    ],
+    "note": "R3: both levers (particle radius shrink 5.22/5.86->3.0/3.5 um, area-preserving loading cuts; V_G adds t+ 0.40 / D 4.2e-10 margin). Full suite incl. 4C-charge 45C thermal+plating exam. anode_potential_v min > 0 => no plating by mechanical derivation."
+  }
+]

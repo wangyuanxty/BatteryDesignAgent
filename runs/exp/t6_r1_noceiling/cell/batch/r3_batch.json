@@ -1,0 +1,5 @@
+[
+  {"candidate": "Rate-4C R1", "outputs": ["cell/r3_rate_1c.json", "cell/r3_rate_energy.json", "cell/r3_rate_4c.json"], "note": "extreme transport-optimized design: boundary test for plating-free 4C (SEI unchecked)"},
+  {"candidate": "ED-Compact B-h25", "outputs": ["cell/r1_b_1c.json", "cell/r1_b_energy.json", "cell/r3_bh25_4c.json", "cell/r2_b_aging.json"], "note": "h=25 cooling on front-runner: T_max lever quantification"},
+  {"candidate": "Baseline-h25", "outputs": ["cell/r1_base_1c.json", "cell/r1_base_energy.json", "cell/r3_baseh25_4c.json", "cell/r2_base_aging.json"], "note": "h=25 cooling reference"}
+]

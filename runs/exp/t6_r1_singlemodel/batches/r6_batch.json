@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "E1_cathode_61um",
+    "outputs": [
+      "cell/r6_E1_1c_spme.json",
+      "cell/r6_E1_energy.json",
+      "cell/r6_E1_4c_spme.json",
+      "cell/r6_E1_aging_spme.json"
+    ],
+    "note": "E1: D1 + cathode 75->61 um (Q_c 7.22). 4C charge ran 1246 s at 18 A (runner cap metric 1.384 Ah = duration x 4 / 3600; true charge 6.06 mAh/cm2) - cathode trip earlier than D1 but still ~50-100 s after the anode-full point (5.75 mAh/cm2) -> over-charge tail -> plated (min -0.237). Quasi-steady trip-time model validated on this trace (+/-10 s). T 319.14 PASS, SEI 118.8 PASS, ED 1130.75 PASS, mid 4.2974 PASS."
+  },
+  {
+    "candidate": "E2_am072_sensitivity",
+    "outputs": [
+      "cell/r6_E2_1c_spme.json",
+      "cell/r6_E2_energy.json",
+      "cell/r6_E2_4c_spme.json",
+      "cell/r6_E2_aging_spme.json"
+    ],
+    "note": "E2: sensitivity, AM 0.72 on the 61 um cathode. Same failure mechanism (charge 1279 s, plated min -0.237). T 319.16 PASS, SEI 119.7 PASS, ED 1160.2 PASS, mid 4.2970 PASS. Confirms the trip timing is set by the cathode surface strip, not the AM."
+  }
+]

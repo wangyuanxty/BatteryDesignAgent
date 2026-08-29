@@ -1,0 +1,37 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 327.18},
+      "energy_density_wh_l": {"min": 880.0},
+      "lowT_retention": {"min": 0.95}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false
+    },
+    "meta": {
+      "case_id": "t4_r1",
+      "headless": true,
+      "task_verbatim": "Design a battery for extreme-cold environment equipment: 1C discharge capacity retention >= 95% at -20C, energy density >= 327.18 Wh/kg, volumetric energy density >= 880 Wh/L.",
+      "real_compute": false,
+      "start_stage": 3,
+      "start_stage_basis": "objective names no new materials/additives/electrolyte chemistry; it is a cell-performance design task (extreme-cold scenario protocol lowT_discharge lives at Stage 3). Electrolyte formulation and system switch remain available via widest degree-of-freedom interpretation; material-bottleneck escalation to Stage 2 allowed if the gap is a transport/material-property limit.",
+      "base_params": "Chen2020",
+      "base_params_basis": "task text names no electrode system -> deterministic default Chen2020 per anchor table (with record). Electrode system is an adjustable freedom (widest interpretation), so system candidates (e.g. OKane2022) may be proposed if baseline ED/VED is insufficient.",
+      "freedoms": {
+        "electrode_system": "adjustable (widest interpretation; task text silent; baseline = Chen2020 default)",
+        "electrolyte_formulation": "adjustable (widest interpretation; task text silent; sigma/t+/D transport parameter overrides via parameter bridge)",
+        "electrode_modification": "adjustable (widest interpretation; task text silent; coating/doping via SEI parameter bridge)",
+        "cell_architecture": "adjustable (widest interpretation; task text silent; thickness/porosity/N-P/separator/collector/particle size)",
+        "thermal_management": "adjustable (widest interpretation; task text silent; cooling coefficient h)"
+      },
+      "lowT_retention_definition": "fraction = capacity_ah(lowT_discharge @253.15K, 1C) / capacity_ah(1C_discharge @298.15K, 1C); task text '95%' = 0.95; mechanically computed from the two run-pyamm outputs and written to a derived JSON passed to log-evaluate",
+      "defaults_record": "T_max_K max 333.15 K (=60 C red line, protocol Stage-4 safety default) and plated=false (no Li plating during 4C charge at 45 C) are protocol safety defaults because the task text is silent on safety metrics. stage1 elimination lines (max_energy_ev 0.0 eV, max_homo_ev -6.0 eV) are protocol funnel defaults, pre-registered in case of Stage-2 molecular escalation.",
+      "no_durability_metric": "task text has no cycle-life/aging metric -> aging protocol not required by criteria"
+    }
+  }
+}

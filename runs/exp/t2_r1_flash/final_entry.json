@@ -1,0 +1,5 @@
+{
+  "action": "final",
+  "recommendation": "Final design FC-C (Chen2020 NMC811/graphite base): negative particle 2.5um / positive particle 4.0um, negative porosity 0.30, high-transport electrolyte (sigma 2.0 S/m, D 2.5e-10 m2/s, t+ 0.55 - literature-order estimates for LiFSI-based low-viscosity formulation), SEI kinetic rate constant 2e-15 m/s (artificial-SEI/coating-class suppression bridge), active liquid cooling h=60 W/m2K. Achieved: ED 425.4 Wh/kg (>=327.18), SEI 78.2nm@100cyc (<=500), SEI 262.0nm@500cyc (<=550), lowT retention 99.4% (>=90%), 4C charge no plating (anode min +0.012V>0), T_max 329.2K@4C/45C (<=333.15). Evidence: cell/r2_fcc_energy.json, cell/r2_fcc_aging100.json, cell/r2_fcc_derived.json, cell/r2_fcc_4c.json (see round-2 evaluate entry). Design intent: grid storage cell, nominal 5 Ah class (area 0.1027 m2), 425 Wh/kg / 881 Wh/L, DCR 2.89 mOhm, 33.9 kW/kg power density. Estimated bridge values (electrolyte transport, SEI suppression) marked estimate in propose entries; real_compute=false (no true DFT/MD endorsement).",
+  "verdict": "achieved"
+}

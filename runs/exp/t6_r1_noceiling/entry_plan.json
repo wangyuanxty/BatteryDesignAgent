@@ -1,0 +1,8 @@
+{
+  "action": "plan",
+  "objective_breakdown": "5 metrics: (1) volumetric ED >= 950 Wh/L (contract caliber, architecture lever: dead-layer thinning + negative-electrode loading); (2) voltage plateau >= 4.1 V (midpoint_voltage_v; NMC811/graphite ~3.6-3.7 V -> material gap, infeasible in architecture space, flagged for three-strike questioning); (3) 4C charge without plating (mechanical: anode_potential_v min < 0 -> plated); (4) T_max <= 323.15 K at 4C/45C ambient (cooling h lever, only 5 K allowance above ambient); (5) SEI <= 500 nm after 100 cycles (baseline ~449 nm, expected pass). Trade-offs: ED-up compaction worsens 4C plating; plateau fixed by cathode OCP.",
+  "candidate_strategy": "R1: baseline + 3 ED variants (dead-layer thinning; + active-fraction/porosity compaction; + thicker capacity-limiting negative) screened by 1C SPMe + calc-energy. R2: 4C_charge_45C DFN+lumped+plating on all four; refine against plating (negative particle radius down, porosity up) and T_max (h up). R3: aging_1C_100cyc on finalists. R4+: targeted refinement; plateau failure expected same-cause every round -> three-strike questioning with documented boundary.",
+  "budget_allocation": "~6 rounds: R1 4x(1C SPMe + calc-energy); R2 4x 4C DFN; R3 <=3x aging SPMe; R4-R6 2-3 variants/round (SPMe screen, DFN finals). real_compute=false (closing records skip).",
+  "risk_and_fallback": "plateau infeasible in-scope -> three-strike, boundary documented, final notes 'reachable only with high-voltage cathode system (LNMO-class midpoint 4.17 V), excluded by ablation'; plating -> Stage 3 negative-electrode levers; T_max -> h within 10-25 W/m2K; ED ceiling -> honest ceiling record without escalation (ceiling_escalation OFF).",
+  "detail": "design_plan.md"
+}

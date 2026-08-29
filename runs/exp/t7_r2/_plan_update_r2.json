@@ -1,0 +1,7 @@
+{
+  "action": "plan",
+  "update": true,
+  "reason": "R2 fallback evidence reshapes direction: (1) thicker-anode N/P direction backfired (4C anode min -0.248 V worse than baseline; SEI 542.7 nm near limit) -> rejected; (2) constant sigma=1.5 S/m gave no gain (sigma not binding at 45 C); (3) measured best levers: t+ 0.4 (+0.089 V) and anode particles 3 um (+0.054 V), effects roughly additive -> combine; (4) OCP diagnostic killed the OKane2022 SiOx system-switch idea (0.076 vs 0.092 V at full lithiation - no plating gain); (5) nail: liquid cooling h=50 passes protocol-default start (triggered=false, T_max 336.3 K) but hot-soak probe (318.15 K) ignites at 588.6 s near the 356 K equilibrium -> cooling design raised to h=80 W/m2/K (still inside liquid-cooling range 20-100, domain estimate; hA=0.4248 W/K).",
+  "candidate_strategy": "R3: four combination candidates (fine particles 2-3 um x t+ 0.4-0.5 x anode porosity 0.32, all carrying h=80 liquid cooling). Expected: additive gains push 4C anode min from -0.103 V toward/above 0 V. If still <0 V: next single levers anode porosity 0.35, separator porosity 0.6, then three-strike questioning.",
+  "budget_allocation": "R3: 4 combos x 4 protocols (cache hits keep cost low) + nails. R4: refinement or final lever. R5: full verification of winning design + closing deliverables."
+}

@@ -1,0 +1,6 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false (contract meta): Stage 5 true DFT/MD endorsement is skipped by the case contract. The final conclusion rests on the Stage 2-4 evidence chain: Stage 2 molecular funnel (3-model heterogeneous: MACE-MP + CHGNet ML potentials + xTB semi-empirical; FEC/VC additive candidates, 2 passed 0 rejected, all strongly negative energies), Stage 3 cell-scale verification at DFN precision (no SPMe fallback for conclusion metrics), Stage 4 safety exams (4C/45C charge + plating potential, overcharge + thermal-runaway ODE).",
+  "note": "No DFT/MD compute was requested or budgeted; endorsement is recorded as skipped, not fabricated."
+}

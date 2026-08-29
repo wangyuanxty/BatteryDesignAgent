@@ -1,0 +1,11 @@
+{
+  "model_used": "DFN",
+  "protocol": "aging",
+  "cycle_numbers": [
+    1
+  ],
+  "capacity_ah_per_cycle": [
+    -0.502786010747608
+  ],
+  "sei_thickness_nm_end": 23.904294774047955
+}

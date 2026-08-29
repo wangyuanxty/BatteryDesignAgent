@@ -1,0 +1,10 @@
+{
+  "action": "funnel",
+  "passed": 1,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "Stage 2 executed with system candidates only: systemLNMO (base=library LNMO.json) skips the molecular funnel per the candidate-type table (ML potentials/xtb are not applied to whole-cell systems; screening responsibility shifts to Stage 3 simulation). Base determination is deterministic via the anchor table - plateau >= 4.1 V -> high-voltage LNMO (4.7 V-class cathode OCP; cell midpoint 4.17 vs NMC811 3.61) - and the discriminant was verified by parameter dump before running (lnmo_ocp numeric sweep: bulk plateau ~4.40-4.45 V; effective merged set = Chen2020 base + LNMO overrides, several newer-style override keys inert under installed pybamm 26.7.1, recorded honestly in entry 0). baselineChen2020 is the anchor-table default-system reference for the opening ceiling assessment (evidence for the material-bottleneck escalation), not a Stage 2 material candidate, hence excluded from funnel counts. No molecular candidates proposed this round, so no MLP/xtb elimination lines were exercised.",
+  "dispositions": [
+    {"name": "systemLNMO", "status": "passed", "reason": "system candidate: molecular funnel skipped by protocol, direct Stage 3 evaluation; deterministic anchor-table base mapping, discriminant verified by dump"}
+  ]
+}

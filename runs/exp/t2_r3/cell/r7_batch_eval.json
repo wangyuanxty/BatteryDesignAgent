@@ -1,0 +1,15 @@
+[
+  {
+    "candidate": "combo-v5-final-DFN",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t2_r3\\cell/r7_final_sei_thickness_nm_100cyc.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t2_r3\\cell/r7_final_sei_thickness_nm_500cyc.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t2_r3\\cell/r7_final_lowT_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t2_r3\\cell/r7_final_lowT_retention.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t2_r3\\cell/r7_final_1c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t2_r3\\cell/r7_final_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t2_r3\\cell/r7_final_energy_dfn.json"
+    ],
+    "note": "DFN verification of winner: all five criteria pass at DFN precision"
+  }
+]

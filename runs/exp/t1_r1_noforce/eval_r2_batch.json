@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "C1 fine-particles (1C+ED)",
+    "outputs": ["cell/r2_c1_1c_spme.json", "cell/r2_c1_energy.json"],
+    "note": "C1 (particle radii 2.5/3 um): 1C capacity 5.04 Ah, ED 416.07 Wh/kg (passes); fuller discharge empties the anode deeper which worsens the 4C charge-onset anode dip."
+  },
+  {
+    "candidate": "C1 fine-particles (4C+overcharge safety)",
+    "outputs": ["validation/r2_c1_tr.json", "cell/r2_c1_oc.json", "cell/r2_c1_4c.json"],
+    "note": "C1 safety: T_max 360.7 K fail, plated (anode min -0.261 V) fail, triggered pass; 4C CC charge still cut at 0.27 Ah - cathode solid diffusion remains the wall (tau~R^2/D=1560 s at 2.5 um >> 900 s)."
+  },
+  {
+    "candidate": "C2 transport+cooling (1C+ED)",
+    "outputs": ["cell/r2_c2_1c_spme.json", "cell/r2_c2_energy.json"],
+    "note": "C2 (sigma 1.8 S/m, D 5e-10, t+ 0.5, h 40): ED 401.32 Wh/kg (passes); cooling holds 1C discharge at 301.7 K at 25 C ambient."
+  },
+  {
+    "candidate": "C2 transport+cooling (4C+overcharge safety)",
+    "outputs": ["validation/r2_c2_tr.json", "cell/r2_c2_oc.json", "cell/r2_c2_4c.json"],
+    "note": "C2 safety: T_max 335.27 K fail (2.1 K over), plated true (anode min -1.87e-5 V, marginal), triggered pass; 4C charge extended to 0.40 Ah - transport helps but charge still blocked by cathode solid diffusion."
+  }
+]

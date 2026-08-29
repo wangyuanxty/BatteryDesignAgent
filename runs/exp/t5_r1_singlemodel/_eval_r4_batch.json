@@ -1,0 +1,34 @@
+[
+  {
+    "candidate": "archL_h45",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r4_archL_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r4_archL_energy.json"
+    ],
+    "note": "PASS all criteria: ED 528.6, Tmax 331.53 (1.62 K margin), no plating (+0.0139 V). h=45 is inside the safe cooling window with the strong transport bridge"
+  },
+  {
+    "candidate": "archM_smallP",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r4_archM_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r4_archM_energy.json"
+    ],
+    "note": "PASS all criteria: ED 532.0, Tmax 331.79, no plating (+0.0230 V). Small particles (2.0/2.2 um) double the anode margin at h=40"
+  },
+  {
+    "candidate": "archN_robust",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r4_archN_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r4_archN_energy.json"
+    ],
+    "note": "PASS all criteria with best combined margins: ED 531.8 (+30.9), Tmax 330.50 (2.65 K margin), no plating (+0.0215 V) - selected as final design"
+  },
+  {
+    "candidate": "archO_negPoro",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r4_archO_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r4_archO_energy.json"
+    ],
+    "note": "PASS all criteria: ED 521.2, Tmax 333.21 (0.06 K margin - too thin), no plating (+0.0128 V). Neg porosity 0.20 adds mass without energy gain; rejected vs archN"
+  }
+]

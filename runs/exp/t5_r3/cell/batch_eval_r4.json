@@ -1,0 +1,32 @@
+[
+  {
+    "candidate": "X1 honest5Ah+full-mit",
+    "outputs": ["cell/r4_x1_energy.json", "cell/r4_x1_1c_spme.json", "cell/r4_x1_4c_45c.json"],
+    "note": "true-4C 5.0Ah cell: ED 519.4 pass; T_max 325.22K pass (double-sided cooling works); min_ap -0.0345V borderline FAIL (4 neg points at 4.2V cut-off; trace: ap slides down all charge)"
+  },
+  {
+    "candidate": "X2 X1+h40",
+    "outputs": ["cell/r4_x2_energy.json", "cell/r4_x2_1c_spme.json", "cell/r4_x2_4c_45c.json"],
+    "note": "ED 519.5 pass; T_max 326.81K pass; min_ap -0.0325V fail"
+  },
+  {
+    "candidate": "X3 manufacturability-relaxed",
+    "outputs": ["cell/r4_x3_energy.json", "cell/r4_x3_1c_spme.json", "cell/r4_x3_4c_45c.json"],
+    "note": "ED 510.5 pass; T_max 325.25K pass; min_ap -0.0347V fail"
+  },
+  {
+    "candidate": "X4 X3+h60",
+    "outputs": ["cell/r4_x4_energy.json", "cell/r4_x4_1c_spme.json", "cell/r4_x4_4c_45c.json"],
+    "note": "ED 510.5 pass; T_max 324.19K pass; min_ap -0.0360V fail; colder->less kinetic margin"
+  },
+  {
+    "candidate": "honest-probe nominal6.5",
+    "outputs": ["cell/r3_honest65_4c_45c.json"],
+    "note": "integrity probe of W3: nominal 6.5Ah->26A true 4C on the thick build: min_ap -0.0230V plated + T_max 340.33K -> W3 pass was nameplate-understatement artifact; rejected as dishonest"
+  },
+  {
+    "candidate": "honest-probe nominal6.0",
+    "outputs": ["cell/r3_honest60_4c_45c.json"],
+    "note": "integrity probe: 24A on thick build still plates (min_ap -0.0085V) + T_max 337.50K -> confirms rebuild on baseline electrode thickness"
+  }
+]

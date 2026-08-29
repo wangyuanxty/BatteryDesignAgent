@@ -1,0 +1,6 @@
+{
+  "low_temperature_retention": 0.9933972597880818,
+  "capacity_ah_25c": 3.9557166267048243,
+  "capacity_ah_lowt": 3.929598057466727,
+  "retention_derivation": "3.929598057466727/3.9557166267048243 (same params)"
+}

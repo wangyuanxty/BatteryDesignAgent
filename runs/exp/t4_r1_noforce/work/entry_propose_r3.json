@@ -1,0 +1,34 @@
+{
+  "action": "propose",
+  "round": 3,
+  "candidates": [
+    {
+      "name": "V5_cooled_40",
+      "role": "V3 + cooling h 10->40 W/m2K (forced-air class thermal management; widest-interpretation thermal freedom) to bring the 492 s 4C charge under the 333.15 K line",
+      "struct": {
+        "Total heat transfer coefficient [W.m-2.K-1]": 40.0
+      }
+    },
+    {
+      "name": "V6_cooled_60",
+      "role": "V3 + cooling h 10->60 W/m2K (liquid-cooling class) for T_max margin",
+      "struct": {
+        "Total heat transfer coefficient [W.m-2.K-1]": 60.0
+      }
+    },
+    {
+      "name": "V7_deep_transport_cooled30",
+      "role": "lower 4C charge polarization heat rate: sigma 2.372->4.0, t+ 0.35->0.45, particles 4/3->3/2 um, anode porosity 0.30->0.35, cathode porosity 0.335->0.40, h=30; porosity costs only ED_mass (volume unchanged) and ED_mass margin is large",
+      "struct": {
+        "Electrolyte conductivity [S.m-1]": 4.0,
+        "Cation transference number": 0.45,
+        "Positive particle radius [m]": 3e-6,
+        "Negative particle radius [m]": 2e-6,
+        "Negative electrode porosity": 0.35,
+        "Positive electrode porosity": 0.40,
+        "Total heat transfer coefficient [W.m-2.K-1]": 30.0
+      }
+    }
+  ],
+  "llm_reason": "R2 diagnosis: V3 removed plating via anode porosity (min +0.011 V) but the unblocked 492 s 4C charge (3.85 W avg heat at h=10) pushed T_max to 358 K; V4's anode thickening only lengthened the charge (dropped). T_max fix has two independent routes: (a) raise cooling h (thermal-management DOF, widest interpretation) — lumped estimate: at h=40 T_max ~337 K, h=60 ~330 K; (b) cut the charge polarization heat by deeper transport (sigma 4.0, t+ 0.45, particles 3/2 um, porosities 0.40/0.35) — charge lengthens toward the full 900 s but at lower overpotential; h=30 combined. All override values are domain estimates marked estimate (sigma 4.0 S/m upper-range high-conductivity formulation; t+ 0.45 LiFSI-class; 2 um graphite fast-charge grade; porosity 0.35-0.40 high-transport electrodes); no fabricated citations. V5/V6 inherit V3's architecture; V7 re-runs all protocols fresh."
+}

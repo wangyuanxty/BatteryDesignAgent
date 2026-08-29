@@ -1,0 +1,44 @@
+{
+  "action": "propose",
+  "round": 3,
+  "candidates": [
+    {
+      "base": "Chen2020",
+      "name": "V4 Thermal-tuned",
+      "role": "safety-fix candidate: V3 (passes ED/5C/mass) + upgraded transport (sigma 1.4 S/m, D 4.5e-10, t+ 0.5), smaller particles (pos 1.0 um / neg 1.5 um), separator porosity 0.55, flatter-pouch cooling area 0.0075 m2; targets 4C-charge T_max <= 333.15 K",
+      "struct": {
+        "Positive particle radius [m]": 1.0e-06,
+        "Negative particle radius [m]": 1.5e-06,
+        "Electrolyte conductivity [S.m-1]": 1.4,
+        "Electrolyte diffusivity [m2.s-1]": 4.5e-10,
+        "Cation transference number": 0.5,
+        "Separator porosity": 0.55,
+        "Cell cooling surface area [m2]": 0.0075,
+        "Positive electrode thickness [m]": 5.1408e-05,
+        "Negative electrode thickness [m]": 5.7936e-05,
+        "Positive current collector thickness [m]": 8.0e-06,
+        "Negative current collector thickness [m]": 6.0e-06,
+        "Nominal cell capacity [A.h]": 3.4
+      }
+    },
+    {
+      "base": "Chen2020",
+      "name": "V5 Thermal-control",
+      "role": "attribution control: identical to V4 but cooling area stays at Chen2020 default 0.00531 m2; isolates the cooling-area contribution to T_max (transport/particle improvements identical)",
+      "struct": {
+        "Positive particle radius [m]": 1.0e-06,
+        "Negative particle radius [m]": 1.5e-06,
+        "Electrolyte conductivity [S.m-1]": 1.4,
+        "Electrolyte diffusivity [m2.s-1]": 4.5e-10,
+        "Cation transference number": 0.5,
+        "Separator porosity": 0.55,
+        "Positive electrode thickness [m]": 5.1408e-05,
+        "Negative electrode thickness [m]": 5.7936e-05,
+        "Positive current collector thickness [m]": 8.0e-06,
+        "Negative current collector thickness [m]": 6.0e-06,
+        "Nominal cell capacity [A.h]": 3.4
+      }
+    }
+  ],
+  "llm_reason": "R2 evaluation (V1/V2/V3): all pass stage2 (ED/5C/mass); V3 passes 5C-discharge T_max 328.8 K; remaining failure = 4C-charge exam (V1 357.2 K, V2 343.6 K, V3 337.3 K vs 333.15). Fallback routing: symptom T_max/plating at cell scale -> Stage 3 (same scale): reduce polarization (transport+particles+sep porosity) and enlarge cooling surface (pouch geometry, architecture lever). Heat Q~hA*dT: need dT<=15 K at h=10 -> Q<=1.2 W at A=0.0075 vs ~1.0 W at A=0.00531 (V3 19.2 K). Both levers together give ~4-6 K margin. Plating already positive on V2/V3 (+15/+21 mV) and improves with transport. V5 = attribution control for cooling-area contribution. Sources: sigma 1.4 S/m and D 4.5e-10 near literature upper bound for LiPF6 EC/EMC; t+ 0.5 ESTIMATE (high-transference formulation, marked); sep porosity 0.55 literature (high-porosity ceramic/polyolefin); cooling area 0.0075 m2 = flatter pouch (cell volume 24.2 cm3, ~75 cm2 single-face cooling, conservative vs typical pouch); particles 1.0/1.5 um literature high-power electrode practice."
+}

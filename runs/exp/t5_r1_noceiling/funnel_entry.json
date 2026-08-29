@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "start_stage=3: this case starts at Stage 3; materials use system baseline. Base parameter set: Chen2020 (NMC811/graphite baseline teaching parameterization) — matching basis: task text names no electrode system → SKILL.md §1.5 anchor-table deterministic default; verified by parameter-set dump (NMC811/graphite geometry keys present: Positive/Negative electrode thickness 75.6/85.2 um, porosities 0.335/0.25, particle radii 5.22/5.86 um, complete thermal/geometry keys incl. Total heat transfer coefficient 10.0 W/m2.K, CC thicknesses 16/12 um, densities). Material property source: baseline (parameter-set literature values; no molecular screening — no materials named in task text and ceiling_escalation OFF). No Stage 2 candidates; elimination lines not applicable."
+}

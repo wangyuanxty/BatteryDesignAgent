@@ -1,0 +1,10 @@
+{
+  "candidates": [
+    {"smiles": "FC1COC(=O)O1", "name": "FEC", "role": "fluoroethylene carbonate film-forming additive: suppresses SEI growth and 4C plating"},
+    {"smiles": "O=C1OC=CO1", "name": "VC", "role": "vinylene carbonate film-forming additive: SEI stabilization"},
+    {"smiles": "O=S1(=O)CCCO1", "name": "PS", "role": "1,3-propane sultone SEI film former: graphite surface protection"},
+    {"smiles": "CCC(=O)OCC", "name": "EP", "role": "ethyl propionate low-viscosity ester co-solvent: -20C electrolyte conductivity"},
+    {"smiles": "[B-]1(OC(=O)C(=O)O1)(F)F", "name": "LiDFOB-anion", "role": "difluoro(oxalato)borate anion: SEI/CEI film former, low-T interfacial impedance reduction"},
+    {"smiles": "[O-]P(=O)(F)F", "name": "LiDFP-anion", "role": "difluorophosphate anion: interfacial film former, low-T impedance reduction"}
+  ]
+}

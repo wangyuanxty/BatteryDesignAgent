@@ -1,0 +1,18 @@
+[
+  {
+    "candidate": "ArchA-h150-F4",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h150_f4_4c.json"
+    ],
+    "note": "PASS 4C: T_max 323.5 K, anode min +0.0074 V (no plating); first candidate to clear both",
+    "round": 5
+  },
+  {
+    "candidate": "ArchA-h150-F4b",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h150_f4b_4c.json"
+    ],
+    "note": "PASS 4C: T_max 323.4 K, anode min +0.0114 V (no plating); larger margin -> final candidate for full suite",
+    "round": 5
+  }
+]

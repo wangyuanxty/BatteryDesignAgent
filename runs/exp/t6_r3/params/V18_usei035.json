@@ -1,0 +1,6 @@
+{
+  "Positive electrode thickness [m]": 6.0e-05,
+  "SEI kinetic rate constant [m.s-1]": 5.0e-14,
+  "Total heat transfer coefficient [W.m-2.K-1]": 80.0,
+  "SEI open-circuit potential [V]": 0.35
+}

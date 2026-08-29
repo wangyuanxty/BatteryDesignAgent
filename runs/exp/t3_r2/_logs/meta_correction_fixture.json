@@ -1,0 +1,7 @@
+{
+  "action": "meta_correction",
+  "target": "entry0.meta.test_fixture",
+  "reason": "empirical probe contradicts the planned test-fixture normalization: the Chen2020 native initial state IS the standard charged state (cathode x=0.27 -> initial OCV 4.1809 V; native 1C SPMe discharge delivers 4.9388 Ah ~ nominal 5 Ah; a pos/neg-max initial-state override, i.e. a lithiated cathode, made discharge infeasible and was rejected).",
+  "resolution": "no initial-concentration overrides anywhere in this case; all runs use the native Chen2020 initial state (charged). The SKILL note 'Chen2020 initial state is discharged (cathode 27% lithiated)' conflicts with the measured OCV/capacity; this case's records follow the measured evidence. R1 candidate structs in the propose entry therefore apply without the initial-concentration keys listed there (B0 = empty override).",
+  "evidence": ["_scripts/probe3.py output: initial_OCV_V 4.1809, cap_ah 4.9388, V_start 4.0363"]
+}

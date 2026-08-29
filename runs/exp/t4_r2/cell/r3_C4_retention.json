@@ -1,0 +1,6 @@
+{
+  "retention_1c_m20c": 0.994406473856733,
+  "capacity_ah_m20c": 5.019732157077885,
+  "capacity_ah_25c": 5.047968098607826,
+  "formula": "capacity_ah(lowT_discharge T0=253.15K soaked)/capacity_ah(1C_discharge 298.15K), same design params; cold soak = Initial temperature [K] set to protocol ambient"
+}

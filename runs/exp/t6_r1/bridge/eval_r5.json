@@ -1,0 +1,7 @@
+[
+  {
+    "candidate": "lnmo_final",
+    "outputs": ["cell/r5_final_1c_spme.json", "cell/r5_final_energy.json", "cell/r5_final_aging_spme.json", "cell/r5_final_4c_spme.json"],
+    "note": "COMBINED FINAL CANDIDATE, full protocol battery at SPMe (all outputs produced from the identical final params file): ED_vol = 1135.2 Wh/L >= 950 PASS (+19.5% margin); midpoint_voltage_v = 4.1885 V >= 4.1 PASS; 4C_charge_45C T_max_K = 321.09 K <= 323.15 PASS (margin 2.06 K); anode_potential_v min = +0.00663 V -> plated = false PASS (margin 6.6 mV); sei_thickness_nm_end = 435.4 nm <= 500 PASS (margin 64.6 nm). Same-round design adjustment recorded: the first combined SPMe run (D_ec = 1.2e-18) measured SEI = 473.2 nm - only 26.8 nm margin - so the EC-diffusivity lever was tightened to the round-4-probe-2 value (D_ec = 1.0e-18, measured 395.2 nm at default geometry), yielding 435.4 nm at the final geometry; 1C/4C protocols do not read EC parameters and were re-run from the identical final params file for audit airtightness. Aging capacity trajectory shows the known climb-then-saturate artifact - annotated, criterion reads sei_thickness_nm_end only. DFN confirmation is the next round (conclusion-grade proxy layering)."
+  }
+]

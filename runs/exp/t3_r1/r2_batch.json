@@ -1,0 +1,66 @@
+[
+  {
+    "candidate": "V1_SmallParticles",
+    "outputs": [
+      "runs/exp/t3_r1/cell/r2_v1_5c.json",
+      "runs/exp/t3_r1/cell/r2_v1_4c.json",
+      "runs/exp/t3_r1/cell/r2_v1_1c.json",
+      "runs/exp/t3_r1/cell/r2_v1_energy.json",
+      "runs/exp/t3_r1/cell/r2_v1_derived.json"
+    ],
+    "note": "Particle size alone insufficient: retention 0.168 < 0.95; plating worse than baseline (anode min -0.278 V) and 4C T_max 360.8 K; attribution: small particles need thin electrodes to pay off."
+  },
+  {
+    "candidate": "V2_ThinElectrodes",
+    "outputs": [
+      "runs/exp/t3_r1/cell/r2_v2_5c.json",
+      "runs/exp/t3_r1/cell/r2_v2_4c.json",
+      "runs/exp/t3_r1/cell/r2_v2_1c.json",
+      "runs/exp/t3_r1/cell/r2_v2_energy.json",
+      "runs/exp/t3_r1/cell/r2_v2_derived.json"
+    ],
+    "note": "Thin electrodes = strongest single lever: retention 0.589 (vs baseline 0.087), anode min -0.0117 V near plating-free, but T_max 340.0 K > 333.15 K; fallback: combine with transport/cooling levers."
+  },
+  {
+    "candidate": "V3_FastElectrolyte",
+    "outputs": [
+      "runs/exp/t3_r1/cell/r2_v3_4c.json",
+      "runs/exp/t3_r1/cell/r2_v3_1c.json",
+      "runs/exp/t3_r1/cell/r2_v3_energy.json"
+    ],
+    "note": "5C DFN solver failure (IDA_CONV_FAIL at t=72.3 s) -> SPMe fallback underestimates 5C capacity, so retention_5c left unchecked (SPMe invalid at 5C); valid DFN results: 4C plating -0.080 V, T_max 356.6 K - electrolyte transport alone cannot rescue thick electrodes."
+  },
+  {
+    "candidate": "V4_HighPorosity",
+    "outputs": [
+      "runs/exp/t3_r1/cell/r2_v4_5c.json",
+      "runs/exp/t3_r1/cell/r2_v4_4c.json",
+      "runs/exp/t3_r1/cell/r2_v4_1c.json",
+      "runs/exp/t3_r1/cell/r2_v4_energy.json",
+      "runs/exp/t3_r1/cell/r2_v4_derived.json"
+    ],
+    "note": "Porosity boost alone: retention 0.403 < 0.95 and 5C T_max 359.6 K (hottest protocol) - higher porosity raises local current density and heat; insufficient and thermally worse."
+  },
+  {
+    "candidate": "V5_ActiveCooling",
+    "outputs": [
+      "runs/exp/t3_r1/cell/r2_v5_5c.json",
+      "runs/exp/t3_r1/cell/r2_v5_4c.json",
+      "runs/exp/t3_r1/cell/r2_v5_1c.json",
+      "runs/exp/t3_r1/cell/r2_v5_energy.json",
+      "runs/exp/t3_r1/cell/r2_v5_derived.json"
+    ],
+    "note": "Cooling alone (h=30): T_max 343.7 K still > 333.15 K and electrochemistry unchanged (retention 0.089, plated) - cooling is necessary but not sufficient."
+  },
+  {
+    "candidate": "V6_ComboCeiling",
+    "outputs": [
+      "runs/exp/t3_r1/cell/r2_v6_5c.json",
+      "runs/exp/t3_r1/cell/r2_v6_4c.json",
+      "runs/exp/t3_r1/cell/r2_v6_1c.json",
+      "runs/exp/t3_r1/cell/r2_v6_energy.json",
+      "runs/exp/t3_r1/cell/r2_v6_derived.json"
+    ],
+    "note": "All levers combined (L 40/52 um, r 2.0/2.5 um, eps 0.42/0.35, kappa 1.5 S/m, D 2.5e-10, t+ 0.35, h 30): all criteria pass (retention 0.978, T_max 324.9 K, anode min +0.0143 V, power 38.8 kW/kg, capacity 3.078 Ah). Caveat: Q_nom 2.62 understates C-rate by ~15% vs measured 3.078 Ah - fixed-point rerun in round 3."
+  }
+]

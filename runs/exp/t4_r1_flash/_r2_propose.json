@@ -1,0 +1,12 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {"name": "A1_LowT-E1", "role": "electrolyte formulation: high-conductivity low-viscosity ester-containing LiPF6 electrolyte (sigma/D/t+ bridge)", "struct": {"Electrolyte conductivity [S.m-1]": 1.5, "Electrolyte diffusivity [m2.s-1]": 3.0e-10, "Cation transference number": 0.40}},
+    {"name": "A2_ThinInactive", "role": "cell architecture: thin separator + current collectors for volumetric ED", "struct": {"Separator thickness [m]": 8.0e-06, "Positive current collector thickness [m]": 1.0e-05, "Negative current collector thickness [m]": 6.0e-06}},
+    {"name": "A3_FineParticle", "role": "cell architecture: fine particles for charge-transfer/solid-diffusion (4C plating + low-T)", "struct": {"Positive particle radius [m]": 2.0e-06, "Negative particle radius [m]": 2.0e-06}},
+    {"smiles": "C1OC(=O)OC1F", "name": "FEC", "role": "fluoroethylene carbonate film-forming additive (low-T SEI)"},
+    {"smiles": "O=C1OC=CO1", "name": "VC", "role": "vinylene carbonate film-forming additive"}
+  ],
+  "llm_reason": "R1 gap attribution: ED_L gap (+4.3%) is architecture-scale (thin separator/CC project ~898 Wh/L); 4C plating is transport+kinetics-scale (electrolyte sigma/D/t+ and particle radius); retention has headroom so lever combinations are safe. Single-lever probes for attribution: A1 electrolyte (R1 gap attribution: transport lever), A2 inactive-layer thinning (Wh/L), A3 fine particles (charge-transfer). Additives FEC/VC go through the three-model funnel (Stage 2 molecular screening); film-forming bridge -> SEI kinetic rate constant for the final formulation. Parameter overrides listed BEFORE run (units in key names; sources: A1 sigma/D/t+ = literature-grounded domain estimates for low-viscosity ester LiPF6 (Smart 1999 / Zhang 2002 / Xu 2004 direction; 25C-reference values, estimate, not simulation output); A2 = industry thin-foil values (8 um coated separator, 10 um Al, 6 um Cu; domain experience); A3 = fine-particle electrode values (domain experience); baseline params for all others."
+}

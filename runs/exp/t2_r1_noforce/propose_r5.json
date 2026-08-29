@@ -1,0 +1,22 @@
+{
+  "action": "propose",
+  "round": 5,
+  "candidates": [
+    {
+      "struct": {"Negative particle radius [m]": 3e-06, "Negative electrode porosity": 0.42, "SEI kinetic rate constant [m.s-1]": 4e-13},
+      "name": "F1 final candidate (anode r3um + por0.42 + ceramic coating k_SEI x0.4)",
+      "role": "convergence candidate combining all measured beneficial levers: V6 (r3um+por0.40) reached 4C min anode -0.0017 V (2 mV from no-plating); porosity 0.42 is the expected final push across zero (V3 por0.35 -0.074 -> V6 por0.40 -0.0017 -> por0.42 ~+0.01..0.02 V); C1 coating (k x0.4, ALD Al2O3/TiO2 class, Stage-3 direct) is the only SEI-reducing lever measured (-5.6% @100cyc, -4.2% @500cyc). Expected: pass ED/SEI@100/lowT/4C; SEI@500 ~745-750 (the documented-unreachable criterion). F1 is the deliverable best-design"
+    },
+    {
+      "struct": {"SEI kinetic rate constant [m.s-1]": 1e-13},
+      "name": "F2 coating strength x0.1 (k_SEI 1e-13)",
+      "role": "protocol-blessed reference magnitude for coating SEI suppression (x0.1 of baseline 1e-12); second measured point on the k_SEI -> SEI@500 curve (C1 x0.4: 745.7 nm). Grown-regime algebra (j_sei -> F*c0*D_ec/L with k largely cancelled) predicts x0.1 is only marginally thinner than x0.4 - this measurement pins the k-sensitivity for the three-strike analysis of the SEI@500 criterion"
+    },
+    {
+      "struct": {},
+      "name": "S1 system-switch strike: OKane2022 baseline SEI",
+      "role": "third-strike measurement for SEI@500 (ceiling-assessment system-switch escalation). Pre-screen dump (tool-verified): installed OKane2022 is pure graphite (negative OCP = graphite_LGM50_ocp_Chen2020, no silicon keys), SEI growth constants identical to Chen2020 (k 1e-12, D_ec 2.5e-22, c0 4541, U_sei 0.4, R_sei 2e5, L0 5 nm) and z_sei=1 vs 2 (2x SEI moles per Li flux -> faster growth). Same graphite OCP -> same operating potential window, so SEI@500 expected worse than Chen2020 baseline 777.9; measurement closes the system-switch question with evidence. No alternative aging-capable system in the library (Prada2013 = LFP class, ED cannot meet 327; LNMO.json = Chen2020-base override with identical SEI kinetics). Base parameter set passed via --base OKane2022 (electrode-system freedom, declared adjustable in entry 0)"
+    }
+  ],
+  "llm_reason": "R4 refuted the N/P-rebalance hypothesis: V7/V8 (thicker anode, thinner cathode, constant capacity) made SEI WORSE (SEI@100 529.5/547.3 vs 449.1 baseline; SEI@500 933.8/1012.8 vs 777.9) and did not improve 4C plating (-0.195/-0.167 V). SEI max thickness scales monotonically with negative electrode thickness - anode thickness is a losing direction for both SEI contracts. Combined with C1's weak k-lever (-4.2% @500cyc) and the ec-reaction-limited growth law (grown regime: j_sei = F*c0*k_exp/(1+L*k_exp/D_ec) -> F*c0*D_ec/L, k drops out), the SEI@500 <= 550 nm criterion is now suspected mathematically unreachable within the protocol's SEI model family (any k gives L(500) >= ~1.7x L(100); L(100) floor ~360-390 nm in the grown regime -> L(500) >= ~640 nm). R5 does three things: (1) F1 locks the deliverable best-design (expected pass on 4 of 5 criteria: ED, SEI@100, lowT, 4C plating - the plating criterion finally crossing zero at porosity 0.42); (2) F2 pins the k-sensitivity of SEI@500 with a second measured point; (3) S1 puts the system-switch strike on record with measured aging on OKane2022 rather than algebra alone. If SEI@500 fails again as expected, the three-strike rule fires and R6 closes with questioning documentation (model/system assumption vs task-boundary vs metric assumption)."
+}

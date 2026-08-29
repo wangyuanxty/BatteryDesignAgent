@@ -1,0 +1,20 @@
+[
+  {
+    "candidate": "V1 Nano-fast",
+    "round": 2,
+    "outputs": ["cell/r1_v1_1c.json", "cell/r1_v1_5c.json", "cell/r1_v1_retention.json", "cell/r1_v1_energy.json"],
+    "note": "Pass: ED 517.6 >= 446.18, 5C retention 98.4% >= 90%, mass 35.7 g <= 40 g. Nano-particle + transport package fixed the 5C solid-diffusion bottleneck (8.7% -> 98.4%)."
+  },
+  {
+    "candidate": "V2 Mid-ED",
+    "round": 2,
+    "outputs": ["cell/r1_v2_1c.json", "cell/r1_v2_5c.json", "cell/r1_v2_retention.json", "cell/r1_v2_energy.json"],
+    "note": "Pass: ED 491.3 >= 446.18, 5C retention 98.5%, mass 30.2 g <= 40 g."
+  },
+  {
+    "candidate": "V3 Rate-lean",
+    "round": 2,
+    "outputs": ["cell/r1_v3_1c.json", "cell/r1_v3_5c.json", "cell/r1_v3_retention.json", "cell/r1_v3_energy.json"],
+    "note": "Pass: ED 469.9 >= 446.18, 5C retention 98.6%, mass 26.8 g <= 40 g."
+  }
+]

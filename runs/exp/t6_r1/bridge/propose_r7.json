@@ -1,0 +1,25 @@
+{
+  "action": "propose",
+  "round": 7,
+  "candidates": [
+    {
+      "name": "lnmo_r7_h400_d5",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 400, \"Negative electrode thickness [m]\": 1.022e-4, \"Negative particle radius [m]\": 3.5e-6, \"EC initial concentration in electrolyte [mol.m-3]\": 2270.5, \"EC diffusivity [m2.s-1]\": 1.0e-18, \"Electrolyte diffusivity [m2.s-1]\": 5.0e-10}",
+      "role": "DFN-gap fix probe A (thermal + midpoint): h 200 -> 400 W/m2K for T_max (DFN Q ~6 W -> expected T_max ~321 K), and electrolyte diffusivity raised to a constant 5e-10 m2/s (vs ~3e-10 Nyman2008 at 1000 mol/m3, and ~3x better in the depleted region) to relieve the through-plane depletion sag that pushed the DFN mid-discharge midpoint to 4.0974 V. Honest caveat: scalar override replaces the concentration-dependent Nyman2008 diffusivity function with a constant - formulation-grade approximation, transport-improvement direction."
+    },
+    {
+      "name": "lnmo_r7_h400_nr30",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 400, \"Negative electrode thickness [m]\": 1.022e-4, \"Negative particle radius [m]\": 3.0e-6, \"EC initial concentration in electrolyte [mol.m-3]\": 2270.5, \"EC diffusivity [m2.s-1]\": 1.0e-18}",
+      "role": "DFN-gap fix probe B (plating): negative particle radius 3.5 -> 3.0 um (+36% specific surface) to delay end-of-charge surface saturation - the exchange-current density collapses as (c_s_max - c_s_surf) -> 0 and drives the -19.3 mV dip at DFN. h=400 included for T_max."
+    },
+    {
+      "name": "lnmo_r7_combo",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 400, \"Negative electrode thickness [m]\": 1.022e-4, \"Negative particle radius [m]\": 3.0e-6, \"EC initial concentration in electrolyte [mol.m-3]\": 2270.5, \"EC diffusivity [m2.s-1]\": 1.0e-18, \"Electrolyte diffusivity [m2.s-1]\": 5.0e-10}",
+      "role": "DFN-gap fix probe C (combined): h=400 + radius 3.0 um + electrolyte diffusivity 5e-10. The end-of-charge dip has both a kinetic component (surface saturation) and a transport component (electrolyte depletion gradients); this candidate attacks both simultaneously plus the thermal criterion."
+    }
+  ],
+  "llm_reason": "DFN confirmation flipped three criteria (midpoint 4.0974, T_max 323.80, plated). Round 7 probes the three fixes in isolation and combination at DFN fidelity: cooling h=400 for the ~6 W DFN heat load; electrolyte diffusivity (fast-charge formulation) for the through-plane depletion sag at 1C and the end-of-charge gradients at 4C; anode radius 3.0 um for the surface-saturation exchange-current collapse. SEI lever set (c_ec0 2270.5, D_ec 1e-18) carried unchanged in all candidates (DFN SEI 346 nm)."
+}

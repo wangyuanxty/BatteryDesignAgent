@@ -1,0 +1,38 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": {"max": 0.0},
+      "max_homo_ev": {"max": -6.0}
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 446.18},
+      "capacity_retention_5c": {"min": 0.9},
+      "mass_kg": {"max": 0.04}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false
+    },
+    "meta": {
+      "real_compute": false,
+      "start_stage": 3,
+      "base_params": "Chen2020",
+      "task": "Design a battery for a long-endurance drone: energy density >= 446.18 Wh/kg, 5C discharge with >= 90% capacity retention, cell mass <= 40 g",
+      "threshold_parse": "energy_density_wh_kg min 446.18 (task text verbatim); capacity_retention_5c min 0.90 (task: 5C capacity retention >= 90%); mass_kg max 0.04 (= 40 g, exact unit conversion); no other task thresholds",
+      "freedoms": {
+        "electrode_system": "adjustable",
+        "electrolyte_formulation": "adjustable",
+        "electrode_modification": "adjustable",
+        "cell_architecture": "adjustable",
+        "thermal_management": "adjustable"
+      },
+      "freedoms_note": "Task text declares no degree-of-freedom restrictions -> widest interpretation for all five categories (recorded per zero-interaction rule; t1_r1 lesson: undeclared electrolyte adjustability must not be read as locked).",
+      "safety_defaults": "Task text specifies no safety thresholds -> protocol defaults applied: T_max_K <= 333.15 K (60 C red line) on the Stage-4 4C_charge_45C safety exam; plated=false (anode surface potential < 0 V anywhere during the exam -> plated). Abuse scenarios (overcharge/nail/thermal-runaway) not in task scope -> 'triggered' criterion not pre-registered, no overcharge/nail runs required.",
+      "retention_metric_definition": "capacity_retention_5c = 5C_discharge capacity_ah / same-params 1C_discharge capacity_ah (both DFN; per bda pybamm_runner docstring the agent computes this mechanically from tool outputs and writes it to a JSON file for log-evaluate judgment).",
+      "mass_scaling": "Cell mass scales linearly with electrode area at fixed stack; ED, 5C retention and T_max are area-invariant (lumped thermal mass scales with Cell volume). Design rounds run at native geometry (0.065 x 1.58 m; Chen2020 default stack 0.4231 kg/m2 -> native mass 43.45 g, probed). Closing round scales area jointly (Electrode height/width, Cell volume [m3], Cell cooling surface area [m2], Nominal cell capacity [A.h]) by f = 0.04 / native_mass_kg and re-verifies mass_kg <= 0.04 on fresh runs. Intermediate rounds may therefore show mass_kg unchecked.",
+      "base_default": "Task text names no electrode system -> protocol default Chen2020 (recorded). Discriminant anchor verified by dumping the set: NMC811/graphite teaching parameterization, no SiOx in negative electrode (density 1657 kg/m3, no cracking-rate keys), aging-capable (SEI kinetic rate constant [m.s-1] = 1e-12), full geometry present (Electrode height 0.065 m, width 1.58 m, Cell volume 2.42e-5 m3, nominal capacity 5 Ah).",
+      "excluded_levers": "Solid-phase conductivity/solid-phase diffusivity (no formulation/doping mapping model), initial concentration/lithiation (breaks baseline comparability), Initial SEI thickness (calibration constant), charge cut-off voltage (usage mode) — per protocol, forbidden as design levers.",
+      "cycle_life_note": "Task text contains no cycle-life metric -> aging protocol not required by criteria; Chen2020 is aging-capable if a coating/doping candidate later requires it."
+    }
+  }
+}

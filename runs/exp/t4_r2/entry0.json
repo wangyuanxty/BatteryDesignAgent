@@ -1,0 +1,39 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": {"max": 0.0},
+      "max_homo_ev": {"max": -6.0}
+    },
+    "stage2": {
+      "retention_1c_m20c": {"min": 0.95},
+      "energy_density_wh_kg": {"min": 327.18},
+      "energy_density_wh_l": {"min": 880.0}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false
+    },
+    "meta": {
+      "task": "Design a battery for extreme-cold environment equipment: 1C discharge capacity retention >= 95% at -20C, energy density >= 327.18 Wh/kg, volumetric energy density >= 880 Wh/L.",
+      "real_compute": false,
+      "ablation": {"exploration_force": "on", "ceiling_escalation": "on", "funnel_voting": "on"},
+      "start_stage": 3,
+      "start_stage_reason": "task text names no new materials/additives/electrode chemistry; objective decomposes to architecture/formulation parameters and electrolyte transport overrides -> Stage 3 (rule: only architecture/formulation -> start_stage 3)",
+      "base": "Chen2020",
+      "base_reason": "task text names no electrode system -> anchor-table default Chen2020 (recorded per protocol; funnel log carries discriminant verification)",
+      "freedoms": {
+        "electrode_system": "adjustable",
+        "electrolyte_formulation": "adjustable",
+        "electrode_modification": "adjustable",
+        "cell_architecture": "adjustable",
+        "thermal_management": "adjustable"
+      },
+      "freedoms_basis": "task text declares no locks -> widest interpretation with record (t1_r1 lesson)",
+      "retention_definition": "retention_1c_m20c = capacity_ah(lowT_discharge, 253.15 K, 1C) / capacity_ah(1C_discharge, 298.15 K, 1C), identical params; derived file written mechanically from the two tool outputs",
+      "energy_density_basis": "calc-energy contract caliber on 298.15 K 1C discharge; electrolyte excluded from mass/volume (electrolyte_included:false)",
+      "safety_defaults": "task text silent on safety; defaults chosen and recorded: T_max_K <= 333.15 K and plated=false on 4C_charge_45C (lumped thermal + plating); overcharge/nail-penetration not in task scope",
+      "structure_model": "not requested (zero-interaction) -> skipped",
+      "durability": "not requested (cycle life/SEI not in task text) -> aging protocol not in scope"
+    }
+  }
+}

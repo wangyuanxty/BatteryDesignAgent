@@ -1,0 +1,74 @@
+[
+  {
+    "candidate": "C1-compress-smallr",
+    "round": 3,
+    "outputs": [
+      "cell/r3_C1_1c.json",
+      "cell/r3_C1_energy.json",
+      "cell/r3_C1_retention.json"
+    ],
+    "note": "C1-compress-smallr (por 0.28/0.22, sep 8um, cc 12/8um, r_pos 3.5/r_neg 3um, h=15, cell volume 1.939e-5; probe 5.031Ah within 3% -> nominal 5.0 kept): W2 443.91 PASS, W3 925.06 PASS (+45.1 vs 880; +31.9 vs B1 same stack - small particles raise 1C energy via lower polarization), W1 0.9946 PASS (cold-soak). T_max_K here is 1C-discharge heating - 4C verdict in safety entry"
+  },
+  {
+    "candidate": "C1-compress-smallr",
+    "round": 3,
+    "outputs": [
+      "cell/r3_C1_4c_dfn.json"
+    ],
+    "note": "4C_charge_45C DFN (verdict-grade): T_max 354.83 FAIL (vs 333.15); plated FAIL (ap_min -0.2591V, 27.0% of points negative). Protocol structure decoded from runner: pre-condition 1C discharge to v_min then 4C charge to 4.2V, whole experiment at 318.15K ambient - T_max spans both legs, ap_min at final index = end-of-4C-charge anode saturation (genuine, not SPMe artifact). Neither lever (small particles) nor h=15 suffice"
+  },
+  {
+    "candidate": "C2-thick-NP",
+    "round": 3,
+    "outputs": [
+      "cell/r3_C2_1c.json",
+      "cell/r3_C2_energy.json",
+      "cell/r3_C2_retention.json"
+    ],
+    "note": "C2-thick-NP (t_pos 85/t_neg 120um, por 0.28/0.22, sep 8um, cc 12/8um, r 4/3um, h=15, vol 2.393e-5; probe 6.795Ah -> re-nominalized to 6.80 for 1C/4C): W2 484.06 PASS, W3 956.69 PASS (+76.7), W1 0.9999 PASS (cold-soak). T_max_K here is 1C-discharge heating - 4C verdict in safety entry"
+  },
+  {
+    "candidate": "C2-thick-NP",
+    "round": 3,
+    "outputs": [
+      "cell/r3_C2_4c_dfn.json"
+    ],
+    "note": "4C_charge_45C DFN (verdict-grade, re-nom 6.80 -> 27.2A): T_max 357.51 FAIL; plated FAIL (ap_min -0.1899V, 10.3% negative - deepest anode margin gives shallowest excursion, confirming margin lever) but still negative. 0.083Ah accepted in 4C leg"
+  },
+  {
+    "candidate": "C3-thick-modNP",
+    "round": 3,
+    "outputs": [
+      "cell/r3_C3_1c.json",
+      "cell/r3_C3_energy.json",
+      "cell/r3_C3_retention.json"
+    ],
+    "note": "C3-thick-modNP (t_pos 85/t_neg 105um, r 4/3um, h=15, vol 2.239e-5; probe 6.185Ah -> re-nominalized to 6.18): W2 474.10 PASS, W3 959.31 PASS (+79.3), W1 0.9933 PASS (cold-soak). T_max_K here is 1C-discharge heating - 4C verdict in safety entry"
+  },
+  {
+    "candidate": "C3-thick-modNP",
+    "round": 3,
+    "outputs": [
+      "cell/r3_C3_4c_dfn.json"
+    ],
+    "note": "4C_charge_45C DFN (verdict-grade, re-nom 6.18 -> 24.7A): T_max 347.84 FAIL; plated FAIL (ap_min -0.2362V, 28.5% negative). 105um margin insufficient; 0.073Ah accepted"
+  },
+  {
+    "candidate": "C4-compress-xsmallr",
+    "round": 3,
+    "outputs": [
+      "cell/r3_C4_1c.json",
+      "cell/r3_C4_energy.json",
+      "cell/r3_C4_retention.json"
+    ],
+    "note": "C4-compress-xsmallr (r_pos 3.5/r_neg 2um, h=20, vol 1.939e-5; probe 5.048Ah within 3% -> nominal 5.0 kept): W2 445.65 PASS, W3 928.67 PASS (+48.7), W1 0.9944 PASS (cold-soak). T_max_K here is 1C-discharge heating - 4C verdict in safety entry"
+  },
+  {
+    "candidate": "C4-compress-xsmallr",
+    "round": 3,
+    "outputs": [
+      "cell/r3_C4_4c_dfn.json"
+    ],
+    "note": "4C_charge_45C DFN (verdict-grade): T_max 350.99 FAIL (h=20 bought only -3.8K vs C1 h=15); plated FAIL (ap_min -0.2580V, 28.0% negative) - r_neg 2um alone does not fix end-of-charge saturation. Cooling lever is partial (transient-dominated heating); electrolyte-transport lever untested at DFN"
+  }
+]

@@ -1,0 +1,6 @@
+[
+  {"candidate": "B_elec", "outputs": ["cell/r3_e1_energy.json", "cell/r3_e1_4c45.json"], "note": "transport boost alone: ED 517.3 PASS; plating reduced 4x (ap_min -0.1918->-0.0544) but still plated; T_max 371.0 fail (longer sustained 4C charge after transport gain)"},
+  {"candidate": "B_elec_por", "outputs": ["cell/r3_e2_energy.json", "cell/r3_e2_4c45.json"], "note": "transport + porosity (pos 0.40/neg 0.35): ED 571.8 PASS; ap_min +0.0138 -> NO PLATING; only failing metric is T_max 367.5 (49.3 K rise at h=10) - thermal management next"},
+  {"candidate": "B_elec_particle", "outputs": ["cell/r3_e3_energy.json", "cell/r3_e3_4c45.json"], "note": "particle-size branch: ED 528.3 PASS; ap_min -0.0132 still plated (dominant transport effect over kinetics at this thickness); T_max 369.4 fail"},
+  {"candidate": "C_elec_NP15", "outputs": ["cell/r3_e4_energy.json", "cell/r3_e4_4c45.json"], "note": "x1.5 platform + N/P buffer: ED 571.9 PASS; plating WORSE (ap_min -0.1784) - N/P buffer did not compensate thicker-stack polarization; T_max 385.5 worst in round - x1.5 platform deprecated"}
+]

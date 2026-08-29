@@ -1,0 +1,15 @@
+# LaTeX build artifacts (sources and final PDFs are tracked)
+*.aux
+*.log
+*.toc
+*.fls
+*.fdb_latexmk
+*.blg
+*.out
+*.synctex.gz
+# generated/scratch
+*.bbl
+.ruff_cache/
+__pycache__/
+*.pyc
+texput.log

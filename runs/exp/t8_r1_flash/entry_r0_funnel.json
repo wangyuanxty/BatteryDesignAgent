@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 1,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "Base determination: Chen2020 (task text names no electrode system -> anchor table default, recorded). System candidate Chen2020 passed to Stage 3 baseline characterization; props source=baseline (literature parameter set). Opening ceiling assessment: NMC811/graphite stack ED ceiling with thin inactives (8/6 um collectors, 9-12 um separator, low porosity) ~450-500 Wh/kg contract-caliber; 5C retention is the binding constraint (baseline 8.7%: solid-diffusion limited, D_s,pos=4e-15 m2/s, r_pos=5.22 um, tau~6800 s). Lever set for rate: positive particle radius (r^2/D scaling, allowed lever), electrolyte transport sigma/D/t+ (formulation), electrode thickness (ED-rate Pareto). No molecular funnel needed this round (system/architecture candidates only)."
+}

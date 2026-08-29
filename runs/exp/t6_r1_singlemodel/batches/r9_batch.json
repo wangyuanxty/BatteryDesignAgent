@@ -1,0 +1,32 @@
+[
+  {
+    "candidate": "F1_kappa0205",
+    "outputs": [
+      "cell/r9_F1_1c_spme.json",
+      "cell/r9_F1_energy.json",
+      "cell/r9_F1_4c_spme.json",
+      "cell/r9_F1_aging_spme.json"
+    ],
+    "note": "F1: E1 geometry + electrolyte conductivity kappa 0.205 (the deliberate-IR trip boundary). 1C: ED 1110.83 PASS, mid 4.2222 PASS, cap 5.4142 Ah, thick 199 um. 4C charge 1214.3 s at 18 A (the cap metric 1.3492 Ah duration-proxy) - plated (anode_pot min -0.1338 < 0) FAIL. T_max 324.138 K FAIL (> 323.15). SEI 130.31 nm PASS. The dip-trip prediction FAILED: the eta_e at the kappa 0.205 is ~0.340 (the diag_f3 measured 0.3669 at 0.190 - the actual scaling eta_e = 0.06868/kappa + 0.00546, NOT the linear 0.0796/kappa) - the eta_tot ~0.374 < the 0.392 needed for the V = 4.70 in the OCP_c dip, so the V peaked at only 4.641 in the dip (the t_ch 500-600) and the trip STILL fired at the anode kinetic saturation (the t_ch ~1165-1214). SECOND failure mode (new, from the diag_f3 trace): the deliberate IR pushed the anode surface potential NEGATIVE from the t_ch ~150 s onward (the anode_pot = OCP_n - 0.615*eta_e; the n crosses 0.26 -> the OCP_n 0.22 < the shift 0.21) - the plating flag fires EARLY in the charge at the low kappa, not at the end. The added IR heat (~6.6 W) also blew the T_max past the 323.15 K red line (324.14/324.26/324.52 across the bracket). Verdict: the dip-trip route is DEAD on both counts. The algebra for any remaining window: the positive anode_pot at the trip needs 0.385*OCP_n >= 0.615*(4.70 - OCP_c) - only satisfiable early in the charge (the t_ch < ~150 s) - the early-trip razor is the only mechanism left."
+  },
+  {
+    "candidate": "F2_kappa0200",
+    "outputs": [
+      "cell/r9_F2_1c_spme.json",
+      "cell/r9_F2_energy.json",
+      "cell/r9_F2_4c_spme.json",
+      "cell/r9_F2_aging_spme.json"
+    ],
+    "note": "F2: kappa 0.200. 1C: ED 1110.27 PASS, mid 4.2201 PASS, cap 5.4142 Ah. 4C charge 1208.0 s - plated (anode_pot min -0.1329) FAIL. T_max 324.260 K FAIL. SEI 130.75 nm PASS. Same two failure modes as F1: the trip still at the anode-full (the eta_tot ~0.379 < the 0.392 dip-trip need) and the anode_pot negative from the early charge (the shift 0.615*eta_e > the OCP_n below the n 0.26)."
+  },
+  {
+    "candidate": "F3_kappa0190",
+    "outputs": [
+      "cell/r9_F3_1c_spme.json",
+      "cell/r9_F3_energy.json",
+      "cell/r9_F3_4c_spme.json",
+      "cell/r9_F3_aging_spme.json"
+    ],
+    "note": "F3: kappa 0.190 (the deep-IR safety). 1C: ED 1109.07 PASS, mid 4.2155 PASS, cap 5.4142 Ah. 4C charge 1169.7 s - plated (anode_pot min -0.1368) FAIL. T_max 324.523 K FAIL. SEI 131.76 nm PASS. The diag_f3 trace (the full charge-phase table): the eta_e 0.3669 constant (NOT 0.419 - the linear 0.0796/kappa scaling is refuted; the fit eta_e = 0.06868/kappa + 0.00546); the V in the dip peaked at 4.6410 (the t_ch 600), 4.6816 (the t_ch 800) - the eta_tot 0.3737-0.3741 vs the 0.392 needed; the trip fired at the t_ch 1165 with the anode at 0.961 (the kinetic saturation, the eta_n -0.0072) - the V 4.7000 via the OCP_c 4.4139 (the cathode out of the dip at the sto 0.211). The anode_pot went negative at the t_ch ~150 (the n 0.26, the OCP_n 0.22 vs the shift 0.225) and stayed negative - the deeper IR made the plating fire EARLIER, the opposite of the intent. Both levers consumed: the trip timing (the dip trip unreachable below the kappa ~0.183 but the anode_pot then negative even earlier) and the thermal headroom (the T 324.5 vs 323.15). The remaining window is the early-trip razor: the trip must fire before the t_ch ~150 s (the n < 0.26) where the anode_pot is still positive - the V(t) peak there is ~4.686 at the kappa 0.19, so the kappa ~0.176-0.183 pushes the peak over 4.70 with the anode_pot +0.005 to +0.02 (the margin algebra: 0.385*OCP_n - 0.615*(4.70 - OCP_c) at the trip point)."
+  }
+]

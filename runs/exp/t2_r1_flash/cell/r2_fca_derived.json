@@ -1,0 +1,5 @@
+{
+  "sei_500cyc_nm": 744.4874661370255,
+  "lowT_retention": 0.995067,
+  "note": "sei_500cyc_nm = r2_fca_aging500.json:sei_thickness_nm_end; lowT_retention = r2_fca_lowt.json:capacity_ah / r2_fca_1c_dfn.json:capacity_ah"
+}

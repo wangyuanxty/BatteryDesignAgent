@@ -1,0 +1,7 @@
+{
+  "Negative electrode thickness [m]": 1.0e-04,
+  "Negative particle radius [m]": 2.5e-06,
+  "Total heat transfer coefficient [W.m-2.K-1]": 30.0,
+  "SEI solvent diffusivity [m2.s-1]": 6.25e-23,
+  "SEI kinetic rate constant [m.s-1]": 3.0e-13
+}

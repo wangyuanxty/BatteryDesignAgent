@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "start_stage=3 case (task text requests no new materials; escalation rule applied only if ceiling assessment shows material bottleneck): no molecular funnel candidates proposed. base=Chen2020 (task text named no electrode system -> deterministic default with record in entry 0; NMC811/graphite parameterization, aging-capable with SEI model - discriminant: SEI kinetic rate constant 1e-12 present, unlike ORegan2022). Materials use system baseline (props source=baseline, literature). Opening ceiling assessment (measured): ED ceiling well above target (max observed 460.8 Wh/kg FC-B; thin-CC/thick-electrode headroom further), lowT no constraint (99.4% baseline), 4C plating and T_max reachable in architecture+formulation space (FC-C final: anode min +0.012V, T_max 329.2K) -> NO Stage 2 escalation; all gaps closed at cell scale. Electrolyte transport overrides used directly as formulation candidates (no molecular screening per candidate table), SEI suppression via coating bridge (SEI kinetic rate constant) - inorganic-coating style, funnel skipped with reason recorded."
+}

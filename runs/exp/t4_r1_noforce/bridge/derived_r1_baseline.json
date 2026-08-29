@@ -1,0 +1,8 @@
+{
+  "lowT_retention": 0.9942847697911101,
+  "lowT_capacity_ah": 4.919111590528276,
+  "rt_capacity_ah": 4.94738704643111,
+  "lowT_source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t4_r1_noforce\\cell\\r1_baseline_lowT_dfn.json",
+  "rt_source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t4_r1_noforce\\cell\\r1_baseline_1c_dfn.json",
+  "label": "r1_baseline_dfn"
+}

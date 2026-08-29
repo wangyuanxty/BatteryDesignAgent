@@ -1,0 +1,8 @@
+{
+  "Electrolyte diffusivity [m2.s-1]": 4e-10,
+  "Cation transference number": 0.36,
+  "Electrolyte conductivity [S.m-1]": 1.2,
+  "Positive electrode thickness [m]": 6e-05,
+  "Negative electrode thickness [m]": 6.761904761904763e-05,
+  "Electrode width [m]": 1.9908
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "SEI_densefilm_v2",
+    "outputs": ["cell/r5_c1_aging.json"],
+    "note": "R5 c1: EC diffusivity 2e-18 -> 5e-19 + k_sei x0.3. SEI 708.1 -> 385.4 nm PASS. Confirms D_ec as the wired diffusion-limited coating lever (L^2 ~ D_ec * t regime, dense FEC/VC-class film analog)."
+  },
+  {
+    "candidate": "Plating_push_v2",
+    "outputs": ["cell/r5_c2_4c45.json"],
+    "note": "R5 c2: R4 c2 levers + positive particle 3.0 um + t+ 0.4. Min anode potential REGRESSED -0.0196 -> -0.0535 V (T_max 327.22). Attribution confounded between posp 3.0 um and t+ 0.4; isolated in R6. Faster cathode kinetics likely accept more charge before the 4.7 V cutoff, saturating the anode surface harder."
+  },
+  {
+    "candidate": "Merge_R5",
+    "outputs": ["cell/r5_c3_energy.json", "cell/r5_c3_1c_spme.json", "cell/r5_c3_4c45.json", "cell/r5_c3_aging.json"],
+    "note": "R5 c3: merge of proven levers (neg 100 um, neg part 2.0 um, posp 3.0 um, t+ 0.4, h=50, D_ec 5e-19, k_sei x0.3). ED 1131.5 PASS, midV 4.227 PASS, T_max 322.78 PASS, SEI 415.1 PASS, plated FAIL (min -0.0484 V). 4/5 criteria on SPMe; only the anode knife-edge at the 4C cutoff remains."
+  }
+]

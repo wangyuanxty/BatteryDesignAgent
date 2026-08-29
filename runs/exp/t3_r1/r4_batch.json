@@ -1,0 +1,14 @@
+[
+  {
+    "candidate": "V12_BalancedCooling",
+    "round": 4,
+    "outputs": [
+      "cell/r4_v12_5c.json",
+      "cell/r4_v12_4c.json",
+      "cell/r4_v12_1c.json",
+      "cell/r4_v12_energy.json",
+      "cell/r4_v12_derived.json"
+    ],
+    "note": "V6 combo + h=20 W/m2/K, Q_nom 3.08 (fixed point). All criteria pass with balanced margins: capacity 3.075 Ah, retention_5c 0.9753, T_max 329.77 K = 56.62 C (3.38 K under 60 C), anode min +12.1 mV (no plating), power density from calc-energy. Selected as final design."
+  }
+]

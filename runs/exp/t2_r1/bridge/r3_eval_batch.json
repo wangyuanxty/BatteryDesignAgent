@@ -1,0 +1,47 @@
+[
+  {
+    "candidate": "ALD-coat-A",
+    "outputs": [
+      "cell/r3_c1_aging100.json",
+      "cell/r3_c1_aging500.json",
+      "cell/r3_c1_sei100.json",
+      "cell/r3_c1_sei500.json",
+      "cell/r3_c1_lowT.json",
+      "cell/r3_c1_lowT_ret.json",
+      "cell/r3_c1_1c.json",
+      "cell/r3_c1_4c.json",
+      "cell/r3_c1_energy.json"
+    ],
+    "note": "k_sei x0.01: SEI@100 201.7 pass, SEI@500 500.4 pass (9.0% margin, thin); ED/4C/lowT unchanged vs FastCharge-B (k_sei does not enter those protocols). Passes all contracts but 500cyc margin thin."
+  },
+  {
+    "candidate": "ALD-coat-B",
+    "outputs": [
+      "cell/r3_c2_aging100.json",
+      "cell/r3_c2_aging500.json",
+      "cell/r3_c2_sei100.json",
+      "cell/r3_c2_sei500.json",
+      "cell/r3_c2_lowT.json",
+      "cell/r3_c2_lowT_ret.json",
+      "cell/r3_c2_1c.json",
+      "cell/r3_c2_4c.json",
+      "cell/r3_c2_energy.json"
+    ],
+    "note": "k_sei x0.0001: SEI@100 8.4 pass, SEI@500 21.7 pass (huge margin); aging capacity trajectory flat/clean (no window-shift artifact); ED 446.6 pass; 4C plating-free (min +0.077 V); lowT 99.5% pass. All five contracts pass with margin -> recommended final design."
+  },
+  {
+    "candidate": "ALD-coat-C",
+    "outputs": [
+      "cell/r3_c3_aging100.json",
+      "cell/r3_c3_aging500.json",
+      "cell/r3_c3_sei100.json",
+      "cell/r3_c3_sei500.json",
+      "cell/r3_c3_lowT.json",
+      "cell/r3_c3_lowT_ret.json",
+      "cell/r3_c3_1c.json",
+      "cell/r3_c3_4c.json",
+      "cell/r3_c3_energy.json"
+    ],
+    "note": "k_sei x0.00001: SEI@100 5.3 pass, SEI@500 6.7 pass; same ED/4C/lowT as B. Passes all contracts; one order more aggressive k than B with no added benefit -> B preferred."
+  }
+]

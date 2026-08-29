@@ -1,0 +1,45 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": {"max": 0.0},
+      "max_homo_ev": {"max": -6.0}
+    },
+    "stage2": {
+      "capacity_ah": {"min": 2},
+      "capacity_retention_5c": {"min": 0.95},
+      "power_density_w_kg": {"min": 4000}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "t_max_5c_k": {"max": 333.15},
+      "plated": false
+    },
+    "meta": {
+      "case": "t3_r2",
+      "task_text": "Design a battery for power tools: nominal capacity >= 2 Ah, support 5C discharge (capacity retention >= 95%), support 4C fast charge (no lithium plating), maximum temperature <= 60C, power density >= 4000 W/kg.",
+      "thresholds_verbatim": ["capacity >= 2 Ah", "5C retention >= 95%", "4C charge without plating", "T_max <= 60C (=333.15 K)", "power density >= 4000 W/kg"],
+      "threshold_parsing_notes": {
+        "capacity_ah": "nominal capacity judged on 1C DFN discharge capacity_ah; 60C judged in BOTH operating scenarios of the task: 4C fast charge at 45C (T_max_K, canonical Stage-4 exam) and 5C discharge at 25C (t_max_5c_k, mechanically copied from 5C output T_max_K into a derived metrics file)",
+        "capacity_retention_5c": "mechanically computed 5C capacity / same-params 1C capacity per SKILL Stage 3 rate-scenario rule, written to a derived metrics file for log-evaluate",
+        "power_density_w_kg": "calc-energy contract formula V_OC^2/(4*DCR)/mass_kg"
+      },
+      "start_stage": 3,
+      "base_params": "Chen2020",
+      "base_rationale": "task text names no electrode system -> deterministic default Chen2020 per SKILL 1.5 anchor table; anchor verified by parameter dump: NMC811/graphite OCP set, Nominal cell capacity 5 Ah, SEI kinetics present, no native plating parameters (runtime-injected with trace), geometry/thermal keys native (Electrode height 0.065 m x width 1.58 m).",
+      "test_fixture": "Chen2020 initial-SOC artifact (cathode 27% lithiated, SKILL-documented: 'initial state is discharged') normalized to a standard fully-charged characterization state for ALL protocols; Initial concentration in positive electrode [mol.m-3] = 63104 (its maximum), Initial concentration in negative electrode [mol.m-3] = 33133 (its maximum). Constant across every candidate in this case (never varied between candidates) - test-condition normalization, NOT a design lever.",
+      "real_compute": false,
+      "ablation": {"exploration_force": "ON", "ceiling_escalation": "ON", "funnel_voting": "ON"},
+      "ablation_set_by": "defaults (task text names no ablation switches)",
+      "freedoms": {
+        "electrode_system": "adjustable (task text does not lock the system; widest interpretation)",
+        "electrolyte_formulation": "adjustable (transport parameter overrides allowed)",
+        "electrode_modification": "adjustable (coating/doping allowed)",
+        "cell_architecture": "adjustable (thickness/porosity/N-P/separator/current collector/particle size)",
+        "thermal_management": "adjustable (cooling coefficient)"
+      },
+      "freedoms_basis": "zero-interaction rule: degrees of freedom not declared in the task text take the widest interpretation with an audit record (t1_r1 lesson)",
+      "structure_model": "not requested in task text",
+      "excluded_levers": "solid-phase conductivity/diffusivity, initial concentration/lithiation variations (used only as the fixed test fixture above), initial SEI thickness, charge cut-off voltage"
+    }
+  }
+}

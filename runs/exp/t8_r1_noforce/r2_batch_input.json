@@ -1,0 +1,20 @@
+[
+  {
+    "candidate": "V1_lean_inert",
+    "outputs": ["cell/r2_v1_energy.json", "cell/r2_v1_retention.json"],
+    "note": "closing repair: R2 evaluate not logged at the time (values were cited in R3 propose reasoning from the same output files; entry appended mechanically from existing outputs). Inert lean-out only: ED 488.3 / mass 35.7 g pass, retention 0.0895 unchanged - rate physics untouched.",
+    "round": 2
+  },
+  {
+    "candidate": "V2_lean_rate",
+    "outputs": ["cell/r2_v2_energy.json", "cell/r2_v2_retention.json"],
+    "note": "closing repair: R2 evaluate not logged at the time (values were cited in R3 propose reasoning from the same output files; entry appended mechanically from existing outputs). Particle refinement r_p 0.7 um / r_n 2 um: retention 0.2325 - direction confirmed, still far from 0.90.",
+    "round": 2
+  },
+  {
+    "candidate": "V3_lean_porous",
+    "outputs": ["cell/r2_v3_energy.json", "cell/r2_v3_retention.json"],
+    "note": "closing repair: R2 evaluate not logged at the time (values were cited in R3 propose reasoning from the same output files; entry appended mechanically from existing outputs). Porosity increase: retention 0.1998 - rate benefit smaller than particles.",
+    "round": 2
+  }
+]

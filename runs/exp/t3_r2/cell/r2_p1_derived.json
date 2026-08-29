@@ -1,0 +1,5 @@
+{
+  "capacity_retention_5c": 0.9889,
+  "t_max_5c_k": 322.2243,
+  "derivation": "capacity_retention_5c = 5C capacity 3.2911 Ah / 1C capacity 3.3278 Ah (same params incl. nominal=3.3219 Ah); t_max_5c_k = T_max_K of the 5C run. it1 cap=3.3278 drift=0.0018"
+}

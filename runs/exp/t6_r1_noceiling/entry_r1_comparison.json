@@ -1,0 +1,11 @@
+{
+  "action": "evaluate",
+  "round": 1,
+  "note": "cross-candidate comparison table for R1 (per-candidate mechanical verdicts recorded in the batch entries above; all values copied from tool output files)",
+  "comparison": [
+    {"name": "Baseline Chen2020", "metrics": {"energy_density_wh_l": 843.487, "midpoint_voltage_v": 3.935, "T_max_K": 311.621}, "verdict": "fail"},
+    {"name": "ED-Compact A", "metrics": {"energy_density_wh_l": 902.977, "midpoint_voltage_v": 3.936, "T_max_K": 311.535}, "verdict": "fail"},
+    {"name": "ED-Compact B", "metrics": {"energy_density_wh_l": 951.66, "midpoint_voltage_v": 3.905, "T_max_K": 315.665}, "verdict": "fail"},
+    {"name": "ED-Thick C", "metrics": {"energy_density_wh_l": 887.501, "midpoint_voltage_v": 3.886, "T_max_K": 319.336}, "verdict": "fail"}
+  ]
+}

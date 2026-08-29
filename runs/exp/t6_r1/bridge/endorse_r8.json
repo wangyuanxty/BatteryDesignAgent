@@ -1,0 +1,5 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false (entry 0 meta): Stage 5 true DFT/MD endorsement skipped per protocol. No run-orca/run-cp2k/run-md/run-qe output exists in this case and none is fabricated. Closing proxy layering recorded honestly: Stage 2 was a system-level material switch (Chen2020 NMC811 -> LNMO 4.7 V-class spinel, library parameter set LNMO.json) logged as funnel entry rather than a molecule batch; cell-scale conclusions carry DFN fidelity (highest available proxy) on all five criteria. Molecular-level endorsement (HOMO/LUMO, Li+ diffusion by true MD) is out of scope for a parameter-set-based system switch and is not simulated."
+}

@@ -1,0 +1,27 @@
+{
+  "action": "propose",
+  "round": 4,
+  "candidates": [
+    {
+      "struct": {"Negative particle radius [m]": 2.0e-6, "Cation transference number": 0.5, "Negative electrode porosity": 0.32, "Total heat transfer coefficient [W.m-2.K-1]": 80.0},
+      "name": "R4_F1_Fine2_Tp05_Por32_H80",
+      "role": "best-of-R3 merging: T3's 2.0 um surface-area term (-0.0175 V) + T4's t+=0.5 transference step (+0.0266 V measured at 3 um) -> expected anode min ~ +0.009 V"
+    },
+    {
+      "struct": {"Negative particle radius [m]": 3.0e-6, "Cation transference number": 0.5, "Negative electrode porosity": 0.35, "Total heat transfer coefficient [W.m-2.K-1]": 80.0},
+      "name": "R4_F2_Fine3_Tp05_Por35_H80",
+      "role": "T4 + anode porosity 0.32->0.35 (porosity step measured +0.0464 V for 0.25->0.32; one more increment on the saturation curve)"
+    },
+    {
+      "struct": {"Negative particle radius [m]": 3.0e-6, "Cation transference number": 0.6, "Negative electrode porosity": 0.32, "Total heat transfer coefficient [W.m-2.K-1]": 80.0},
+      "name": "R4_F3_Fine3_Tp06_Por32_H80",
+      "role": "T4 + t+ 0.5->0.6 (advanced concentrated-electrolyte class; literature t+ up to ~0.7, marked estimate; transference term (1-t+)/kappa falls a further 20% relative to 0.5)"
+    },
+    {
+      "struct": {"Negative particle radius [m]": 2.0e-6, "Cation transference number": 0.5, "Negative electrode porosity": 0.32, "Separator porosity": 0.55, "Total heat transfer coefficient [W.m-2.K-1]": 80.0},
+      "name": "R4_F4_Fine2_Tp05_Por32_Sep55_H80",
+      "role": "F1 + separator porosity 0.47->0.55 (Chen2020 default 0.47): relieves the ionic droop exactly at the measured separator interface, the widest-margin variant"
+    }
+  ],
+  "llm_reason": "R3 closed the nail criterion (hA=0.4248: T_max 321.7 K even hot-soak start, 6x margin under the ~356 K ignition) and narrowed plating to ~10 mV: anode min -0.0097 V at T4 (3um+t+0.5+por0.32). Residual -10 mV = unrelieved electrolyte-phase concentration/ohmic droop at the separator interface; each of F1-F4 stacks one more measured lever increment (surface area / anode porosity / transference / separator porosity) to push the full-trace minimum above 0 V. All inherit h=80 liquid cooling. SEI headroom: R3 worst 503.4 nm vs 550 (46 nm margin); R4 variants tracked against the same aging run."
+}

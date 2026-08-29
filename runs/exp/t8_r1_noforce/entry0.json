@@ -1,0 +1,42 @@
+{
+  "criteria": {
+    "stage1": {},
+    "stage2": {
+      "energy_density_wh_kg": {"min": 446.18},
+      "capacity_retention_5c": {"min": 0.90},
+      "mass_kg": {"max": 0.04}
+    },
+    "stage3": {
+      "plated": false,
+      "T_max_K": {"max": 333.15}
+    },
+    "meta": {
+      "case_id": "t8_r1_noforce",
+      "goal": "Long-endurance drone battery: energy density >= 446.18 Wh/kg, 5C discharge with capacity retention >= 90%, cell mass <= 40 g.",
+      "thresholds_source": "task text verbatim: 446.18 Wh/kg, 90% 5C retention, 40 g mass",
+      "stage1_vacuous_note": "Task text names no new materials/additives/electrolyte -> start_stage=3 (cell design); stage1 molecular criteria empty; system candidates skip the molecular funnel per protocol.",
+      "stage3_defaults_note": "Task text silent on thermal red line and plating -> protocol defaults applied: plated=false (Stage 4 fast-charge exam, auto-derived from anode_potential_v min<0) and T_max_K max 333.15 K (60 C operating red line).",
+      "retention_definition": "capacity_retention_5c = Q(5C_discharge, dfn) / Q(1C_discharge, dfn) with identical params, computed mechanically by the agent from two run-pyamm outputs and written to a derived JSON judged by log-evaluate.",
+      "mass_definition": "cell mass = calc-energy mass_kg (contract formula: sum over layer thickness x (1-porosity) x density x area; electrolyte excluded - calc-energy output electrolyte_included:false).",
+      "start_stage": 3,
+      "base": "Chen2020",
+      "base_reason": "Task text names no electrode system -> anchor-table default Chen2020 (NMC811/graphite teaching parameterization), recorded per Section 1.5.",
+      "real_compute": false,
+      "ablation": {
+        "exploration_force": false,
+        "exploration_force_source": "task text: 'exploration_force switch OFF - no forced 2-4 architecture variants per round; propose architecture variants at relevant moments only, free exploration'",
+        "ceiling_escalation": true,
+        "funnel_voting": true
+      },
+      "freedoms": {
+        "electrode_system": "adjustable",
+        "electrolyte_formulation": "adjustable",
+        "electrode_modification": "adjustable",
+        "cell_architecture": "adjustable",
+        "thermal_management": "adjustable",
+        "note": "Task text declares none of the five degree-of-freedom categories; zero-interaction rule + t1_r1 lesson -> widest interpretation applied with record."
+      },
+      "shell_note": "Bash tool unavailable in this session; commands executed via PowerShell as single-line .venv python -m bda invocations from repo root (no guardrail-limited constructs). Recorded deviation."
+    }
+  }
+}

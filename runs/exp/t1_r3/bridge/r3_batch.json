@@ -1,0 +1,5 @@
+[
+  {"candidate": "V5_fastcharge_plus", "outputs": ["cell/r3_v5_energy.json", "cell/r3_v5_4c.json"], "note": "transport+N/P+1.5um particles: no plating (+0.0247V), T_max 322.6K, acceptance 1.08Ah — margin widened but acceptance still short of genuine 4C"},
+  {"candidate": "V6_thin_fastcharge", "outputs": ["cell/r3_v6_energy.json", "cell/r3_v6_4c.json"], "note": "thin 55/80um + pack: no plating (+0.0328V), T_max 320.6K, acceptance 1.17Ah (32% of 3.6Ah) — best so far"},
+  {"candidate": "V7_np_only", "outputs": ["cell/r3_v7_energy.json", "cell/r3_v7_4c.json"], "note": "N/P isolation: V1 pack + 110um negative -> plated (-0.0022V, marginal) — thicker negative hurts via longer diffusion path; N/P lever net-negative at 4C"}
+]

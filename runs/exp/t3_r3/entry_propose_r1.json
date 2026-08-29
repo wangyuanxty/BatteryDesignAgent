@@ -1,0 +1,8 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {"name": "Chen2020-baseline", "role": "system baseline characterization: NMC811/graphite wound cell, zero parameter overrides; anchor for opening ceiling assessment (5C retention / 4C plating / power density / T_max gaps)"}
+  ],
+  "llm_reason": "start_stage=3 (task names no new material or electrolyte-design objective). Round 1 characterizes the deterministic default system (Chen2020, per anchor table default rule for unnamed systems); architecture variants are proposed from round 2 once the baseline gap magnitude is measured (exploration_force active)."
+}

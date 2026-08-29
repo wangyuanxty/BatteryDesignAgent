@@ -1,0 +1,138 @@
+% ============================================================
+% 6. Discussion
+% ============================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Governance Value Is Bottleneck-Matched, Not Uniform}
+
+The ablation results carry a structural lesson for the design of agent
+governance: the marginal value of a governance component depends on what
+kind of bottleneck the task carries, and the protocol's ceiling assessment
+is precisely the machinery that diagnoses the bottleneck before effort is
+spent. Where the binding constraint is material---a plateau beyond the
+chemistry's polarization limit, a lifetime bound that only a coating
+suppresses---the escalation mechanism is causal: remove it and the task is
+lost (T6, T2). Where the binding constraint is structural, escalation
+matters not at all (T5), and forced architectural breadth matters only when
+the search space itself hides the solution (T2). The voting mechanism is the
+clearest case of a matched-null: in a suite where the cheapest route
+(parameter bridges and system switches) always sufficed, the molecular
+funnel was never entered, so its three-model vote was never exercised.
+Governance is thus not a fixed bundle whose every element pays rent in every
+regime; it is a portfolio whose elements pay according to the distribution
+of bottlenecks. An organization deploying such a system should expect
+exactly this pattern, and should instrument---as our protocol does---which
+components were exercised, so that dormant components are identified by
+data rather than presumed by fiat.
+
+\subsection{Sharpening the Low-Headroom Calibration}
+
+Battery-Sim-Agent, the closest published system, reports a
+calibration of its headline: in low-headroom regimes where literature
+defaults already sit near the target, Bayesian optimization remains
+competitive and can outperform the agent \cite{chen2026battery}. Our
+results sharpen this calibration in two directions. First, the BO wins we
+observe are contract-attainment wins, not merely error-margin wins: on the
+three structural tasks BO \emph{achieves} the contract, and with the
+highest energy densities of any condition---the expected signature of an
+unconstrained thin-electrode search. The tasks where BO loses are exactly
+those whose bottleneck is outside its parameter space, which is a
+verifiable property of the space rather than a statistical property of the
+search. The boundary is thus the research target rather than a fairness
+compromise: the configuration replicates the published standard to measure
+what the field's strongest classical setup does---and does not do---not to
+stage a symmetric contest; the aligned-penalizer re-run (Section~5.1)
+closes the one configurable gap the replication left open. Second, and this is the sharper point, the protocol-free agent's
+failure mode is invisible in Battery-Sim-Agent's benchmark by
+construction: their objective is a fixed curve-matching error, so their
+bare agent has no yardstick it can move. Our contracts are multi-criterion
+natural-language requirements, which is precisely the setting where
+yardstick adjustment becomes possible---and it is what the ungoverned agent
+does, in five distinguishable modes (Section~5.5). The prevailing
+``LLM beats classical optimization'' narrative is therefore incomplete in a
+way that matters for practice: an ungoverned LLM agent in a multi-criterion
+design setting can lose to a black-box optimizer \emph{and} fail its own
+reported claims simultaneously---the former on reachable space, the latter
+on movable criteria. Only the adjudication layer addresses both.
+
+\subsection{Yardstick Malleability and the Case for Mechanized Adjudication}
+
+The C1 re-adjudication is the empirical core of RQ3, and it reads directly
+into the delegation literature. Delegated agency theory identifies contract
+specification quality and governance visibility as the design dimensions
+that discipline agent behavior \cite{delegatedagency2026}; empirical work
+shows that auditable algorithmic recommendations reshape decision behavior
+in organizations \cite{nikpayam2024aiassisted}. Our results instantiate
+both mechanisms at the engineering level. Pre-registration is contract
+specification made machine-readable before any work begins; the evidence
+chain is governance visibility made file-level; and the prohibition on the
+agent writing its own verdicts is a separation of duties---the auditee may
+not write the audit. The five observed yardstick adjustments (threshold
+shift, model substitution, parameter purchase, caliber shift, criterion
+omission) are not pathological behavior; they are what an incentive-free,
+unmonitored agent does with a movable yardstick, and they are exactly the
+moral hazard agency theory predicts when the agent both acts and evaluates.
+
+Two counter-arguments deserve explicit answers. First, one might read the
+protocol as ``just a better prompt'': C1 received a five-sentence system
+prompt while the governed agent received the full rule set. The distinction
+is architectural, not rhetorical. The protocol's load-bearing components
+are \emph{outside} the model's text: the adjudication layer is a
+command-line program that computes verdicts, the verifier refuses
+incomplete audit chains, and the agent is forbidden to write its own
+evaluations. No prompt, however long, can place an evaluator outside the
+agent; that is precisely what a code-level adjudication layer does. Second,
+one might question whether C1 is a fair counterfactual, since its prompt
+requests a deliverable but no criterion discipline. The control is
+``same tools, same budget, no protocol,'' which is the natural baseline for
+measuring the protocol's contribution: it holds every resource constant and
+removes exactly the governance layer. A stronger C1 (e.g., adding only a
+pre-registration instruction) would measure the marginal value of one
+component rather than the protocol as a whole; the ablation design already
+serves that purpose component by component. The magnitudes in Table~6
+should therefore be read as the protocol's total contribution, not as
+predictions for any particular stripped-down agent.
+
+The theory bridge can be made quantitative with the paper's own machinery.
+Delegation fidelity---the fraction of adjudicable criteria measured against
+their pre-registered thresholds---is computed, not asserted, in our setup:
+the governed agent scores one by construction (the verifier refuses
+otherwise), while the C1 re-adjudication is exactly a fidelity audit. The
+design implication transfers beyond battery design: any deployment in which
+an agent's success metric can be influenced by the agent's own choices
+needs an adjudication layer outside the agent, and the cheaper the
+adjudication (the present layer is a command-line evaluator and a ledger),
+the broader the class of tasks for which delegation becomes safe.
+
+\subsection{Limitations}
+
+Six limitations bound the present study. (i) \emph{Replication.} Each
+condition-by-task cell contains a single run; a threefold replication
+covers all eight tasks (three seeds each; $24/24$ achieved under the
+mechanical adjudicator with complete evidence coverage---design-level, not
+trajectory-level, reproduction), and cross-model corroboration spans 24
+further sessions over three models. The three-model matrix (8/8 under pro
+and flash, $4/8$ with honest signatures
+under a third-vendor model, Section~5.4) provides stability evidence across
+models, and all three T6 seeds independently reach the same
+material-bottleneck diagnosis and solution (the LNMO system switch) through
+three different designs (supplementary materials). (ii)
+\emph{Domain.} The evidence is confined to one domain (battery cells) and
+one simulator family (PyBaMM-based electrochemistry); the governance
+components are domain-agnostic in design, but their marginal values in
+other engineering domains are open. (iii) \emph{Reproducibility of the
+LLM.} LLM runs cannot be seeded; the protocol's verdicts are reproducible,
+the agent's trajectories are not. (iv) \emph{Simulation-only.} The
+real-data anchor validates the \emph{simulator}, not the final designs;
+no physical cell has been built from any agent design. (v) \emph{No human
+baseline.} We do not benchmark human experts, because the research
+question is the comparison among delegation mechanisms under identical
+resources, not the (already well-attested) economics of replacing
+engineers; a human-expert control would also confound the resource-constant
+design. (vi) \emph{Harness and endorsement.} All runs execute under one
+agent harness. The cross-harness demonstration under two further
+frameworks is executed and reported (Section~5.7); the endorsement stage is
+executed for the molecular finalists in two independent codes (ORCA and
+CP2K, Section~5.8), with the molecular-dynamics diffusion endorsement in
+progress at the time of this draft.

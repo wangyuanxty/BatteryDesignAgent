@@ -1,0 +1,12 @@
+[
+  {
+    "candidate": "Baseline Chen2020",
+    "outputs": ["cell/r1_baseline_1c_spme.json", "cell/r1_baseline_energy.json", "cell/r1_baseline_4c_dfn.json"],
+    "note": "Baseline: ED 400.29 Wh/kg passes stage2 with thin margin; 4C charge is polarization-limited (DFN: hits 4.2 V after 0.176 Ah/31.7 s) with T_max 354.29 K fail and anode potential min -0.192 V -> plated fail. SPMe 4C run (0.029 Ah, instant termination) recorded as SPMe linearized-BV artifact; DFN judged."
+  },
+  {
+    "candidate": "Baseline Chen2020",
+    "outputs": ["cell/r1_baseline_overcharge.json", "cell/r1_baseline_tr.json"],
+    "note": "Overcharge to 4.7 V (0.5C, upper cut-off 4.2 V + 0.5 V): overcharge T_max 311.62 K; run-tr coupling (mcp = mass x 900 = 39.1 J/K from calc-energy mass 0.04345 kg; hA = 10 x 0.00531 = 0.0531 W/K design-consistent) -> triggered false. Overcharge safety passes."
+  }
+]

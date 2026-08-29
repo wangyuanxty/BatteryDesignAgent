@@ -1,0 +1,21 @@
+{
+  "action": "propose",
+  "round": 3,
+  "candidates": [
+    {
+      "name": "FC-4a",
+      "role": "integrated final: FC-2 cooling (h_total 170 W/m2K, hA 0.90) + strengthened transport (sigma 1.6 S/m, t+ 0.45, D 3.0e-10; literature-basis estimate, high-transport formulation) + negative particle 2.5 um (solid-diffusion lever) + negative porosity 0.34 / separator porosity 0.58 (salt reservoir). Plating margin must be earned at the cooled operating temperature (T_max ~323 K) where Arrhenius transport is weaker.",
+      "struct": {
+        "Electrolyte conductivity [S.m-1]": 1.6,
+        "Cation transference number": 0.45,
+        "Electrolyte diffusivity [m2.s-1]": 3.0e-10,
+        "Negative particle radius [m]": 2.5e-6,
+        "Negative electrode porosity": 0.34,
+        "Separator porosity": 0.58,
+        "Separator thickness [m]": 9.0e-6,
+        "Total heat transfer coefficient [W.m-2.K-1]": 170.0
+      }
+    }
+  ],
+  "llm_reason": "Round 2 split the levers and failed both ways: FC-1 (transport only) passes 4C at +12.6 mV but its uncooled cell rides at 354 K and still loses the nail; FC-2 (cooling only added) passes the nail but cools to 324 K and re-introduces plating (-26 mV). The lever interaction is temperature-mediated: cooling is mandatory for the 10 W nail (hA 0.90 -> steady state 309-324 K, >70 K below side-reaction onset ~385-400 K), so 4C margin must be won at ~323 K. FC-4a stacks stronger electrolyte transport (sigma 1.6, t+ 0.45, D 3.0e-10) with smaller negative particles (2.5 um: solid-diffusion time (r/3um)^2 = 0.69x) and higher porosities (salt reservoir) - DFN 4C pre-screen shows anode_pot min +0.0285 V (vs -0.0263 for FC-2). ED cost of porosity increase is small (FC-1 422 -> est. ~415 Wh/kg, still >> 327.18). SEI risk: smaller particles raise interfacial area; aging will be re-measured for FC-4a directly."
+}

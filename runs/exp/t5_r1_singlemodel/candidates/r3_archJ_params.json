@@ -1,0 +1,14 @@
+{
+  "Positive current collector thickness [m]": 8e-06,
+  "Negative current collector thickness [m]": 6e-06,
+  "Separator thickness [m]": 1e-05,
+  "Positive electrode porosity": 0.40,
+  "Negative electrode porosity": 0.22,
+  "Negative electrode thickness [m]": 8.9e-05,
+  "Electrolyte conductivity [S.m-1]": 2.2,
+  "Electrolyte diffusivity [m2.s-1]": 7.5e-10,
+  "Cation transference number": 0.45,
+  "Positive particle radius [m]": 2.6e-06,
+  "Negative particle radius [m]": 2.9e-06,
+  "Total heat transfer coefficient [W.m-2.K-1]": 40.0
+}

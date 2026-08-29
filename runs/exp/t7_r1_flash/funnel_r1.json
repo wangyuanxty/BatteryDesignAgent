@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "start_stage=3: this case starts at the cell scale; materials use system baseline (Chen2020, source=baseline/literature value). Base determination: task text names no electrode system -> anchor-table default Chen2020 (recorded default). Matching basis verified by parameter dump: OKane2022 adds cracking-rate functions (SiOx family discriminant), ORegan2022 changes density/c_max keys - anchors distinguish the three sets. Molecular funnel skipped by protocol at start_stage 3; escalation to Stage 2 material design planned if a material-property bottleneck appears."
+}

@@ -1,0 +1,7 @@
+[
+  {
+    "candidate": "Chen2020 baseline",
+    "outputs": ["cell/r1_chen2020_4c_dfn.json", "cell/r1_chen2020_energy.json"],
+    "note": "Baseline fails all three: ED 400.75 < 500.94 (mass-limited, closable via thin foils + thickness), 4C plates (anode_potential_v min -0.19 V) and overheats (T_max 354.29 K > 333.15, dominated by 1C discharge segment at h=10) -> architecture + formulation + thermal fallback at Stage 3. Note: 4C capacity_ah key under-reports charge acceptance (t x C_rate/3600 instead of t x current; physically 158.7 s x 20 A = 0.882 Ah accepted before 4.2 V cutoff) - recorded honestly, does not affect stage3 judgment."
+  }
+]

@@ -1,0 +1,6 @@
+[
+  {"candidate": "V8-finecath", "outputs": ["cell/r4_v8_1c_spme.json", "cell/r4_v8_5c_dfn.json", "cell/r4_v8_4c_spme.json", "cell/r4_v8_energy.json", "cell/r4_v8_derived.json"], "note": "4C T_max 332.65 K passes at SPMe screening (margin 0.5 K); 5C 323.2 K passes; retention 98.5%, no plating (anode min +38 mV), 4C acceptance 0.726 Ah"},
+  {"candidate": "V9-fastD", "outputs": ["cell/r4_v9_1c_spme.json", "cell/r4_v9_5c_dfn.json", "cell/r4_v9_4c_spme.json", "cell/r4_v9_energy.json", "cell/r4_v9_derived.json"], "note": "D 8e-10 alone insufficient: 4C T_max 333.76 K still 0.6 K over; 4C acceptance 0.697 Ah (no gain over V6); retention 96.6% passes"},
+  {"candidate": "V10-h25", "outputs": ["cell/r4_v10_1c_spme.json", "cell/r4_v10_5c_dfn.json", "cell/r4_v10_4c_spme.json", "cell/r4_v10_energy.json", "cell/r4_v10_derived.json"], "note": "h=25 passes 4C T_max 332.34 K (0.8 K margin); retention 96.6% passes; anode min +27 mV; 4C acceptance 0.677 Ah"},
+  {"candidate": "V11-combo", "outputs": ["cell/r4_v11_1c_spme.json", "cell/r4_v11_5c_dfn.json", "cell/r4_v11_4c_spme.json", "cell/r4_v11_energy.json", "cell/r4_v11_derived.json"], "note": "champion at screening: T_max 4C 329.87 K (3.3 K margin), 5C 319.6 K, retention 98.5%, capacity 3.88 Ah, no plating (anode min +39.6 mV), 4C acceptance 0.729 Ah"}
+]

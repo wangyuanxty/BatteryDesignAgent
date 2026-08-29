@@ -1,0 +1,26 @@
+[
+  {
+    "candidate": "ArchA-h150-F1",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h150_f1_4c.json"
+    ],
+    "note": "T_max 325.1 K pass; anode min -0.048 V still < 0 -> plating persists (improved from -0.077)",
+    "round": 3
+  },
+  {
+    "candidate": "ArchA-h150-F2",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h150_f2_4c.json"
+    ],
+    "note": "T_max 324.5 K pass; anode min -0.029 V still < 0 -> plating persists (transport helps monotonically)",
+    "round": 3
+  },
+  {
+    "candidate": "ArchA-h150-P1",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h150_p1_4c.json"
+    ],
+    "note": "T_max 326.0 K pass; anode min -0.048 V still < 0 -> particle-size lever alone insufficient",
+    "round": 3
+  }
+]

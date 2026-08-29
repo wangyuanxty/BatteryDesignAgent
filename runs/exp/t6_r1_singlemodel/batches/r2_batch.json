@@ -1,0 +1,42 @@
+[
+  {
+    "candidate": "A1_anode_rebalance",
+    "outputs": [
+      "cell/r2_A1_1c_spme.json",
+      "cell/r2_A1_energy.json",
+      "cell/r2_A1_4c_spme.json",
+      "cell/r2_A1_aging_spme.json"
+    ],
+    "note": "A1: sep 25->10 um, anode 85->100 um, cathode porosity 0.28/AM 0.72. Expect ED up (anode rebalance), SEI still high (no coating), 4C still dead (cathode surface OCP spike), plating fail, T fail."
+  },
+  {
+    "candidate": "A2_plus_electrolyte",
+    "outputs": [
+      "cell/r2_A2_1c_spme.json",
+      "cell/r2_A2_energy.json",
+      "cell/r2_A2_4c_spme.json",
+      "cell/r2_A2_aging_spme.json"
+    ],
+    "note": "A2 = A1 + electrolyte sigma 1.6 S/m (baseline function 0.949 at c=1000). Expect lower ohmic/thermal, plating margin up; 4C acceptance still limited by cathode diffusion."
+  },
+  {
+    "candidate": "A3_plus_nanoparticles",
+    "outputs": [
+      "cell/r2_A3_1c_spme.json",
+      "cell/r2_A3_energy.json",
+      "cell/r2_A3_4c_spme.json",
+      "cell/r2_A3_aging_spme.json"
+    ],
+    "note": "A3 = A2 + cathode radius 0.2 um / anode radius 0.5 um. Expect 4C charge to sustain (cathode surface stays on 4.4-4.53 V plateau), no plating (anode surface overshoot ~0.17), SEI still high (no coating)."
+  },
+  {
+    "candidate": "A4_plus_coating_cooling",
+    "outputs": [
+      "cell/r2_A4_1c_spme.json",
+      "cell/r2_A4_energy.json",
+      "cell/r2_A4_4c_spme.json",
+      "cell/r2_A4_aging_spme.json"
+    ],
+    "note": "A4 = A3 + k_SEI 1e-13 (x0.1), SEI j0 1.5e-8 (x0.1), h 150 W/m2K. Expect SEI <= 500 and T_max <= 323.15; full-criteria candidate."
+  }
+]

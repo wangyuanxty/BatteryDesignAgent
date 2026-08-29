@@ -1,0 +1,8 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {"name": "Chen2020-baseline", "role": "baseline characterization: system default NMC811/graphite architecture, establishes starting ED / T_max / plating and the ceiling gap"}
+  ],
+  "llm_reason": "Round 1 = baseline characterization per plan: anchor system (Chen2020, task text gives no electrode system) at default parameters; 1C discharge + calc-energy for ED, 4C_charge_45C (thermal lumped + plating) for T_max and plating; result feeds the Stage-3 opening ceiling assessment to decide escalation into Stage 2 materials."
+}

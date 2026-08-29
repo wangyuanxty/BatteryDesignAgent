@@ -1,0 +1,42 @@
+[
+  {
+    "candidate": "V9_sei_kin005",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r5_V9_sei_kin005_1c.json",
+      "runs/exp/t6_r3/cell/r5_V9_sei_kin005_aging.json",
+      "runs/exp/t6_r3/cell/r5_V9_sei_kin005_energy.json",
+      "runs/exp/t6_r3/cell/r5_V9_sei_kin005_4c.json"
+    ],
+    "note": "SEI kinetics x0.05: SEI 615.6 nm (diminishing returns vs x0.1->653.7); plating/T_max unchanged; kinetics lever alone cannot reach 500 nm"
+  },
+  {
+    "candidate": "V10_sei_dual",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r5_V10_sei_dual_1c.json",
+      "runs/exp/t6_r3/cell/r5_V10_sei_dual_aging.json",
+      "runs/exp/t6_r3/cell/r5_V10_sei_dual_energy.json",
+      "runs/exp/t6_r3/cell/r5_V10_sei_dual_4c.json"
+    ],
+    "note": "dual SEI levers: SEI 653.7 nm identical to kinetics-only V4 -> exchange-current lever confirmed INERT in ec-reaction-limited aging; dropped"
+  },
+  {
+    "candidate": "V11_np120",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r5_V11_np120_1c.json",
+      "runs/exp/t6_r3/cell/r5_V11_np120_aging.json",
+      "runs/exp/t6_r3/cell/r5_V11_np120_energy.json",
+      "runs/exp/t6_r3/cell/r5_V11_np120_4c.json"
+    ],
+    "note": "N/P 1.20: plating dip nearly cleared (amin -0.0116 V), ED 1122.7 Wh/L; SEI worsens to 818.2 nm (anode stays lithiated during time-capped discharge); T_max 330.35 K"
+  },
+  {
+    "candidate": "V12_np120_particle",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r5_V12_np120_particle_1c.json",
+      "runs/exp/t6_r3/cell/r5_V12_np120_particle_aging.json",
+      "runs/exp/t6_r3/cell/r5_V12_np120_particle_energy.json",
+      "runs/exp/t6_r3/cell/r5_V12_np120_particle_4c.json"
+    ],
+    "note": "N/P 1.20 + r_neg 3.0 um: amin -0.0413 (worse than V11 alone); small-particle lever backfires on top of N/P 1.20; dropped"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "action": "propose",
+  "round": 3,
+  "candidates": [
+    {"smiles": "C1OC(=O)OC1F", "name": "FEC", "role": "fluoroethylene carbonate film-forming additive (SEI/plating suppression)"},
+    {"smiles": "C1=COC(=O)O1", "name": "VC", "role": "vinylene carbonate film-forming additive (SEI stabilization)"},
+    {"smiles": "C1CCS(=O)(=O)O1", "name": "PES", "role": "1,3-propanesultone film-forming additive (SEI/plating)"},
+    {"smiles": "C1COS(=O)(=O)O1", "name": "DTD", "role": "1,3,2-dioxathiolane-2,2-dioxide SEI stabilizer"},
+    {"base": "LNMO.json", "name": "LNMO-Ceiling", "role": "system candidate: 4.7 V high-voltage spinel cathode (voltage lever for ED) on Ceiling-A architecture"},
+    {"struct": {"Electrolyte conductivity [S.m-1]": 1.8, "Cation transference number": 0.4, "Electrolyte diffusivity [m2.s-1]": 2.0e-10}, "name": "HiTrans-Elyte", "role": "formulation candidate: high-conductivity high-transference electrolyte (LiFSI-class, transport levers for plating/heat)"}
+  ],
+  "llm_reason": "Ceiling assessment: existing-system idealized architecture caps at 487.3 Wh/kg (< 500.94) -> material escalation. ED levers: (1) LNMO 4.7V cathode raises cell voltage ~+13% vs NMC811 (ED ~scales with V); (2) OKane2022 graphite+SiOx negative (next round). Plating/heat levers: high-transport electrolyte (sigma 1.8 S/m, t+ 0.4, D 2e-10) + small particles + thin negative. Molecular additives (FEC/VC/PES/DTD) screened in funnel for SEI/plating suppression; additives affect aging/SEI not direct ED. Params listed before run."
+}

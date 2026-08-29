@@ -1,0 +1,5 @@
+[
+  {"candidate": "V1-HP-A", "outputs": ["cell/r2_v1_1c_spme.json", "cell/r2_v1_5c_dfn.json", "cell/r2_v1_4c_spme.json", "cell/r2_v1_energy.json", "cell/r2_v1_derived.json"], "note": "retention 97.0% + capacity 3.32 Ah pass; no plating (SPMe screening); T_max 342.9 K (4C charge; 5C gives 338.4 K) still > 333.15 K; 4C charge acceptance 0.503 Ah (anode-surface limited, anode min +21 mV)"},
+  {"candidate": "V2-HP-B", "outputs": ["cell/r2_v2_1c_spme.json", "cell/r2_v2_5c_dfn.json", "cell/r2_v2_4c_spme.json", "cell/r2_v2_energy.json", "cell/r2_v2_derived.json"], "note": "retention 97.3% + capacity 3.65 Ah pass; no plating (SPMe); T_max 343.5 K (4C) still > 333.15 K; 4C charge acceptance 0.568 Ah; porosity helped retention but not temperature"},
+  {"candidate": "V3-HP-C", "outputs": ["cell/r2_v3_1c_spme.json", "cell/r2_v3_5c_dfn.json", "cell/r2_v3_4c_spme.json", "cell/r2_v3_energy.json", "cell/r2_v3_derived.json"], "note": "ultra-fine particles best so far: retention 98.7%, capacity 3.33 Ah, no plating (SPMe, anode min +32 mV), 4C charge 0.588 Ah; T_max 340.0 K (4C charge; 5C 332.3 K) still > 333.15 K"}
+]

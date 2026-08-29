@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "V1_SEI_pack",
+    "outputs": ["cell/v1_aging100.json", "cell/derived_sei_500cyc_v1.json"],
+    "note": "V1 SEI pack (k 1e-12->3e-13, SEI i0 1.5e-7->7.5e-8): SEI100 416.2<=500 pass, SEI500 736.1>550 fail. Measured sensitivity far below sqrt(k) expectation (-5.4% vs -45%): diagnosed the ec-reaction-limited growth (Yang2017) is diffusion-limited at L>100 nm (L*k_exp/D_ec >> 1, D_ec=2e-18), i.e. j_sei ~ F*c0*D_ec/L -> L^2 ~ D_ec*t; the k prefactor is almost inactive at these thicknesses. Round-3 SEI lever: EC diffusivity D_ec (film permeability, additive-derived denser SEI)."
+  },
+  {
+    "candidate": "V2_kinetics",
+    "outputs": ["cell/v2_4c45.json"],
+    "note": "V2 constant negative exchange-current density 2.0 A/m2, SPMe measurement: 4C charge anode min -0.4186 V vs baseline -0.4385 V -> still plated; marginal improvement only in SPMe. Later DFN diagnostics showed the SPMe c_e profile is unreliable for thick-anode geometries (negative electrolyte concentration artifact at neg 250 um), so SPMe 4C plating values are superseded by DFN runs in round 3."
+  },
+  {
+    "candidate": "V3_thick_4C",
+    "outputs": ["cell/v3_energy.json", "cell/v3_4c45.json", "cell/derived_retention_lowT_v3.json"],
+    "note": "V3 thick electrodes (pos 100 um, neg 150 um, radii 3.0/3.5 um): ED 509.4 Wh/kg pass, lowT retention 99.99% pass, but 4C SPMe anode min -0.5228 V -> plated fail (deeper dip than baseline: longer charge gives the anode surface more time to enrich). SPMe caveat as V2: DFN re-validation in round 3 (DFN is the reliable mode for thick anodes)."
+  }
+]

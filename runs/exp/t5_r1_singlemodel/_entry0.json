@@ -1,0 +1,40 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0,
+      "funnel_voting": "off",
+      "note": "funnel_voting OFF (task text ablation): molecular screening uses run-mlp(mace) only; mace hard elimination lines (converged=true, energy_ev <= 0.0) apply; run-xtb not executed so the HOMO line is unavailable; no three-model ranking / no disputed concept. max_homo_ev retained for traceability but not applied in this ablation."
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 500.94}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false
+    },
+    "meta": {
+      "task": "next-generation flagship vehicle battery",
+      "objective_text": "energy density >= 500.94 Wh/kg; 4C fast charge without lithium plating; maximum temperature <= 60 C",
+      "base_params": "Chen2020 (anchor-table default: task text names no explicit electrode system -> deterministic default Chen2020 with record)",
+      "start_stage": 3,
+      "start_stage_basis": "task text names no new materials/additives/electrolyte design -> per starting-point rule start at Stage 3 (cell design); materials use system baseline; ceiling_escalation ON permits proactive Stage 2 escalation after opening ceiling assessment",
+      "real_compute": false,
+      "ablation": {
+        "funnel_voting": "off (task text)",
+        "exploration_force": "on (default)",
+        "ceiling_escalation": "on (default)"
+      },
+      "freedoms": {
+        "electrode_system": "adjustable",
+        "electrolyte_formulation": "adjustable",
+        "electrode_modification": "adjustable",
+        "cell_architecture": "adjustable",
+        "thermal_management": "adjustable",
+        "basis": "task text declares no degree-of-freedom restriction; widest interpretation per t1_r1 lesson, recorded here"
+      },
+      "temp_parse": "60 C = 333.15 K (60 + 273.15); T_max judged on 4C_charge_45C protocol output T_max_K (Stage 4 safety assessment, thermal lumped)",
+      "notes": "No capacity/cycle-life/low-temperature/abuse criteria given in task text -> not adjudicated. Structure model (CAD): not requested in headless session -> skipped."
+    }
+  }
+}

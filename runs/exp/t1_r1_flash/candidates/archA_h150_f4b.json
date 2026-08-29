@@ -1,0 +1,8 @@
+{
+  "Positive current collector thickness [m]": 1.0e-5,
+  "Negative current collector thickness [m]": 0.8e-5,
+  "Total heat transfer coefficient [W.m-2.K-1]": 150.0,
+  "Electrolyte conductivity [S.m-1]": 5.0,
+  "Electrolyte diffusivity [m2.s-1]": 1.2e-9,
+  "Cation transference number": 0.65
+}

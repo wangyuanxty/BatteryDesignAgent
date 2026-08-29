@@ -1,0 +1,56 @@
+[
+  {
+    "candidate": "D1-transport-h40",
+    "round": 4,
+    "outputs": [
+      "cell/r4_D1_1c.json",
+      "cell/r4_D1_energy.json",
+      "cell/r4_D1_retention.json"
+    ],
+    "note": "D1-transport-h40 (C1 stack + sigma1.4/D2.6e-10/t+0.5 + h=40; probe 5.0376 within 3% -> nominal 5.0 kept): W2 446.13 PASS, W3 929.68 PASS (+49.7), W1 0.9940 PASS (cold-soak). T_max_K here is 1C-discharge heating - 4C verdict in safety entry"
+  },
+  {
+    "candidate": "D1-transport-h40",
+    "round": 4,
+    "outputs": [
+      "cell/r4_D1_4c_dfn.json"
+    ],
+    "note": "4C_charge_45C DFN verdict-grade: T_max 340.03 FAIL (vs 333.15, -6.88K; transport+h40 bought -14.8K vs C1 354.83); plated FAIL (ap_min -0.0737V, 13.3% negative - transport bought +0.185V vs C1 -0.2591). 4C leg accepted 0.4934Ah. Both metrics moved hugely; remaining gap small"
+  },
+  {
+    "candidate": "D2-transport-h60",
+    "round": 4,
+    "outputs": [
+      "cell/r4_D2_1c.json",
+      "cell/r4_D2_energy.json",
+      "cell/r4_D2_retention.json"
+    ],
+    "note": "D2-transport-h60 (same + h=60; probe 5.0371 within 3% -> nominal 5.0 kept): W2 445.95 PASS, W3 929.31 PASS, W1 0.9938 PASS (cold-soak). T_max_K here is 1C-discharge heating - 4C verdict in safety entry"
+  },
+  {
+    "candidate": "D2-transport-h60",
+    "round": 4,
+    "outputs": [
+      "cell/r4_D2_4c_dfn.json"
+    ],
+    "note": "4C_charge_45C DFN verdict-grade: T_max 333.91 FAIL by only 0.76K (h60 bought -6.12K vs h40); plated FAIL (ap_min -0.0778V, 14.9% negative). Closest candidate; D-family branch confirmed - round 5 bracket targets the last 0.76K + 0.078V"
+  },
+  {
+    "candidate": "D3-deepAnode-transport",
+    "round": 4,
+    "outputs": [
+      "cell/r4_D3_1c.json",
+      "cell/r4_D3_energy.json",
+      "cell/r4_D3_retention.json"
+    ],
+    "note": "D3-deepAnode-transport (C2 deep-anode stack + r_neg 2.5um + transport + h=60; probe 6.7956Ah -> re-nominalized to 6.80 for 1C/4C): W2 497.88 PASS, W3 984.00 PASS (+104.0), W1 0.9999 PASS (cold-soak). T_max_K here is 1C-discharge heating - 4C verdict in safety entry"
+  },
+  {
+    "candidate": "D3-deepAnode-transport",
+    "round": 4,
+    "outputs": [
+      "cell/r4_D3_4c_dfn.json"
+    ],
+    "note": "4C_charge_45C DFN verdict-grade (re-nom 6.80 -> 27.2A): T_max 342.61 FAIL; plated FAIL (ap_min -0.2357V, 31.9% negative at 3784.5s). Thick-stack family rejected at R5 planning: transport boost did NOT rescue 27A-class charge - areal current too high despite transport; thick family dropped"
+  }
+]

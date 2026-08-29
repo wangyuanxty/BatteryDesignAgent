@@ -1,0 +1,3 @@
+[
+  {"candidate": "V11-final", "outputs": ["cell/r5_v11_energy.json", "cell/r5_v11_aging45.json", "cell/r5_v11_nail.json", "cell/r5_v11_4c45.json"], "note": "FINAL DESIGN. All four criteria pass at DFN precision: ED 483.25 Wh/kg (contract calc on DFN 1C discharge; mass 0.045105 kg, capacity 6.032 Ah, midpoint 3.724 V, DCR 2.88 mOhm), SEI 465.47 nm after 100 cyc 45C, nail not triggered (T_max 336.32 K, dTdt_max 0.245 K/s at hA=0.2655 = h 50 W/m2K x 0.00531 m2), 4C 45C charge plated=false (anode surface min +0.0476 V, T_max 330.13 K). Nail margin basis: h=40 passes T_max 348.7 K, h=30 triggers at 666 s (r5_v8_nail_h30) -> design cooling floor ~40 W/m2K, design value 50."}
+]

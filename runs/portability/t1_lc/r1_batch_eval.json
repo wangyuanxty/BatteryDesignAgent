@@ -1,0 +1,5 @@
+[
+  {"candidate": "Baseline Chen2020 (energy)", "round": 1, "outputs": ["cell/r1_base_energy.json"], "note": "ED already exceeds 392.61 Wh/kg at contract caliber; keep as margin anchor."},
+  {"candidate": "Baseline Chen2020 (4C)", "round": 1, "outputs": ["cell/r1_base_4c_dfn.json"], "note": "4C fast-charge safety: T_max 81.1C > 60C and anode potential dips below 0V -> plating."},
+  {"candidate": "Baseline Chen2020 (overcharge)", "round": 1, "outputs": ["cell/r1_base_tr.json"], "note": "Overcharge 4.7V does not trigger thermal runaway (triggered=false)."}
+]

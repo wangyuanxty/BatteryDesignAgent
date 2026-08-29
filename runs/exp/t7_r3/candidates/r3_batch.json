@@ -1,0 +1,7 @@
+[
+ {"candidate": "V1_DFN", "round": 3, "outputs": ["cell/r2_v1_energy.json", "cell/r3_v1_4c45c_dfn.json"], "note": "DFN: anode min -0.138 V, charge 0.221 Ah — radius helps but insufficient"},
+ {"candidate": "V2_DFN", "round": 3, "outputs": ["cell/r2_v2_energy.json", "cell/r3_v2_4c45c_dfn.json"], "note": "DFN: thicker neg worse (-0.253 V)"},
+ {"candidate": "V4_DFN", "round": 3, "outputs": ["cell/r2_v4_energy.json", "cell/r3_v4_4c45c_dfn.json"], "note": "DFN: best before electrolyte fix (-0.108 V, 0.382 Ah)"},
+ {"candidate": "V5_posR3.0", "round": 3, "outputs": ["cell/r3_v5_energy.json", "cell/r3_v5_4c45c_dfn.json"], "note": "DFN: smaller pos particle extends charge but worsens anode depth (-0.262 V)"},
+ {"candidate": "V7_V4posR", "round": 3, "outputs": ["cell/r3_v7_energy.json", "cell/r3_v7_4c45c_dfn.json"], "note": "DFN: longest charge 0.462 Ah but worst anode min (-0.292 V); pos radius kept at 5.22 um going forward"}
+]

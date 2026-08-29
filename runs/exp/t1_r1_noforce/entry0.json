@@ -1,0 +1,37 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 392.61}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false,
+      "triggered": false
+    },
+    "meta": {
+      "task": "Design a battery for a next-generation pure electric sedan: energy density >= 392.61 Wh/kg, support 4C fast charge (no lithium plating), maximum temperature <= 60 C, overcharge to 4.7 V without triggering thermal runaway.",
+      "case_id": "t1_r1_noforce",
+      "base": "Chen2020",
+      "base_rationale": "Task text names no electrode system -> anchor-table default Chen2020 (NMC811/graphite baseline teaching parameterization); its 4.2 V upper cut-off + 0.5 V overcharge protocol lands exactly on the 4.7 V spec.",
+      "start_stage": 3,
+      "real_compute": false,
+      "freedoms": {
+        "electrode_system": "adjustable",
+        "electrolyte_formulation": "adjustable",
+        "electrode_modification": "adjustable",
+        "cell_architecture": "adjustable",
+        "thermal_management": "adjustable"
+      },
+      "freedoms_note": "No degree of freedom declared in the task text -> widest interpretation per protocol (t1_r1 lesson: undeclared electrolyte adjustability must not be read as locked).",
+      "ablation": {
+        "exploration_force": "OFF (task text: no forced 2-4 architecture variants per round; free exploration)",
+        "ceiling_escalation": "ON (default, not mentioned in task text)",
+        "funnel_voting": "ON (default, not mentioned in task text)"
+      }
+    }
+  }
+}

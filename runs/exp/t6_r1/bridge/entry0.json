@@ -1,0 +1,47 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": {"max": 0.0},
+      "max_homo_ev": {"max": -6.0}
+    },
+    "stage2": {
+      "energy_density_wh_l": {"min": 950},
+      "midpoint_voltage_v": {"min": 4.1},
+      "sei_thickness_nm_end": {"max": 500}
+    },
+    "stage3": {
+      "T_max_K": {"max": 323.15},
+      "plated": false
+    },
+    "meta": {
+      "case": "t6_r1",
+      "task_text": "Design a battery for a smartphone: volumetric energy density >= 950 Wh/L, support 4C fast charge (no lithium plating), maximum temperature <= 50 C, anode SEI thickness <= 500 nm after 100 cycles, voltage plateau >= 4.1 V.",
+      "mode": "headless zero-interaction (no clarification; parsed from task text, defaults for unspecified)",
+      "real_compute": false,
+      "start_stage": 2,
+      "start_stage_basis": "task text names no electrode system (anchor-table default Chen2020, recorded), but voltage plateau >= 4.1 V is unreachable by NMC811-class cathodes (anchor: NMC811 cell midpoint 3.61 V) -> objective involves new-material design (high-voltage cathode system switch) -> start at Stage 2 with a system candidate (system candidates skip the molecular funnel, direct Stage 3 evaluation)",
+      "base_mapping": "no explicit electrode system -> anchor-table default Chen2020 (recorded); plateau >= 4.1 V -> high-voltage LNMO library parameter set scripts/bda/simulators/data/LNMO.json (4.7 V-class spinel cathode; runner merges Chen2020 base + JSON overrides). Discriminant verified by dump: lnmo_ocp numeric sweep (bulk plateau ~4.40-4.45 V vs NMC811 midpoint 3.61 V); note: several LNMO.json keys use newer-style names that the installed pybamm 26.7.1 Chen2020 set does not read (max concentration / molar mass / stoich limits remain Chen2020 values) - recorded honestly, effective set behavior judged by simulation output only",
+      "aging_cycles": 100,
+      "freedoms": {
+        "electrode_system": {"adjustable": true, "basis": "task names no system; plateau >= 4.1 V requires a high-voltage cathode -> system switch allowed (widest interpretation)"},
+        "electrolyte_formulation": {"adjustable": true, "basis": "not declared in task text -> widest interpretation (t1_r1 lesson)"},
+        "electrode_modification": {"adjustable": true, "basis": "not declared in task text -> widest interpretation"},
+        "cell_architecture": {"adjustable": true, "basis": "not declared in task text -> widest interpretation"},
+        "thermal_management": {"adjustable": true, "basis": "not declared in task text -> widest interpretation (cooling h; contract default 10 W/m2K)"}
+      },
+      "excluded_levers": [
+        "solid-phase conductivity / solid-phase diffusivity (no formulation/doping mapping model)",
+        "initial concentration / lithiation (breaks baseline comparability)",
+        "Initial SEI thickness (calibration constant)",
+        "charge cut-off voltage (usage mode, not design)"
+      ],
+      "threshold_parsing": {
+        "volumetric energy density >= 950 Wh/L": "criteria.stage2.energy_density_wh_l {min: 950} <- calc-energy energy_density_wh_l (contract formula, electrolyte excluded)",
+        "voltage plateau >= 4.1 V": "criteria.stage2.midpoint_voltage_v {min: 4.1} <- calc-energy midpoint_voltage_v (plateau-voltage approximation = voltage at discharge-time midpoint)",
+        "anode SEI thickness <= 500 nm after 100 cycles": "criteria.stage2.sei_thickness_nm_end {max: 500} <- run-pyamm aging_1C_100cyc (100x 1C CC charge/discharge, SEI ec reaction limited, isothermal)",
+        "4C fast charge without lithium plating": "criteria.stage3.plated false <- run-pyamm 4C_charge_45C --plating (plated = min(anode_potential_v) < 0 V)",
+        "maximum temperature <= 50 C": "criteria.stage3.T_max_K {max: 323.15} (50 C = 323.15 K) <- run-pyamm 4C_charge_45C --thermal lumped (skill-defined fast-charge safety exam at 45 C ambient)"
+      }
+    }
+  }
+}

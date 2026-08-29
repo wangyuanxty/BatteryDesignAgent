@@ -1,0 +1,12 @@
+{
+  "Positive electrode thickness [m]": 6.0e-05,
+  "Negative electrode thickness [m]": 6.8e-05,
+  "Separator thickness [m]": 8.0e-06,
+  "Positive current collector thickness [m]": 1.0e-05,
+  "Negative current collector thickness [m]": 6.0e-06,
+  "Nominal cell capacity [A.h]": 3.93,
+  "Electrolyte conductivity [S.m-1]": 2.0,
+  "Electrolyte diffusivity [m2.s-1]": 5.0e-10,
+  "Cation transference number": 0.60,
+  "Total heat transfer coefficient [W.m-2.K-1]": 40.0
+}

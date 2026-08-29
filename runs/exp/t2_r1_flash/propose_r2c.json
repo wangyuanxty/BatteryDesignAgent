@@ -1,0 +1,21 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "name": "FC-C",
+      "role": "final combined candidate: FC-A geometry (negative 85.2um - FC-B lesson: 100um negative worsened anode dip via longer electrolyte path) + stronger transport (sigma 2.0 S/m, D 2.5e-10, t+ 0.55) + negative porosity 0.30 + SEI k 2e-15 (coating bridge from scan extrapolation) + cooling h=60 (liquid-cooled grid storage)",
+      "struct": {
+        "Negative particle radius [m]": 2.5e-06,
+        "Positive particle radius [m]": 4.0e-06,
+        "Negative electrode porosity": 0.30,
+        "Electrolyte conductivity [S.m-1]": 2.0,
+        "Electrolyte diffusivity [m2.s-1]": 2.5e-10,
+        "Cation transference number": 0.55,
+        "SEI kinetic rate constant [m.s-1]": 2.0e-15,
+        "Total heat transfer coefficient [W.m-2.K-1]": 60.0
+      }
+    }
+  ],
+  "llm_reason": "Plating dip budget: FC-A min -0.062V on 85.2um geometry; FC-B (100um neg) worsened to -0.125V -> negative thickness is a strong driver of the electrolyte-phase drop in the negative; revert to 85.2um. Remaining levers to lift anode potential ~0.07V: sigma 1.5->2.0 S/m (ohmic drop ~27% lower; 20 mS/cm = LiFSI/glyme-class, estimate), D 1.77e-10->2.5e-10 (conc. polarization ~30% lower, low-viscosity solvent, estimate), t+ 0.45->0.55 (conc. pol ~18% lower, high-transference formulation, estimate), negative particle 3.0->2.5um on 85.2um geometry (solid-diffusion pol ~30% lower), negative porosity 0.25->0.30 (electrolyte tortuosity drop lower; ED cost modest). T_max: FC-B h=30 gave 347.2K with 23.6A heat; FC-C h=60 + lower polarization -> est. ~330K (verify by sim). SEI: scan gave delta(500cyc,k=1e-14)=583nm, delta~k^0.08 -> k=2e-15 extrapolates ~510nm < 550 (margin); aging100 also verified. All overrides listed before running; sigma/D/t+ = literature-order estimates for advanced LiFSI-based low-viscosity electrolytes (domain experience, no precise source), particle/porosity/thickness = architecture estimates, SEI k = coating bridge estimate (aggressive x0.002, artificial-SEI-class suppression), h=60 = liquid-cooled grid-storage design choice (documented)."
+}

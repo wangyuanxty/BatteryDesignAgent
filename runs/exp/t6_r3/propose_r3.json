@@ -1,0 +1,27 @@
+{
+  "action": "propose",
+  "round": 3,
+  "candidates": [
+    {
+      "struct": {"Electrolyte conductivity [S.m-1]": 2.0, "Cation transference number": 0.5},
+      "name": "V1_transport",
+      "role": "electrolyte formulation: high-conductivity high-transference electrolyte (2.0 S/m, t+=0.5) to suppress anode overpotential at 4C and cut ohmic heating"
+    },
+    {
+      "struct": {"Total heat transfer coefficient [W.m-2.K-1]": 50.0},
+      "name": "V2_cooling",
+      "role": "thermal management: cooling coefficient 10->50 W/m2/K (vapor-chamber-class smartphone thermal design) to pull 4C T_max under 323.15 K"
+    },
+    {
+      "struct": {"Negative particle radius [m]": 3.0e-06},
+      "name": "V3_anode_particle",
+      "role": "negative particle radius 5.86->3.0 um: larger specific area lowers local plating current density at 4C (library T1 note: particle size +14.6% plating contribution)"
+    },
+    {
+      "struct": {"SEI kinetic rate constant [m.s-1]": 1.0e-13},
+      "name": "V4_sei_coating",
+      "role": "anode coating suppressing SEI growth (ec reaction limited): SEI kinetic rate constant x0.1 per parameter bridge (library signal scale: Chen2020 449->385 nm)"
+    }
+  ],
+  "llm_reason": "LNMO baseline passes plateau+ED, fails plating/T_max/SEI. Round 3 isolates four zero/low-ED-cost levers one at a time for effect attribution: transport (V1), cooling (V2), anode particle size (V3), SEI coating (V4). Values: sigma 2.0 S/m and t+ 0.5 = high-conductivity LiFSI/concentrated-electrolyte class (literature class values, estimate); h=50 = vapor-chamber smartphone cooling (estimate); r_neg 3.0 um = fine graphite (domain estimate within commercial range); SEI kinetics x0.1 = coating bridge (literature-class coating effect, estimate). ED cost of V1/V2/V4 ~0; V3 volume-neutral (radius only)."
+}

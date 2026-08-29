@@ -1,0 +1,46 @@
+[
+  {
+    "candidate": "R4_F1_Fine2_Tp05_Por32_H80",
+    "round": 4,
+    "outputs": [
+      "cell/r4_f1_aging45.json",
+      "validation/r4_f1_nail.json",
+      "cell/r4_f1_4c45.json",
+      "cell/r4_f1_energy.json"
+    ],
+    "note": "SELECTED DESIGN. 2.0 um anode particles + t+ 0.5 + anode porosity 0.32 + liquid cooling h=80 W/m2/K (hA=0.4248 W/K): 4C anode potential min +0.0090 V through the charge (no plating, +9 mV margin); T_max 329.8 K at 4C/45C; 4C charge capacity 0.384 Ah; ED 423.6 Wh/kg (vs 327.18); SEI 463.1 nm (vs 550, 87 nm margin); nail 10 W source: triggered=false, T_max 321.7 K; hot-soak probe (318.15 K start) also no trigger. All four criteria pass."
+  },
+  {
+    "candidate": "R4_F2_Fine3_Tp05_Por35_H80",
+    "round": 4,
+    "outputs": [
+      "cell/r4_f2_aging45.json",
+      "validation/r4_f2_nail.json",
+      "cell/r4_f2_4c45.json",
+      "cell/r4_f2_energy.json"
+    ],
+    "note": "T4 + anode porosity 0.35: anode min +0.0015 V (passes but only 1.5 mV margin - numerically fragile); SEI 505.7 nm (44 nm margin, worst of the passers); ED 425.2. Contingency variant, not selected."
+  },
+  {
+    "candidate": "R4_F3_Fine3_Tp06_Por32_H80",
+    "round": 4,
+    "outputs": [
+      "cell/r4_f3_aging45.json",
+      "validation/r4_f3_nail.json",
+      "cell/r4_f3_4c45.json",
+      "cell/r4_f3_energy.json"
+    ],
+    "note": "T4 + t+=0.6: anode min +0.0106 V (pass, 10.6 mV margin); SEI 508.5 nm (41 nm margin); ED 421.2. Pass but SEI headroom smaller than F1/F4 - not selected."
+  },
+  {
+    "candidate": "R4_F4_Fine2_Tp05_Por32_Sep55_H80",
+    "round": 4,
+    "outputs": [
+      "cell/r4_f4_aging45.json",
+      "validation/r4_f4_nail.json",
+      "cell/r4_f4_4c45.json",
+      "cell/r4_f4_energy.json"
+    ],
+    "note": "F1 + separator porosity 0.47->0.55: anode min +0.0111 V (best, 11.1 mV margin); SEI 463.4 nm; ED 424.1. Pass; NOT selected - gains only +2 mV over F1 while high-porosity separator relaxes mechanical/melt-integrity margin in an abuse-design context. F1 is the preferred design (anode-side levers only, standard separator)."
+  }
+]

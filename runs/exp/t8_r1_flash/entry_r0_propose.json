@@ -1,0 +1,12 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {
+      "base": "Chen2020",
+      "name": "Chen2020 baseline",
+      "role": "system baseline characterization: ED / mass / 5C retention reference point; no parameter overrides"
+    }
+  ],
+  "llm_reason": "Round 1 = baseline + opening ceiling assessment (protocol Stage 3 opening). Task names no electrode system -> Chen2020 per anchor table. Measure current ED (expect ~250-400 Wh/kg), mass (vs 40 g), and 5C retention (DFN; SPMe underestimates at 5C). Ceiling assessment will decide whether Stage 2 system escalation is required; prior domain reasoning suggests thin-inactive architecture can lift NMC811/graphite stack ED to ~450-500 Wh/kg and 5C is the binding constraint (solid diffusion), fixed via particle radius + electrolyte transport rather than chemistry switch."
+}

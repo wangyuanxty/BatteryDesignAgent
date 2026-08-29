@@ -1,0 +1,11 @@
+[
+  {
+    "candidate": "Chen2020 baseline",
+    "outputs": [
+      "cell/r1_baseline_energy.json",
+      "cell/r1_baseline_1c_spme.json",
+      "cell/r1_baseline_4c_45c.json"
+    ],
+    "note": "baseline characterization: ED=400.29 far below 500.94; 4C min anode potential -0.438V -> plated; T_max 332.35K pass (0.8K margin)"
+  }
+]

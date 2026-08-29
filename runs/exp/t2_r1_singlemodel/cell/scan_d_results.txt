@@ -1,0 +1,9 @@
+﻿d_v3_4c45.json: cap=0.2521 Ah  ap_min=-0.3989  T_max=366.7 K  model=DFN  t_end=6147s
+d2_4c45.json: cap=5.5700 Ah  ap_min=0.1120  T_max=342.5 K  model=DFN  t_end=5013s
+d3_4c45.json: cap=0.3928 Ah  ap_min=-0.2612  T_max=371.6 K  model=DFN  t_end=5299s
+d4_4c45.json: cap=0.6949 Ah  ap_min=0.1302  T_max=344.7 K  model=SPMe(fallback)  t_end=625s
+d6_4c45.json: cap=0.3879 Ah  ap_min=-0.2382  T_max=378.1 K  model=DFN  t_end=5138s
+d7_4c45.json: cap=0.3624 Ah  ap_min=-0.2887  T_max=373.6 K  model=DFN  t_end=5358s
+d10_4c45.json: cap=0.4743 Ah  ap_min=-0.2997  T_max=382.5 K  model=DFN  t_end=6191s
+d11_4c45.json: cap=0.3528 Ah  ap_min=-0.3649  T_max=362.6 K  model=DFN  t_end=6237s
+d12_4c45.json: cap=0.3159 Ah  ap_min=-0.3547  T_max=374.4 K  model=DFN  t_end=5903s

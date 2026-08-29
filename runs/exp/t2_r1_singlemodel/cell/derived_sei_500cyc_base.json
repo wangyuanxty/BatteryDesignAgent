@@ -1,0 +1,5 @@
+{
+  "sei_thickness_nm_end_500cyc": 777.8824350661486,
+  "derived_from": "cell/base_aging500.json:sei_thickness_nm_end",
+  "formula": "key copy (rename only, no arithmetic)"
+}

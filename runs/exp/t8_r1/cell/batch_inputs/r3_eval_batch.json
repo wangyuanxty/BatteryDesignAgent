@@ -1,0 +1,5 @@
+[
+  {"candidate": "V5-cooled", "outputs": ["cell/r3_v5_energy.json", "cell/r3_v5_5c_dfn.json", "cell/r3_v5_retention.json", "cell/r3_v5_4c45_dfn.json"], "note": "h=30: 5C-discharge T_max 327.25 K pass, ED 592.33 pass, retention 98.43% pass, mass 31.28 g pass, but exam T_max 335.76 K fails and anode margin collapsed to +0.0002 V (h=30 alone leaves polarization heat too high)"},
+  {"candidate": "V6-margin", "outputs": ["cell/r3_v6_energy.json", "cell/r3_v6_5c_dfn.json", "cell/r3_v6_retention.json", "cell/r3_v6_4c45_dfn.json"], "note": "plating-margin levers alone: anode min +0.0200 V (10x margin), ED 634.91 pass, retention 99.01% pass, mass 32.36 g pass, but no cooling -> exam T_max 349.93 K and 5C T_max 347.58 K fail"},
+  {"candidate": "V7-final-candidate", "outputs": ["cell/r3_v7_energy.json", "cell/r3_v7_5c_dfn.json", "cell/r3_v7_retention.json", "cell/r3_v7_4c45_dfn.json"], "note": "combination: ED 634.40 pass, retention 98.83% pass, mass 32.36 g pass, no plating (anode min +0.0107 V) pass, 5C-discharge T_max 325.13 K pass; only exam T_max 333.73 K fails by 0.58 K"}
+]

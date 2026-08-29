@@ -1,0 +1,7 @@
+{
+  "sei_thickness_nm_end_500cyc": 214.79077292294787,
+  "_formula": "copy of sei_thickness_nm_end from --cycles 500 aging output",
+  "_inputs": [
+    "cell/r3_vA_k15_aging500.json:sei_thickness_nm_end"
+  ]
+}

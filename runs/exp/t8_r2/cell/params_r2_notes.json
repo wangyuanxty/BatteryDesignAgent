@@ -1,0 +1,7 @@
+{
+  "round": 2,
+  "method": "all variants share Nominal cell capacity 5 Ah; V_B/V_C geometry chosen so positive-electrode capacity (cmax*AMVF*L*A) is preserved vs baseline",
+  "area_va_vb_m2": 0.1027,
+  "area_vc_vd_m2": 0.129402,
+  "sources": "t+=0.36 Valoen&Reimers JES 152 A882 (2005); D=4.0e-10 const = high-transport blend estimate (Nyman2008 peak 4.1e-10 dilute); sigma=1.2 S/m = blend estimate (Nyman2008/Valoen ~1.0-1.1 at 1M)"
+}

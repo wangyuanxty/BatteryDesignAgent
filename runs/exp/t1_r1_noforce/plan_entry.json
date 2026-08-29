@@ -1,0 +1,8 @@
+{
+  "action": "plan",
+  "objective_breakdown": "ED>=392.61 Wh/kg (contract stack-dry mass, electrolyte excluded) drives thick/low-porosity electrodes + thin collectors/separator; 4C no-plating and T_max<=333.15K (60C) at 45C ambient conflict with it (transport vs loading, heat vs mass); overcharge-to-4.7V-no-TR checked mechanically (cut-off 4.2V + 0.5V). Central trade-off: ED vs plating/T_max Pareto.",
+  "candidate_strategy": "R1 baseline Chen2020 characterization (1C SPMe->DFN, calc-energy, 4C lumped+plating, overcharge+run-tr); opening ceiling assessment with best-legal architecture + high-sigma electrolyte; if ceiling<392.61 escalate to Stage 2 material design (SiOx system switch OKane2022 / composition candidates; LNMO excluded: overcharge window mismatch with 4.7V spec); then free architecture exploration (exploration_force OFF) + full safety exam on every stage2-qualified candidate.",
+  "budget_allocation": "R1 baseline; R2 ceiling probe; R3-R6 ED maximization (Chen2020 then escalated system); R7-R9 safety fine-tuning; closing deliverables/render (real_compute=false, no true compute).",
+  "risk_and_fallback": "Chen2020 initial-state/thermal defaults: check initial-concentration keys; plating fallback: negative particle radius down, electrolyte sigma/t+ up, N/P up; T_max fallback: cooling h up; three-strike: question system/boundary/metric assumptions, plan-update + final escalation record.",
+  "detail": "design_plan.md"
+}

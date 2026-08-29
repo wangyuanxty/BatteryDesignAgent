@@ -1,0 +1,11 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {
+      "name": "Chen2020_baseline",
+      "role": "baseline characterization of the default NMC811/graphite system with no parameter overrides (1C + lowT discharge, 4C/45C safety, calc-energy)"
+    }
+  ],
+  "llm_reason": "R1 is the characterization round per plan: establish the gap profile against entry-0 criteria before proposing variants. No overrides: params file is empty (bridge/params_r1_empty.json)."
+}

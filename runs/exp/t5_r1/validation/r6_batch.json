@@ -1,0 +1,10 @@
+[
+  {"candidate": "R6A slim cathode 75.6um + N/P 1.265 - Chen2020", "outputs": ["cell/r6a_chen_4c_dfn.json", "cell/r6a_chen_energy.json"], "note": "ED 576.3 passes; T_max 330.06 passes; anode min -0.0265 still plated. Slim cathode + moderate N/P alone does not close plating."},
+  {"candidate": "R6A slim cathode 75.6um + N/P 1.265 - OKane2022", "outputs": ["cell/r6a_okane_4c_dfn.json", "cell/r6a_okane_energy.json"], "note": "ED 574.6 passes; T_max 331.40 passes; anode min -0.0240 plated."},
+  {"candidate": "R6B slim cathode + anode 105.8um (N/P 1.40) - Chen2020", "outputs": ["cell/r6b_chen_4c_dfn.json", "cell/r6b_chen_energy.json"], "note": "ED 613.0 passes; T_max 329.93 passes; anode min -0.0274 plated (N/P up = deeper charge acceptance 4.40 Ah, dip slightly worse than R6A)."},
+  {"candidate": "R6B slim cathode + anode 105.8um (N/P 1.40) - OKane2022", "outputs": ["cell/r6b_okane_4c_dfn.json", "cell/r6b_okane_energy.json"], "note": "ED 611.9 passes; T_max 331.28 passes; anode min -0.0257 plated."},
+  {"candidate": "R6C R6B + eps_neg 0.45 + sep 8um - Chen2020", "outputs": ["cell/r6c_chen_4c_dfn.json", "cell/r6c_chen_energy.json"], "note": "ED 629.8 passes; T_max 329.47 passes; anode min -0.0227 plated (transport still improving)."},
+  {"candidate": "R6C R6B + eps_neg 0.45 + sep 8um - OKane2022", "outputs": ["cell/r6c_okane_4c_dfn.json", "cell/r6c_okane_energy.json"], "note": "ED 628.6 passes; T_max 330.80 passes; anode min -0.0203 plated."},
+  {"candidate": "R6D R6C + t+ 0.45 - Chen2020", "outputs": ["cell/r6d_chen_4c_dfn.json", "cell/r6d_chen_energy.json"], "note": "Best Chen: ED 630.2 passes; T_max 328.98 passes; anode min -0.0190 plated (4C charge acceptance 4.47 Ah; dip localized at END of charge segment, monotonic slide 0.188->-0.019)."},
+  {"candidate": "R6D R6C + t+ 0.45 - OKane2022", "outputs": ["cell/r6d_okane_4c_dfn.json", "cell/r6d_okane_energy.json"], "note": "Best OKane: ED 628.9 passes; T_max 330.31 passes; anode min -0.0159 plated (nearest to zero yet). Transport levers at aggressive-estimate bounds; three-strike triggered (R4-R6 same cause) -> next lever: negative particle size (solid diffusion)."}
+]

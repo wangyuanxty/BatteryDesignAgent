@@ -1,0 +1,12 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "base": ".claude/skills/virtual-battery-factory/scripts/bda/simulators/data/LNMO.json",
+      "name": "systemLNMO",
+      "role": "system switch to 4.7 V-class LNMO spinel cathode (LiNi0.5Mn1.5O4): the only library system whose chemistry can satisfy the 4.1 V cell plateau (anchor: OCP(0.5)~4.7 V, cell midpoint ~4.17 V); Chen2020-inherited graphite anode/electrolyte/SEI/geometry"
+    }
+  ],
+  "llm_reason": "round-1 ceiling assessment: plateau 3.935 V measured on Chen2020 is chemistry-bound (NMC811 OCP ceiling ~4.2 V) -> no architecture/electrolyte lever can lift cell midpoint to 4.1 V -> material-bottleneck escalation to Stage 2 via system switch (ceiling_escalation=on). LNMO.json = Chen2020 base + 4.7 V spinel OCP + cathode overrides (density 4400, D 1e-12, c_max 43000, molar mass 0.1503, 4.5 Ah, AM volume fraction 0.665), negative/electrolyte/separator/thermal/SEI inherited -> aging-capable. System candidates skip the molecular funnel; evaluated directly at Stages 3/4 (protocol rule). Expected: plateau ~4.1-4.2 V pass; ED ~energy gain from +0.2 V midpoint; 4C plating/T_max need anode-side and cooling levers (next rounds)"
+}

@@ -1,0 +1,8 @@
+{
+  "action": "plan",
+  "objective_breakdown": "stage2: low_temperature_retention>=0.95 (capacity(-20C)/capacity(25C), hard metric, driven by Chen2020 Arrhenius i0 (neg E~35kJ/mol -> x0.081 at 253K if fully cooled) + lumped-thermal cooling; electrolyte sigma/D are T-independent in Chen2020 (measured) so transport levers act uniformly; energy_density_wh_kg>=327.18 (calc-energy contract, baseline ~400 headroom); energy_density_wh_l>=880 (baseline ~850, needs inactive-layer thinning). stage3 protocol defaults: plated=false, T_max_K<=333.15 on 4C_charge_45C, triggered=false.",
+  "candidate_strategy": "R1 baseline Chen2020 (no overrides): 1C/lowT/4C45+plating/calc-energy + opening ceiling assessment. R2 electrolyte formulations (sigma/D/t+ bridge, low-viscosity ester basis, Smart1999/Zhang2002/Xu2004) + architecture variants (small particle radius -> charge-transfer, thin separator/CC -> Wh/L). R3+ combine winners, iterate retention to 0.95 while tracking ED via calc-energy; thermal h direction decided by evidence (insulation for retention vs cooling for 4C exam); system switch (OKane2022/LNMO) only on evidence.",
+  "budget_allocation": "R1 ~4 runs; R2 ~12; R3+ ~12; Stage4+closing ~4; total ~32 runs, SPMe quick-screen, DFN final confirmation only",
+  "risk_and_fallback": "retention unreachable -> diagnose scale: charge-transfer (particle radius/system) vs transport (sigma/D/t+) vs cell-cooling (h insulation); ED_wh_l shortfall -> separator/CC thinning; thermal tension retention-vs-4C -> record operating envelope verbatim, no threshold fiddling; three-strike -> escalation questions (system reachability / boundary / metric reachability).",
+  "detail": "design_plan.md"
+}

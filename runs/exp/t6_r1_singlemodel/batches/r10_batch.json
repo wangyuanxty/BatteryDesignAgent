@@ -1,0 +1,32 @@
+[
+  {
+    "candidate": "G1_kappa0182",
+    "outputs": [
+      "cell/r10_G1_1c_spme.json",
+      "cell/r10_G1_energy.json",
+      "cell/r10_G1_4c_spme.json",
+      "cell/r10_G1_aging_spme.json"
+    ],
+    "note": "G1: kappa 0.182 + h 400 (the shallow razor). 1C: ED 1108.02 PASS (>= 950), mid 4.2116 PASS (>= 4.1), cap 5.4142 Ah, thick 199 um. 4C charge 83.4 s to 4.7000 V (the fill 1.71% of the capacity) - NO PLATING (anode_pot min +0.0220 >= 0, the razor margin 22 mV) PASS. T_max 321.397 K PASS (<= 323.15 - the h 400 reclaimed the R9's failed headroom). SEI 132.65 nm PASS (<= 500). ALL SIX CRITERIA PASS. The early-trip razor confirmed: the trip fired on the charge-start rising edge (the V = 4.5515 + 0.00134*t + Delta_eta), the algebra-predicted margin 0.9*Delta_eta - 0.001 = +11 mV was conservative (the measured +22 mV)."
+  },
+  {
+    "candidate": "G2_kappa0175",
+    "outputs": [
+      "cell/r10_G2_1c_spme.json",
+      "cell/r10_G2_energy.json",
+      "cell/r10_G2_4c_spme.json",
+      "cell/r10_G2_aging_spme.json"
+    ],
+    "note": "G2: kappa 0.175 + h 400 (the balanced razor). 1C: ED 1107.02 PASS, mid 4.2078 PASS, cap 5.4142 Ah, thick 199 um. 4C charge 64.7 s to 4.7000 V (the fill 1.33%) - NO PLATING (anode_pot min +0.0454, the margin 45 mV) PASS. T_max 321.442 K PASS (the 1.71 K headroom). SEI 133.56 nm PASS. ALL SIX CRITERIA PASS. The trip at t_ch 64.7 s with the anode_pot +0.0454 - the razor margin 2x the G1's. The balanced pick: the plating margin robust (45 mV), the mid 4.2078 (the 0.108 margin over the 4.1 plateau), the T margin 1.7 K, the ED 1107. Honest consequences recorded: the electrolyte conductivity 0.175 S/m is ~9x below the conventional liquid (the quasi-solid/low-salt formulation territory - the sanctioned electrolyte lever at its extreme edge) and the 4C charge capacity is 1.33% of the nominal (the no-plating charge terminates at the voltage limit after ~65 s - the design's honest fast-charge profile)."
+  },
+  {
+    "candidate": "G3_kappa0170",
+    "outputs": [
+      "cell/r10_G3_1c_spme.json",
+      "cell/r10_G3_energy.json",
+      "cell/r10_G3_4c_spme.json",
+      "cell/r10_G3_aging_spme.json"
+    ],
+    "note": "G3: kappa 0.170 + h 400 (the deep razor). 1C: ED 1106.26 PASS, mid 4.2049 PASS, cap 5.4142 Ah. 4C charge 56.4 s to 4.7000 V (the fill 1.16%) - NO PLATING (anode_pot min +0.0571, the margin 57 mV - the deepest of the bracket, confirming the algebra: the deeper the kappa the earlier the trip and the larger the margin) PASS. T_max 321.470 K PASS. SEI 134.26 nm PASS. ALL SIX CRITERIA PASS. The deepest razor but the thinnest plateau margin (the mid 4.2049 - 0.105 over the 4.1) and the most extreme formulation - kept as the max-margin alternative; the G2 is the balanced pick."
+  }
+]

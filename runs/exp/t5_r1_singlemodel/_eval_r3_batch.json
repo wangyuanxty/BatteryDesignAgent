@@ -1,0 +1,34 @@
+[
+  {
+    "candidate": "archH_transport",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r3_archH_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r3_archH_energy.json"
+    ],
+    "note": "ALL CRITERIA PASS: ED 528.3 >= 500.94, Tmax 332.91 <= 333.15, no plating (anode min +0.0155 V). Stronger transport bridge (sigma 3.5 S/m, D 1.2e-9, t+ 0.55) at h=40 is the decisive safety combination"
+  },
+  {
+    "candidate": "archI_h50",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r3_archI_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r3_archI_energy.json"
+    ],
+    "note": "h=50: Tmax 332.30 pass but plating FAIL (anode min -0.0008 V) - even h=50 overcools the cell; cooling vs plating trade-off confirmed a second time, h must stay at 40 with this transport level"
+  },
+  {
+    "candidate": "archJ_npUp",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r3_archJ_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r3_archJ_energy.json"
+    ],
+    "note": "negative thickness +4.5%: ED 540.4 (capacity 5.244 Ah) but Tmax 335.27 fail and plating margin thin (+0.0005 V) - N/P-up direction rejected"
+  },
+  {
+    "candidate": "archK_particles",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r3_archK_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r3_archK_energy.json"
+    ],
+    "note": "particles 2.0/2.2 um: ED 531.2, anode margin +0.0081 V, but Tmax 334.14 fail (1.0 K over) - kinetic heat cut alone insufficient at sigma 2.2/h=40"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "action": "funnel",
+  "passed": 2,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "FEC/VC additive screening (Stage 2 molecular funnel, 3-model: run-mlp mace + run-mlp chgnet + run-xtb): both candidates pass all hard elimination lines (mace/chgnet converged=true, energy_ev<0; xtb homo_ev -12.82/-12.00 < max_homo_ev -6.0). Candidate count 2 < 3 -> three-model spread voting not applied (protocol rule). Bridge to Stage 3: film-forming additives -> SEI kinetic rate constant suppression direction (Zhang2002 low-T film rationale), included in final formulation as SEI design content (not a judged metric).",
+  "dispositions": [
+    {"name": "FEC", "status": "passed", "reason": "elimination lines pass; low-T film-forming additive (FEC, fluorinated SEI)"},
+    {"name": "VC", "status": "passed", "reason": "elimination lines pass; film-forming additive"}
+  ]
+}

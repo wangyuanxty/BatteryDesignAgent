@@ -1,0 +1,7 @@
+[
+  {
+    "candidate": "R3C Area1p5_Small (DFN validation)",
+    "outputs": ["cell/r3_C_1c_dfn.json", "cell/r3_C_calc_dfn.json", "cell/r3_C_4c_dfn.json"],
+    "note": "DFN confirmation of the SPMe pass: ED 549.58 pass; T_max 320.63 pass (4C charge phase); 4C charge true span 1434.9 s = 7.97 Ah at 20 A, ends at the 4.2 V ceiling at ~83% SOC, anode min +0.01428 V -> no plating (SPMe said +0.0162 V - consistent; DFN resolves through-plane gradients, margin slightly thinner). 1C discharge completes cleanly at 9.6177 Ah (well under the 7200 s cap). Design validated at DFN: all three criteria hold. Remaining work: round 4 margin/ED polish, then selection."
+  }
+]

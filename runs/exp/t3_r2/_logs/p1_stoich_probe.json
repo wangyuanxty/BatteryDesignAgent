@@ -1,0 +1,12 @@
+{
+  "discharge_capacity_ah": 3.3278373668968877,
+  "x_start": 0.27,
+  "x_end": 0.9102,
+  "y_start": 0.9014,
+  "y_end": 0.0326,
+  "pos_consumed_area_capacity_ah_m2": 32.403,
+  "neg_consumed_area_capacity_ah_m2": 32.403,
+  "cell_delivered_area_capacity_ah_m2": 32.403,
+  "identity_pos_vs_cell": 1.0,
+  "identity_neg_vs_cell": 1.0
+}

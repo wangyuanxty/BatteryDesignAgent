@@ -1,0 +1,13 @@
+{
+  "action": "funnel",
+  "passed": 4,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "All 4 additive candidates pass elimination lines (mace/chgnet converged, energy_ev << 0; xtb homo_ev <= -11.9 eV < -6.0). One dispute resolved by reasoning: PES rank spread 3 (ML potentials rank most stable, xTB highest HOMO) - resolved as passed: sulfur-containing film-forming additives are anode-side SEI builders at low concentration, high HOMO tolerable; literature-validated class. No candidate rejected.",
+  "dispositions": [
+    {"name": "FEC", "status": "passed", "reason": "consistent ranks; homo -12.82 eV; film-forming SEI additive"},
+    {"name": "VC", "status": "passed", "reason": "consistent ranks; homo -12.00 eV; film-forming SEI additive"},
+    {"name": "PES", "status": "passed", "reason": "disputed (spread 3) resolved by reasoning: anode-side film-forming additive, low concentration, sulfur SEI chemistry; ML potentials rank most stable"},
+    {"name": "DTD", "status": "passed", "reason": "consistent ranks; homo -12.59 eV; SEI stabilizer"}
+  ]
+}

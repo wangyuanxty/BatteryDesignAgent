@@ -1,0 +1,3 @@
+[
+  {"candidate": "V11_final", "outputs": ["cell/r5_v11_tr.json", "cell/r5_v11_oc.json"], "note": "Stage 4 safety on finalist V11: overcharge (0.5C DFN) reached 4.70 V exactly (v_max=v_end=4.700), overcharge segment 8010 s; T_max 298.57 K (h=120 W/m2/K + low DCR keeps cell near ambient). run-tr coupled from OC T_max_K with mass_kg 0.03076: triggered=false, T_max 298.57 K, dT/dt max -1.1e-6 K/s (net cooling) — no thermal runaway after 4.7 V overcharge."}
+]

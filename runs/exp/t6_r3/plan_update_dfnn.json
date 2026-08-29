@@ -1,0 +1,8 @@
+{
+  "action": "plan",
+  "update": true,
+  "reason": "key assumption overturned by simulation: SPMe screening margins (T +0.89 K, plating +39 mV, plateau +65 mV) did not survive DFN precision verification — DFN 4C CC phase lasts 36 s vs SPMe 6 s (amin -0.0522, T_max 330.57); DFN plateau 4.0766 vs SPMe 4.1647. SPMe discredited as the screening layer for this cell class; DFN SEI also much lower than SPMe (191.1 vs 394.5 nm).",
+  "candidate_strategy": "rounds 10+ in DFN mode: V24 transport probe (sigma 2.0 / t+ 0.5); V25 N/P 1.28 plating probe; V26 thin-and-wide repack (all thicknesses x0.695, area x1.4388, volume/capacity conserving, N/P 1.28, h 150); V27 parameter-route combo (sigma + t+ + N/P 1.28 + h 250).",
+  "budget_allocation": "rounds 10-12 DFN tuning, round 13 DFN final verification, round 14 closing deliverables",
+  "risk_and_fallback": "if DFN tuning stalls (three strikes): question (1) model assumption — is 4C charge of this cell class feasible in DFN at all; (2) task boundary — cooling h/geometry freedoms already at widest interpretation; (3) metric assumption — if unreachable, report negative result honestly with the reachability margin stated"
+}

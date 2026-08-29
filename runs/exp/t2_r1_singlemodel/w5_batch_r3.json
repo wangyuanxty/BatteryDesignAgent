@@ -1,0 +1,14 @@
+[
+  {
+    "candidate": "R3_finaldesign",
+    "round": 3,
+    "outputs": [
+      "cell/r3_energy.json",
+      "cell/r3_aging100.json",
+      "cell/derived_sei_500cyc_r3.json",
+      "cell/derived_retention_lowT_r3.json",
+      "cell/r3_4c45.json"
+    ],
+    "note": "R3 final design: ED 358.0 Wh/kg >= 327.18, SEI100 (1e-19 re-measure, predicted ~194 nm) <= 500, SEI500 439.7 nm <= 550 (D_ec 1e-19 final: 8e-20 dies deterministically at cycle ~174 of 500-cycle aging, IDA_CONV_FAIL; 1e-19 completes 500 cycles), lowT retention 99.6% >= 90, 4C plating-free (ap_min +0.112 V); T_max monitored only, no red line in criteria."
+  }
+]

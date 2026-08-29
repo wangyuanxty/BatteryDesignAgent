@@ -1,0 +1,24 @@
+[
+  {
+    "candidate": "Baseline Chen2020",
+    "round": 1,
+    "outputs": [
+      "cell/r1_baseline_1c_dfn.json",
+      "cell/r1_baseline_energy.json",
+      "cell/r1_baseline_4C_dfn.json",
+      "cell/r1_baseline_aging100_spme.json",
+      "derived/r1_baseline_retention.json",
+      "derived/r1_baseline_sei500.json"
+    ],
+    "note": "baseline diagnosis: ED 400.75 Wh/kg and SEI@100 (449.1 nm) and lowT retention (99.43%) pass; SEI@500 (777.9 nm > 550) and 4C plating (anode_potential_v min -0.192 V < 0, plated) fail - two binding constraints: 4C anode polarization and ec-limited SEI growth"
+  },
+  {
+    "candidate": "Baseline lowT test-condition fix",
+    "round": 1,
+    "outputs": [
+      "cell/r1_baseline_lowT_coldstart_spme.json",
+      "derived/r1_baseline_retention.json"
+    ],
+    "note": "cold-start -20 C 1C discharge (Initial temperature [K]=253.15): retention 99.43% >= 90% passes; harness ambient-only lowT protocol starts the lumped model at 298.15 K (warm-start artifact, T_max_K=298.15 in the unfixed run) - fix documented, thin-electrode Chen2020 cell is genuinely insensitive at -20 C/1C"
+  }
+]

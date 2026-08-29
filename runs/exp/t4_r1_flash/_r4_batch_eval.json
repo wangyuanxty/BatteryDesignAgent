@@ -1,0 +1,4 @@
+[
+  {"candidate": "B4_ThinCellE2_h25", "outputs": ["cell/r4_b4_1c.json", "cell/r4_b4_lowt.json", "cell/r4_b4_energy.json", "cell/r4_b4_4c45.json", "cell/r4_b4_retention.json"], "note": "all pass except T_max 333.83K (0.68K over 333.15); retention 99.3% at h=25 (h cost negligible)"},
+  {"candidate": "B5_ThinCellE2_h20", "outputs": ["cell/r4_b5_1c.json", "cell/r4_b5_lowt.json", "cell/r4_b5_energy.json", "cell/r4_b5_4c45.json", "cell/r4_b5_retention.json"], "note": "T_max 335.85K fails; confirms h trend -2K/+5h"}
+]

@@ -1,0 +1,8 @@
+[
+  {"candidate": "Architecture A (kinetics+cooling)", "round": 2, "outputs": ["cell/r2_A_4c_dfn.json"], "note": "smaller particles alone worsened plating (anode_min -0.282V) and T_max still 340.9K; kinetics not the binding lever."},
+  {"candidate": "Architecture B (transport+cooling)", "round": 2, "outputs": ["cell/r2_B_4c_dfn.json"], "note": "high-transport electrolyte cut anode dip to -0.031V; T_max 334.5K still marginally over 333.15K."},
+  {"candidate": "Architecture C (combined)", "round": 2, "outputs": ["cell/r2_C_4c_dfn.json"], "note": "combined passes T_max (330.0K) but residual anode dip -0.043V -> still plating."},
+  {"candidate": "Architecture V1 (transport-max)", "round": 3, "outputs": ["cell/r3_V1_4c_dfn.json"], "note": "transport-max (cond2.5,t+0.6) + h60: anode_min +0.0007V (no plating), T_max 330.2K pass; marginal anode margin."},
+  {"candidate": "Architecture V2 (transport + larger neg particle)", "round": 3, "outputs": ["cell/r3_V2_4c_dfn.json"], "note": "larger negative particle (8um) re-introduced plating (anode_min -0.0228V) -> direction rejected."},
+  {"candidate": "Architecture V3 (transport + smaller neg particle)", "round": 3, "outputs": ["cell/r3_V3_tr.json", "cell/r3_V3_energy.json", "cell/r3_V3_4c_dfn.json"], "note": "winning design: transport-max + neg particle 3um + h60 -> no plating (anode_min +0.0368V), T_max 328.6K, ED 413.0 Wh/kg, overcharge 4.7V no TR."}
+]

@@ -1,0 +1,21 @@
+{
+  "action": "propose",
+  "round": 4,
+  "candidates": [
+    {
+      "name": "V8_deep_cooled_40",
+      "role": "V7 deep-transport architecture + h=40: T_max under the line while keeping anode margin (V7 had +25 mV at h=30, T_max 333.81)",
+      "struct": {
+        "Total heat transfer coefficient [W.m-2.K-1]": 40.0
+      }
+    },
+    {
+      "name": "V9_deep_cooled_35",
+      "role": "V7 deep-transport architecture + h=35: finer cooling step (interpolation between V7 h=30 and V8 h=40)",
+      "struct": {
+        "Total heat transfer coefficient [W.m-2.K-1]": 35.0
+      }
+    }
+  ],
+  "llm_reason": "R3 diagnosis: V7 (deep transport, h=30) passes plating with +25 mV margin but T_max 333.81 K is 0.66 K over the 333.15 line; V5/V6 show that stronger cooling (h=40/60) on V3-class transport brings the anode back below 0 V (kinetics cool-down) — so the fix is to raise h only as far as V7's larger plating margin allows. V8 (h=40) and V9 (h=35) bracket the trade: expected T_max ~330-332 K; anode margin should retain a positive buffer (kinetics factor exp(Ea/R(1/T1-1/T2)) ~12% per 4 K). Other overrides unchanged from V7 (listed in R3 propose)."
+}

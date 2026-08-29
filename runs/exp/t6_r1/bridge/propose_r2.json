@@ -1,0 +1,25 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "name": "lnmo_arch_default",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{}",
+      "role": "systemLNMO default architecture through the full protocol battery: aging_1C_100cyc (sei_thickness_nm_end evidence) + 4C_charge_45C with plating module (T_max_K and anode_potential_v evidence). Gap-quantification candidate - measures how far the default stack is from the unevidenced criteria before any tuning."
+    },
+    {
+      "name": "lnmo_h200",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 200}",
+      "role": "Thermal probe at 4C_charge_45C with h=200 W/m2K (20x the contract default h=10). Intermediate cooling point to map T_max(h). Assumption recorded: h is the declared-adjustable thermal-management DOF; 200 W/m2K represents forced/phase-change cooling beyond passive smartphone levels."
+    },
+    {
+      "name": "lnmo_h500",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 500}",
+      "role": "Thermal probe at 4C_charge_45C with h=500 W/m2K (aggressive active cooling). Upper point of the T_max(h) mapping; if this is insufficient the thermal criterion demands heat-generation reduction (electrolyte conductivity / resistance levers) rather than more cooling."
+    }
+  ],
+  "llm_reason": "Stage 2 closed (systemLNMO passes ED + midpoint at defaults; baselineChen2020 fail evidences the material bottleneck). Round 2 opens Stage 3/4 with the gap-quantification battery: default architecture through aging + 4C/45C/plating, plus a two-point thermal probe because 4C at 45C ambient leaves only 5 K headroom and h is the first-order lever on T_max. All candidates are architecture/thermal variants of the same system - molecular funnel not re-entered (no stage2 candidates this round). SEI evidence from the isothermal aging run is a system/anode property shared across variants."
+}

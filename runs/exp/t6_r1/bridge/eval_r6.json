@@ -1,0 +1,7 @@
+[
+  {
+    "candidate": "lnmo_final",
+    "outputs": ["cell/r6_final_1c_dfn.json", "cell/r6_final_energy_dfn.json", "cell/r6_final_aging_dfn.json", "cell/r6_final_4c_dfn.json"],
+    "note": "DFN confirmation round - honest FAIL on three criteria: (1) midpoint_voltage_v = 4.0974 V < 4.1 (the DFN grid samples the true ~70%-depth discharge point where through-plane electrolyte depletion sags the voltage; the SPMe 4.1661 sampled an early grid point - contract quirk recorded); (2) 4C T_max_K = 323.80 K > 323.15 (+0.65 K over; DFN heat generation ~6 W vs ~2.7 W at SPMe); (3) anode_potential_v min = -0.0193 V -> plated (DFN resolves the anode potential distribution; end-of-charge surface-saturation collapse of the exchange-current density, dip confined to the final ~2.5 s). Passing: ED_vol = 1127.1 Wh/L (+18.6%), sei_thickness_nm_end = 346.0 nm at DFN (margin 154 nm). Round 7 attacks the three DFN gaps: h 200->400 (T_max), electrolyte diffusivity 5e-10 constant (depletion sag + end-of-charge gradients), negative radius 3.0 um (surface saturation)."
+  }
+]

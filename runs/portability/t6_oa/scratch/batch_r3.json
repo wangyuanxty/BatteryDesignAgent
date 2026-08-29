@@ -1,0 +1,6 @@
+[
+  {"candidate": "LNMO-S4 stronger-coating+cooling", "round": 3, "outputs": ["cell/r2_v4_energy.json", "cell/r2_v4_4c.json", "cell/r2_v4_aging.json"], "note": "k=2e-15 -> SEI 355.8nm, h=60 -> T_max 323.57K still 0.4K over"},
+  {"candidate": "LNMO-S5 +N/P-margin", "round": 3, "outputs": ["cell/r2_v5_energy.json", "cell/r2_v5_4c.json", "cell/r2_v5_aging.json"], "note": "thicker anode 112um: T_max 323.50K, no extra plating benefit over S4"},
+  {"candidate": "LNMO-S6 cooling-80", "round": 3, "outputs": ["cell/r2_v6_energy.json", "cell/r2_v6_4c.json", "cell/r2_v6_aging.json"], "note": "h=80 -> T_max 323.06K pass (0.09K margin, tight)"},
+  {"candidate": "LNMO-S7 cooling-100", "round": 3, "outputs": ["cell/r2_v7_energy.json", "cell/r2_v7_4c.json", "cell/r2_v7_aging.json"], "note": "h=100 -> T_max 322.71K pass (0.44K margin); all 5 criteria pass"}
+]

@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "stage1": {},
+    "stage2": {
+      "capacity_ah": {"min": 2.0},
+      "retention_5c": {"min": 0.95},
+      "power_density_w_kg": {"min": 4000.0}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false
+    },
+    "meta": {
+      "goal": "Design a battery for power tools: nominal capacity >= 2 Ah, support 5C discharge (capacity retention >= 95%), support 4C fast charge (no lithium plating), maximum temperature <= 60 C, power density >= 4000 W/kg.",
+      "case_id": "t3_r1_flash",
+      "real_compute": false,
+      "start_stage": 3,
+      "base_params": "Chen2020",
+      "base_params_basis": "task text names no electrode system -> anchor-table default Chen2020 (baseline teaching parameterization); materials use system baseline",
+      "retention_5c_definition": "5C_discharge (dfn) capacity / 1C_discharge (dfn) capacity, same parameters; mechanically computed",
+      "T_max_definition": "max cell temperature under 4C_charge_45C protocol (thermal lumped, ambient 318.15 K); 60 C = 333.15 K",
+      "plated_definition": "anode_potential_v min < 0 V during 4C charge -> plated=true",
+      "power_density_definition": "calc-energy: V0^2/(4*DCR)/mass_kg",
+      "freedoms": {
+        "electrode_system": "adjustable (start Chen2020 per anchor default; switch only if ceiling assessment infeasible)",
+        "electrolyte_formulation": "adjustable (transport parameter overrides: Electrolyte conductivity/diffusivity, Cation transference number)",
+        "electrode_modification": "adjustable (coating/doping; reserve)",
+        "cell_architecture": "adjustable (electrode thickness/porosity/N-P, separator thickness/porosity, current collector thickness, particle radius)",
+        "thermal_management": "adjustable (Total heat transfer coefficient)"
+      },
+      "excluded_levers": ["solid-phase conductivity", "solid-phase diffusivity", "initial concentration/lithiation", "initial SEI thickness", "charge cut-off voltage"]
+    }
+  }
+}

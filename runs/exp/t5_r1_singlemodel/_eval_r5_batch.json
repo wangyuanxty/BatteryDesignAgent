@@ -1,0 +1,10 @@
+[
+  {
+    "candidate": "archN_robust",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r4_archN_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r5_final_archN_energy_dfn.json"
+    ],
+    "note": "Final design DFN-precision confirmation (R5): 1C discharge DFN ED 533.18 Wh/kg (+32.2 over target, calc-energy with archN params+OKane2022 base); 4C charge DFN Tmax 330.50 K (2.65 K margin) and anode min +0.0215 V (no plating). SPMe ED 531.85 vs DFN ED 533.18 consistent within 0.25% (capacity identical 5.037 Ah; energy 18.328 vs 18.374 Wh). SPMe midpoint-voltage field (4.07 V) is a mid-time sample of the flatter SPMe profile, not the energy-mean (3.64 V) - mechanical verdict uses ED/Tmax/plated, unaffected."
+  }
+]

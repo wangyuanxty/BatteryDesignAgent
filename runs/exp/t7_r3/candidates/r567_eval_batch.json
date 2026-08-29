@@ -1,0 +1,11 @@
+[
+  {"candidate": "v13", "round": 5, "outputs": ["cell/r5_v13_4c45c_dfn.json"], "note": "R5 charge-screen (pos porosity lever); plated-only mechanical check, SEI/ED/TR unchecked at this intermediate stage"},
+  {"candidate": "v14", "round": 5, "outputs": ["cell/r5_v14_4c45c_dfn.json"], "note": "R5 charge-screen (pos porosity lever); plated-only mechanical check, SEI/ED/TR unchecked at this intermediate stage"},
+  {"candidate": "v15", "round": 5, "outputs": ["cell/r5_v15_4c45c_dfn.json"], "note": "R5 charge-screen (pos porosity lever); plated-only mechanical check, SEI/ED/TR unchecked at this intermediate stage"},
+  {"candidate": "v16", "round": 5, "outputs": ["cell/r5_v16_4c45c_dfn.json"], "note": "R5 charge-screen (pos porosity lever); plated-only mechanical check, SEI/ED/TR unchecked at this intermediate stage"},
+  {"candidate": "v17", "round": 6, "outputs": ["cell/r6_v17_4c45c_dfn.json"], "note": "R6 charge-screen (D_e 6e-10 + neg r 3.0um ladder rung); plated-only mechanical check, SEI/ED/TR unchecked at this intermediate stage"},
+  {"candidate": "v18", "round": 6, "outputs": ["cell/r6_v18_4c45c_dfn.json"], "note": "R6 charge-screen (neg r 3.0um + neg 110um + pos r 2.0um); plated-only mechanical check, SEI/ED/TR unchecked at this intermediate stage"},
+  {"candidate": "v19", "round": 6, "outputs": ["cell/r6_v19_4c45c_dfn.json", "cell/r6_v19_1c.json", "cell/r6_v19_energy.json"], "note": "R6 selected candidate (neg r 2.0um); ED + plate check; SEI/TR deferred to R7 acceptance battery"},
+  {"candidate": "v20", "round": 6, "outputs": ["cell/r6_v20_4c45c_dfn.json"], "note": "R6 robustness probe (pos porosity 0.45); plated-only mechanical check, SEI/ED/TR unchecked at this intermediate stage"},
+  {"candidate": "v19_final", "round": 7, "outputs": ["cell/r7_v19_final_energy.json", "cell/r7_v19_final_aging45c.json", "cell/r7_v19_final_4c45c.json", "cell/r7_v19_final_nail_hA05.json"], "note": "Acceptance battery at honest ratings: nominal 6.28 Ah -> 4C = 25.12 A DFN; SEI after 100cyc@45C; ED contract formula; nail 10 W with designed cooling hA=0.5 W/K (sweep: 0.05 trig@346s, 0.2 trig@2097s, 0.3 pass 331.7K, 0.4 pass 323.2K, 0.5 pass 318.2K -> min passing ~0.3 W/K)"}
+]

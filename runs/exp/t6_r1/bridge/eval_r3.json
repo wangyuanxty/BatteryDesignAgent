@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "lnmo_h200_np120",
+    "outputs": ["cell/r3_np120_1c_spme.json", "cell/r3_np120_energy.json", "cell/r3_np120_4c.json"],
+    "note": "Plating fix attempt 1 (N/P 1.20, anode 85.2 -> 102.2 um, h=200): anode_potential_v min improved -0.176 -> -0.0049 V - the N/P lever removes ~97% of the end-of-charge dip, confirming the mechanism (higher anode capacity headroom keeps charge-end sto lower / OCP higher) but the min remains marginally < 0 -> plated FAIL. T_max_K = 321.20 K PASS (margin 1.95 K). 1C: capacity 6.161 Ah (scales ~1:1 with anode thickness - collapse-depth self-similarity), energy 24.999 Wh, ED_vol = 1117.6 Wh/L PASS (+17.6% margin - energy growth over-compensates the +17 um stack), midpoint_voltage_v = 4.1676 V PASS. SEI not yet evidenced for this variant (aging probe ran separately)."
+  },
+  {
+    "candidate": "lnmo_h200_nr35",
+    "outputs": ["cell/r3_nr35_1c_spme.json", "cell/r3_nr35_energy.json", "cell/r3_nr35_4c.json"],
+    "note": "Plating fix attempt 2 (negative particle radius 5.86 -> 3.5 um, h=200): anode_potential_v min -0.176 -> -0.168 V - only ~8 mV improvement, specific-surface increase alone is not the dominant term -> plated FAIL. T_max_K = 320.58 K PASS. 1C: capacity 5.167 Ah, ED_vol = 1019.0 Wh/L PASS, midpoint_voltage_v = 4.1870 V PASS. Verdict: keep the particle-radius lever as a secondary term in the combined candidate; insufficient alone."
+  },
+  {
+    "candidate": "lnmo_h200_elyte",
+    "outputs": ["cell/r3_elyte_1c_spme.json", "cell/r3_elyte_energy.json", "cell/r3_elyte_4c.json"],
+    "note": "Plating fix attempt 3 (t+ 0.2594 -> 0.35, conductivity -> constant 1.6 S/m replacing the Nyman2008 function - honest caveat recorded in propose): anode_potential_v min -0.176 -> -0.191 V - slightly WORSE -> plated FAIL; the electrolyte-transport direction does not help the end-of-charge dip. T_max_K = 320.70 K PASS. 1C: capacity 5.109 Ah, ED_vol = 1001.7 Wh/L PASS, midpoint_voltage_v = 4.1787 V PASS. Verdict: direction dropped from the design path (no benefit to any failing criterion)."
+  },
+  {
+    "candidate": "lnmo_sei6e13",
+    "outputs": ["cell/r3_sei_aging.json"],
+    "note": "SEI probe: k_sei 1e-12 -> 6e-13 m/s gave sei_thickness_nm_end = 736.0 vs 753.1 (-2.3% only) -> FAIL (>500 nm). Mechanism diagnosis (tool-code-derived, Yang2017 ec-reaction-limited rate law j = -F c0 k_exp/(1 + L k_exp / D_ec)): with L*k_exp/D_ec ~ 375 >> 1 the growth is in the diffusion-limited regime where k_sei is nearly inert; thickness scales ~ sqrt(c0 * D_ec). Next levers: EC initial concentration (formulation) and EC diffusivity in SEI (SEI structure), target factor 0.44 on the product. k_sei revert to base value in the combined candidate (minimal design - ineffective lever dropped)."
+  }
+]

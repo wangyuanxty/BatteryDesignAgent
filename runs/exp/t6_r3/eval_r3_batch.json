@@ -1,0 +1,42 @@
+[
+  {
+    "candidate": "V1_transport",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r3_V1_transport_1c.json",
+      "runs/exp/t6_r3/cell/r3_V1_transport_aging.json",
+      "runs/exp/t6_r3/cell/r3_V1_transport_energy.json",
+      "runs/exp/t6_r3/cell/r3_V1_transport_4c.json"
+    ],
+    "note": "sigma=2.0/t+=0.5: ED 1011 and midpoint 4.189 pass; plating worsened (amin -0.210, deeper charge end-state) and T_max 328.5 K fails; SEI 769 nm"
+  },
+  {
+    "candidate": "V2_cooling",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r3_V2_cooling_1c.json",
+      "runs/exp/t6_r3/cell/r3_V2_cooling_aging.json",
+      "runs/exp/t6_r3/cell/r3_V2_cooling_energy.json",
+      "runs/exp/t6_r3/cell/r3_V2_cooling_4c.json"
+    ],
+    "note": "h=50: T_max 322.72 K passes (<323.15); plating and SEI unchanged (753 nm); cooling lever confirmed for the T_max gate"
+  },
+  {
+    "candidate": "V3_anode_particle",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r3_V3_anode_particle_1c.json",
+      "runs/exp/t6_r3/cell/r3_V3_anode_particle_aging.json",
+      "runs/exp/t6_r3/cell/r3_V3_anode_particle_energy.json",
+      "runs/exp/t6_r3/cell/r3_V3_anode_particle_4c.json"
+    ],
+    "note": "r_neg 3.0 um: marginal plating gain (amin -0.1695) and SEI 740.8 nm; ED 1026; insufficient alone"
+  },
+  {
+    "candidate": "V4_sei_coating",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r3_V4_sei_coating_1c.json",
+      "runs/exp/t6_r3/cell/r3_V4_sei_coating_aging.json",
+      "runs/exp/t6_r3/cell/r3_V4_sei_coating_energy.json",
+      "runs/exp/t6_r3/cell/r3_V4_sei_coating_4c.json"
+    ],
+    "note": "SEI kinetics x0.1: SEI 753->654 nm (x0.868, below 500 still unmet); plating/T_max unchanged; needs combination with anode-swing levers"
+  }
+]

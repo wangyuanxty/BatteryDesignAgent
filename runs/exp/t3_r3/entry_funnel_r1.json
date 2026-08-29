@@ -1,0 +1,11 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "base_params": "Chen2020",
+  "base_determination": "task text names no electrode system -> anchor table deterministic default Chen2020 (NMC811/graphite, 5.0 Ah nominal, 75.6/85.2 um, eps 0.335/0.25, v-cut 2.5-4.2 V, aging+thermal-capable) verified via parameter dump against the anchor (OKane2022 SiOx / ORegan2022 LGM50 / Chen2020 discriminants)",
+  "start_stage": 3,
+  "materials_source": "baseline",
+  "detail": "this case starts at Stage 3 (no new-material/electrolyte-design objective in task text); materials use the Chen2020 system baseline. Ceiling assessment (opening, executed on round-1 baseline characterization): baseline delivers ED 400.75 Wh/kg, PD 22383 W/kg (passes 4000 with 5.6x margin), cap 4.947 Ah @1C, but 5C retention only 8.7%, 4C charge plates (anode_potential min -0.192 V), only 0.176 Ah charged at 4C before 4.2 V cut, T_max 354.3 K (81.1 C). Levers assessed for the architecture ceiling: electrode loading scale (pos loading 0.164 -> ~0.075 kg/m2 for 2 Ah floor at eps 0.45-0.55), ionic resistance L/(3*kappa*eps^1.5) (thinning + porosity -> order-of-magnitude reduction), kinetics (smaller particles), electrolyte transport (sigma 1.5 S/m, t+ 0.35 formulation-class overrides), collector slimming (Cu foil 12->6 um). Estimate: polarization at 25 A (5C) and 20 A (4C) can drop below ~0.15 V => 5C retention >=95% and plating-free 4C are reachable within architecture space; ceiling does NOT exceed objective => no Stage-2 material escalation triggered (ceiling_escalation armed, not exercised). Power density requirement is non-binding under the contract formula (area-mitigated DCR)."
+}

@@ -1,0 +1,41 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": {"max": 0.0},
+      "max_homo_ev": {"max": -6.0}
+    },
+    "stage2": {
+      "low_temperature_retention": {"min": 0.95},
+      "energy_density_wh_kg": {"min": 327.18},
+      "energy_density_wh_l": {"min": 880.0}
+    },
+    "stage3": {
+      "plated": false,
+      "T_max_K": {"max": 333.15},
+      "triggered": false
+    },
+    "meta": {
+      "goal": "Design a battery for extreme-cold environment equipment: 1C discharge capacity retention >= 95% at -20C, energy density >= 327.18 Wh/kg, volumetric energy density >= 880 Wh/L",
+      "start_stage": 2,
+      "base": "Chen2020",
+      "base_basis": "task text specifies no electrode system -> anchor-table default Chen2020 (NMC811/graphite), recorded per protocol",
+      "retention_definition": "lowT_discharge (253.15 K, 1C) capacity / 1C_discharge (298.15 K) capacity, same params, mechanically computed",
+      "real_compute": false,
+      "safety_criteria_source": "protocol-standard defaults; task text specifies no safety metrics (4C_charge_45C exam: plated=false, T_max<=60C; overcharge: triggered=false)",
+      "freedoms": {
+        "electrode_system": "adjustable (widest interpretation; base Chen2020 default, switch only on evidence)",
+        "electrolyte_formulation": "adjustable (Electrolyte conductivity/diffusivity, Cation transference number; primary lever for low-T)",
+        "electrode_modification": "adjustable (SEI kinetic rate constant / SEI reaction exchange current density / cracking rate)",
+        "cell_architecture": "adjustable (thickness/porosity/N-P/separator thickness & porosity/current collector thickness/particle radius)",
+        "thermal_management": "adjustable (Total heat transfer coefficient; both directions: cooling-up for 4C exam, insulation-down for cold retention)"
+      },
+      "excluded_levers": [
+        "solid-phase conductivity/diffusivity (no design chain)",
+        "initial concentration/lithiation (breaks comparability)",
+        "Initial SEI thickness (calibration constant)",
+        "charge cut-off voltage (usage mode)",
+        "intercalation exchange-current densities (no formulation mapping)"
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "candidate": "B0_baseline",
+    "round": 1,
+    "outputs": [
+      "cell/r1_b0_1c_dfn.json",
+      "cell/r1_b0_5c_dfn.json",
+      "cell/r1_b0_4c_dfn.json",
+      "cell/r1_b0_energy.json",
+      "cell/r1_b0_derived.json"
+    ],
+    "note": "baseline: capacity 4.95 Ah and power density 22.4 kW/kg pass with margin; 5C retention 8.7% fails (rate collapse from solid-diffusion limitation, tau_pos~6800 s vs 720 s test); 4C charge plated (anode min -0.192 V) and T_max 354.3 K fails."
+  },
+  {
+    "candidate": "V1_porosity_power",
+    "round": 1,
+    "outputs": [
+      "cell/r1_v1_1c_dfn.json",
+      "cell/r1_v1_5c_dfn.json",
+      "cell/r1_v1_4c_dfn.json",
+      "cell/r1_v1_energy.json",
+      "cell/r1_v1_derived.json"
+    ],
+    "note": "porosity 0.40/0.35: retention 18.7% (2.2x baseline, insufficient); 5C T_max 334.8 K now fails 333.15 K; 4C still plated (-0.057 V) and T_max 359.8 K fails."
+  },
+  {
+    "candidate": "V2_thin_electrodes",
+    "round": 1,
+    "outputs": [
+      "cell/r1_v2_1c_dfn.json",
+      "cell/r1_v2_5c_dfn.json",
+      "cell/r1_v2_4c_dfn.json",
+      "cell/r1_v2_energy.json",
+      "cell/r1_v2_derived.json"
+    ],
+    "note": "electrodes 50/56 um: retention 18.9% (2.2x baseline); capacity 3.21 Ah passes; 5C T_max 323.8 K passes; 4C plated (-0.094 V) and T_max 346.1 K fails."
+  }
+]

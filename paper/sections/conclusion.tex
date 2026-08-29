@@ -1,0 +1,76 @@
+% ============================================================
+% 7. Conclusion
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+We asked what governs the quality of design decisions when they are handed
+to an LLM agent, and what governs the trustworthiness of the yardstick the
+agent measures against. The answer, from a controlled experiment in a
+virtual battery factory, is threefold.
+
+First, end-to-end delegation is real and measurable. A single governed
+agent, given nothing but a natural-language contract, spans the full chain
+of cell-design levers---electrolyte, separator, electrode, architecture,
+thermal---and achieves all eight scenario contracts under two
+DeepSeek-generation models, and four of eight under a third, with every
+verdict computed by an adjudication layer outside the
+agent and traceable to the exact file and key that supports it. The human
+engineer's role ends at the statement of the contract.
+
+Second, the two failure modes of ungoverned delegation are real, orthogonal,
+and both visible in our data. A Bayesian optimizer configured to the
+published standard achieves exactly the three contracts whose bottlenecks
+are structural, and fails the five that need material levers---a
+solution-space failure. A protocol-free agent with identical resources
+achieves none within the measurement space: its claims dissolve under
+mechanical re-adjudication into shifted thresholds, substituted models,
+purchased parameters, altered calibers, and omitted criteria---a yardstick
+failure. Both baselines fall short for orthogonal, specifiable
+reasons---the optimizer threefold, the bare agent zero within the space---and
+only governance passes all eight.
+
+Third, the governance itself decomposes cleanly. Ceiling escalation is the
+load-bearing mechanism, causal for the material-bottleneck tasks; forced
+architecture exploration is a narrow lever; the three-model vote is an
+showed no verdict change in this suite. The pattern implies a
+deployment principle: govern by diagnosing the bottleneck first, and let
+the data tell you which defenses stay dormant.
+
+For the management of agent-mediated design systems, the implications are
+direct. The decision to delegate a design chain to a machine is not
+primarily a question of model capability---the same model under- or
+over-performs depending on the process wrapped around it---but of three
+infrastructural conditions that our protocol makes explicit:
+
+\begin{enumerate}
+\item \emph{Pre-register the contract.} The criteria are machine-readable
+before work begins, so the principal's yardstick cannot drift after the
+fact. (C1's shifted thresholds and altered calibers are the failures this
+condition prevents.)
+\item \emph{Compute the verdict outside the agent.} Judgment runs as code
+over tool outputs, so the auditee never writes its own audit. (C1's
+self-set parameters and missing criterion variables are the failures this
+condition prevents.)
+\item \emph{Refuse incomplete audit chains.} A verifier rejects runs whose
+evidence trail has holes, so ``achieved'' remains a verifiable claim rather
+than a narrative. (The one governed-run defect this paper records---a
+missing final entry---was caught by exactly this check and became a
+regression test.)
+\end{enumerate}
+
+Where these three conditions hold, the marginal cost of adjudication is a
+command-line evaluator and a ledger---and the class of design decisions that
+can safely leave the human loop widens accordingly. Where they do not hold,
+our protocol-free control shows exactly what the same model will do with the
+same tools: it will succeed at looking successful.
+
+The extensions anticipated at the design stage are now executed and
+reported above: the true first-principles endorsement of the flagship
+finalists in two independent codes (Section~5.8), the threefold replication
+of all eight tasks ($24/24$ achieved, supplementary materials), and the
+cross-harness demonstration of the protocol as a declarative artifact
+(Section~5.7). Each tightens,
+rather than overturns, the claim this experiment establishes: that when
+design decisions go to the agent, the infrastructure that matters most is
+not the funnel that searches, but the yardstick that judges.

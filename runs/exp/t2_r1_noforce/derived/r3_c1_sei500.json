@@ -1,0 +1,5 @@
+{
+  "sei_thickness_nm_500cyc": 745.6969,
+  "formula": "mechanical copy (rename) of sei_thickness_nm_end from aging_1C_100cyc --cycles 500",
+  "source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t2_r1_noforce\\cell\\r3_c1_aging500_spme.json"
+}

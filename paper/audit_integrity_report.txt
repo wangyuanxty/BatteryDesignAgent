@@ -1,0 +1,130 @@
+=== Pipeline Stage 3: Integrity Audit ===
+checks=127 fails=1
+
+[PASS] t1pro verdict achieved: actual='achieved' expected='achieved'
+[PASS] t1flash verdict achieved: actual='achieved' expected='achieved'
+[PASS] t2pro verdict achieved: actual='achieved' expected='achieved'
+[PASS] t2flash verdict achieved: actual='achieved' expected='achieved'
+[PASS] t3pro verdict achieved: actual='achieved' expected='achieved'
+[PASS] t3flash verdict achieved: actual='achieved' expected='achieved'
+[PASS] t4pro verdict achieved: actual='achieved' expected='achieved'
+[PASS] t4flash verdict achieved: actual='achieved' expected='achieved'
+[PASS] t5pro verdict achieved: actual='achieved' expected='achieved'
+[PASS] t5flash verdict achieved: actual='achieved' expected='achieved'
+[PASS] t6pro verdict achieved: actual='achieved' expected='achieved'
+[FAIL] t6flash verdict achieved: actual=None expected='achieved' (KNOWN DEFECT — documented in paper §5.4; missing final entry became a regression test)
+[PASS] t7pro verdict achieved: actual='achieved' expected='achieved'
+[PASS] t7flash verdict achieved: actual='achieved' expected='achieved'
+[PASS] t8pro verdict achieved: actual='achieved' expected='achieved'
+[PASS] t8flash verdict achieved: actual='achieved' expected='achieved'
+[PASS] T1 pro ED 553.98: actual=553.98 expected=553.98
+[PASS] T2 pro ED 465.62: actual=465.62 expected=465.62
+[PASS] T4 pro ED 471.55: actual=471.55 expected=471.55
+[PASS] T6 pro Wh/L 1135.8: actual=1135.8 expected=1135.8
+[PASS] T1 flash ED 459.4: actual=459.4 expected=459.4
+[PASS] T6 pro plateau 4.1145: actual=4.1145 expected=4.1145
+[PASS] T8 pro mass 0.0398: actual=0.0398 expected=0.0398
+[PASS] T2 final design k_SEI 1e-16 declared: actual=True expected=True
+[PASS] T2 x0.01 variant SEI@500 500.4 in log: actual=True expected=True
+[PASS] T7 no SEI kinetic override: actual=True expected=True
+[PASS] governed run-pyamm call total 203: actual=203 expected=203
+[PASS] BO t1 seed0 attaining trials: actual=25 expected=25
+[PASS] BO t1 seed1 attaining trials: actual=28 expected=28
+[PASS] BO t1 seed2 attaining trials: actual=21 expected=21
+[PASS] BO t2 seed0 attaining trials: actual=0 expected=0
+[PASS] BO t2 seed1 attaining trials: actual=0 expected=0
+[PASS] BO t2 seed2 attaining trials: actual=0 expected=0
+[PASS] BO t3 seed0 attaining trials: actual=0 expected=0
+[PASS] BO t3 seed1 attaining trials: actual=0 expected=0
+[PASS] BO t3 seed2 attaining trials: actual=0 expected=0
+[PASS] BO t4 seed0 attaining trials: actual=34 expected=34
+[PASS] BO t4 seed1 attaining trials: actual=33 expected=33
+[PASS] BO t4 seed2 attaining trials: actual=32 expected=32
+[PASS] BO t5 seed0 attaining trials: actual=0 expected=0
+[PASS] BO t5 seed1 attaining trials: actual=0 expected=0
+[PASS] BO t5 seed2 attaining trials: actual=0 expected=0
+[PASS] BO t6 seed0 attaining trials: actual=0 expected=0
+[PASS] BO t6 seed1 attaining trials: actual=0 expected=0
+[PASS] BO t6 seed2 attaining trials: actual=0 expected=0
+[PASS] BO t7 seed0 attaining trials: actual=0 expected=0
+[PASS] BO t7 seed1 attaining trials: actual=0 expected=0
+[PASS] BO t7 seed2 attaining trials: actual=0 expected=0
+[PASS] BO t8 seed0 attaining trials: actual=10 expected=10
+[PASS] BO t8 seed1 attaining trials: actual=5 expected=5
+[PASS] BO t8 seed2 attaining trials: actual=1 expected=1
+[PASS] BO t1 best objective: actual=514.13 expected=514.13
+[PASS] BO t2 best objective: actual=617.81 expected=617.81
+[PASS] BO t3 best objective: actual=442.45 expected=442.45
+[PASS] BO t4 best objective: actual=628.26 expected=628.26
+[PASS] BO t5 best objective: actual=626.87 expected=626.87
+[PASS] BO t6 best objective: actual=606.97 expected=606.97
+[PASS] BO t7 best objective: actual=577.15 expected=577.15
+[PASS] BO t8 best objective: actual=643.75 expected=643.75
+[PASS] BO t6 aligned trials: actual=50 expected=50
+[PASS] BO t6 aligned best objective: actual=594.64 expected=594.64
+[PASS] BO t6 aligned contract attained: actual=0 expected=0
+[PASS] BO t6 aligned Wh/L-only clears: actual=30 expected=30
+[PASS] BO t6 aligned safe trials: actual=0 expected=0
+[PASS] BO t6 aligned plateau (best design): actual=4.0065 expected=4.0065
+[PASS] BO t6 original contract attained: actual=0 expected=0
+[PASS] BO t6 original plateau (best design): actual=4.0065 expected=4.0065
+[PASS] ablation t2_r1_noceiling verdict: actual=False expected=False
+[PASS] ablation t5_r1_noceiling verdict: actual=True expected=True
+[PASS] ablation t6_r1_noceiling verdict: actual=False expected=False
+[PASS] ablation t1_r1_noforce verdict: actual=True expected=True
+[PASS] ablation t2_r1_noforce verdict: actual=False expected=False
+[PASS] ablation t3_r1_noforce verdict: actual=True expected=True
+[PASS] ablation t4_r1_noforce verdict: actual=True expected=True
+[PASS] ablation t7_r1_noforce verdict: actual=True expected=True
+[PASS] ablation t8_r1_noforce verdict: actual=True expected=True
+[PASS] ablation t2_r1_singlemodel verdict: actual=True expected=True
+[PASS] ablation t5_r1_singlemodel verdict: actual=True expected=True
+[PASS] ablation t6_r1_singlemodel verdict: actual=True expected=True
+[PASS] seed t1_r2 verdict: actual=True expected=True
+[PASS] seed t1_r3 verdict: actual=True expected=True
+[PASS] seed t2_r2 verdict: actual=True expected=True
+[PASS] seed t2_r3 verdict: actual=True expected=True
+[PASS] seed t3_r2 verdict: actual=True expected=True
+[PASS] seed t3_r3 verdict: actual=True expected=True
+[PASS] seed t4_r2 verdict: actual=True expected=True
+[PASS] seed t4_r3 verdict: actual=True expected=True
+[PASS] seed t5_r2 verdict: actual=True expected=True
+[PASS] seed t5_r3 verdict: actual=True expected=True
+[PASS] seed t6_r2 verdict: actual=True expected=True
+[PASS] seed t6_r3 verdict: actual=True expected=True
+[PASS] seed t7_r2 verdict: actual=True expected=True
+[PASS] seed t7_r3 verdict: actual=True expected=True
+[PASS] seed t8_r2 verdict: actual=True expected=True
+[PASS] seed t8_r3 verdict: actual=True expected=True
+[PASS] luna t1 verdict: actual=False expected=False
+[PASS] luna t2 verdict: actual=True expected=True
+[PASS] luna t3 verdict: actual=True expected=True
+[PASS] luna t4 verdict: actual=True expected=True
+[PASS] luna t5 verdict: actual=False expected=False
+[PASS] luna t6 verdict: actual=False expected=False
+[PASS] luna t7 verdict: actual=True expected=True
+[PASS] luna t8 verdict: actual=False expected=False
+[PASS] C1-T2 SEI@100 full design 487.9: actual=487.9 expected=487.9
+[PASS] C1-T2 SEI@500 full design 818.9: actual=818.9 expected=818.9
+[PASS] C1-T2 4C min potential -360.9 mV: actual=-360.9 expected=-360.9
+[PASS] C1-T3 full-design 5C/1C 94.1: actual=94.1 expected=94.1
+[PASS] C1-T3 standard-diffusivity 5C/1C 84.8: actual=84.8 expected=84.8
+[PASS] endorse HOMO C1OC(=O)OC: actual=-7.458 expected=-7.458
+[PASS] endorse HOMO C1=COC(=O): actual=-6.47 expected=-6.47
+[PASS] endorse HOMO C1CCS(=O)(: actual=-7.151 expected=-7.151
+[PASS] endorse HOMO C1COS(=O)(: actual=-7.601 expected=-7.601
+[PASS] CP2K HOMO C1OC(=O)OC: actual=-7.461 expected=-7.461
+[PASS] CP2K HOMO C1=COC(=O): actual=-6.319 expected=-6.319
+[PASS] CP2K HOMO C1CCS(=O)(: actual=-6.689 expected=-6.689
+[PASS] CP2K HOMO C1COS(=O)(: actual=-7.23 expected=-7.23
+[PASS] LG M50T capacity diff +0.45%: actual=0.45 expected=0.45
+[PASS] LG M50T RMSE 20.6 mV: actual=20.6 expected=20.6
+[PASS] portability t1_oa verdict: actual='achieved' expected='achieved'
+[PASS] portability t6_oa verdict: actual='achieved' expected='achieved'
+[PASS] portability t1_lc verdict: actual='achieved' expected='achieved'
+[PASS] portability t6_lc verdict: actual='achieved' expected='achieved'
+[PASS] replication t1_r2 verdict: actual='achieved' expected='achieved'
+[PASS] replication t1_r3 verdict: actual='achieved' expected='achieved'
+[PASS] replication t6_r2 verdict: actual='achieved' expected='achieved'
+[PASS] replication t6_r3 verdict: actual='achieved' expected='achieved'
+[PASS] citation keys all resolve: actual=[] expected=[]

@@ -1,0 +1,9 @@
+{
+  "action": "endorse",
+  "candidates": [
+    {"name": "LNMO-R6 (final architecture)", "smiles": "",
+     "endorsement": {"status": "skipped",
+       "reason": "real_compute=false (case meta): true DFT/MD endorsement (run-orca/run-md) not executed; no DFT/MD values fabricated. Screening-grade endorsement stands: LNMO 4.7 V high-voltage spinel (base parameter set LNMO.json), HiTrans-class electrolyte transport (sigma/t+/D domain estimates marked estimate), additive set FEC/VC/PES/DTD passed the three-model funnel (MACE-MP + CHGNet + xTB, PES dispute resolved)."}}
+  ],
+  "note": "Stage 5 true-compute endorsement skipped per meta.real_compute=false; conclusion-grade cell values come from DFN cell simulation (run-pyamm), not from true DFT/MD."
+}

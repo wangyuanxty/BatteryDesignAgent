@@ -1,0 +1,8 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {"name": "Chen2020-baseline", "role": "baseline characterization of the default NMC811/graphite system (no parameter changes): 1C discharge SPMe+DFN, calc-energy, 4C charge 45C lumped+plating, aging 100x1C@45C, nail run-tr q=10W"}
+  ],
+  "llm_reason": "Round 1 is full-protocol baseline characterization to localize gaps per metric before any parameter change; ED ceiling assessment runs alongside to decide whether material design (Stage 2 escalation) is needed at all."
+}

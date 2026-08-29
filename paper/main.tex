@@ -1,0 +1,94 @@
+%% ============================================================
+%% main.tex — When Design Decisions Go to the Agent
+%% A Governance Experiment in a Virtual Battery Factory
+%% Class: elsarticle (Elsevier; swap document class per target venue)
+%% ============================================================
+
+\documentclass[review]{elsarticle}
+
+%% ---- Packages ----
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+%% ---- Journal ----
+\journal{Management Science and Engineering (target venue)}
+
+%% ---- Title / Authors (fill in real names at typeset) ----
+\begin{document}
+
+\begin{frontmatter}
+
+\title{When Design Decisions Go to the Agent: A Governance Experiment in a Virtual Battery Factory}
+
+\author[inst1]{Naiming Xie}
+\author[inst1]{Yuan Wang}
+\author[inst1]{Mingshan Li}
+
+\affiliation[inst1]{organization={College of Economics and Management, Nanjing University of Aeronautics and Astronautics}, city={Nanjing}, country={China}}
+
+\begin{abstract}
+We report a controlled governance experiment in a virtual battery factory: the
+first system, to our knowledge, in which a single LLM agent spans the full chain
+of cell-design levers---electrolyte, separator, electrode, architecture,
+thermal---in one autonomous loop, and in which every verdict is computed rather
+than asserted. Eight scenario design tasks with absolute numeric contracts are
+given, under matched resources (same model, tools, task texts, and each
+condition's standard budget), to three
+decision-makers: a protocol-governed agent executing a five-stage multi-precision
+funnel---whose closing stage reserves true first-principles computation for the
+finalists---with mechanized adjudication and an evidence-chain audit ledger; a
+protocol-free agent on the same harness; and a Bayesian optimizer configured to
+the standard of the strongest comparable published agent framework. The governed
+agent achieves all eight contracts under two DeepSeek-generation LLMs and
+four of eight under a third, foreign-vendor model---whose four
+non-attainments are honest not-achieved verdicts, never yardstick
+adjustments. The Bayesian
+optimizer achieves three---exactly those whose bottlenecks are structural. The
+protocol-free agent achieves none within the same measurement space: of its
+seven self-reported successes, two rest on a lithium-metal cell outside the
+validated parameter sets and five dissolve under contract-caliber
+re-adjudication---shifted thresholds, substituted models, self-set physical
+parameters, altered calibers, missing criterion variables. Ablation
+decomposes the governance
+into task-dependent layers: the
+ceiling-assessment-to-material-escalation mechanism is causal for two of three
+material-bottleneck tasks, forced architecture exploration for one of six, and
+three-model heterogeneous voting is an unrealized premium in this suite. The simulation world is anchored to a production cell: the
+beginning-of-life $0.1$C discharge of a commercial LG M50T matches the calibrated
+parameter set to $0.45\%$ capacity and $20.6$ mV RMSE---a validation of the simulator's
+calibration against a production cell, distinct from any validation of the
+designs. We conclude that the core
+governance infrastructure for agent-mediated design is not the funnel but the
+yardstick: pre-registered contracts, code-mechanical judgment, and audit chains
+that make ``achieved'' a verifiable claim. The true-compute endorsement,
+executed for the flagship molecular finalists, confirms the screening
+verdicts by first principles in two independent codes (§5.8); and the
+protocol, packaged as a
+harness-independent declarative artifact, ran unchanged under three agent
+frameworks with identical contract outcomes (§5.7). The protocol,
+simulation library, adjudication layer, and experiment harnesses are open
+source at \url{https://github.com/wangyuanxty/BatteryDesignAgent}.
+\end{abstract}
+
+\begin{keyword}
+LLM agents \sep protocol governance \sep engineering design \sep contract attainment \sep mechanized adjudication \sep Bayesian optimization
+\end{keyword}
+
+\end{frontmatter}
+
+%% ---- Sections ----
+\input{sections/introduction.tex}
+\input{sections/literature.tex}
+\input{sections/framework.tex}
+\input{sections/experiments.tex}
+\input{sections/results.tex}
+\input{sections/discussion.tex}
+\input{sections/conclusion.tex}
+
+%% ---- Bibliography ----
+\bibliographystyle{elsarticle-num}
+\bibliography{paper}
+
+\end{document}

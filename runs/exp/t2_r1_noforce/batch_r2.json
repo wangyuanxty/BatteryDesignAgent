@@ -1,0 +1,35 @@
+[
+  {
+    "candidate": "V1 anode particle radius 3um",
+    "round": 2,
+    "outputs": [
+      "cell/r2_v1_1c_spme.json",
+      "cell/r2_v1_energy.json",
+      "cell/r2_v1_4c_dfn.json",
+      "cell/r2_v1_aging100_spme.json"
+    ],
+    "note": "ED 408.29 pass, SEI@100 446.47 pass, 4C min anode -0.1379 V fail (plated) but improved from baseline -0.192 V - finer anode particles are a valid plating lever (kept for later rounds). SEI@500 and lowT not yet measured in R2 (reserved for later rounds)"
+  },
+  {
+    "candidate": "V2 negative electrode thickness 100um (N/P up)",
+    "round": 2,
+    "outputs": [
+      "cell/r2_v2_1c_spme.json",
+      "cell/r2_v2_energy.json",
+      "cell/r2_v2_4c_dfn.json",
+      "cell/r2_v2_aging100_spme.json"
+    ],
+    "note": "ED 440.77 pass, but SEI@100 518.40 FAIL (>500) and 4C min anode -0.2482 V WORSE than baseline -0.192 V - thicker anode rejected on both counts (SEI tracks anode thickness; cathode saturates deeper at the 4.2 V cutoff). SEI@500 and lowT not yet measured in R2"
+  },
+  {
+    "candidate": "V3 negative electrode porosity 0.35",
+    "round": 2,
+    "outputs": [
+      "cell/r2_v3_1c_spme.json",
+      "cell/r2_v3_energy.json",
+      "cell/r2_v3_4c_dfn.json",
+      "cell/r2_v3_aging100_spme.json"
+    ],
+    "note": "ED 415.56 pass, SEI@100 463.74 pass, 4C min anode -0.0739 V fail (plated) but best improvement so far (baseline -0.192 -> -0.074) - porosity is the strongest plating lever found (kept and pushed further in later rounds). SEI@500 and lowT not yet measured in R2"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "candidate": "V7 N/P rebalance 1.16 (neg 100um, pos 66um)",
+    "round": 4,
+    "outputs": [
+      "cell/r4_v7_1c_spme.json",
+      "cell/r4_v7_energy.json",
+      "cell/r4_v7_4c_dfn.json",
+      "cell/r4_v7_aging100_spme.json",
+      "derived/r4_v7_sei500.json"
+    ],
+    "note": "ED 401.92 pass, cap 4.9348 Ah, but SEI@100 529.47 fail (>500), SEI@500 933.84 fail (>550, worse than baseline 777.9), 4C min anode -0.1954 V fail (plated), charge-in 0.2217 Ah. N/P rebalance hypothesis refuted: thickening the anode to keep it less lithiated does NOT reduce SEI - SEI max thickness tracks negative electrode thickness instead; plating not improved either"
+  },
+  {
+    "candidate": "V8 N/P rebalance 1.36 (neg 110um, pos 62um)",
+    "round": 4,
+    "outputs": [
+      "cell/r4_v8_1c_spme.json",
+      "cell/r4_v8_energy.json",
+      "cell/r4_v8_4c_dfn.json",
+      "cell/r4_v8_aging100_spme.json",
+      "derived/r4_v8_sei500.json"
+    ],
+    "note": "ED 372.40 pass, cap 4.5977 Ah, but SEI@100 547.32 fail, SEI@500 1012.77 fail (worse than baseline), 4C min -0.1668 V fail, charge-in 0.2170 Ah. Stronger rebalance also fails both SEI contracts; SEI max thickness scales monotonically with negative electrode thickness across 85.2/100/110 um (449/518-529/547 nm at 100cyc) - anode thickness is a losing direction for both SEI contracts"
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "candidate": "R8a_cutoff28_midV_probe",
+    "outputs": ["cell/r8_a_energy_dfn.json", "cell/r8_a_1c_dfn.json"],
+    "note": "R8a: lower cutoff 2.5 -> 2.8 V on R7 base. DFN midV 4.1029 -> 4.1073 (+0.0044 only), ED unchanged 1133.9. Marginal gain - kept as a small margin tweak, not the primary lever."
+  },
+  {
+    "candidate": "R8s1_kinetics",
+    "outputs": ["cell/r8_s1_4c45_dfn.json"],
+    "note": "R8s1: DFN 4C with posp 3.0 um + neg particle 2.0 um. Min anode potential +0.0398 V -> plating RESOLVED on DFN (the R6b SPMe regression did not transfer; DFN particle physics differs). T_max 333.80 K still 10.6 K over - kinetics helps heat only 2.2 K."
+  },
+  {
+    "candidate": "R8s2_eltrans",
+    "outputs": ["cell/r8_s2_4c45_dfn.json"],
+    "note": "R8s2: DFN 4C with electrolyte diffusivity 5e-10. Plating resolved (+0.0188) but T_max 339.07 K WORSE: better transport -> charge runs deeper before the 4.7 V cutoff -> more total heat (cutoff ratchet). Rejected."
+  },
+  {
+    "candidate": "R8s3_thinpos",
+    "outputs": ["cell/r8_s3_4c45_dfn.json"],
+    "note": "R8s3: DFN 4C with pos 70 um. Plating FAILS on DFN (min -0.0391 V, mid-charge dip) - the R6c SPMe fix does not transfer to DFN. Rejected."
+  },
+  {
+    "candidate": "R8s4_h100",
+    "outputs": ["cell/r8_s4_4c45_dfn.json"],
+    "note": "R8s4: DFN 4C with h=100. dT 17.81 -> 11.78 K (linear in 1/h, steady-state-dominated). Plating still fails (-0.0053). Cooling alone would need h~180 - beyond smartphone passive cooling; combined heat-reduction path taken in R9."
+  }
+]

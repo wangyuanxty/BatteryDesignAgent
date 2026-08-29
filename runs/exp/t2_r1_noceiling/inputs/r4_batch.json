@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "I Cool (h 10->100 W/m2/K, thin CC)",
+    "outputs": ["cell/r4_I_energy.json", "cell/r4_I_derived_sei.json", "cell/r4_I_derived_lowT.json", "cell/r4_I_4c45.json", "cell/r4_I_1c_spme.json"],
+    "note": "anode min -0.4337 vs r2A -0.4386 (+0.005 only): thermal lever is DEAD for plating - the 4C abort is a ~5 s transport event (charge step 5.3 s, T_max 322.7 K), too fast for cell-level cooling to act; the earlier Tmax-vs-anode-min correlation across candidates was confounded (cooler runs were simply earlier-abort runs). SEI500 786.4 (isothermal aging, ~unchanged). ED 454.1, SEI100 454.1, lowT 0.9919 all pass. Nominal 4.9401 Ah."
+  },
+  {
+    "candidate": "J CathPartUp (cathode particle 5.22->12.5 um, thin CC)",
+    "outputs": ["cell/r4_J_energy.json", "cell/r4_J_derived_sei.json", "cell/r4_J_derived_lowT.json", "cell/r4_J_4c45.json", "cell/r4_J_1c_spme.json"],
+    "note": "anode min -0.4455 (WORSE than r2A -0.4386): hypothesis rejected - bigger cathode particles did NOT abort the 4C charge earlier; the charge step ran LONGER (13.5 s vs 5.2 s baseline, 0.0498 Ah) and the anode excursion went deeper. 1C capacity collapses 4.95->3.32 Ah (cathode surface-area loss) - ED 376.4 still passes but SEI500 856.7 worse. Nominal 3.3156 Ah, 4C=13.26 A (129 A/m2, milder test - the negative result is even stronger in absolute terms)."
+  },
+  {
+    "candidate": "K TransDown (sigma 0.475, D 9e-11, t+ 0.2, thin CC)",
+    "outputs": ["cell/r4_K_energy.json", "cell/r4_K_derived_sei.json", "cell/r4_K_derived_lowT.json", "cell/r4_K_4c45.json", "cell/r4_K_1c_spme.json"],
+    "note": "DEGENERATE data point - transport-down collapses the 1C capacity to 1.16 Ah (nominal bookkeeping: 4C = 4.64 A = 45 A/m2 vs baseline 195). The 4C test never reached 4.2 V within the experiment window (t_end 7200 s, charge_cap 8.0 is a duration x C_rate bookkeeping artifact), so the mechanical plating pass (min +0.1178) is an artifact of the C-rate definition on a crippled cell, NOT a design success. ED 238.2 FAILS (< 327.18). SEI 68.0 nm is an artifact of the cell barely cycling. Transport-down direction rejected (mirrors B's transport-up rejection)."
+  },
+  {
+    "candidate": "L AnPorUp (anode porosity 0.25->0.35, thin CC)",
+    "outputs": ["cell/r4_L_energy.json", "cell/r4_L_derived_sei.json", "cell/r4_L_derived_lowT.json", "cell/r4_L_4c45.json", "cell/r4_L_1c_spme.json"],
+    "note": "BEST plating margin of all 13 candidates: anode min -0.3868 (vs r2A -0.4386, +0.052) - the anode-side electrolyte-potential-drop mechanism from R3's dose-response is confirmed in the favorable direction (lower tortuosity at the metric point). Charge step ran 8.4 s (0.0461 Ah) yet the excursion per unit charge is shallower. ED 476.7 (BEST of round, porosity removes active mass), SEI100 467.6, lowT 0.9944 all pass; DCR 0.199 mOhm (lowest measured). SEI500 811.3 still fails (vs 777.9 baseline). Nominal 4.9506 Ah, 4C=19.80 A (193 A/m2)."
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false (entry-0 contract): true DFT/MD endorsement (run-orca/run-md) skipped honestly. No DFT/MD values exist or are fabricated. The final design V27_combo carries DFN-precision cell-simulation endorsement only (round 10 evaluate, all five criteria pass)."
+}

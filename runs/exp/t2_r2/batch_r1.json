@@ -1,0 +1,20 @@
+[
+  {
+    "candidate": "baseline",
+    "round": 1,
+    "outputs": ["runs/exp/t2_r2/cell/r1_base_calc.json", "runs/exp/t2_r2/cell/r1_base_aging100.json", "runs/exp/t2_r2/derived/r1_base_sei500.json", "runs/exp/t2_r2/derived/r1_base_retention.json", "runs/exp/t2_r2/cell/r1_base_4c_dfn.json"],
+    "note": "ED 400.75 and SEI@100 449 pass; SEI@500 778 fails (>550); 4C plating (min ap -0.19V, charge acceptance ~0.18Ah)."
+  },
+  {
+    "candidate": "CEIL_ED",
+    "round": 1,
+    "outputs": ["runs/exp/t2_r2/cell/r1_ceil_ed_calc.json", "runs/exp/t2_r2/derived/r1_ceil_ed_retention.json", "runs/exp/t2_r2/cell/r1_ceil_ed_4c_spme.json"],
+    "note": "ED ceiling probe: 521.7 Wh/kg reachable. 4C still plates (min ap -0.43 V spme): thick+low-porosity alone does not fix fast charge; aging not run for this probe."
+  },
+  {
+    "candidate": "CEIL_RATE",
+    "round": 1,
+    "outputs": ["runs/exp/t2_r2/cell/r1_ceil_rate_calc.json", "runs/exp/t2_r2/derived/r1_ceil_rate_retention.json", "runs/exp/t2_r2/cell/r1_ceil_rate_4c_spme.json"],
+    "note": "Rate-optimized probe: plating-free at 4C (min ap +0.0045 V, marginal) but ED 289 < 327.18. Direction confirmed: combine thick-ED geometry with rate-optimized anode/electrolyte."
+  }
+]

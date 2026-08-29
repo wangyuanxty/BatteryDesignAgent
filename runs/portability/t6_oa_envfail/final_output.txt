@@ -1,0 +1,31 @@
+## Result: NOT ACHIEVED — environment failure (broken `run_shell` tool), no fabrication
+
+I completed all shell-independent protocol work and diagnosed a hard blocker in the harness.
+
+### What I determined (task parsing — correct and recorded in `log.jsonl` entry 0)
+
+| Decision layer | Metric | Threshold | Key |
+|---|---|---|---|
+| stage1 (molecular) | elimination lines | E ≤ 0 eV, HOMO ≤ −6 eV | max_energy_ev / max_homo_ev |
+| stage2 (cell) | volumetric ED | ≥ 950 Wh/L | energy_density_wh_l |
+| stage2 (cell) | voltage plateau | ≥ 4.1 V | midpoint_voltage_v |
+| stage2 (cell) | anode SEI @100 cyc | ≤ 500 nm | sei_thickness_nm_end |
+| stage3 (safety) | 4C max temp | ≤ 50 °C (323.15 K) | T_max_K |
+| stage3 (safety) | 4C plating | none | plated=false |
+
+**Starting point:** `start_stage = 2` (materials design). The binding constraint is the ≥4.1 V plateau — NMC811 (midpoint ≈3.6–3.8 V) cannot meet it, so a high-voltage **LNMO spinel system switch** is required; SEI ≤500 nm additionally needs film-forming additives (FEC/VC) and an aging-capable base.
+
+### The blocker (diagnosed, not assumed)
+
+The harness `run_shell` tool is **broken**: every command — `echo`, `python --version`, `.venv/Scripts/python.exe -c "import bda"`, `nonexistent_command`, `cmd.exe /c …`, absolute exe paths, redirect probes — returns `[stderr] /c: /c: Is a directory` and executes **nothing** (no stdout, no file side effects, no "command not found"). The harness executes `/c` (the MSYS C:-drive mount, a directory) as the executable and ignores the command string entirely. The real command `.venv/Scripts/python.exe -m bda run-pyamm --base Chen2020 --protocol 1C_discharge …` fails identically.
+
+With only the four tools (run_shell/read_file/write_file/list_dir) and delegation forbidden, there is **no execution path** — so no `bda` simulation, no `bda.store.append_entry`, no `log-evaluate`, no self-install, no deliverables could run.
+
+### What I produced (shell-independent, honest)
+
+- **`log.jsonl`** — entry 0 (criteria + `meta.freedoms` five-category parsing + environment failure record), the Stage-1 `plan` entry, and an honest `final` entry (`verdict: not achieved`, with an `escalation` record of the broken-shell diagnosis).
+- **`design_plan.md`** — full Stage-1 plan: objective decomposition, trade-off map, candidate strategy (LNMO system switch + FEC/VC funnel + architecture variants), budget, risk/fallback, domain references.
+
+### Honesty note (per the no-fabrication iron rule)
+
+No simulation value is reported anywhere, because none could be run. This is a **negative result from an environment defect, not a design failure** — the criteria parsing and Stage-1 planning are correct and replayable, and the case is cleanly resumable the moment the `run_shell` tool is fixed (entry 0 is already in place; the first command would be `import bda` self-check → LNMO baseline characterization).

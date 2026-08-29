@@ -1,0 +1,10 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {"struct": {"Negative particle radius [m]": 2.0e-6, "Positive particle radius [m]": 2.0e-6, "Total heat transfer coefficient [W.m-2.K-1]": 50.0}, "name": "Architecture A (kinetics+cooling)", "role": "smaller particles cut solid-diffusion overpotential (anti-plating), higher cooling h reduces T_max"},
+    {"struct": {"Electrolyte conductivity [S.m-1]": 1.8, "Cation transference number": 0.5, "Electrolyte diffusivity [m2.s-1]": 3.0e-10, "Total heat transfer coefficient [W.m-2.K-1]": 50.0}, "name": "Architecture B (transport+cooling)", "role": "high-transport electrolyte formulation reduces electrolyte polarization (anti-plating) and ohmic heat"},
+    {"struct": {"Negative particle radius [m]": 2.0e-6, "Positive particle radius [m]": 2.0e-6, "Electrolyte conductivity [S.m-1]": 1.8, "Cation transference number": 0.5, "Electrolyte diffusivity [m2.s-1]": 3.0e-10, "Total heat transfer coefficient [W.m-2.K-1]": 60.0}, "name": "Architecture C (combined)", "role": "kinetics + transport + liquid cooling, strongest anti-plating/thermal combination"}
+  ],
+  "llm_reason": "Baseline 4C fails plating (anode_potential_v min ~ -0.19V) and T_max (354.3K > 333.15K). Cause lives at cell scale (Stage 3): solid-diffusion and electrolyte-transport polarization plus limited cooling. Mass-neutral levers (particle size, electrolyte transport, cooling h) target both without sacrificing the 400.75 Wh/kg ED margin. Electrolyte values are formulation estimates (high-transport electrolyte, marked estimate)."
+}

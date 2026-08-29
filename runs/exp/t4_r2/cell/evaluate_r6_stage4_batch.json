@@ -1,0 +1,20 @@
+[
+  {
+    "candidate": "E3-finalist-stage4",
+    "round": 6,
+    "outputs": [
+      "cell/r5_E3_4c_dfn2.json"
+    ],
+    "note": "Stage-4 exam on finalist E3 (plan line 30: 4C/45C lumped + plating on finalists). Second independent DFN 4C_charge_45C run reproduces the verdict-grade result exactly: T_max 326.96 PASS (-6.19K vs 333.15); plated PASS (ap_min +0.0060V, 0/337 points negative). Deterministic solver; run-to-run identical to first exam (r5_E3_4c_dfn.json) - reproducibility confirmed"
+  },
+  {
+    "candidate": "E3-finalist-stage4",
+    "round": 6,
+    "outputs": [
+      "cell/r5_E3_1c_dfn.json",
+      "cell/r5_E3_energy_dfn.json",
+      "cell/r5_E3_retention_dfn.json"
+    ],
+    "note": "Finalist E3 DFN-grade confirmation of performance criteria (Stage 3 closing, DFN model for all): W1 retention 0.9938 PASS (DFN lowT soak 5.0078Ah / DFN 1C 5.0392Ah, >=0.95); W2 459.4465 PASS (>=327.18, +132.3); W3 936.8218 PASS (>=880, +56.8). T_max_K here is DFN 1C-discharge heating (299.6K), 4C verdict in the paired safety record"
+  }
+]

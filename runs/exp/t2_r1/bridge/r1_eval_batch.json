@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "Baseline Chen2020",
+    "outputs": [
+      "cell/r1_base_aging100.json",
+      "cell/r1_base_aging500.json",
+      "cell/r1_base_sei100.json",
+      "cell/r1_base_sei500.json",
+      "cell/r1_base_lowT.json",
+      "cell/r1_base_lowT_ret.json",
+      "cell/r1_base_1c_dfn.json",
+      "cell/r1_base_4c.json",
+      "cell/r1_base_energy.json"
+    ],
+    "note": "baseline gap vector: ED 400.8 pass; lowT retention 99.4% pass; SEI@100cyc 449.1 pass; SEI@500cyc 777.9 fail; 4C plated (anode potential min -0.192 V, charge accepted only 0.176 Ah before 4.2 V cut) fail; aging capacity climb 1.65->2.19 Ah is the known Li-inventory artifact, annotated."
+  }
+]

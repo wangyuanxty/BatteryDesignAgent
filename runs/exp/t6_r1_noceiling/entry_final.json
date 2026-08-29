@@ -1,0 +1,32 @@
+{
+  "action": "final",
+  "verdict": "not achieved",
+  "recommendation": "No single in-boundary Chen2020 (NMC811/graphite) design satisfies all five criteria. Achieved in-boundary: volumetric ED >= 950 Wh/L (ED-Compact B 951.7 / B-p 964.4 Wh/L) and SEI <= 500 nm after 100 cycles (404.6 / 417.7 nm; baseline 449.1 nm). Not achievable in-boundary (boundary: ceiling_escalation OFF, only task-named materials/systems, Chen2020 architecture/formulation + cooling h 10-25): (1) voltage plateau >= 4.1 V - cathode OCP caps midpoint at ~4.0 V (best measured 3.998 V, Rate-4C); requires 4.7 V-class cathode (LNMO-class midpoint 4.17 V) - system switch excluded; (2) plating-free 4C charge at ED >= 950 - the compaction that yields 950 Wh/L destroys 4C transport (all ED-passers plate at 4C, anode min -0.26 to -0.29 V); plating-free corner measured at ED 769 Wh/L (Rate-4C R1, anode min +0.0144 V, 4C acceptance 0.41 Ah before voltage limit); (3) T_max <= 50 C at 4C/45 C - best measured 336.4 K at max in-boundary cooling (Rate-4C-h25); heat rejection hA capped at 0.133 W/K (A=0.00531 m2 locked, h<=25) vs ~1.5+ W/K needed. Recommendation: ED-champion family ED-Compact B/B-p for the energy-density objective (derated fast charge, thermal envelope redesign required), or Rate-4C R1 as the fast-charge-capable design at 769 Wh/L. Full relaxation mapping in escalation.questions.",
+  "escalation": {
+    "rule": "three-strike",
+    "strikes": [
+      {"round": 1, "candidate": "Baseline/ED-Compact A/B/C", "failed metric": "midpoint_voltage_v 3.886-3.936 V (max 4.1)"},
+      {"round": 2, "candidate": "all 5 candidates (incl. B-p)", "failed metric": "midpoint_voltage_v 3.905-3.921 V; T_max_K 348-356 K at h=10; plated=true at ED>=950"},
+      {"round": 3, "candidate": "Rate-4C R1 / B-h25 / Baseline-h25", "failed metric": "midpoint_voltage_v 3.998 V max; T_max_K 338.7-345.2 K even at h=25"},
+      {"round": 4, "candidate": "Middle-M1/M2 / Rate-4C-h25", "failed metric": "plated at ED 840/923 Wh/L (plating-free ED ceiling ~770-840); T_max_K 336.4 K best at h=25"}
+    ],
+    "questions": [
+      {
+        "assumption": "system (Chen2020 NMC811/graphite reachable for each metric)",
+        "conclusion": "Partially. ED>=950 and SEI<=500 nm ARE reachable (measured). Plateau>=4.1 V is NOT: NMC811 OCP at ~50% SOC ~3.9-4.0 V caps midpoint_voltage_v at ~4.0 V (best measured 3.998 V at the lowest-IR design). 4C plating-free at ED>=950 is NOT: electrolyte transport (baseline Nyman2008 sigma/D/t+, locked) cannot support 4C through the compacted electrodes. T_max<=323.15 K at 4C/45C is NOT: measured heat load needs hA>=~1.5 W/K, in-boundary hA<=0.133 W/K.",
+        "why continue/stop": "system-level verdict is data-supported (12 candidates, 4 rounds); continuing blind architecture trials cannot change cathode OCP, electrolyte transport, or hA."
+      },
+      {
+        "assumption": "task boundary (ablation note restricts design to task-named materials/systems; execution with Chen2020 + architecture/formulation + cooling h 10-25 W/m2K, cooling area locked)",
+        "conclusion": "Boundary is explicit and unambiguous (ceiling_escalation OFF by task text; no materials/systems named). Executed as declared (recorded in entry 0 meta.freedoms). Each failing metric maps to an excluded lever: plateau -> high-voltage cathode system (system switch); 4C+ED -> electrolyte transport formulation (sigma/t+/D design); T_max -> smartphone-pouch cooling envelope (larger cooling surface area). The boundary was NOT misread - it was deliberately constrained by the ablation note.",
+        "why continue/stop": "expanding the boundary mid-run would violate the pre-registered contract; the correct response is honest negative reporting with the relaxation mapping."
+      },
+      {
+        "assumption": "metric (objective physically reachable within the boundary)",
+        "conclusion": "Unreachable as a whole. Reachable-if-relaxed (documented, thresholds NOT modified): plateau - if LNMO-class high-voltage cathode system allowed (anchor table: cell midpoint 4.17 V >= 4.1); T_max - if cooling surface area enlarged to smartphone-pouch scale (~0.02 m2 with h=25 -> hA=0.5 W/K) and heat reduced by a plating-free design, T_max ~= 323-324 K borderline, or ambient derating; 4C-no-plating at ED>=950 - if electrolyte transport parameters (sigma/t+/D) were designable or a high-capacity anode system (Si-type) allowed.",
+        "why continue/stop": "three metrics are boundary-locked material/formulation/thermal-envelope properties; further in-boundary rounds would be blind repetition (three-strike). Close as honest negative result."
+      }
+    ],
+    "decision": "close as negative result - verdict 'not achieved', with the in-boundary Pareto (ED+SEI achieved; plateau/4C-plating/T_max boundary-locked) and the per-metric relaxation mapping documented for the paper"
+  }
+}

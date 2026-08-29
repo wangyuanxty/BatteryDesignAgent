@@ -1,0 +1,6 @@
+[
+  {"candidate": "V4-NPup", "outputs": ["cell/r3_v4_1c_spme.json", "cell/r3_v4_5c_dfn.json", "cell/r3_v4_4c_spme.json", "cell/r3_v4_energy.json", "cell/r3_v4_derived.json"], "note": "N/P x1.3 alone: 4C charge acceptance up to 0.702 Ah, no plating (anode min +36 mV), retention 96.6% passes; but T_max 4C 341.4 K still fails (h left at 10)"},
+  {"candidate": "V5-cool", "outputs": ["cell/r3_v5_1c_spme.json", "cell/r3_v5_5c_dfn.json", "cell/r3_v5_4c_spme.json", "cell/r3_v5_energy.json", "cell/r3_v5_derived.json"], "note": "h=20 passes 5C T_max (325.3 K) and halves 4C T_max to 334.2 K - still 1.05 K over 333.15; retention 98.6% passes; 4C acceptance 0.569 Ah"},
+  {"candidate": "V6-NPup-cool", "outputs": ["cell/r3_v6_1c_spme.json", "cell/r3_v6_5c_dfn.json", "cell/r3_v6_4c_spme.json", "cell/r3_v6_energy.json", "cell/r3_v6_derived.json"], "note": "N/P x1.3 + h=20: 4C T_max 334.5 K still 1.4 K over; 5C T_max 326.7 passes; 4C acceptance 0.684 Ah; retention 96.6% passes"},
+  {"candidate": "V7-HiP-NPup-cool", "outputs": ["cell/r3_v7_1c_spme.json", "cell/r3_v7_5c_dfn.json", "cell/r3_v7_4c_spme.json", "cell/r3_v7_energy.json", "cell/r3_v7_derived.json"], "note": "high porosity + N/P + h=20: largest 4C acceptance 0.774 Ah, capacity 4.30 Ah, retention 96.9% passes; 4C T_max 334.5 K still 1.4 K over"}
+]

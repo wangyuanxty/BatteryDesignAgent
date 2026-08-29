@@ -1,0 +1,9 @@
+{
+  "Positive electrode thickness [m]": 5.7e-05,
+  "Negative electrode thickness [m]": 1.10e-04,
+  "Separator thickness [m]": 8.0e-06,
+  "Positive current collector thickness [m]": 1.0e-05,
+  "Negative current collector thickness [m]": 8.0e-06,
+  "Total heat transfer coefficient [W.m-2.K-1]": 35.0,
+  "SEI kinetic rate constant [m.s-1]": 1.0e-15
+}

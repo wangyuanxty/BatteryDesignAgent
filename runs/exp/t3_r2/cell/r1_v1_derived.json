@@ -1,0 +1,5 @@
+{
+  "capacity_retention_5c": 0.187,
+  "t_max_5c_k": 334.8039,
+  "derivation": "capacity_retention_5c = 5C capacity 0.9257 Ah / 1C capacity 4.9516 Ah (same parameter set, SKILL Stage 3 rate-scenario rule); t_max_5c_k = T_max_K of the 5C discharge run (25 C ambient, lumped thermal)"
+}

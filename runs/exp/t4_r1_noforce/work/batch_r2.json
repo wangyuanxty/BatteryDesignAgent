@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "V1_slim_overhead",
+    "outputs": ["cell/r2_v1_energy.json", "cell/r2_v1_1c_spme.json", "cell/r2_v1_lowT_spme.json", "bridge/derived_r2_v1.json", "cell/r2_v1_4C45_safety_spme.json"],
+    "note": "CC 16/12->8/6 um + separator 12->10 um: ED_vol 844.5->917.6 and ED_mass 400.8->488.2 pass; plating unchanged (anode min -0.4378 V, no kinetics lever in V1); T_max 332.36 K passes with only 0.8 K margin"
+  },
+  {
+    "candidate": "V2_transport_boost",
+    "outputs": ["cell/r2_v2_energy.json", "cell/r2_v2_1c_spme.json", "cell/r2_v2_lowT_spme.json", "bridge/derived_r2_v2.json", "cell/r2_v2_4C45_safety_spme.json"],
+    "note": "sigma x2.5/D x2/t+ 0.35 + particles 4/3 um: cut discharge heating (T_max 328.6) but extended 4C charge to 34 s and deepened anode swing (min -0.4578 V, worse than baseline -0.4385) -> still plated; ED_vol 878.5 just under 880 without overhead thinning"
+  },
+  {
+    "candidate": "V3_coldpro_1",
+    "outputs": ["cell/r2_v3_energy.json", "cell/r2_v3_1c_spme.json", "cell/r2_v3_lowT_spme.json", "bridge/derived_r2_v3.json", "cell/r2_v3_4C45_safety_spme.json"],
+    "note": "V1+V2+anode porosity 0.30: plating removed (anode min +0.0111 V, margin thin) but the now-unblocked 492 s 4C charge heats the cell to T_max 358.0 K -> fails; ED 517.9 Wh/kg / 953.6 Wh/L and retention 0.9951 pass with margin"
+  },
+  {
+    "candidate": "V4_coldpro_2",
+    "outputs": ["cell/r2_v4_energy.json", "cell/r2_v4_1c_spme.json", "cell/r2_v4_lowT_spme.json", "bridge/derived_r2_v4.json", "cell/r2_v4_4C45_safety_spme.json"],
+    "note": "V3+anode 85.2->90 um: capacity 5.32 Ah, ED 536.4/978.5 pass, no plating (+0.0067 V) but charge lengthens to 536 s -> T_max 360.9 K fails; N/P guard unnecessary once porosity fixed -> drop anode thickening"
+  }
+]

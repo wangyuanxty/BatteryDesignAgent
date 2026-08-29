@@ -1,0 +1,13 @@
+{
+  "action": "funnel",
+  "round": 5,
+  "passed": 1,
+  "rejected": 2,
+  "disputed": 0,
+  "detail": "R5 bracket closed the design: E3 passes ALL criteria at DFN verdict grade (T_max 326.96 with -6.19K margin; ap_min +0.0060V, 0/337 points negative - no plating window; W2 457.14/W3 932.12/W1 0.9938 at SPMe grade, DFN-grade confirmation W2 459.45/W3 936.82/W1 0.9938). E1 isolation datum: h80 alone passes T_max (330.39) but plating unchanged (-0.0803) - cooling and separator-interface depletion are orthogonal. E2 datum: transport-max alone nearly closes plating (-0.0158, 6.0%) but not fully. E3 = E2 + anode porosity 0.28 ((0.28/0.22)^1.5 = +43.6% effective anode-region transport) - final 0.078V lever. Finalist recommendation: E3 (compressed stack + small particles + high-transport high-transference blended-single-ion electrolyte + h=80 liquid cooling). Strike ledger final: strike 1 (geometry-only R2+R3) closed with escalation layer 1 (lever-class switch) - no second strike; escalation history recorded in final entry.",
+  "dispositions": [
+    {"name": "E1-h80-isolation", "status": "rejected", "reason": "passed T_max only (330.39); plating -0.0803 (15.1%) - isolation datum, cooling is not a plating lever"},
+    {"name": "E2-transportmax-h80", "status": "rejected", "reason": "passed T_max (327.77); plating -0.0158 (6.0%) - one porosity step short; superseded by E3"},
+    {"name": "E3-porheadroom", "status": "passed", "reason": "all five criteria pass at DFN verdict grade, two independent DFN 4C runs identical - finalist"}
+  ]
+}

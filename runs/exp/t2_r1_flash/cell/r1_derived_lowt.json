@@ -1,0 +1,6 @@
+{
+  "lowT_retention": 0.994285,
+  "note": "lowT_retention = r1_base_lowt.json:capacity_ah / r1_base_1c_dfn.json:capacity_ah (mechanical derivation, formula documented)",
+  "capacity_ah_lowT": 4.919111590528276,
+  "capacity_ah_25C": 4.94738704643111
+}

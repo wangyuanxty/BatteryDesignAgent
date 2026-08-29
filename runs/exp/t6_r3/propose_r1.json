@@ -1,0 +1,12 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {
+      "struct": {},
+      "name": "baseline_Chen2020",
+      "role": "baseline characterization of the anchor-table default system (task names no electrode system) + Stage-3 opening ceiling assessment anchor"
+    }
+  ],
+  "llm_reason": "start_stage=3: no materials named in task -> begin at cell scale with Chen2020 defaults; measure the four objective metrics (1C discharge+calc-energy for ED/plateau, 4C_charge_45C for plating/T_max, aging_1C_100cyc for SEI) as the ceiling-assessment baseline; expected plateau ~3.6 V vs required 4.1 V will show the NMC811 ceiling gap and trigger material escalation"
+}

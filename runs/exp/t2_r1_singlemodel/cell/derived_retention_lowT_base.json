@@ -1,0 +1,7 @@
+{
+  "retention_lowT_pct": 99.42658034815626,
+  "capacity_ah_lowT": 4.91939263521399,
+  "capacity_ah_25C": 4.947764086814652,
+  "derived_from": "cell/base_lowT_cold.json:capacity_ah / cell/base_1c_spme.json:capacity_ah * 100",
+  "formula": "lowT_capacity / 25C_capacity * 100"
+}

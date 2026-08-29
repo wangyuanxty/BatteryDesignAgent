@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "E3_Rp170_balanced",
+    "outputs": [
+      "cell/r7_E3_1c_spme.json",
+      "cell/r7_E3_energy.json",
+      "cell/r7_E3_4c_spme.json",
+      "cell/r7_E3_aging_spme.json"
+    ],
+    "note": "E3: E1 + positive particle radius 100->170 nm. 4C charge 1245.3 s at 18 A (runner cap metric 1.3836 Ah = duration x 4/3600; true charge 6.05 mAh/cm2) - plated (min -0.23716). T 319.14 PASS, SEI 118.79 PASS, ED 1130.71 PASS, mid 4.2973 PASS. Diagnostic corrections this round: (1) my earlier reading of the anode bulk stoich 0.525 at the plunge was a UNITS BUG - negative concentration divided by the positive c_max 63104; against the negative c_max 33133 the anode average stoich at t_ch 1215 s is 0.9997 - the anode IS fully saturated (swing 0.913 x Q_a = 5.92 mAh/cm2 -> 1217 s, exact match). (2) The R5-era 'anode saturation' theory is CONFIRMED; the salt-depletion theory is overturned (the electrolyte profile is frozen from t_ch 100 s onward, min 2045 mol/m3 at the anode side - never depleted). (3) The R6/R7-era 'quasi-steady surface overshoot' theory is overturned: in this SPMe the X-averaged positive particle surface concentration EQUALS the average particle concentration at every sample (no quasi-steady lag), so the OCP uses the BULK stoich and the R_p is empirically dead for the trip timing (E1 100 nm vs E3 170 nm: trips 1246.0 vs 1245.3 s). Mechanism: the 4C charge trips at 4.7 V only when the cathode BULK strips to ~0.01-0.03 (the OCP_c caps at 4.696 < 4.7, so the trip needs the end-of-charge eta ~0.05-0.12) - with Q_c 7.22 that is ~0.97-0.99 Q_c = 6.99-7.15 mAh/cm2 -> 1438-1471 s, LONG after the anode-full point (1217 s) -> the anode saturates -> the potential plunge -> the plating -> the V spike -> the trip. The fix: bulk-capacity balance - the trip swing (~0.97-0.99 Q_c) plus margin must fit inside the anode charge-room (0.10 Q_a + S_dis; the clamp-tail discharge gives S_dis ~ 0.82 Q_a)."
+  },
+  {
+    "candidate": "E4_Rp150_sensitivity",
+    "outputs": [
+      "cell/r7_E4_1c_spme.json",
+      "cell/r7_E4_energy.json",
+      "cell/r7_E4_4c_spme.json",
+      "cell/r7_E4_aging_spme.json"
+    ],
+    "note": "E4: sensitivity, R_p 150 nm. Identical to E3 within noise (charge 1245.5 s, plated min -0.23716, T 319.14 PASS, SEI 118.79 PASS, ED 1130.72 PASS, mid 4.2973 PASS). Empirically confirms the R_p insensitivity (the bulk-stoich OCP in this SPMe)."
+  }
+]

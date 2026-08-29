@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "lnmo_r7_h400_d5",
+    "outputs": ["cell/r7_d5_1c_dfn.json", "cell/r7_d5_energy.json", "cell/r7_d5_4c_dfn.json"],
+    "note": "DFN probe A (h=400, r_neg 3.5 um unchanged, D_e 5e-10 constant). ALL FOUR measured criteria PASS at DFN: ED_vol = 1135.8 Wh/L (+19.6%); midpoint_voltage_v = 4.1085 V (+8.5 mV - the electrolyte-diffusivity lever recovered the through-plane depletion sag); 4C T_max_K = 321.62 K (margin 1.53 K, h=400 handles the DFN ~6 W heat load); anode_potential_v min = +0.00339 V -> plated = false (D_e 5e-10 added +22.7 mV vs the R6 default-D_e value of -19.3 mV - the end-of-charge dip is transport-dominated, not purely kinetic). SEI pending: DFN aging run on this candidate's params is round 8. WINNER candidate of round 7."
+  },
+  {
+    "candidate": "lnmo_r7_h400_nr30",
+    "outputs": ["cell/r7_nr30_1c_dfn.json", "cell/r7_nr30_energy.json", "cell/r7_nr30_4c_dfn.json"],
+    "note": "DFN probe B (h=400, r_neg 3.0 um, default D_e). FAILS: midpoint_voltage_v = 4.0844 V < 4.1 (radius reduction COSTS 13 mV on the DFN midpoint vs R6 4.0974 at r=3.5 - smaller particles worsen the through-plane depletion profile, counterintuitive direction recorded); 4C anode_potential_v min = -0.01605 V -> plated = true (r_neg 3.0 alone only recovered 3.2 mV of the -19.3 mV dip - the plating fix needs the transport lever). T_max_K = 322.06 K PASS (h=400). Direction dropped: r_neg 3.0 has no net benefit and one clear cost."
+  },
+  {
+    "candidate": "lnmo_r7_combo",
+    "outputs": ["cell/r7_combo_1c_dfn.json", "cell/r7_combo_energy.json", "cell/r7_combo_4c_dfn.json"],
+    "note": "DFN probe C (h=400, r_neg 3.0 um, D_e 5e-10). FAILS by a hair on midpoint: midpoint_voltage_v = 4.0999 V < 4.1 (-0.1 mV - the r_neg 3.0 penalty on the depletion profile eats most of the D_e gain; 4.0999 vs 4.1085 for the same D_e at r=3.5). Everything else PASSES: ED_vol = 1138.6 Wh/L; T_max_K = 321.62 K; anode_potential_v min = +0.01174 V -> plated = false (largest plating margin of the round, but the criterion set is conjunctive - one 0.1 mV miss is still a fail, recorded without relaxation)."
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "action": "plan",
+  "update": true,
+  "reason": "three-strike: SEI@500 <= 550 nm unreachable across 3 measured rounds (R3 coating kinetics x0.4 -> 745.7; R4 architecture N/P rebalance -> 933.8/1012.8, worse; R5 strongest coating x0.1 -> 701.4 and system switch OKane2022 -> 1067.7, worse). Growth-law analysis: ec-reaction-limited SEI cannot saturate (grown regime j_sei = F*c0*k_exp/(1+L*k_exp/D_ec) -> F*c0*D_ec/L); measured minimum growth ratio 100->500cyc is x1.68 (F1); k-saturation floor L(100) ~385 nm (F2) -> L(500) >= ~650 nm for any sanctioned design",
+  "candidate_strategy": "stop blind SEI tuning. F1 (negative particle radius 3 um + negative porosity 0.42 + ceramic coating k_SEI x0.4, Chen2020 base) locked as best-design candidate: 4 of 5 criteria measured pass (ED 435.44 Wh/kg, SEI@100 439.5 nm, lowT retention 99.45%, 4C min anode +0.0071 V no plating). Close with three-strike questioning documented in the final entry's escalation field; thresholds NOT relaxed",
+  "budget_allocation": "remaining budget -> closing only: endorse (skip, real_compute=false), final entry with escalation, render, deliverables, verify-deliverables"
+}

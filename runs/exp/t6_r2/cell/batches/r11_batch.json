@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "R11a_negp15",
+    "outputs": ["cell/r11_a_4c45_dfn.json"],
+    "note": "R11a: negative particle 2.0 -> 1.5 um + A=0.0106 + h=100. Plating margin improved to +0.0400 V (best so far); T_max 324.11 K, still 0.96 K over 323.15."
+  },
+  {
+    "candidate": "R11b_h120",
+    "outputs": ["cell/r11_b_4c45_dfn.json"],
+    "note": "R11b: A=0.0106 + h=120 on negpart 2.0 base. T_max 323.50 K, 0.35 K over; plating False (+0.0267)."
+  },
+  {
+    "candidate": "R11c_negp15_h120",
+    "outputs": ["cell/r11_c_4c45_dfn.json"],
+    "note": "R11c: negpart 1.5 + A=0.0106 + h=120. T_max 323.31 K - only 0.16 K over budget; plating False with +0.039 V margin. One final cooling step needed."
+  }
+]

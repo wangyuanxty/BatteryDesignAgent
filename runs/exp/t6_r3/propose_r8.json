@@ -1,0 +1,22 @@
+{
+  "action": "propose",
+  "round": 8,
+  "candidates": [
+    {
+      "struct": {"Positive electrode thickness [m]": 6.0e-05, "SEI kinetic rate constant [m.s-1]": 5.0e-14, "Total heat transfer coefficient [W.m-2.K-1]": 100.0, "EC initial concentration in electrolyte [mol.m-3]": 2000.0},
+      "name": "V21_final",
+      "role": "final fusion: EC 2000 (SEI 394.5) + h 100 (T_max 322.26) — combines both margins from V17/V20"
+    },
+    {
+      "struct": {"Positive electrode thickness [m]": 6.0e-05, "SEI kinetic rate constant [m.s-1]": 5.0e-14, "Total heat transfer coefficient [W.m-2.K-1]": 120.0, "EC initial concentration in electrolyte [mol.m-3]": 2000.0},
+      "name": "V22_h120",
+      "role": "thermal margin probe: h 120 on V21 platform"
+    },
+    {
+      "struct": {"Positive electrode thickness [m]": 6.0e-05, "SEI kinetic rate constant [m.s-1]": 5.0e-14, "Total heat transfer coefficient [W.m-2.K-1]": 100.0, "EC initial concentration in electrolyte [mol.m-3]": 1500.0},
+      "name": "V23_ec1500",
+      "role": "SEI margin probe: EC 1500 (1.5 M) on V21 platform"
+    }
+  ],
+  "llm_reason": "Round-7 attribution: EC concentration is the dominant SEI lever (V17: 606.2->394.5 nm, j_sei proportional to c_ec_0 confirmed empirically); U_sei (546.3) and V_bar (507.9) active but weak. V17 (EC 2000, h 80) and V20 (EC 2500 + U_sei 0.38, h 100) both pass all five criteria. Final round fuses the two: V21 = EC 2000 + h 100 (both margins, T_max 322.26 K / SEI 394.5 nm expected); V22 = h 120 (extra thermal margin); V23 = EC 1500 (extra SEI margin). Winner goes to DFN-precision verification (--mode dfn) before endorsement."
+}

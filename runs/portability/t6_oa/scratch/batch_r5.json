@@ -1,0 +1,5 @@
+[
+  {"candidate": "LNMO-DFN-D1 transport", "round": 5, "outputs": ["cell/r5_d1_4c.json"], "note": "DFN 4C: smaller anode particles + sigma1.8 fix plating (anode +0.0415V) but T_max 325.79K still over (energy/SEI not yet run)"},
+  {"candidate": "LNMO-DFN-D10 cooling-300", "round": 5, "outputs": ["cell/r5_d10_4c.json"], "note": "h=300: T_max 322.66K pass, anode +0.0433 pass (plating safe)"},
+  {"candidate": "LNMO-DFN-D11 cooling-400", "round": 5, "outputs": ["cell/r5_d11_energy.json", "cell/r5_d11_4c.json", "cell/r5_d11_aging.json"], "note": "final: all 5 criteria pass under DFN (ED 1260, plateau 4.131, T_max 321.68K, no plating, SEI 193.6nm)"}
+]

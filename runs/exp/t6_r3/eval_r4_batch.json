@@ -1,0 +1,42 @@
+[
+  {
+    "candidate": "V5_np_up",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r4_V5_np_up_1c.json",
+      "runs/exp/t6_r3/cell/r4_V5_np_up_aging.json",
+      "runs/exp/t6_r3/cell/r4_V5_np_up_energy.json",
+      "runs/exp/t6_r3/cell/r4_V5_np_up_4c.json"
+    ],
+    "note": "N/P 1.12: plating dip halved (amin -0.0880 V) and ED 1076.7 Wh/L; SEI worsened to 791.6 nm; T_max 329.97 K"
+  },
+  {
+    "candidate": "V6_negpor",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r4_V6_negpor_1c.json",
+      "runs/exp/t6_r3/cell/r4_V6_negpor_aging.json",
+      "runs/exp/t6_r3/cell/r4_V6_negpor_energy.json",
+      "runs/exp/t6_r3/cell/r4_V6_negpor_4c.json"
+    ],
+    "note": "neg porosity 0.35: amin -0.1693 marginal, SEI 763.2 nm, T_max 329.86 K; insufficient"
+  },
+  {
+    "candidate": "V7_sep",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r4_V7_sep_1c.json",
+      "runs/exp/t6_r3/cell/r4_V7_sep_aging.json",
+      "runs/exp/t6_r3/cell/r4_V7_sep_energy.json",
+      "runs/exp/t6_r3/cell/r4_V7_sep_4c.json"
+    ],
+    "note": "separator 8um/0.55: ED 1025.9 Wh/L; plating slightly worse (amin -0.1815), SEI 753.4 nm unchanged; separator lever dropped"
+  },
+  {
+    "candidate": "V8_transport_cooling",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r4_V8_transport_cooling_1c.json",
+      "runs/exp/t6_r3/cell/r4_V8_transport_cooling_aging.json",
+      "runs/exp/t6_r3/cell/r4_V8_transport_cooling_energy.json",
+      "runs/exp/t6_r3/cell/r4_V8_transport_cooling_4c.json"
+    ],
+    "note": "sigma=2.0/t+=0.5/h=50: T_max 323.69 K still fails (transport heat offsets cooling benefit vs h=50 alone 322.72 K); amin -0.208; transport combo dropped for T_max"
+  }
+]

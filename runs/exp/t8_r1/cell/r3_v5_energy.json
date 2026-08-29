@@ -1,0 +1,22 @@
+{
+  "capacity_ah": 5.066494489643765,
+  "energy_wh": 18.526270261058727,
+  "mass_kg": 0.031276783824,
+  "energy_density_wh_kg": 592.3329702091279,
+  "volume_m3": 1.8978960000000003e-05,
+  "energy_density_wh_l": 976.1478111054938,
+  "thickness_m": 0.00018480000000000002,
+  "midpoint_voltage_v": 3.887225772424075,
+  "dcr_ohm": 0.0009524814760492716,
+  "power_density_w_kg": 141713.9993531302,
+  "layer_kg_m2": {
+    "positive_electrode": 0.13563396,
+    "negative_electrode": 0.09176466,
+    "positive_cc": 0.021599999999999998,
+    "negative_cc": 0.05376,
+    "separator": 0.0017865000000000001
+  },
+  "area_m2": 0.10270000000000001,
+  "electrolyte_included": false,
+  "note": "电解液不计入质量与体积（参数集缺密度）"
+}

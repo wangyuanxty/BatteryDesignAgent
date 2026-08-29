@@ -1,0 +1,16 @@
+# Design FMEA (qualitative) — VBF-T4R2-DFMEA-01
+Case t4_r2 · finalist E3-porheadroom · qualitative version based on simulation signals · 2026-08-26
+
+> Qualitative S/O ratings derived from simulation-signal magnitudes vs thresholds. Rated "qualitative version, based on simulation signals"; complete FMEA (process/supplier failures) is "N/A (beyond pure simulation boundary)". No numbers from memory — signals cited from output files.
+
+| Failure mode | Failure cause | Simulation signal (detectability basis) | Severity (qual.) | Occurrence (qual.) | Design-side mitigation |
+|---|---|---|---|---|---|
+| Negative-electrode plating during 4C fast charge | separator-interface salt depletion → anode surface potential vs Li⁰ dips below 0 during end-of-charge (established in R2/R3 diagnostics; geometry levers insufficient) | `anode_potential_v` min = **+0.0060 V** (only 6 mV above onset); 0/307 points negative in stage-4 exam | Medium (passes, but razor-thin margin) | Low (identical in 2 independent DFN runs; levers deliberately pushed: anode porosity 0.28, t⁺ 0.6, σ 1.6 S/m) | Keep 4C charge ≤ 0.59 Ah window as specified; do NOT raise anode porosity above 0.28 or drop electrolyte transport; if pack integration allows, re-verify with further anode margin; production control on porosity/transference targets |
+| Thermal-runaway risk at 4C/45 °C | 4C charge + pre-condition discharge heating at 45 °C ambient | T_max **326.96 K** vs 333.15 (margin 6.19 K; h=80 liquid cooling required) | Medium | Low (margin stable across 2 runs; h lever measured −6.1 K per +20 units in R4) | Mandate liquid-class cooling (h ≈ 80 W/(m²·K)); derate to 3C if h < 50; monitor T during pack validation |
+| Electrolyte oxidative decomposition | charged positive surface vs electrolyte HOMO (voltage window 4.2 V) | no true-compute HOMO/IE-EA data (Stage 5 skipped, real_compute=false); only window limit 4.2 V as signal | Medium (qualitative — not computed) | Medium (qualitative — not computed) | 4.2 V limit set as designed; recommend true-compute HOMO check of electrolyte formulation before production (beyond this session's boundary) |
+| Insufficient capacity / energy | design misses ED thresholds | margins: +132.3 Wh/kg, +56.8 Wh/L, retention +4.6 ppt (all PASS) | Low | Low | margins re-verified at DFN grade; keep compression/porosity spec |
+| Cold-performance beyond −20 °C | rate capability below spec point | verified only at 253.15 K soak (retention 0.9938 at 1C); electrolyte σ/D are flat-in-T in this parameter set — real electrolytes worsen below −20 °C | Low at spec point | Medium beyond spec (simulation boundary — physical testing required) | qualifying below −20 °C or above 45 °C requires physical experiment (N/A in sim); noted in DVPR |
+
+## Conclusion
+
+Highest-risk items: (1) plating margin 6 mV and (2) thermal margin 6.19 K — both PASS but are the binding margins; both mitigations are implemented in the final design (anode-porosity + transport electrolyte for plating; h=80 cooling for thermal) and are stable across two independent DFN runs. Full process/supplier-level FMEA: N/A (beyond pure simulation boundary).

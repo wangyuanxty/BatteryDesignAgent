@@ -1,0 +1,19 @@
+{
+  "action": "propose",
+  "round": 5,
+  "candidates": [
+    {
+      "name": "V8_dfn_verify",
+      "role": "DFN-grade verification of the V8 deep-transport design (h=40) on Chen2020: full judged metric set at DFN precision"
+    },
+    {
+      "name": "V8_coldstart_check",
+      "role": "honesty check: same design with Initial temperature 253.15 K (true -20C thermal equilibrium) — guards against the protocol's warm-start artifact"
+    },
+    {
+      "name": "V8_OKane2022_recheck",
+      "role": "robustness check: same overrides on the OKane2022 base (Arrhenius electrolyte + SiOx-class anode parameterization) — the design must not be an artifact of one parameter set"
+    }
+  ],
+  "llm_reason": "R4 SPMe probes selected V8 (h=40): Chen2020 SPMe T_max 330.67 K, anode +22.6 mV. Before closing, verify at DFN precision and run the two honesty/robustness checks committed in the plan (risk items 1-2): cold-start lowT and OKane2022 re-validation. No new design levers in this round; candidates are verification configurations."
+}

@@ -1,0 +1,7 @@
+[
+  {
+    "candidate": "R7_final_merge",
+    "outputs": ["cell/r7_final_energy_spme.json", "cell/r7_final_1c_spme.json", "cell/r7_final_4c45.json", "cell/r7_final_aging.json"],
+    "note": "R7 merged SPMe candidate: neg 110 um + neg particle 2.5 um + h=50 + D_ec 5e-19 + k_sei 3e-13 (harmful R5 levers t+ 0.4 and posp 3.0 um reverted per R6 attribution). SPMe evaluation: ED 1143.9 PASS, midV 4.2004 PASS, T_max 323.51 FAIL (0.36 K over on SPMe), plated PASS (min +0.0223 V), SEI 433.3 PASS. DFN cross-check of the same candidate (cell/r7_final_energy_dfn.json, cell/r7_final_4c45_dfn.json) is more pessimistic: midV 4.1029, T_max 335.96 K, min -0.0053 V -> drove the DFN re-design in R8-R12."
+  }
+]

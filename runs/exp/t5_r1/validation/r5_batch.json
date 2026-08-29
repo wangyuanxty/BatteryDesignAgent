@@ -1,0 +1,10 @@
+[
+  {"candidate": "R5A +separator - Chen2020", "outputs": ["cell/r5a_chen_4c_dfn.json", "cell/r5a_chen_energy.json"], "note": "ED 581.7 passes; T_max 332.42 passes at h=60; anode min -0.054 still plated. Separator thinning helps T more than plating."},
+  {"candidate": "R5A +separator - OKane2022", "outputs": ["cell/r5a_okane_4c_dfn.json", "cell/r5a_okane_energy.json"], "note": "ED 579.7 passes; T_max 333.93 fails by 0.78 K; anode -0.053 plated."},
+  {"candidate": "R5B +neg porosity 0.40 - Chen2020", "outputs": ["cell/r5b_chen_4c_dfn.json", "cell/r5b_chen_energy.json"], "note": "ED 596.1 passes; T_max 331.57 passes; anode -0.035 still plated (10x better than R3D)."},
+  {"candidate": "R5B +neg porosity 0.40 - OKane2022", "outputs": ["cell/r5b_okane_4c_dfn.json", "cell/r5b_okane_energy.json"], "note": "ED 594.0 passes; T_max 333.09 passes by 0.06 K; anode -0.033 plated."},
+  {"candidate": "R5C +sigma 2.0 - Chen2020", "outputs": ["cell/r5c_chen_4c_dfn.json", "cell/r5c_chen_energy.json"], "note": "ED 596.4 passes; T_max 331.19 passes; anode -0.034 plated."},
+  {"candidate": "R5C +sigma 2.0 - OKane2022", "outputs": ["cell/r5c_okane_4c_dfn.json", "cell/r5c_okane_energy.json"], "note": "ED 594.3 passes; T_max 332.71 passes; anode -0.032 plated."},
+  {"candidate": "R5D +diffusivity 4.5e-10 - Chen2020", "outputs": ["cell/r5d_chen_4c_dfn.json", "cell/r5d_chen_energy.json"], "note": "Best: ED 596.8 passes; T_max 330.36 passes; anode -0.024 still plated but 12x better than R3D. Transport levers saturating; next target electrode profile (slim cathode + N/P via anode)."},
+  {"candidate": "R5D +diffusivity 4.5e-10 - OKane2022", "outputs": ["cell/r5d_okane_4c_dfn.json", "cell/r5d_okane_energy.json"], "note": "Best: ED 594.7 passes; T_max 331.89 passes; anode -0.021 plated."}
+]

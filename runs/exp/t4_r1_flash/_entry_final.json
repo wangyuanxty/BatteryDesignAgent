@@ -1,0 +1,15 @@
+{
+  "action": "final",
+  "recommendation": "B7_ThinCellE2_h40 (FINAL): NMC811/graphite (Chen2020) cell — 60 um positive / 68 um negative electrode thickness, 8 um separator, 10/6 um current collectors, C_nom 3.93 Ah (true 1C), electrolyte sigma=2.0 S/m, D=5e-10 m2/s, t+=0.60, forced-air cooling h=40 W/m2K. DFN-confirmed metrics (model_used=DFN, no fallback): -20C 1C retention 0.9929 (>= 0.95), gravimetric ED 460.1 Wh/kg (>= 327.18), volumetric ED 899.3 Wh/L (>= 880), 4C/45C charge plating-free (anode potential min +0.019 V > 0, plated=false), T_max 329.6 K (<= 333.15), overcharge 0.5C to 4.7V without thermal runaway (triggered=false, T_max 300.7 K). Stage 2 funnel: FEC/VC additive candidates passed elimination lines (2 passed / 0 rejected).",
+  "verdict": "achieved",
+  "note": "unchecked criteria max_energy_ev / max_homo_ev are Stage-1 molecular elimination lines; funnel JSON reports per-candidate energy_ev (no max_* aggregate keys) so log-evaluate cannot mechanically check them — funnel entry records 2 passed / 0 rejected with strongly negative energies; flagged here for reviewer transparency.",
+  "self_check": {
+    "fabricated_values": "none — every conclusion value read from tool output files (DFN/SPMe sims, calc-energy, run-tr)",
+    "hidden_failures": "none — full trail logged: R1 ED_L 843<880 + plated, R2 A1/A2/A3 plated, R3 B1/B3 T_max 350.6/342.3 K, R4 B4 333.83 K (0.68 K over), B5 335.85 K; final margin +3.36 K",
+    "overclaiming": "claims bounded to DFN precision; SPMe-vs-DFN spread reported; retention 0.9929 not inflated",
+    "circular_reasoning": "none — plating cause localized by lever isolation (electrolyte transport fixed it; thickness/particle levers measured ineffective), T-independence of Chen2020 electrolyte transport measured via parameter introspection",
+    "survivorship_bias": "none — all failed candidates reported with values and cause",
+    "fabricated_references": "none — plan cites real sources (Zhang2002 JPS 115:137; Smart1999 JES 146:486; Xu2004 Chem Rev 104:4303; Jaguemont2016 Appl Energy 164:99; Chen2020 JES 167:080534; Nyman2008 Electrochim Acta 53:6356)",
+    "unreported_uncertainty": "flagged — unchecked molecular-line keys, skipped DFT/MD endorsement, parameter-set T-independence as the reason retention is trivially met, all stated"
+  }
+}

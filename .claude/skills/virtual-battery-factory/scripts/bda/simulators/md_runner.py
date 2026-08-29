@@ -493,7 +493,7 @@ def _run_mace_md(box: dict, t_ns: float) -> dict:
         workdir = Path(td)
         frames: list[Atoms] = []
         energies: list[float] = []
-        dyn = Langevin(atoms, timestep=1.0 * units.fs, temperature_K=298.15, friction=0.01)
+        dyn = Langevin(atoms, timestep=1.0 * units.fs, temperature_K=298.15, friction=0.01, fixcm=False)
         dyn.attach(lambda: frames.append(atoms.copy()), interval=_NSTXOUT)
         dyn.attach(lambda: energies.append(atoms.get_potential_energy()), interval=_NSTXOUT)
         # chunked run with progress reporting (1% granularity, ETA) — observability

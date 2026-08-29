@@ -1,0 +1,5 @@
+{
+  "action": "final",
+  "recommendation": "Final design: V4 Margin-fix on Chen2020 base (NMC/graphite). Parameters: positive 42 um eps 0.40 r 0.8 um; negative 58 um eps 0.38 r 1.0 um; separator 12 um; Al 16 um / Cu 12 um collectors; high-transport electrolyte sigma=2.4 S/m, D=3.5e-10 m2/s, t+=0.5; cooling h=100 W/m2/K. Measured (all DFN, evidence in evaluate R2): capacity 3.438 Ah >= 2.0; 5C retention 0.987 >= 0.95; power density 111807 W/kg >= 4000; T_max 321.94 K (48.8 C) <= 333.15 K; plated=false (anode potential min +22.6 mV). Conservative alternative: V5 (anode-geometry-only fix, plated=false +16.0 mV). Honest notes: (1) 4C CC charge phase delivers 0.617 Ah before hitting the 4.2 V cutoff (slow cathode solid diffusion 4e-15 m2/s -> surface U_pos rise); a real charger would continue in CV; no plating occurs in the CC phase. (2) Power density is the contract-caliber theoretical peak P=Voc^2/4R/mass. (3) Cycle life not simulated (no aging criterion in task). No three-strike escalation needed (objective achieved in 3 rounds).",
+  "verdict": "achieved"
+}

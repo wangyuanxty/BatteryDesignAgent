@@ -1,0 +1,12 @@
+[
+  {
+    "candidate": "lnmo_r8_final",
+    "outputs": ["cell/r8_final_1c_dfn.json", "cell/r8_final_energy_dfn.json", "cell/r8_final_aging_dfn.json", "cell/r8_final_4c_dfn.json"],
+    "note": "ROUND-7 WINNER, full five-criteria confirmation battery at DFN from one params file (h=400, Ln 1.022e-4, r_neg 3.5e-6, c_ec0 2270.5, D_ec 1e-18, D_e 5e-10): ED_vol = 1135.8 Wh/L (+19.6%); midpoint_voltage_v = 4.1085 V (+8.5 mV); 4C T_max_K = 321.62 K (margin 1.53 K); anode_potential_v min = +0.00339 V -> plated = false; sei_thickness_nm_end = 384.5 nm (margin 115.5 nm). ALL FIVE CRITERIA PASS at DFN. Identical 1C/4C values to round 7 probe A (same params) - audit airtight."
+  },
+  {
+    "candidate": "lnmo_r8_d6_margin",
+    "outputs": ["cell/r8_d6_1c_dfn.json", "cell/r8_d6_energy_dfn.json", "cell/r8_d6_aging_dfn.json", "cell/r8_d6_4c_dfn.json"],
+    "note": "MARGIN-UPGRADE PROBE, ADOPTED AS SHIPPING DESIGN (strictly dominates r8_final on every criterion at DFN): ED_vol = 1135.8 Wh/L (+19.6%); midpoint_voltage_v = 4.1145 V (+14.5 mV, widened by +6.0 mV); 4C T_max_K = 321.42 K (margin 1.73 K); anode_potential_v min = +0.01096 V -> plated = false (3.2x the r8_final plating margin - D_e 6e-10 relaxes the end-of-charge depletion gradients); sei_thickness_nm_end = 385.3 nm (margin 114.7 nm, D_e-insensitive as predicted by the EC-diffusion-limited SEI law). ALL FIVE CRITERIA PASS at DFN. Honest caveat carried to datasheet: D_e = 6e-10 m2/s constant = upper bound of reported low-viscosity fast-charge carbonate electrolyte formulations (Nyman2008 baseline ~2.9e-10 at 1000 mol/m3); formulation-grade approximation replacing the concentration-dependent function."
+  }
+]

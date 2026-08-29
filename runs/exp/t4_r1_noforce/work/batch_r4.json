@@ -1,0 +1,12 @@
+[
+  {
+    "candidate": "V8_deep_cooled_40",
+    "outputs": ["cell/r4_v8_energy.json", "cell/r4_v8_1c_spme.json", "cell/r4_v8_lowT_spme.json", "bridge/derived_r4_v8.json", "cell/r4_v8_4C45_safety_spme.json"],
+    "note": "deep-transport architecture + h=40 (SPMe screen): all five criteria pass — T_max 330.67 K (2.48 K margin), anode +22.6 mV, ED 564.9/969.6, retention 0.9944; selected for DFN verification"
+  },
+  {
+    "candidate": "V9_deep_cooled_35",
+    "outputs": ["cell/r4_v9_energy.json", "cell/r4_v9_1c_spme.json", "cell/r4_v9_lowT_spme.json", "bridge/derived_r4_v9.json", "cell/r4_v9_4C45_safety_spme.json"],
+    "note": "deep-transport architecture + h=35 (SPMe screen): also passes all five (T_max 332.08 K, anode +23.7 mV) but T_max margin (1.07 K) smaller than V8's 2.48 K -> V8 preferred"
+  }
+]

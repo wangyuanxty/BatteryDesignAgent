@@ -1,0 +1,8 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {"name": "baseline", "role": "Chen2020 (NMC811/graphite, anchor-table default; task text names no electrode system), no parameter overrides — characterization reference for all later candidates"}
+  ],
+  "llm_reason": "R1 is baseline characterization + opening ceiling assessment. Run 1C_discharge, lowT_discharge, 4C_charge_45C+plating, calc-energy on stock Chen2020 to quantify gaps vs entry-0 criteria before proposing levers."
+}

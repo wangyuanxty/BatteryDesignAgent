@@ -1,0 +1,10 @@
+{
+ "retention_lowT_pct": 99.59,
+ "capacity_lowT_ah": 6.927072396678716,
+ "capacity_1C_ref_ah": 6.955522857609939,
+ "source_files": [
+  "cell/r3_lowT.json",
+  "cell/r3_1c_dfn.json"
+ ],
+ "formula": "capacity_lowT_ah / capacity_1C_ref_ah * 100"
+}

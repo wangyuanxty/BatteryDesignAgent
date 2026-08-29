@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "start_stage=3: no molecular screening (task names no new materials/additives/electrolyte). Materials use system baseline. base=Chen2020 (deterministic anchor: task text names no electrode system -> default Chen2020, NMC811/graphite baseline teaching parameterization; verified negative/positive are NMC811/graphite keys). source=baseline (literature parameter set)."
+}

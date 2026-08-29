@@ -1,0 +1,49 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {
+      "struct": {
+        "Positive electrode thickness [m]": 4.2e-05,
+        "Negative electrode thickness [m]": 5.2e-05,
+        "Positive electrode porosity": 0.4,
+        "Negative electrode porosity": 0.35,
+        "Positive particle radius [m]": 1.0e-06,
+        "Negative particle radius [m]": 1.5e-06,
+        "Electrolyte conductivity [S.m-1]": 2.0,
+        "Electrolyte diffusivity [m2.s-1]": 3.0e-10,
+        "Cation transference number": 0.4,
+        "Total heat transfer coefficient [W.m-2.K-1]": 100.0
+      },
+      "name": "V1 Power-thin 0.55x",
+      "role": "main power-cell architecture: electrodes thinned to ~55% (42/52 um), porosity raised (0.40/0.35), small particles (1.0/1.5 um), high-transport electrolyte (sigma=2.0 S/m, D=3e-10, t+=0.4), forced-air cooling h=100 W/m2/K; est. capacity ~2.5 Ah"
+    },
+    {
+      "struct": {
+        "Positive electrode thickness [m]": 3.6e-05,
+        "Negative electrode thickness [m]": 4.4e-05,
+        "Positive electrode porosity": 0.38,
+        "Negative electrode porosity": 0.33,
+        "Positive particle radius [m]": 1.0e-06,
+        "Negative particle radius [m]": 1.5e-06,
+        "Electrolyte conductivity [S.m-1]": 2.0,
+        "Electrolyte diffusivity [m2.s-1]": 3.0e-10,
+        "Cation transference number": 0.4,
+        "Total heat transfer coefficient [W.m-2.K-1]": 100.0
+      },
+      "name": "V2 Power-thin 0.47x",
+      "role": "thinner fallback (36/44 um) if V1 retention or T_max still short; est. capacity ~2.2 Ah (near the 2.0 Ah bound)"
+    },
+    {
+      "struct": {
+        "Electrolyte conductivity [S.m-1]": 2.0,
+        "Electrolyte diffusivity [m2.s-1]": 3.0e-10,
+        "Cation transference number": 0.4,
+        "Total heat transfer coefficient [W.m-2.K-1]": 100.0
+      },
+      "name": "V3 Transport-only",
+      "role": "diagnostic: baseline geometry with high-transport electrolyte + cooling only; isolates electrolyte contribution to 5C retention / plating / T_max"
+    }
+  ],
+  "llm_reason": "Baseline R0: retention_5c=0.087, plated=true, T_max=354.3 K fail; power_density=22383 W/kg and capacity=4.95 Ah already pass. Root cause of 5C collapse: positive solid diffusivity 4e-15 m2/s gives particle diffusion time constant ~6.8 ks (r=5.22 um) >> 720 s 5C window; solid diffusivity is an excluded lever, so particle radius is the allowed fix (t1 precedent: small particle +14.6 contribution). R1 packages the levers: thin electrodes (ionic path + mass + heat), raised porosity (ionic resistance + plating), small particles (diffusion + plating), high-transport electrolyte (sigma 2.0 S/m ~2.1x baseline, D 3e-10 ~1.7x, t+ 0.4; estimates with literature basis: Xu Chem. Rev. 2004, high-conductivity LiFSI-class formulations), h=100 forced-air (T_max). Params listed above with sources: thickness/porosity/particle = design values; electrolyte transport = estimate (literature-adjacent); h = design (domain experience). V3 isolates the electrolyte effect."
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "candidate": "V3 Rate-lean",
+    "round": 3,
+    "outputs": ["cell/r1_v3_1c.json", "cell/r1_v3_5c.json", "cell/r1_v3_retention.json", "cell/r1_v3_energy.json", "cell/r1_v3_4c.json"],
+    "note": "Stage2 all pass; fails 4C-charge exam: T_max 337.32 > 333.15 (no plating, +20.6 mV). Baseline for thermal fix."
+  },
+  {
+    "candidate": "V4 Thermal-tuned",
+    "round": 3,
+    "outputs": ["cell/r1_v4_1c.json", "cell/r1_v4_5c.json", "cell/r1_v4_retention.json", "cell/r1_v4_energy.json", "cell/r1_v4_4c.json"],
+    "note": "FULL PASS: ED 473.0, 5C retention 99.0%, mass 26.8 g, 5C T_max 321.2, 4C-charge T_max 331.98 <= 333.15, no plating (+24.7 mV). Transport upgrade + cooling area jointly close the thermal gap (V3 337.3 -> V5 334.7 -> V4 332.0)."
+  },
+  {
+    "candidate": "V5 Thermal-control",
+    "round": 3,
+    "outputs": ["cell/r1_v5_1c.json", "cell/r1_v5_5c.json", "cell/r1_v5_retention.json", "cell/r1_v5_energy.json", "cell/r1_v5_4c.json"],
+    "note": "Attribution control (no cooling-area change): fails 4C-charge T_max 334.73 > 333.15 by 1.6 K; shows cooling area 0.00531->0.0075 m2 contributes ~2.8 K (334.7->332.0)."
+  }
+]

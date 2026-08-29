@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "start_stage=3: this case starts at Stage 3; materials use system baseline (source: baseline). Base=Chen2020 determined deterministically by the anchor table (task text names no electrode system -> default Chen2020, recorded in entry 0 meta); dump-verified: positive OCP function nmc_LGM50_ocp_Chen2020 (NMC811), 5 Ah, complete thermal/geometry parameter set -> no thermal injection expected, plating params injected by runner (standard defaults). Opening ceiling assessment (during baseline characterization): baseline ED=400.75 Wh/kg already >= 327.18; best-architecture estimate (sep 10 um, collectors 10/6 um, porosity 0.28/0.22, pos 90/neg 100 um) ~500 Wh/kg contract caliber -> ED is NOT the binding constraint; no Stage-2 material escalation needed. Binding gaps localized at Stage 3/4: 4C plating (anode surface potential min -0.192 V -> plated) and nail thermal runaway at contract cooling (hA=0.05 W/K, triggered at 322.2 s) -> both are architecture/parameter and thermal-management properties -> fallback routing stays at Stage 3."
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "candidate": "Y4-DFN finalist max-margin",
+    "outputs": ["cell/r6_y4_energy_dfn.json", "cell/r6_y4_1c_dfn.json", "cell/r6_y4_4c_dfn.json"],
+    "note": "True full-order DFN (model_used=DFN, no fallback). ED 535.72 Wh/kg pass; T_max 327.60K pass (5.6K margin); min_ap +0.0200V pass (best margin of all rounds, 0 n_neg)"
+  },
+  {
+    "candidate": "Y3-DFN finalist manufacturable-foils",
+    "outputs": ["cell/r6_y3_energy_dfn.json", "cell/r6_y3_1c_dfn.json", "cell/r6_y3_4c_dfn.json"],
+    "note": "True full-order DFN. ED 526.24 Wh/kg pass; T_max 329.38K pass (3.8K margin); min_ap +0.0162V pass (0 n_neg); Al8um/sep9um relaxed manufacturing"
+  }
+]

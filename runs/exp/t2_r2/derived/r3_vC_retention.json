@@ -1,0 +1,8 @@
+{
+  "capacity_retention_pct": 99.60825148744753,
+  "_formula": "100 x capacity_ah(lowT) / capacity_ah(1C spme)",
+  "_inputs": [
+    "cell/r3_vC_lowt_spme.json:capacity_ah",
+    "cell/r3_vC_1c_spme.json:capacity_ah"
+  ]
+}

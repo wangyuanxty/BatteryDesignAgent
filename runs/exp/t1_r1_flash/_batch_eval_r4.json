@@ -1,0 +1,26 @@
+[
+  {
+    "candidate": "ArchA-h150-F3",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h150_f3_4c.json"
+    ],
+    "note": "T_max 323.7 K pass; anode min -0.0023 V: 2.3 mV short of 0 - transport ceiling approach; needs final nudge",
+    "round": 4
+  },
+  {
+    "candidate": "ArchA-h150-NP",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h150_np_4c.json"
+    ],
+    "note": "T_max 325.0 K pass; anode min -0.062 V: N/P increase let the cell charge deeper (0.68 Ah) -> surface saturation persists; lever rejected",
+    "round": 4
+  },
+  {
+    "candidate": "ArchA-h150-NP2",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h150_np2_4c.json"
+    ],
+    "note": "T_max 324.3 K pass; anode min -0.040 V: stronger N/P also rejected (same mechanism)",
+    "round": 4
+  }
+]

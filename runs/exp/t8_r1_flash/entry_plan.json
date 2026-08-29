@@ -1,0 +1,8 @@
+{
+  "action": "plan",
+  "objective_breakdown": "Three cell-level contract metrics + standard safety exam: ED>=446.18 Wh/kg (chemistry+architecture lever), 5C retention>=0.90 (rate lever, opposite to ED lever: thick electrodes hurt rate), mass<=40 g (stack mass cap => E<=~17.8 Wh, moderate cell). Multi-objective trade-off: ED vs 5C (thickness), ED vs T_max (areal loading/heat). Safety: 4C charge @45C lumped+plating, T_max<=333.15 K, no plating.",
+  "candidate_strategy": "R0: Chen2020 baseline 1C/5C DFN + calc-energy (ED, mass, 5C retention) + opening ceiling assessment. R1: 3 architecture variants on Chen2020 - A High-ED (thick electrodes, thin collectors/sep), B Rate-ED balanced (moderate thickness + electrolyte transport boost sigma/t+), C Thin-fast (probe rate ceiling). R2: refine winner. R3: 4C charge safety on best. Escalation path if ED ceiling < 446: LNMO 4.7V system switch -> electrolyte formulation -> electrode composition (run-comp).",
+  "budget_allocation": "flash case: R0 ~3 sims; R1 ~10 sims; R2 ~6 sims; R3 ~2 sims; total ~20 pybamm runs; no true DFT (real_compute=false, honest endorse skip).",
+  "risk_and_fallback": "Risk1 ED unreachable with NMC811/graphite given 5C constraint -> escalate Stage 2 (LNMO switch/electrolyte/composition). Risk2 5C<90% on thick electrodes -> thin+high-sigma/t+ + small particles, document Pareto. Risk3 T_max>333.15 K -> thermal lever locked h=10; if fails question boundary and report honestly. Three-strike questioning layers: (1) system physical reachability, (2) system-switch boundary, (3) metric reachability -> negative result with 'reachable if X relaxed' note.",
+  "detail": "design_plan.md"
+}

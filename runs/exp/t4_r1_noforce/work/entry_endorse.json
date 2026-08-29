@@ -1,0 +1,5 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false (entry 0 meta): true DFT/MD endorsement (run-orca/run-md) skipped per protocol — no fabricated DFT/MD values; model-grade verification instead at DFN precision on two independent parameter sets (Chen2020 judged set + OKane2022 robustness, round 6)"
+}

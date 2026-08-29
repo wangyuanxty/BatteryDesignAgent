@@ -1,0 +1,55 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 327.18},
+      "sei_thickness_nm_end": {"max": 550}
+    },
+    "stage3": {
+      "plated": false,
+      "triggered": false
+    },
+    "meta": {
+      "case": "t7_r1_noforce",
+      "application": "hybrid electric vehicle (HEV) battery cell",
+      "real_compute": false,
+      "ablation": {
+        "exploration_force": false,
+        "ceiling_escalation": true,
+        "funnel_voting": true,
+        "exploration_force_set_by": "task text",
+        "ceiling_escalation_set_by": "protocol default (task silent)",
+        "funnel_voting_set_by": "protocol default (task silent)"
+      },
+      "start_stage": 3,
+      "start_stage_reason": "task text names no new materials/additives/electrolyte design; metrics-only objective; materials use system baseline until ceiling assessment triggers escalation",
+      "base_params": "Chen2020",
+      "base_reason": "task text names no electrode system; protocol anchor table default = Chen2020 (recorded); discriminant anchor dump verified before first run",
+      "freedoms": {
+        "electrode_system": "adjustable",
+        "electrolyte_formulation": "adjustable",
+        "electrode_modification": "adjustable",
+        "cell_architecture": "adjustable",
+        "thermal_management": "adjustable",
+        "basis": "task text declares no degree-of-freedom boundary; widest interpretation per zero-interaction rule (t1_r1 lesson)"
+      },
+      "protocols": {
+        "fast_charge": "4C_charge_45C (900 s, 318.15 K ambient, lumped thermal, plating module; plated = min(anode_potential_v) < 0 V)",
+        "aging": "aging_1C_100cyc_45C (45 C / 318.15 K accelerated SEI growth, 100 cycles, SEI ec reaction limited)",
+        "energy": "calc-energy contract caliber (ED = discharge energy / sum of layer mass; electrolyte excluded)"
+      },
+      "nail_scenario": {
+        "q_nail_w": 10.0,
+        "t_init_source": "run-tr --sim <4C_charge_45C output>: T_max_K of fast charge taken as initial temperature (worst-case operating state, mechanical coupling)",
+        "mass_kg": "from calc-energy mass_kg of the evaluated cell (mcp = mass*900, mandatory)",
+        "hA_w_k": 0.05,
+        "t_amb_k": 298.15,
+        "trigger_criterion": "dT/dt > 1 K/s or T >= 573 K (run-tr mechanical judgment)"
+      },
+      "parsing_note": "thresholds verbatim from task text: 327.18 Wh/kg; 550 nm; 10 W; no T_max_K red line given in task text, hence no T_max_K threshold in criteria (T_max_K recorded in metrics for trend reporting only)"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "action": "propose",
+  "round": 5,
+  "candidates": [
+    {
+      "struct": {"SEI kinetic rate constant [m.s-1]": 5.0e-14},
+      "name": "V9_sei_kin005",
+      "role": "stronger anode coating: SEI kinetic rate constant x0.05 (robust artificial SEI class, e.g. ALD Al2O3 / LiF-rich) to push SEI below 500 nm"
+    },
+    {
+      "struct": {"SEI kinetic rate constant [m.s-1]": 1.0e-13, "SEI reaction exchange current density [A.m-2]": 1.5e-08},
+      "name": "V10_sei_dual",
+      "role": "dual SEI suppression (ec reaction x0.1 + electron-migration exchange current density x0.1): test whether the exchange-current lever is active in the ec-reaction-limited aging model"
+    },
+    {
+      "struct": {"Negative electrode thickness [m]": 1.02e-04},
+      "name": "V11_np120",
+      "role": "N/P 1.20 (negative 85.2->102 um): further lower anode areal current density at 4C to clear the remaining -0.088 V plating dip"
+    },
+    {
+      "struct": {"Negative electrode thickness [m]": 1.02e-04, "Negative particle radius [m]": 3.0e-06},
+      "name": "V12_np120_particle",
+      "role": "N/P 1.20 + r_neg 3.0 um: combined anode thickness and surface-area levers for plating margin"
+    }
+  ],
+  "llm_reason": "Round-4 attribution: N/P 1.12 (V5) halved the 4C anode dip (-0.176->-0.088 V) and raised ED (1076.7, higher discharge voltage profile); neg porosity/separator marginal; transport+cooling combo worsens T_max vs cooling alone (323.69 K). SEI: only the kinetics lever responded (753->654); V5 raised SEI to 791.6. Round 5: (a) push plating further via N/P 1.20 (V11) and +r_neg 3.0 um surface area (V12); (b) push SEI via stronger coating x0.05 (V9) and probe the exchange-current-density lever (V10). Values: coating x0.05 = robust artificial-SEI class (literature-class, estimate); r_neg 3.0 um commercial fine graphite (estimate)."
+}

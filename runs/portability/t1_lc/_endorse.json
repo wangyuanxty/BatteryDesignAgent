@@ -1,0 +1,5 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false: no Stage-2 molecular candidates were generated (start_stage=3, materials use Chen2020 baseline), so there is no Top-3 molecule/composition to sign with true DFT/MD; no DFT/MD values fabricated."
+}

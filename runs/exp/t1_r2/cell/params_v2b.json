@@ -1,0 +1,7 @@
+{
+  "Positive particle radius [m]": 2.5e-06,
+  "Negative particle radius [m]": 2.5e-06,
+  "Electrolyte conductivity [S.m-1]": 1.8,
+  "Electrolyte diffusivity [m2.s-1]": 6.0e-10,
+  "Cation transference number": 0.4
+}

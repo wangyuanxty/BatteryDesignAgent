@@ -1,0 +1,6 @@
+[
+  {"candidate": "e2_h40", "outputs": ["cell/r4_t1_energy.json", "cell/r4_t1_4c45.json"], "note": "h 40: T_max 344.7 (still >333.15); cooling reintroduced plating (ap_min -0.0142): cooler cell -> slower charge kinetics -> anode potential below 0 at fixed 4C; ED 569.0 pass"},
+  {"candidate": "e2_h50", "outputs": ["cell/r4_t2_energy.json", "cell/r4_t2_4c45.json"], "note": "h 50: T_max 341.1 fail; ap_min -0.0191 plated (same coupling); ED 568.6 pass"},
+  {"candidate": "e2_h80", "outputs": ["cell/r4_t3_energy.json", "cell/r4_t3_4c45.json"], "note": "h 80: T_max 334.2 (1.1 K over, closest yet); plating worst of round (ap_min -0.0285) - cooling alone cannot satisfy both criteria in this cell"},
+  {"candidate": "e2_por43_h50", "outputs": ["cell/r4_t4_energy.json", "cell/r4_t4_4c45.json"], "note": "porosity + h 50: ap_min -0.0054 (neg porosity +0.05 gained +13.7 mV vs t2 at same h, confirming anode-electrolyte transport as the plating dial); T_max 339.9 fail; ED 597.3 - max margin so far"}
+]

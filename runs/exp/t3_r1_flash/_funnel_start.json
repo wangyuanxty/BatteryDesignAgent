@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "start_stage=3: this case starts at Stage 3 (cell design); Stage 2 molecular screening skipped. Base parameter set = Chen2020 (anchor-table default: task text names no electrode system). Matching basis: Chen2020 = baseline teaching parameterization (NMC/graphite, 5 Ah nominal, no complete thermal/geometry set -> run-pyamm injects thermal defaults with trace). Materials props source marked baseline (literature values); no parameter overrides in R0."
+}

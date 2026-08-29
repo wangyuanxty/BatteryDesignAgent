@@ -1,0 +1,30 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "name": "FC-B",
+      "role": "fast-charge escalation on FC-A: cooling h 10->30 W/m2K (active cooling, grid-storage engineering), negative thickness 85.2->100 um (N/P margin lifts anode potential), negative particle 3.0->2.5 um (solid-diffusion overpotential down)",
+      "struct": {
+        "Total heat transfer coefficient [W.m-2.K-1]": 30.0,
+        "Negative electrode thickness [m]": 1.0e-04,
+        "Negative particle radius [m]": 2.5e-06
+      }
+    },
+    {
+      "name": "SEI-a",
+      "role": "SEI-lever scan A on FC-B basis: SEI reaction exchange current density 1.5e-7 -> 1.5e-8 A/m2 (x0.1, electron-migration-limited bridge; k x0.2 kept from FC-A)",
+      "struct": {
+        "SEI reaction exchange current density [A.m-2]": 1.5e-08
+      }
+    },
+    {
+      "name": "SEI-b",
+      "role": "SEI-lever scan B on FC-B basis: SEI kinetic rate constant 2e-13 -> 1e-14 m/s (x0.01 of baseline, aggressive ec-reaction bridge)",
+      "struct": {
+        "SEI kinetic rate constant [m.s-1]": 1.0e-14
+      }
+    }
+  ],
+  "llm_reason": "FC-A 4C: anode min -0.062V (improved from -0.192 but still plated); T_max 361.1K WORSE than baseline 354.3K because higher delivered capacity (5.04Ah) raises 4C current and charge duration - heat scales with current, so T_max needs active cooling (h=30, grid-storage standard with HVAC). Plating remaining -0.062V: add N/P margin (negative 100um lifts equilibrium potential at end of charge) + negative particle 2.5um. FC-A aging500: SEI 744.5nm with k x0.2 (baseline 777.9) - k is nearly insensitive (d(log SEI)/d(log k) ~ 0.03), so the ec-reaction-limited growth is controlled elsewhere: scan i0 x0.1 (electron-migration bridge) vs k x0.01 to identify the effective lever. Sources: h=30 design choice (documented), thickness/particle = architecture estimate, i0/k = bridge estimates."
+}

@@ -1,0 +1,9 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {"base": "scripts/bda/simulators/data/LNMO.json", "name": "systemLNMO", "role": "4.7 V-class high-voltage spinel cathode system (Chen2020 base + LNMO overlay, aging-capable via inherited SEI model): required to meet plateau >= 4.1 V (NMC811 cell midpoint 3.61 V unreachable)"},
+    {"base": "Chen2020", "name": "baselineNMC811", "role": "reference baseline (NMC811/graphite) for opening ceiling assessment: quantify plateau/ED gap that forces system switch"}
+  ],
+  "llm_reason": "Round 1 = baseline + opening ceiling assessment. M2 (plateau >= 4.1 V) is only reachable with a high-voltage cathode; LNMO is the anchor-table system for the high-voltage direction (discharge midpoint 4.17 V). Chen2020 run provides mechanical ceiling proof (midpoint ~3.61 V < 4.1 V) and the SEI/thermal reference. Both system candidates skip the molecular funnel per protocol; props source = baseline (literature-anchored parameter sets)."
+}

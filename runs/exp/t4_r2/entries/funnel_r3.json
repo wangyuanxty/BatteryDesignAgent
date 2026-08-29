@@ -1,0 +1,14 @@
+{
+  "action": "funnel",
+  "round": 3,
+  "passed": 0,
+  "rejected": 4,
+  "disputed": 0,
+  "detail": "R3 C-family post-mortem at DFN verdict grade: all 4 candidates fail W4 (T_max 347.8-357.5 vs 333.15) and W5 (ap_min -0.19 to -0.26 = end-of-4C-charge anode saturation); W1-W3 solved with margin (925-959 Wh/L, retention >=0.9933). Branch vote 3/3 (mechanism-confirmed + bracket): promote electrolyte-transport architecture (D-branch), because (a) ap_min is measured at the SEPARATOR interface where salt depletion dominates - r_neg 2um was neutral-to-worse at same current (-0.258 vs baseline -0.192), so particle-surface area is the wrong lever for this metric; (b) anode margin helps monotonically (120um -> -0.19) but is insufficient alone; (c) B4 SPMe evidence: transport boost cut SPMe T_max 330.7 and the sigma/D/t+ triple is untested at DFN. Ceiling assessment: W3 ceiling already exceeded (959.3); binding ceiling = 4C safety pair. Three-strike ledger: geometry-only anode-saturation attack failed R2+R3 = strike 1 of 3 (same failure cause, 2 consecutive rounds); escalation layer 1 executed now - switch lever class to electrolyte transport + cooling bracket, not a 4th geometry tune.",
+  "dispositions": [
+    {"name": "C1-compress-smallr", "status": "rejected", "reason": "DFN T_max 354.83 + plating -0.2591; geometry kept as D-branch donor stack (925.06 Wh/L, 5.03Ah)"},
+    {"name": "C2-thick-NP", "status": "rejected", "reason": "DFN T_max 357.51 worst; shallowest plating -0.1899 confirms margin lever; 120um anode carried into D3"},
+    {"name": "C3-thick-modNP", "status": "rejected", "reason": "DFN T_max 347.84 best of family but still FAIL; 105um margin insufficient at 24.7A"},
+    {"name": "C4-compress-xsmallr", "status": "rejected", "reason": "DFN T_max 350.99 (h=20 bought -3.8K per +5 h - partial lever); plating -0.2580: r_neg 2um does not help separator-interface metric"}
+  ]
+}

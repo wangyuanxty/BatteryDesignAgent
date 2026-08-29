@@ -1,0 +1,62 @@
+[
+  {
+    "candidate": "V7_NPMargin",
+    "round": 3,
+    "outputs": [
+      "cell/r3_v7_5c.json",
+      "cell/r3_v7_4c.json",
+      "cell/r3_v7_1c.json",
+      "cell/r3_v7_energy.json",
+      "cell/r3_v7_derived.json"
+    ],
+    "note": "V6 + anode 52->58 um. retention_5c=0.9345 < 0.95 -> fail. Note: measured 1C=3.317 Ah vs Q_nom 2.94 (Q understated C-rates by ~13%; at the true 5C=16.6 A retention would degrade further, so the fail verdict is conservative-solid). Plating margin +11 mV and T_max pass. Thicker anode alone does not restore 95% retention."
+  },
+  {
+    "candidate": "V8_Cooling15",
+    "round": 3,
+    "outputs": [
+      "cell/r3_v8_5c.json",
+      "cell/r3_v8_4c.json",
+      "cell/r3_v8_1c.json",
+      "cell/r3_v8_energy.json",
+      "cell/r3_v8_derived.json"
+    ],
+    "note": "V6 + h 30->15 W/m2/K (light forced-air cooling realistic for power tools). All criteria pass. T_max=331.96 K = 58.81 C -> only 1.19 K margin under the 60 C red line; plating margin improves to +14.9 mV (warmer cell). Pass but T margin thin."
+  },
+  {
+    "candidate": "V9_ModerateElectrolyte",
+    "round": 3,
+    "outputs": [
+      "cell/r3_v9_5c.json",
+      "cell/r3_v9_4c.json",
+      "cell/r3_v9_1c.json",
+      "cell/r3_v9_energy.json",
+      "cell/r3_v9_derived.json"
+    ],
+    "note": "V6 + electrolyte kappa 1.5->1.2 S/m, D 2.5->2.0e-10, t+ 0.35->0.30 (realistic formulation). Mechanically passes (anode min +0.6 mV > 0) but plating margin is effectively zero -> not selectable as final; documents that the aggressive electrolyte transport of V6 is load-bearing for plating margin."
+  },
+  {
+    "candidate": "V10_NoPorosityBoost",
+    "round": 3,
+    "outputs": [
+      "cell/r3_v10_5c.json",
+      "cell/r3_v10_4c.json",
+      "cell/r3_v10_1c.json",
+      "cell/r3_v10_energy.json",
+      "cell/r3_v10_derived.json"
+    ],
+    "note": "V6 with porosity rolled back to baseline 0.335/0.25. retention_5c=0.9738 passes but anode min = -4.3 mV -> plated -> fail. Porosity boost (0.42/0.35) is load-bearing for plating avoidance."
+  },
+  {
+    "candidate": "V11_FixedPointCombo",
+    "round": 3,
+    "outputs": [
+      "cell/r3_v11_5c.json",
+      "cell/r3_v11_4c.json",
+      "cell/r3_v11_1c.json",
+      "cell/r3_v11_energy.json",
+      "cell/r3_v11_derived.json"
+    ],
+    "note": "V6 combo re-tested at fixed-point Q_nom=3.08 Ah (true 5C=15.4 A, true 4C=12.3 A). All criteria pass: retention 0.9746, T_max=326.86 K (53.71 C, 6.29 K margin), anode min +8.2 mV. Confirms V6's pass was not a C-rate-definition artifact; plating margin thinner than V6's +14 mV (V6 ran 4C at understated 10.48 A)."
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "criteria": {
+    "stage1": {},
+    "stage2": {
+      "energy_density_wh_kg": {"min": 500.94}
+    },
+    "stage3": {
+      "plated": false,
+      "T_max_K": {"max": 333.15}
+    },
+    "meta": {
+      "case_id": "t5_r1_noceiling",
+      "task_text": "Design a battery for a next-generation flagship vehicle: energy density ≥ 500.94 Wh/kg, support 4C fast charge (no lithium plating), maximum temperature ≤ 60°C. Ablation note: ceiling_escalation switch OFF — do not proactively escalate into material design; use materials/systems named in the task text only, otherwise tune within the existing cell/architecture formulation space.",
+      "base": "Chen2020",
+      "base_reason": "task text names no electrode system → §1.5 anchor-table default Chen2020 (NMC811/graphite baseline teaching parameterization; complete thermal/geometry keys verified by parameter-set dump)",
+      "start_stage": 3,
+      "start_stage_reason": "no new materials/additives/electrolyte design named in task text; tuning within existing cell/architecture formulation space",
+      "real_compute": false,
+      "ablation": {
+        "ceiling_escalation": {"state": "off", "set_by": "task text"},
+        "exploration_force": {"state": "on", "set_by": "default"},
+        "funnel_voting": {"state": "on", "set_by": "default", "applicable": false, "note": "no Stage 2 molecular candidates at start_stage=3"}
+      },
+      "freedoms": {
+        "electrode_system": {"state": "locked", "value": "Chen2020", "basis": "task text names no system → §1.5 deterministic default; anchored by parameter-set dump (NMC811/graphite geometry keys present)"},
+        "electrolyte_formulation": {"state": "adjustable", "scope": "transport parameter overrides only (Electrolyte conductivity [S.m-1], Cation transference number, Electrolyte diffusivity [m2.s-1]) within existing formulation space; no new molecules/additives", "basis": "not declared in task text → widest interpretation (t1_r1 lesson: narrowest interpretation produced negative result)"},
+        "electrode_modification": {"state": "locked", "basis": "no coating/doping named in task text; ceiling_escalation OFF → no proactive material design"},
+        "cell_architecture": {"state": "adjustable", "basis": "task text explicitly allows tuning 'within the existing cell/architecture formulation space' (thickness/porosity/N-P/separator/current collector/particle size/electrode area)"},
+        "thermal_management": {"state": "adjustable", "scope": "Total heat transfer coefficient [W.m-2.K-1] (cooling design)", "basis": "not declared in task text → widest interpretation"}
+      },
+      "thresholds_verbatim": {
+        "energy_density_wh_kg": {"min": 500.94},
+        "fast_charge": "4C",
+        "plating": "no lithium plating",
+        "T_max_C": 60
+      },
+      "notes": [
+        "headless zero-interaction execution: parameters parsed from task text, unspecified ones take protocol defaults; no user available to confirm (SKILL.md §0 zero-interaction rule)",
+        "stage1 criteria empty: start_stage=3, no molecular candidates, elimination lines not applicable",
+        "T_max_K threshold 333.15 = 60°C + 273.15 (mechanical conversion)",
+        "T_max criterion judged on 4C_charge_45C protocol output (Stage 4 safety exam); 1C discharge T_max also reported"
+      ]
+    }
+  }
+}

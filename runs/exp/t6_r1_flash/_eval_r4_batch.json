@@ -1,0 +1,6 @@
+[
+  {"candidate": "seiDEC50", "outputs": ["cell/r4_seiDEC50_aging.json"], "note": "EC diffusivity through SEI x0.5 (2e-18->1e-18): SEI 559 nm (-26% from 753) - confirms diffusion-limited regime, but >500; need x0.3"},
+  {"candidate": "seiDEC40", "outputs": ["cell/r4_seiDEC40_aging.json"], "note": "EC diffusivity x0.4 (8e-19): SEI 505.2 nm - just 5 nm over target; x0.3 (6e-19) should land ~470-480 for margin"},
+  {"candidate": "tplus70", "outputs": ["cell/r4_tplus70_4c.json"], "note": "t+ 0.7 only: charge 5.34 Ah, anode min -0.233 - barely better than hiTrans (-0.243): plating is NOT electrolyte-limited; diagnostic shows anode surface saturation (sto_surf->1.0) with U_neg 0.046 + eta -0.27 = -0.245"},
+  {"candidate": "superTrans", "outputs": ["cell/r4_superTrans_4c.json"], "note": "max transport + h60: T_max 329.2 K fail (needs h~90-100), plated -0.245 (anode saturation mechanism, same as tplus70). Diagnostic: charge leg 1069s @18A = 5.34 Ah; anode surface hits sto 1.0 at V~4.53 BEFORE 4.7 V cutoff; root cause N/P ~1.1 -> anode too small for the charge the 4.7 V cutoff allows. Fix: N/P up via L_neg"}
+]

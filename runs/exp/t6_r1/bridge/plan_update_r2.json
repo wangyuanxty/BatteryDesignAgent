@@ -1,0 +1,7 @@
+{
+  "action": "plan",
+  "update": true,
+  "reason": "Round-1 measurement confirmed and sharpened the plan: systemLNMO at DEFAULT architecture passes stage2 ED (1005.3 Wh/L, +5.8% margin) and midpoint (4.166 V); baselineChen2020 fails both (843.5 Wh/L, 3.935 V) - material bottleneck evidenced. Direction change: architecture rounds pivot from ED-raising moves to safety-first tuning, because the binding risks are now the unevidenced criteria (4C_charge_45C T_max_K <= 323.15 K, plated=false, aging SEI <= 500 nm).",
+  "candidate_strategy": "Round 2: full protocol battery on systemLNMO default architecture (aging_1C_100cyc + 4C_charge_45C with plating) to quantify all remaining gaps, plus two thermal probes (h=200 and h=500 W/m2K) to map T_max(h) for the 4C charge - heat generation scales ~I^2 (16x at 4C vs 1C) while the 45C ambient leaves only 5 K headroom, so cooling h is the first lever to characterize. Subsequent rounds follow the gap map: plating -> N/P + electrolyte transport + particle radius; SEI -> SEI kinetics (electrode-modification DOF); ED margin (+55 Wh/L ~ 11.7 um thickness headroom) is the protected budget for any safety-driven geometry changes.",
+  "budget_allocation": "Safety characterization 2 rounds, plating/N-P tuning 2-3 rounds, SEI tuning 1-2 rounds, ED-margin verification + DFN confirmation 1 round, closing 1 round (total ~8-10 remaining of ~12-15 planned)."
+}

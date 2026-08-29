@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "A ThinCC (thin current collectors)",
+    "outputs": ["cell/r2_A_energy.json", "cell/r2_A_derived_sei.json", "cell/r2_A_derived_lowT.json", "cell/r2_A_4c45.json", "cell/r2_A_1c_spme.json"],
+    "note": "Al 16->10 um, Cu 12->8 um: ED 400.3->456.5 Wh/kg (+56, inert-mass bank confirmed); anode min -0.4386 and SEI 449.1/777.9 unchanged vs baseline - pure ED lever with zero effect on plating/SEI; stack into later rounds as free headroom."
+  },
+  {
+    "candidate": "B HiCond (electrolyte sigma 2x, D 1.7x, t+ 0.4)",
+    "outputs": ["cell/r2_B_energy.json", "cell/r2_B_derived_sei.json", "cell/r2_B_derived_lowT.json", "cell/r2_B_4c45.json", "cell/r2_B_1c_spme.json"],
+    "note": "anode min -0.4494 (worse than baseline -0.4385) and SEI500 829.8 (worse than 777.9): improved transport lets charge/cycling run deeper before the 4.2 V abort, so the metric-terminating state is deeper in both the 4C test and 1C cycling; transport-up direction rejected for plating AND SEI."
+  },
+  {
+    "candidate": "C SmallNeg (negative particle radius 3.5 um)",
+    "outputs": ["cell/r2_C_energy.json", "cell/r2_C_derived_sei.json", "cell/r2_C_derived_lowT.json", "cell/r2_C_4c45.json", "cell/r2_C_1c_spme.json"],
+    "note": "anode min -0.4368 (+0.002 only vs baseline) and SEI500 771.4 (-6.5 nm, ~noise): the 4C anode excursion in the first ~30 s is not particle-surface-limited (diffusion penetration delta << R); weak lever, drop."
+  },
+  {
+    "candidate": "D LowLoad (electrode thickness x0.728, nominal bookkept to measured 1C)",
+    "outputs": ["cell/r2_D_energy.json", "cell/r2_D_derived_sei.json", "cell/r2_D_derived_lowT.json", "cell/r2_D_4c45.json", "cell/r2_D_1c_spme.json"],
+    "note": "anode min -0.4067 (best of round, +0.032) but SEI500 836.8 (worse than baseline): lower areal current (195->142 A/m2, honest 4C=14.3 A after nominal update) helps the 4C margin a little, but the lower-loading cell reaches deeper voltage-window extremes in 1C cycling (more SEI); keep loading direction only as a 4C aid, must pair with an SEI countermeasure."
+  }
+]

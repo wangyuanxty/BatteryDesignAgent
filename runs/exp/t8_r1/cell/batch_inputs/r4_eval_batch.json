@@ -1,0 +1,4 @@
+[
+  {"candidate": "V8-cool35", "outputs": ["cell/r4_v8_energy.json", "cell/r4_v8_5c_dfn.json", "cell/r4_v8_retention.json", "cell/r4_v8_4c45_dfn.json"], "note": "h=35: all criteria pass at native geometry — ED 634.35 Wh/kg, retention 98.79%, mass 32.36 g, exam T_max 331.88 K (margin 1.27 K), 5C T_max 322.29 K, no plating (anode min +0.0093 V); thermal margin thinner than V9"},
+  {"candidate": "V9-cool40", "outputs": ["cell/r4_v9_energy.json", "cell/r4_v9_5c_dfn.json", "cell/r4_v9_retention.json", "cell/r4_v9_4c45_dfn.json"], "note": "h=40: all criteria pass — ED 634.32 Wh/kg, retention 98.77%, mass 32.36 g, exam T_max 330.41 K (margin 2.74 K), 5C T_max 319.99 K, no plating (anode min +0.0082 V); chosen as final stack (better thermal margin), 4C-charge acceptance 0.94 Ah noted honestly"}
+]

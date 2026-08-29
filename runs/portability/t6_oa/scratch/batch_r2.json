@@ -1,0 +1,5 @@
+[
+  {"candidate": "LNMO-S1 thin-cell", "round": 2, "outputs": ["cell/r2_v1_energy.json", "cell/r2_v1_4c.json", "cell/r2_v1_aging.json"], "note": "geometry only: plating fixed (+0.024V), T_max 331.5K still fail, SEI 835nm fail"},
+  {"candidate": "LNMO-S2 thin-cell+coating+cooling", "round": 2, "outputs": ["cell/r2_v2_energy.json", "cell/r2_v2_4c.json", "cell/r2_v2_aging.json"], "note": "plating fixed (+0.028V), SEI 492.6nm pass but marginal, T_max 324.9K fail by 1.8K"},
+  {"candidate": "LNMO-S3 +anode-kinetics", "round": 2, "outputs": ["cell/r2_v3_energy.json", "cell/r2_v3_4c.json", "cell/r2_v3_aging.json"], "note": "transport changes hurt plating margin (+0.001V) but help SEI (395.9) and T_max (323.55K)"}
+]

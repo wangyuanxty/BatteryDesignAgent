@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "R6a_tplus_attrib",
+    "outputs": ["cell/r6_a_tplus_4c45.json"],
+    "note": "R6a: R4 c2 base + t+ 0.4 only. Min anode potential -0.0196 -> -0.0334 V: t+ 0.4 alone REGRESSES plating. Attribution confirmed - drop t+ lever (keep Chen2020 default 0.2594)."
+  },
+  {
+    "candidate": "R6b_posp_attrib",
+    "outputs": ["cell/r6_b_posp_4c45.json"],
+    "note": "R6b: R4 c2 base + positive particle 3.0 um only. Min anode potential -0.0196 -> -0.0344 V: posp 3.0 um alone REGRESSES plating (faster cathode kinetics accept more charge before the 4.7 V cutoff, saturating the anode surface). Attribution confirmed - drop posp lever (keep Chen2020 default 5.22 um)."
+  },
+  {
+    "candidate": "R6c_thinpos_margin",
+    "outputs": ["cell/r6_c_thinpos_4c45.json"],
+    "note": "R6c: R4 c2 base + positive thickness 74.75 -> 70 um. Min anode potential +0.0317 V -> plating RESOLVED (charge reaches 4.7 V cutoff earlier, anode surface leaves positive margin). T_max 329.14 K here is at default cooling (h=10), fixed separately by h=50. Kept as documented fallback (ED cost ~6%)."
+  },
+  {
+    "candidate": "R6d_np_margin",
+    "outputs": ["cell/r6_d_np_4c45.json"],
+    "note": "R6d: R4 c2 base + negative thickness 100 -> 110 um. Min anode potential +0.0274 V -> plating RESOLVED (10% more anode capacity headroom at cutoff). T_max 329.52 K here is at default cooling (h=10), fixed separately by h=50. Selected as primary plating fix: preserves full cell capacity, ED cost ~4%."
+  }
+]

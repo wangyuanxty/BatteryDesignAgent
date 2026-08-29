@@ -1,0 +1,62 @@
+[
+  {
+    "candidate": "sei-coat-k02",
+    "outputs": [
+      "runs/exp/t2_r3/cell/r2_sei-coat-k02_aging100_spme.json",
+      "runs/exp/t2_r3/cell/r2_sei-coat-k02_sei_thickness_nm_100cyc.json",
+      "runs/exp/t2_r3/cell/r2_sei-coat-k02_aging500_spme.json",
+      "runs/exp/t2_r3/cell/r2_sei-coat-k02_sei_thickness_nm_500cyc.json",
+      "runs/exp/t2_r3/cell/r2_sei-coat-k02_lowT_spme.json",
+      "runs/exp/t2_r3/cell/r2_sei-coat-k02_lowT_retention.json",
+      "runs/exp/t2_r3/cell/r2_sei-coat-k02_1c_spme.json",
+      "runs/exp/t2_r3/cell/r2_sei-coat-k02_4c_spme.json",
+      "runs/exp/t2_r3/cell/r2_sei-coat-k02_energy.json"
+    ],
+    "note": "SPMe screen round"
+  },
+  {
+    "candidate": "fine-anode-25",
+    "outputs": [
+      "runs/exp/t2_r3/cell/r2_fine-anode-25_aging100_spme.json",
+      "runs/exp/t2_r3/cell/r2_fine-anode-25_sei_thickness_nm_100cyc.json",
+      "runs/exp/t2_r3/cell/r2_fine-anode-25_aging500_spme.json",
+      "runs/exp/t2_r3/cell/r2_fine-anode-25_sei_thickness_nm_500cyc.json",
+      "runs/exp/t2_r3/cell/r2_fine-anode-25_lowT_spme.json",
+      "runs/exp/t2_r3/cell/r2_fine-anode-25_lowT_retention.json",
+      "runs/exp/t2_r3/cell/r2_fine-anode-25_1c_spme.json",
+      "runs/exp/t2_r3/cell/r2_fine-anode-25_4c_spme.json",
+      "runs/exp/t2_r3/cell/r2_fine-anode-25_energy.json"
+    ],
+    "note": "SPMe screen round"
+  },
+  {
+    "candidate": "elec-high-sigma",
+    "outputs": [
+      "runs/exp/t2_r3/cell/r2_elec-high-sigma_aging100_spme.json",
+      "runs/exp/t2_r3/cell/r2_elec-high-sigma_sei_thickness_nm_100cyc.json",
+      "runs/exp/t2_r3/cell/r2_elec-high-sigma_aging500_spme.json",
+      "runs/exp/t2_r3/cell/r2_elec-high-sigma_sei_thickness_nm_500cyc.json",
+      "runs/exp/t2_r3/cell/r2_elec-high-sigma_lowT_spme.json",
+      "runs/exp/t2_r3/cell/r2_elec-high-sigma_lowT_retention.json",
+      "runs/exp/t2_r3/cell/r2_elec-high-sigma_1c_spme.json",
+      "runs/exp/t2_r3/cell/r2_elec-high-sigma_4c_spme.json",
+      "runs/exp/t2_r3/cell/r2_elec-high-sigma_energy.json"
+    ],
+    "note": "SPMe screen round"
+  },
+  {
+    "candidate": "combo-v1",
+    "outputs": [
+      "runs/exp/t2_r3/cell/r2_combo-v1_aging100_spme.json",
+      "runs/exp/t2_r3/cell/r2_combo-v1_sei_thickness_nm_100cyc.json",
+      "runs/exp/t2_r3/cell/r2_combo-v1_aging500_spme.json",
+      "runs/exp/t2_r3/cell/r2_combo-v1_sei_thickness_nm_500cyc.json",
+      "runs/exp/t2_r3/cell/r2_combo-v1_lowT_spme.json",
+      "runs/exp/t2_r3/cell/r2_combo-v1_lowT_retention.json",
+      "runs/exp/t2_r3/cell/r2_combo-v1_1c_spme.json",
+      "runs/exp/t2_r3/cell/r2_combo-v1_4c_spme.json",
+      "runs/exp/t2_r3/cell/r2_combo-v1_energy.json"
+    ],
+    "note": "SPMe screen round"
+  }
+]

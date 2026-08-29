@@ -1,0 +1,5 @@
+[
+  {"candidate": "f1_h70_B", "outputs": ["cell/r6_f1_energy.json", "cell/r6_f1_4c45.json"], "note": "B platform + h70: ALL PASS - ED 627.39, T_max 331.03 (2.1 K margin), ap_min +0.051 no plating"},
+  {"candidate": "f2_h70_C", "outputs": ["cell/r6_f2_energy.json", "cell/r6_f2_4c45.json"], "note": "C platform + h70: ALL PASS - ED 665.40 (max), T_max 330.98 (2.2 K margin), ap_min +0.0506 no plating; channel-cooling class, selected finalist candidate"},
+  {"candidate": "f3_h80_C", "outputs": ["cell/r6_f3_energy.json", "cell/r6_f3_4c45.json"], "note": "C platform + h80: ALL PASS - ED 665.31, T_max 329.65 (3.5 K margin), ap_min +0.0488 no plating; alternate (higher cooling class)"}
+]

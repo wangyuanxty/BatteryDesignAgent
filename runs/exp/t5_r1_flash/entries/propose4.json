@@ -1,0 +1,43 @@
+{
+  "action": "propose",
+  "round": 4,
+  "candidates": [
+    {"struct": {
+        "Positive current collector thickness [m]": 8.0e-6,
+        "Negative current collector thickness [m]": 5.0e-6,
+        "Separator thickness [m]": 9.0e-6,
+        "Positive electrode thickness [m]": 9.8e-5,
+        "Negative electrode thickness [m]": 1.1e-4,
+        "Positive electrode porosity": 0.30,
+        "Negative electrode porosity": 0.22,
+        "Separator porosity": 0.45,
+        "Positive particle radius [m]": 2.5e-6,
+        "Negative particle radius [m]": 3.0e-6,
+        "Electrolyte conductivity [S.m-1]": 1.8,
+        "Cation transference number": 0.4,
+        "Electrolyte diffusivity [m2.s-1]": 2.0e-10,
+        "Total heat transfer coefficient [W.m-2.K-1]": 100.0
+      },
+      "name": "LNMO-R1",
+      "role": "LNMO 4.7V + mass-cut architecture (8/5 um collectors) + thicker positive (98 um) + N/P up (negative 110 um) + HiTrans electrolyte (sigma 1.8, t+ 0.4, D 2e-10) + small particles; targets ED >= 500.94 and plating-free 4C"},
+    {"struct": {
+        "Positive current collector thickness [m]": 1.0e-5,
+        "Negative current collector thickness [m]": 6.0e-6,
+        "Separator thickness [m]": 9.0e-6,
+        "Positive electrode thickness [m]": 9.5e-5,
+        "Negative electrode thickness [m]": 1.1e-4,
+        "Positive electrode porosity": 0.30,
+        "Negative electrode porosity": 0.22,
+        "Separator porosity": 0.45,
+        "Positive particle radius [m]": 2.5e-6,
+        "Negative particle radius [m]": 3.0e-6,
+        "Electrolyte conductivity [S.m-1]": 1.8,
+        "Cation transference number": 0.4,
+        "Electrolyte diffusivity [m2.s-1]": 2.0e-10,
+        "Total heat transfer coefficient [W.m-2.K-1]": 100.0
+      },
+      "name": "OKane2022-C1",
+      "role": "system candidate: NMC811/graphite+SiOx (cracking model, aging-capable) + Ceiling architecture + HiTrans electrolyte; SiOx negative capacity lever for ED"}
+  ],
+  "llm_reason": "Round 3 LNMO-Ceiling ED 492.75 (gap 8.2 Wh/kg, 1.6%): close the gap via mass cuts (Al 10->8 um, Cu 6->5 um) and slight positive thickening (95->98 um). Plating gate (all candidates so far plated): apply full HiTrans electrolyte (t+ 0.4, D 2e-10 - estimates, LiFSI-class transport, sources marked estimate) + smaller particles (2.5/3 um) + higher N/P (negative 110 um) to keep anode potential >= 0 V at 4C. OKane2022-C1 tests the SiOx system (designated SiOx anchor) on same architecture. Params listed before run; transport overrides are domain estimates (not simulation output)."
+}

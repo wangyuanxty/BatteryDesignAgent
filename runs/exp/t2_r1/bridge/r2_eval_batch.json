@@ -1,0 +1,47 @@
+[
+  {
+    "candidate": "FastCharge-A",
+    "outputs": [
+      "cell/r2_v1_aging100.json",
+      "cell/r2_v1_aging500.json",
+      "cell/r2_v1_sei100.json",
+      "cell/r2_v1_sei500.json",
+      "cell/r2_v1_lowT.json",
+      "cell/r2_v1_lowT_ret.json",
+      "cell/r2_v1_1c.json",
+      "cell/r2_v1_4c.json",
+      "cell/r2_v1_energy.json"
+    ],
+    "note": "plating cleared (anode potential min +0.0657 V>0), 4C acceptance 0.176->0.521 Ah; ED 414.4 pass; lowT 99.5% pass incl. true-soak (T_max 269.4 K shows cell at -20C); SEI@100 495.1 pass thin margin; SEI@500 820.4 fail (SEI kinetics untouched this round, R3 coating lever)."
+  },
+  {
+    "candidate": "FastCharge-B",
+    "outputs": [
+      "cell/r2_v2_aging100.json",
+      "cell/r2_v2_aging500.json",
+      "cell/r2_v2_sei100.json",
+      "cell/r2_v2_sei500.json",
+      "cell/r2_v2_lowT.json",
+      "cell/r2_v2_lowT_ret.json",
+      "cell/r2_v2_1c.json",
+      "cell/r2_v2_4c.json",
+      "cell/r2_v2_energy.json"
+    ],
+    "note": "plating cleared (min +0.0770 V), 4C acceptance 0.537 Ah; ED 446.6 pass (best, porosity lowers mass); lowT 99.5% pass incl. true-soak; SEI@100 499.5 pass thin margin; SEI@500 826.4 fail (R3 coating lever)."
+  },
+  {
+    "candidate": "FastCharge-C",
+    "outputs": [
+      "cell/r2_v3_aging100.json",
+      "cell/r2_v3_aging500.json",
+      "cell/r2_v3_sei100.json",
+      "cell/r2_v3_sei500.json",
+      "cell/r2_v3_lowT.json",
+      "cell/r2_v3_lowT_ret.json",
+      "cell/r2_v3_1c.json",
+      "cell/r2_v3_4c.json",
+      "cell/r2_v3_energy.json"
+    ],
+    "note": "plating cleared (min +0.0559 V), 4C acceptance 0.618 Ah best; ED 441.9 pass; lowT 100.0% pass incl. soak; SEI@100 582.4 FAIL (thicker negative raises SEI), SEI@500 940.2 fail -> V3 rejected on SEI; N/P boost not needed since plating cleared without it."
+  }
+]

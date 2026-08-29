@@ -1,0 +1,67 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "struct": {
+        "Positive current collector thickness [m]": 8e-06,
+        "Negative current collector thickness [m]": 5e-06,
+        "Negative electrode thickness [m]": 1.10e-04,
+        "Negative particle radius [m]": 3.0e-06,
+        "Negative electrode porosity": 0.30,
+        "Negative electrode active material volume fraction": 0.70,
+        "Total heat transfer coefficient [W.m-2.K-1]": 50.0,
+        "Electrolyte conductivity [S.m-1]": 1.8
+      },
+      "name": "r2-E formHiSig",
+      "role": "Stage-2 fallback, formulation: electrolyte conductivity 1.8 S/m (Chen2020 Nyman2008 1M LiPF6 EC/EMC ~1.2 S/m at 318 K -> high-conductivity salt/solvent formulation; literature direction: optimized LiPF6 carbonate blends reach 1.5-1.8 S/m at 45 C; constant-with-T documented as estimate simplification). Cuts electrolyte ohmic polarization in the anode at 20 A (plating) and ohmic heat (Tmax)."
+    },
+    {
+      "struct": {
+        "Positive current collector thickness [m]": 8e-06,
+        "Negative current collector thickness [m]": 5e-06,
+        "Negative electrode thickness [m]": 1.10e-04,
+        "Negative particle radius [m]": 3.0e-06,
+        "Negative electrode porosity": 0.30,
+        "Negative electrode active material volume fraction": 0.70,
+        "Total heat transfer coefficient [W.m-2.K-1]": 50.0,
+        "Electrolyte conductivity [S.m-1]": 1.8,
+        "Cation transference number": 0.45
+      },
+      "name": "r2-F formSigTp",
+      "role": "E + cation transference number 0.45 (Chen2020 default 0.2594; high-t+ electrolyte class, domain estimate from fluorinated-salt / t+-enhanced formulation literature direction). Reduces concentration polarization (salt depletion in anode pores at 20 A), the second-largest anode eta component."
+    },
+    {
+      "struct": {
+        "Positive current collector thickness [m]": 8e-06,
+        "Negative current collector thickness [m]": 5e-06,
+        "Negative electrode thickness [m]": 1.10e-04,
+        "Negative particle radius [m]": 3.0e-06,
+        "Negative electrode porosity": 0.30,
+        "Negative electrode active material volume fraction": 0.70,
+        "Total heat transfer coefficient [W.m-2.K-1]": 100.0,
+        "Electrolyte conductivity [S.m-1]": 1.8,
+        "Cation transference number": 0.45
+      },
+      "name": "r2-G formSigTpCool",
+      "role": "F + cooling h 50->100 W/m2K (liquid cold-plate with thermally conductive interface pad; EV pack liquid-cooling domain range 100-1000 W/m2K at channel level, 100 chosen conservative). DFN Tmax for D was 342.0 K (fails 333.15) at h=50; lower ohmic heat + doubled h targets <= 333.15."
+    },
+    {
+      "struct": {
+        "Positive current collector thickness [m]": 8e-06,
+        "Negative current collector thickness [m]": 5e-06,
+        "Negative electrode thickness [m]": 1.10e-04,
+        "Negative particle radius [m]": 3.0e-06,
+        "Negative electrode porosity": 0.35,
+        "Negative electrode active material volume fraction": 0.65,
+        "Total heat transfer coefficient [W.m-2.K-1]": 100.0,
+        "Electrolyte conductivity [S.m-1]": 1.8,
+        "Cation transference number": 0.45,
+        "Separator thickness [m]": 8e-06
+      },
+      "name": "r2-H formSigTpCoolT",
+      "role": "G + anode transport package: separator 12->8 um (shorter ionic path, less ohmic+concentration drop) and anode porosity 0.30->0.35 with AMVF 0.70->0.65 kept consistent (more electrolyte volume in the anode for 20 A transport). Anode stays cathode-limited (110 um x 0.65 AMVF capacity still > cathode 5.74 Ah), so 1C capacity and ED are preserved; ED slightly up (lighter anode layer, thinner separator)."
+    }
+  ],
+  "llm_reason": "Round-1 verdicts: all four architecture candidates fail on plating (DFN D min anode potential -0.1357 V; DFN Tmax 342.0 K fails at h=50). Protocol diagnosis (diag_protocol.py, current profile extracted from the exact library experiment): the 4C exam is a full 1C discharge followed by a true 20 A CC charge to 4.2 V; in SPMe that charge accepts only 0.21 Ah (37.9 s) making the SPMe plating readout near-vacuous, while DFN accepts 1.59 Ah (~28% SOC) and shows plating from ~8% SOC onward. Cause: eta_neg(20 A) ~0.35 V exceeds U_anode (~0.15-0.20 V) of the empty-to-quarter-full anode -> transport/kinetic-limited, formulation-scale root cause -> Stage-2 fallback with electrolyte sigma/t+ candidates (parameter bridge; no new molecule, molecular funnel skipped). Candidate ladder E<F<G<H bundles the two formulation overrides, then cooling for the DFN Tmax gap, then anode/separator transport. All parameter values declared before running: 1.8 S/m and t+ 0.45 = formulation-domain estimates (literature direction recorded in roles); h=100 = liquid-cooling domain; separator 8 um and porosity 0.35/AMVF 0.65 = architecture choices (widest DOF); names per PyBaMM parameter set (run-pyamm validates)."
+}

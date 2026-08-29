@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "E ThickNeg (N/P 1.16->1.5, anode 110 um, thin CC)",
+    "outputs": ["cell/r3_E_energy.json", "cell/r3_E_derived_sei.json", "cell/r3_E_derived_lowT.json", "cell/r3_E_4c45.json", "cell/r3_E_1c_spme.json"],
+    "note": "anode min -0.4643 vs r2A -0.4386 (WORSE): thicker anode worsens the 4C plating margin despite +29% anode headroom - the longer anode adds electrolyte-potential drop inside the electrode at the metric point, and the charge aborts deeper (0.0329 vs 0.0289 Ah). SEI500 865.6 vs 777.9 (WORSE): longer 1C charge step per cycle (5.65 Ah back vs 3.2 baseline). SEI100 494.6 passes but margin thins (449->495). ED 478.6 (pass). lowT 0.9999 (pass). Nominal bookkept to measured 1C: 5.744 Ah, 4C=22.98 A."
+  },
+  {
+    "candidate": "F ThinSep (separator 9 um, porosity 0.55, thin CC)",
+    "outputs": ["cell/r3_F_energy.json", "cell/r3_F_derived_sei.json", "cell/r3_F_derived_lowT.json", "cell/r3_F_4c45.json", "cell/r3_F_1c_spme.json"],
+    "note": "anode min -0.4348 (only +0.004 vs r2A): separator thinning + porosity does NOT relieve the electrolyte bottleneck at the separator/anode interface (the potential drop is dominated by the anode-side transport, not the separator film). SEI500 787.9 (slightly worse than 777.9). ED 458.6 (pass). lowT 0.9943 (pass). Separator lever: neutral, drop."
+  },
+  {
+    "candidate": "G ThickNeg+ThinSep (E+F combined, thin CC)",
+    "outputs": ["cell/r3_G_energy.json", "cell/r3_G_derived_sei.json", "cell/r3_G_derived_lowT.json", "cell/r3_G_4c45.json", "cell/r3_G_1c_spme.json"],
+    "note": "anode min -0.4704, SEI500 868.9 - no synergy, both negative directions confirmed in combination; ED 480.0 (pass), lowT 0.9999 (pass). Nominal 5.7439 Ah."
+  },
+  {
+    "candidate": "H ThickNeg2 (N/P 1.16->1.77, anode 130 um, dose-response)",
+    "outputs": ["cell/r3_H_energy.json", "cell/r3_H_derived_sei.json", "cell/r3_H_derived_lowT.json", "cell/r3_H_4c45.json", "cell/r3_H_1c_spme.json"],
+    "note": "anode min -0.5027, SEI500 979.9, SEI100 540.0 (FAIL) - the anode-thickness direction scales monotonically NEGATIVE on all three: plating margin, SEI100, SEI500. Dose-response complete: N/P-up direction rejected. ED 452.1 (pass). lowT 1.0000 (pass). Nominal 5.7443 Ah."
+  }
+]

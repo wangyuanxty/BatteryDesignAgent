@@ -1,0 +1,8 @@
+{
+  "action": "plan",
+  "update": true,
+  "reason": "baseline measurement overturned plan expectation (plan-update trigger 3): ED=400.75 Wh/kg already exceeds the 327.18 threshold (+22% margin) and SEI@45C=476 nm passes; the failures are 4C plating (anode_pot min -0.44 V, charge terminates after 0.145 Ah in 26 s) and nail 10 W TR (triggered at 174.6 s post-charge). ED is no longer the binding constraint; the design budget is reallocated to fast-charge transport and nail heat rejection, spending ED margin as needed.",
+  "candidate_strategy": "Round 2 proposes three variants targeting the two failures: FC-1 electrolyte-transport+porosity (sigma 1.35 S/m, t+ 0.35, D 2.3e-10, negative particle 3 um, negative porosity 0.32, separator porosity 0.55 / thickness 9 um); FC-2 = FC-1 + thermal management (h_total 170 W/m2K, consistent nail hA 0.90 W/K); FC-3 architecture-only (same geometry, no electrolyte override) to attribute the transport lever. Round 3 integrates the winners; final candidate re-verifies all four contract metrics.",
+  "budget_allocation": "R2: 3 candidates x (1C spme + calc-energy, 4C lumped+plating, aging45, nail 10 W mass-coupled) = 12 sims; R3: integrated final + margin checks; remaining budget for safety fine-tuning.",
+  "risk_and_fallback": "If FC-1/FC-3 still plate at 4C: escalate electrolyte lever (higher sigma/t+, e.g. 1.5 S/m / 0.40) or thin negative electrode / raise cooling; if nail hA 0.9 insufficient: raise h_total or cooling surface (still within HEV liquid-cooling plausibility); SEI re-checked on every candidate (coating lever in reserve). Three-strike questioning documented in final if triggered."
+}

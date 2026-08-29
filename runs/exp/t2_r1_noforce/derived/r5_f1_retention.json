@@ -1,0 +1,10 @@
+{
+  "lowT_retention_pct": 99.4464,
+  "formula": "100 * capacity_ah(lowT_discharge, 253.15K ambient, Initial temperature 253.15K) / capacity_ah(1C_discharge, 298.15K)",
+  "cap_lowT_ah": 5.000343548787933,
+  "cap_25C_ah": 5.028179901026959,
+  "sources": [
+    "r5_f1_lowT_spme.json",
+    "r5_f1_1c_spme.json"
+  ]
+}

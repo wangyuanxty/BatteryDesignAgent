@@ -1,0 +1,8 @@
+{
+  "action": "funnel",
+  "start_stage": 3,
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "start_stage=3 (task names no new materials/additives/coatings -> SKILL 0 starting-point rule): no molecular screening runs; material properties use system baseline (source: baseline). Base determination (SKILL 1.5 anchor table): task text names no electrode system -> deterministic default Chen2020. Anchor verified against parameter dump: NMC811/graphite OCP set, Nominal cell capacity 5 Ah, SEI kinetics 1e-12 m/s present, no native plating parameters (runtime-injected with trace) - consistent with the 'NMC811/graphite teaching parameterization' discriminant description."
+}

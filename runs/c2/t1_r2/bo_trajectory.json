@@ -1,0 +1,952 @@
+[
+  {
+    "trial": 0,
+    "objective": 221.2205,
+    "energy_density_wh_kg": 278.6408,
+    "T_max_K": 334.6341,
+    "plated": true,
+    "params": {
+      "pos_thickness": 60.15719845890999,
+      "neg_thickness": 97.91068822145462,
+      "pos_porosity": 0.20131204398348929,
+      "neg_porosity": 0.41950407326221467,
+      "sep_thickness": 15.675292730331421,
+      "sep_porosity": 0.32930199578404423,
+      "pos_cc": 13.418164134025574,
+      "neg_cc": 11.320061922073364,
+      "h_heat": 18.080267310142517,
+      "neg_rp": 3.947075605392456
+    }
+  },
+  {
+    "trial": 1,
+    "objective": 278.5574,
+    "energy_density_wh_kg": 328.5574,
+    "T_max_K": 331.1733,
+    "plated": true,
+    "params": {
+      "pos_thickness": 88.60210762359202,
+      "neg_thickness": 126.98317042551935,
+      "pos_porosity": 0.36861340613104404,
+      "neg_porosity": 0.3178411936853081,
+      "sep_thickness": 8.751417212188244,
+      "sep_porosity": 0.48066453477367754,
+      "pos_cc": 16.28311636298895,
+      "neg_cc": 16.579537887126207,
+      "h_heat": 60.861316695809364,
+      "neg_rp": 5.6689014956355095
+    }
+  },
+  {
+    "trial": 2,
+    "objective": 195.8044,
+    "energy_density_wh_kg": 245.8044,
+    "T_max_K": 324.7899,
+    "plated": true,
+    "params": {
+      "pos_thickness": 78.73394493944943,
+      "neg_thickness": 62.97132482752204,
+      "pos_porosity": 0.3243540190625936,
+      "neg_porosity": 0.33026060070842506,
+      "sep_thickness": 13.26358251646161,
+      "sep_porosity": 0.5992285170592367,
+      "pos_cc": 10.54527523741126,
+      "neg_cc": 19.270544949918985,
+      "h_heat": 88.96489749662578,
+      "neg_rp": 4.3788769990205765
+    }
+  },
+  {
+    "trial": 3,
+    "objective": 213.3969,
+    "energy_density_wh_kg": 286.0012,
+    "T_max_K": 337.6708,
+    "plated": true,
+    "params": {
+      "pos_thickness": 69.28375917486846,
+      "neg_thickness": 137.7416194975376,
+      "pos_porosity": 0.40572529872879387,
+      "neg_porosity": 0.22837361278943719,
+      "sep_thickness": 17.184711575508118,
+      "sep_porosity": 0.4458832159638405,
+      "pos_cc": 19.504541523754597,
+      "neg_cc": 8.076986908912659,
+      "h_heat": 46.13909939303994,
+      "neg_rp": 2.2253531366586685
+    }
+  },
+  {
+    "trial": 4,
+    "objective": 221.5287,
+    "energy_density_wh_kg": 271.5287,
+    "T_max_K": 327.1679,
+    "plated": true,
+    "params": {
+      "pos_thickness": 67.36634066328406,
+      "neg_thickness": 72.76271978393197,
+      "pos_porosity": 0.34497470809146763,
+      "neg_porosity": 0.249924043007195,
+      "sep_thickness": 18.512299828231335,
+      "sep_porosity": 0.3675386980175972,
+      "pos_cc": 8.495632484555244,
+      "neg_cc": 17.73159073665738,
+      "h_heat": 79.006022894755,
+      "neg_rp": 5.270113464444876
+    }
+  },
+  {
+    "trial": 5,
+    "objective": 288.5942,
+    "energy_density_wh_kg": 316.487,
+    "T_max_K": 338.7286,
+    "plated": false,
+    "params": {
+      "pos_thickness": 83.0687377601862,
+      "neg_thickness": 144.76995091885328,
+      "pos_porosity": 0.2561950218398124,
+      "neg_porosity": 0.3674260168801993,
+      "sep_thickness": 11.93635868653655,
+      "sep_porosity": 0.5185997226275504,
+      "pos_cc": 17.45417745783925,
+      "neg_cc": 10.92075364291668,
+      "h_heat": 33.24627973139286,
+      "neg_rp": 3.110970314592123
+    }
+  },
+  {
+    "trial": 6,
+    "objective": 281.8934,
+    "energy_density_wh_kg": 342.1212,
+    "T_max_K": 335.1956,
+    "plated": true,
+    "params": {
+      "pos_thickness": 99.9919855967164,
+      "neg_thickness": 85.28448072262108,
+      "pos_porosity": 0.42896347590722145,
+      "neg_porosity": 0.28469363441690804,
+      "sep_thickness": 10.423644423484802,
+      "sep_porosity": 0.562446857895702,
+      "pos_cc": 11.716341942548752,
+      "neg_cc": 13.68225559592247,
+      "h_heat": 27.642690045759082,
+      "neg_rp": 2.8424640484154224
+    }
+  },
+  {
+    "trial": 7,
+    "objective": 179.925,
+    "energy_density_wh_kg": 229.925,
+    "T_max_K": 326.6432,
+    "plated": true,
+    "params": {
+      "pos_thickness": 52.796021196991205,
+      "neg_thickness": 111.58291096799076,
+      "pos_porosity": 0.26986393267288805,
+      "neg_porosity": 0.40199247472919525,
+      "sep_thickness": 14.002698469907045,
+      "sep_porosity": 0.4088367344811559,
+      "pos_cc": 14.582015607506037,
+      "neg_cc": 14.418385479599237,
+      "h_heat": 73.44711998477578,
+      "neg_rp": 4.55818285420537
+    }
+  },
+  {
+    "trial": 8,
+    "objective": 224.74,
+    "energy_density_wh_kg": 274.74,
+    "T_max_K": 324.4042,
+    "plated": true,
+    "params": {
+      "pos_thickness": 53.49616943858564,
+      "neg_thickness": 69.19195669703186,
+      "pos_porosity": 0.44196744267828764,
+      "neg_porosity": 0.37688927380368115,
+      "sep_thickness": 8.352725930511951,
+      "sep_porosity": 0.42465538876131176,
+      "pos_cc": 8.814385667443275,
+      "neg_cc": 18.284778609871864,
+      "h_heat": 83.31805082038045,
+      "neg_rp": 2.396244201809168
+    }
+  },
+  {
+    "trial": 9,
+    "objective": 259.0363,
+    "energy_density_wh_kg": 339.5108,
+    "T_max_K": 339.2449,
+    "plated": true,
+    "params": {
+      "pos_thickness": 93.80172514356673,
+      "neg_thickness": 132.93754418380558,
+      "pos_porosity": 0.2881094909273088,
+      "neg_porosity": 0.24423722834326328,
+      "sep_thickness": 16.448614101856947,
+      "sep_porosity": 0.5735812034457921,
+      "pos_cc": 17.866658110171556,
+      "neg_cc": 10.003330368548632,
+      "h_heat": 40.53560274653137,
+      "neg_rp": 4.23533496633172
+    }
+  },
+  {
+    "trial": 10,
+    "objective": 306.4487,
+    "energy_density_wh_kg": 367.6758,
+    "T_max_K": 335.3954,
+    "plated": true,
+    "params": {
+      "pos_thickness": 85.73716250248253,
+      "neg_thickness": 102.71964658051729,
+      "pos_porosity": 0.3345483218319714,
+      "neg_porosity": 0.40363167580217124,
+      "sep_thickness": 17.958215549588203,
+      "sep_porosity": 0.46410390045493843,
+      "pos_cc": 11.961921244859695,
+      "neg_cc": 13.14661294594407,
+      "h_heat": 23.682396113872528,
+      "neg_rp": 5.968717347830534
+    }
+  },
+  {
+    "trial": 11,
+    "objective": 189.0258,
+    "energy_density_wh_kg": 239.0258,
+    "T_max_K": 330.481,
+    "plated": true,
+    "params": {
+      "pos_thickness": 63.93802831880748,
+      "neg_thickness": 120.75628297403455,
+      "pos_porosity": 0.23536997572518886,
+      "neg_porosity": 0.27120565208606423,
+      "sep_thickness": 12.865440104156733,
+      "sep_porosity": 0.31773748425766823,
+      "pos_cc": 15.108867440372705,
+      "neg_cc": 15.31819772720337,
+      "h_heat": 66.50953129865229,
+      "neg_rp": 3.6824259273707867
+    }
+  },
+  {
+    "trial": 12,
+    "objective": 248.0452,
+    "energy_density_wh_kg": 336.713,
+    "T_max_K": 340.8836,
+    "plated": true,
+    "params": {
+      "pos_thickness": 74.42410318180919,
+      "neg_thickness": 90.14287479221821,
+      "pos_porosity": 0.2965790452901274,
+      "neg_porosity": 0.3005576150491834,
+      "sep_thickness": 11.209498148411512,
+      "sep_porosity": 0.3878743353299796,
+      "pos_cc": 12.891679506748915,
+      "neg_cc": 11.849626887589693,
+      "h_heat": 10.790904480963945,
+      "neg_rp": 4.820891290903091
+    }
+  },
+  {
+    "trial": 13,
+    "objective": 342.1518,
+    "energy_density_wh_kg": 342.1518,
+    "T_max_K": 328.4949,
+    "plated": false,
+    "params": {
+      "pos_thickness": 77.47238501906395,
+      "neg_thickness": 105.32856239005923,
+      "pos_porosity": 0.4022497938014567,
+      "neg_porosity": 0.4486205592285842,
+      "sep_thickness": 19.613793082535267,
+      "sep_porosity": 0.5365341117605567,
+      "pos_cc": 16.03790505975485,
+      "neg_cc": 15.685365721583366,
+      "h_heat": 56.549248872324824,
+      "neg_rp": 2.5446055829524994
+    }
+  },
+  {
+    "trial": 14,
+    "objective": 205.85,
+    "energy_density_wh_kg": 255.85,
+    "T_max_K": 330.1266,
+    "plated": true,
+    "params": {
+      "pos_thickness": 92.59204622358084,
+      "neg_thickness": 79.02180044911802,
+      "pos_porosity": 0.2282164695672691,
+      "neg_porosity": 0.20328909000381828,
+      "sep_thickness": 15.104374382644892,
+      "sep_porosity": 0.502341141924262,
+      "pos_cc": 10.133162584155798,
+      "neg_cc": 18.711644619703293,
+      "h_heat": 95.90252608060837,
+      "neg_rp": 3.2525701597332954
+    }
+  },
+  {
+    "trial": 15,
+    "objective": 208.964,
+    "energy_density_wh_kg": 258.964,
+    "T_max_K": 328.6817,
+    "plated": true,
+    "params": {
+      "pos_thickness": 58.53847535327077,
+      "neg_thickness": 139.905451470986,
+      "pos_porosity": 0.37295755189843477,
+      "neg_porosity": 0.35155325853265823,
+      "sep_thickness": 9.697332933545113,
+      "sep_porosity": 0.3556721379049122,
+      "pos_cc": 19.18615562468767,
+      "neg_cc": 9.000417325645685,
+      "h_heat": 50.09943322278559,
+      "neg_rp": 5.101178832352161
+    }
+  },
+  {
+    "trial": 16,
+    "objective": 186.6835,
+    "energy_density_wh_kg": 236.6835,
+    "T_max_K": 330.2716,
+    "plated": true,
+    "params": {
+      "pos_thickness": 57.66711379401386,
+      "neg_thickness": 79.73856875672936,
+      "pos_porosity": 0.28560759434476496,
+      "neg_porosity": 0.28661097078584136,
+      "sep_thickness": 17.738876555114985,
+      "sep_porosity": 0.5323659276589752,
+      "pos_cc": 16.824838798493147,
+      "neg_cc": 19.125176072120667,
+      "h_heat": 41.2314076628536,
+      "neg_rp": 3.1569095589220524
+    }
+  },
+  {
+    "trial": 17,
+    "objective": 348.7773,
+    "energy_density_wh_kg": 398.7773,
+    "T_max_K": 327.7105,
+    "plated": true,
+    "params": {
+      "pos_thickness": 91.97140824981034,
+      "neg_thickness": 143.4839953109622,
+      "pos_porosity": 0.44447076790966095,
+      "neg_porosity": 0.3883487068116665,
+      "sep_thickness": 13.834776237607002,
+      "sep_porosity": 0.3813115554861724,
+      "pos_cc": 13.971041105687618,
+      "neg_cc": 9.336312238126993,
+      "h_heat": 88.22514517232776,
+      "neg_rp": 5.442956123501062
+    }
+  },
+  {
+    "trial": 18,
+    "objective": 250.665,
+    "energy_density_wh_kg": 300.665,
+    "T_max_K": 329.15,
+    "plated": true,
+    "params": {
+      "pos_thickness": 75.07202127017081,
+      "neg_thickness": 92.17234787531197,
+      "pos_porosity": 0.24068322968669237,
+      "neg_porosity": 0.2596549448091537,
+      "sep_thickness": 9.322061996906996,
+      "sep_porosity": 0.3376440052874386,
+      "pos_cc": 19.70000186190009,
+      "neg_cc": 12.310588378459215,
+      "h_heat": 71.41580891795456,
+      "neg_rp": 4.729105424135923
+    }
+  },
+  {
+    "trial": 19,
+    "objective": 277.0697,
+    "energy_density_wh_kg": 304.5314,
+    "T_max_K": 338.6423,
+    "plated": false,
+    "params": {
+      "pos_thickness": 72.26244672201574,
+      "neg_thickness": 110.20914520137012,
+      "pos_porosity": 0.3292412686161697,
+      "neg_porosity": 0.3615939070470631,
+      "sep_thickness": 16.229275174438953,
+      "sep_porosity": 0.49125677458941935,
+      "pos_cc": 10.753018148243427,
+      "neg_cc": 15.974940672516823,
+      "h_heat": 24.378931932151318,
+      "neg_rp": 2.890259515494108
+    }
+  },
+  {
+    "trial": 20,
+    "objective": 404.8231,
+    "energy_density_wh_kg": 404.9066,
+    "T_max_K": 333.1667,
+    "plated": false,
+    "params": {
+      "pos_thickness": 88.78825602768761,
+      "neg_thickness": 123.61161324616148,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 19.598520921322127,
+      "sep_porosity": 0.4368776027143184,
+      "pos_cc": 13.657045731160563,
+      "neg_cc": 12.044890640855622,
+      "h_heat": 38.27613869896895,
+      "neg_rp": 2.917044143082749
+    }
+  },
+  {
+    "trial": 21,
+    "objective": 369.1506,
+    "energy_density_wh_kg": 457.6685,
+    "T_max_K": 350.8536,
+    "plated": false,
+    "params": {
+      "pos_thickness": 95.50727668729456,
+      "neg_thickness": 120.0968452529234,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 20.0,
+      "sep_porosity": 0.39143249215525444,
+      "pos_cc": 12.977464948008638,
+      "neg_cc": 9.28062864748431,
+      "h_heat": 10.0,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 22,
+    "objective": 383.43,
+    "energy_density_wh_kg": 383.43,
+    "T_max_K": 329.1922,
+    "plated": false,
+    "params": {
+      "pos_thickness": 91.64184874069042,
+      "neg_thickness": 118.88467651503203,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 20.0,
+      "sep_porosity": 0.3726512229919909,
+      "pos_cc": 20.0,
+      "neg_cc": 14.618391703866411,
+      "h_heat": 59.35986489837949,
+      "neg_rp": 2.9357797972121977
+    }
+  },
+  {
+    "trial": 23,
+    "objective": 280.488,
+    "energy_density_wh_kg": 375.8593,
+    "T_max_K": 352.2243,
+    "plated": false,
+    "params": {
+      "pos_thickness": 92.06656798716143,
+      "neg_thickness": 150.0,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 20.0,
+      "sep_porosity": 0.46777629962154865,
+      "pos_cc": 11.519306915909542,
+      "neg_cc": 16.004694913065208,
+      "h_heat": 10.0,
+      "neg_rp": 3.3724054775893824
+    }
+  },
+  {
+    "trial": 24,
+    "objective": 423.9638,
+    "energy_density_wh_kg": 423.9638,
+    "T_max_K": 325.9829,
+    "plated": false,
+    "params": {
+      "pos_thickness": 88.93607242859603,
+      "neg_thickness": 117.80635441754359,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 16.6685997965208,
+      "sep_porosity": 0.4232177987144649,
+      "pos_cc": 11.748170560888164,
+      "neg_cc": 11.138515509605307,
+      "h_heat": 80.36929138832693,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 25,
+    "objective": 409.7787,
+    "energy_density_wh_kg": 409.7787,
+    "T_max_K": 324.4472,
+    "plated": false,
+    "params": {
+      "pos_thickness": 89.70538943212196,
+      "neg_thickness": 119.17119693848777,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 20.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 20.0,
+      "neg_cc": 10.887496698355404,
+      "h_heat": 99.9280666510152,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 26,
+    "objective": 412.356,
+    "energy_density_wh_kg": 412.356,
+    "T_max_K": 325.5861,
+    "plated": false,
+    "params": {
+      "pos_thickness": 87.89207137321758,
+      "neg_thickness": 117.04499377202288,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.3,
+      "pos_cc": 17.81136363841813,
+      "neg_cc": 11.115809587609608,
+      "h_heat": 82.88088557833366,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 27,
+    "objective": 447.5228,
+    "energy_density_wh_kg": 447.5228,
+    "T_max_K": 325.7793,
+    "plated": false,
+    "params": {
+      "pos_thickness": 90.92983209058983,
+      "neg_thickness": 119.50901748518892,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 11.320339229586352,
+      "h_heat": 75.7143361042565,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 28,
+    "objective": 476.0251,
+    "energy_density_wh_kg": 476.0251,
+    "T_max_K": 326.3001,
+    "plated": false,
+    "params": {
+      "pos_thickness": 94.66068264119727,
+      "neg_thickness": 119.29261485222018,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 9.615348108434112,
+      "h_heat": 70.66853362503265,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 29,
+    "objective": 507.4152,
+    "energy_density_wh_kg": 507.4152,
+    "T_max_K": 326.6229,
+    "plated": false,
+    "params": {
+      "pos_thickness": 99.08091139531552,
+      "neg_thickness": 118.13143205261034,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 68.02836901635831,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 30,
+    "objective": 478.4789,
+    "energy_density_wh_kg": 478.4789,
+    "T_max_K": 326.6667,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 112.80435250216881,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 20.0,
+      "neg_cc": 8.0,
+      "h_heat": 66.90483846813952,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 31,
+    "objective": 513.7952,
+    "energy_density_wh_kg": 513.7952,
+    "T_max_K": 326.0606,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 111.93288213144673,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 72.80711649843772,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 32,
+    "objective": 496.7381,
+    "energy_density_wh_kg": 496.7381,
+    "T_max_K": 326.4,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 108.76489784364091,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 20.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 73.24266872782253,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 33,
+    "objective": 442.0276,
+    "energy_density_wh_kg": 492.0276,
+    "T_max_K": 325.6375,
+    "plated": true,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 108.93202307519431,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 79.93531105093406,
+      "neg_rp": 4.61611125266387
+    }
+  },
+  {
+    "trial": 34,
+    "objective": 459.1767,
+    "energy_density_wh_kg": 459.1767,
+    "T_max_K": 327.3373,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 118.27697500742407,
+      "pos_porosity": 0.32475215989305195,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 72.14310199769686,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 35,
+    "objective": 495.9329,
+    "energy_density_wh_kg": 495.9329,
+    "T_max_K": 327.2321,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 122.93322049610482,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 20.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 67.56197921799736,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 36,
+    "objective": 506.5976,
+    "energy_density_wh_kg": 506.5976,
+    "T_max_K": 327.1387,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 108.89307681437754,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 62.08876890647755,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 37,
+    "objective": 502.1918,
+    "energy_density_wh_kg": 502.1918,
+    "T_max_K": 326.8385,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 108.2984677131461,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.4314414566332555,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 66.27386781596424,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 38,
+    "objective": 510.4149,
+    "energy_density_wh_kg": 510.4149,
+    "T_max_K": 326.9948,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 117.91491967466018,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 64.77629936101846,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 39,
+    "objective": 479.7061,
+    "energy_density_wh_kg": 479.7061,
+    "T_max_K": 327.3596,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 99.54054937625232,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 58.729162318110085,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 40,
+    "objective": 507.8014,
+    "energy_density_wh_kg": 507.8014,
+    "T_max_K": 326.5718,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 118.60818676909406,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.48695657236073875,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 69.7255238047606,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 41,
+    "objective": 507.7372,
+    "energy_density_wh_kg": 507.7372,
+    "T_max_K": 326.1329,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 120.2360687867657,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 73.45971642278364,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 42,
+    "objective": 511.7303,
+    "energy_density_wh_kg": 511.7303,
+    "T_max_K": 325.6924,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 116.24524345290287,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 77.73540595444442,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 43,
+    "objective": 512.1529,
+    "energy_density_wh_kg": 512.1529,
+    "T_max_K": 326.3046,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 115.97846882524145,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 70.94615423448977,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 44,
+    "objective": 513.6836,
+    "energy_density_wh_kg": 513.6836,
+    "T_max_K": 325.1772,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 113.78720491784519,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 83.86842175084591,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 45,
+    "objective": 511.4606,
+    "energy_density_wh_kg": 511.4606,
+    "T_max_K": 326.031,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 116.17175612736565,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 74.96538389592027,
+      "neg_rp": 2.3420265743002853
+    }
+  },
+  {
+    "trial": 46,
+    "objective": 513.7011,
+    "energy_density_wh_kg": 513.7011,
+    "T_max_K": 325.7144,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 113.99567178696613,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 77.07193992720343,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 47,
+    "objective": 513.3243,
+    "energy_density_wh_kg": 513.3243,
+    "T_max_K": 326.0042,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 114.59173025846071,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 73.8819082446973,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 48,
+    "objective": 514.1339,
+    "energy_density_wh_kg": 514.1339,
+    "T_max_K": 325.4229,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 112.2426703414189,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 80.33110300929695,
+      "neg_rp": 2.0
+    }
+  },
+  {
+    "trial": 49,
+    "objective": 513.1944,
+    "energy_density_wh_kg": 513.1944,
+    "T_max_K": 325.912,
+    "plated": false,
+    "params": {
+      "pos_thickness": 100.0,
+      "neg_thickness": 114.34788704635191,
+      "pos_porosity": 0.45,
+      "neg_porosity": 0.45,
+      "sep_thickness": 8.0,
+      "sep_porosity": 0.6,
+      "pos_cc": 8.0,
+      "neg_cc": 8.0,
+      "h_heat": 75.52687623153788,
+      "neg_rp": 2.2045619956656566
+    }
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "action": "propose",
+  "round": 5,
+  "candidates": [
+    {
+      "name": "lnmo_final",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 200, \"Negative electrode thickness [m]\": 1.022e-4, \"Negative particle radius [m]\": 3.5e-6, \"EC initial concentration in electrolyte [mol.m-3]\": 2270.5, \"EC diffusivity [m2.s-1]\": 1.2e-18}",
+      "role": "COMBINED FINAL CANDIDATE - the exact intersection of all round-3/4 measured-passing levers, run through the full protocol battery (1C discharge + calc-energy + aging_1C_100cyc + 4C_charge_45C with plating): (1) thermal management h = 200 W/m2K (T_max 320.7 K measured, margin 2.4 K); (2) N/P 1.20 anode 102.2 um (end-of-charge dip -176 -> -4.9 mV); (3) negative particle radius 3.5 um (dip -> +6.6 mV, plated=false); (4) EC-lean electrolyte c_ec0 2270.5 mol/m3 + densified-SEI EC diffusivity 1.2e-18 m2/s (sei_thickness 753 -> 430.5 nm). Design rationale per lever: cooling solution for 4C at 45C ambient; anode capacity headroom + finer anode microstructure for plating-free end-of-charge kinetics; EC-lean formulation + film-forming additive for SEI growth suppression (diffusion-limited regime, sqrt(c0*D_ec) scaling validated). SPMe screening first; DFN confirmation is the next round."
+    }
+  ],
+  "llm_reason": "Rounds 2-4 closed each failing criterion with a measured lever; round 5 combines them into the single shipping candidate and runs the complete evidence battery so every criterion has same-candidate tool-sourced values. Expected: ED ~1128 Wh/L, midpoint ~4.188 V, T_max ~321 K, min anode potential ~ +6.6 mV, SEI ~430 nm - all passing at SPMe with the DFN confirmation pending."
+}

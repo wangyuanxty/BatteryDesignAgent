@@ -1,0 +1,20 @@
+{
+  "Positive current collector thickness [m]": 8e-06,
+  "Negative current collector thickness [m]": 6e-06,
+  "Positive particle radius [m]": 1e-06,
+  "Negative particle radius [m]": 1.5e-06,
+  "Electrolyte conductivity [S.m-1]": 1.3,
+  "Cation transference number": 0.5,
+  "Electrolyte diffusivity [m2.s-1]": 3.5e-10,
+  "Positive electrode porosity": 0.45,
+  "Negative electrode porosity": 0.35,
+  "Separator porosity": 0.55,
+  "Separator thickness [m]": 1e-05,
+  "Negative electrode thickness [m]": 9.5e-05,
+  "Total heat transfer coefficient [W.m-2.K-1]": 40.0,
+  "Electrode height [m]": 0.07208507000838972,
+  "Electrode width [m]": 1.7522217017423962,
+  "Cell volume [m3]": 2.976317801144842e-05,
+  "Cell cooling surface area [m2]": 0.006530680795074012,
+  "Nominal cell capacity [A.h]": 6.149416944514137
+}

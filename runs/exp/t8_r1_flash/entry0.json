@@ -1,0 +1,43 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": {"max": 0.0},
+      "max_homo_ev": {"max": -6.0}
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 446.18},
+      "capacity_retention_5c": {"min": 0.90},
+      "mass_kg": {"max": 0.04}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false
+    },
+    "meta": {
+      "case_id": "t8_r1_flash",
+      "objective": "Design a battery for a long-endurance drone: energy density >= 446.18 Wh/kg, support 5C discharge (capacity retention >= 90%), cell mass <= 40 g",
+      "parsed_thresholds": {
+        "energy_density_wh_kg": ">= 446.18 (verbatim from task text)",
+        "capacity_retention_5c": ">= 0.90 = 5C capacity / 1C capacity, same params, mechanically derived",
+        "mass_kg": "<= 0.04 kg (40 g); contract mass = calc-energy layer-stack mass (electrolyte excluded, honest note)",
+        "T_max_K": "<= 333.15 K (60 C red line, protocol default; task text does not specify a temperature)",
+        "plated": false
+      },
+      "real_compute": false,
+      "start_stage": 2,
+      "base_params": "Chen2020 (task text names no electrode system -> anchor table default, with record)",
+      "system_switch_allowed": true,
+      "rate_protocol": "5C_discharge (DFN; SPMe underestimates at 5C)",
+      "safety_protocol": "4C_charge_45C thermal lumped + plating",
+      "thermal_cooling_h": 10.0,
+      "freedoms": {
+        "electrode_system": "adjustable (no system locked in task text; default Chen2020, system switch allowed e.g. LNMO high-voltage set)",
+        "electrolyte_formulation": "adjustable (transport overrides: Electrolyte conductivity/diffusivity/Cation transference number)",
+        "electrode_modification": "adjustable (coating/doping if needed)",
+        "cell_architecture": "adjustable (thickness/porosity/N-P/separator/current collector/particle size)",
+        "thermal_management": "locked at default h=10 W/m2/K (unless safety fails)"
+      },
+      "note": "headless zero-interaction run: parameters parsed from task text, unspecified items use protocol defaults (SKILL.md section 0)"
+    }
+  }
+}

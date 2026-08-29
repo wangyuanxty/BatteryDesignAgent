@@ -1,0 +1,6 @@
+[
+  {"candidate": "r2-E formHiSig", "outputs": ["cell/r2_E_4c_dfn.json", "cell/r2_E_energy.json"], "note": "Stage-2 formulation fallback: electrolyte conductivity 1.8 S/m; DFN is the authoritative 4C exam (SPMe 4C charge segment near-vacuous); TR re-check deferred to final candidate"},
+  {"candidate": "r2-F formSigTp", "outputs": ["cell/r2_F_4c_dfn.json", "cell/r2_F_energy.json"], "note": "+ cation transference number 0.45; DFN authoritative 4C exam; TR re-check deferred to final candidate"},
+  {"candidate": "r2-G formSigTpCool", "outputs": ["cell/r2_G_4c_dfn.json", "cell/r2_G_energy.json"], "note": "+ cooling h=100 W/m2K vs DFN Tmax 342 K gap; DFN authoritative 4C exam; TR re-check deferred to final candidate"},
+  {"candidate": "r2-H formSigTpCoolT", "outputs": ["cell/r2_H_4c_dfn.json", "cell/r2_H_energy.json"], "note": "+ separator 8 um + anode porosity 0.35/AMVF 0.65 transport package; DFN authoritative 4C exam; TR re-check deferred to final candidate"}
+]

@@ -1,0 +1,8 @@
+{
+  "Electrolyte conductivity [S.m-1]": 2.2,
+  "Electrolyte diffusivity [m2.s-1]": 7.5e-10,
+  "Cation transference number": 0.45,
+  "Positive particle radius [m]": 2.6e-06,
+  "Negative particle radius [m]": 2.9e-06,
+  "Total heat transfer coefficient [W.m-2.K-1]": 40.0
+}

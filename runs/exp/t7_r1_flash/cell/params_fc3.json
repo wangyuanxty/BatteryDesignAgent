@@ -1,0 +1,6 @@
+{
+  "Negative particle radius [m]": 3.0e-6,
+  "Negative electrode porosity": 0.32,
+  "Separator porosity": 0.55,
+  "Separator thickness [m]": 9.0e-6
+}

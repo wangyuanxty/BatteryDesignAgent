@@ -1,0 +1,11 @@
+{
+  "Positive electrode thickness [m]": 0.00006,
+  "Negative electrode thickness [m]": 0.000065,
+  "Positive electrode porosity": 0.40,
+  "Negative electrode porosity": 0.36,
+  "Positive particle radius [m]": 2e-06,
+  "Negative particle radius [m]": 2e-06,
+  "Total heat transfer coefficient [W.m-2.K-1]": 50.0,
+  "Electrolyte conductivity [S.m-1]": 1.8,
+  "Cation transference number": 0.50
+}

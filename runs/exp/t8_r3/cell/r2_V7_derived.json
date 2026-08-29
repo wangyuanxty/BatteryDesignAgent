@@ -1,0 +1,11 @@
+{
+  "candidate": "V7",
+  "capacity_1c_ah": 5.056480598143841,
+  "capacity_5c_ah": 4.940834861709173,
+  "retention_5c": 0.9771292039611267,
+  "formula": "retention_5c = capacity_5c_ah / capacity_1c_ah (5C_discharge DFN vs same-params 1C_discharge DFN)",
+  "sources": {
+    "one_c": "runs\\exp\\t8_r3\\cell\\r2_V7_1c_dfn.json",
+    "five_c": "runs\\exp\\t8_r3\\cell\\r2_V7_5c_dfn.json"
+  }
+}

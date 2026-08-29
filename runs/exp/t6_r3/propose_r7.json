@@ -1,0 +1,27 @@
+{
+  "action": "propose",
+  "round": 7,
+  "candidates": [
+    {
+      "struct": {"Positive electrode thickness [m]": 6.0e-05, "SEI kinetic rate constant [m.s-1]": 5.0e-14, "Total heat transfer coefficient [W.m-2.K-1]": 80.0, "EC initial concentration in electrolyte [mol.m-3]": 2000.0},
+      "name": "V17_ec2000",
+      "role": "EC-lean electrolyte (4541->2000 mol/m3, ~4.5 M -> ~2 M EC): Yang2017 ec-reaction-limited law has j_sei proportional to EC concentration; high-voltage electrolytes must be EC-lean anyway (EC oxidizes above ~4.5 V, cell charges to 4.7 V)"
+    },
+    {
+      "struct": {"Positive electrode thickness [m]": 6.0e-05, "SEI kinetic rate constant [m.s-1]": 5.0e-14, "Total heat transfer coefficient [W.m-2.K-1]": 80.0, "SEI open-circuit potential [V]": 0.35},
+      "name": "V18_usei035",
+      "role": "electrolyte with higher reduction stability (U_sei 0.4->0.35 V): shifts SEI overpotential by +50 mV -> k_exp falls exp(-alpha*F*dU/RT) ~ x0.38 when active; fluorinated solvent blends also shift reduction onset"
+    },
+    {
+      "struct": {"Positive electrode thickness [m]": 6.0e-05, "SEI kinetic rate constant [m.s-1]": 5.0e-14, "Total heat transfer coefficient [W.m-2.K-1]": 80.0, "SEI partial molar volume [m3.mol-1]": 7.0e-05},
+      "name": "V19_vbar7",
+      "role": "denser inorganic-rich SEI (V_bar 9.585e-5 -> 7.0e-5 m3/mol, -27%): L_sei proportional to molar volume; fluorinated additives (FEC/LiF-rich) give denser SEI than organic LEDC"
+    },
+    {
+      "struct": {"Positive electrode thickness [m]": 6.0e-05, "SEI kinetic rate constant [m.s-1]": 5.0e-14, "Total heat transfer coefficient [W.m-2.K-1]": 100.0, "EC initial concentration in electrolyte [mol.m-3]": 2500.0, "SEI open-circuit potential [V]": 0.38},
+      "name": "V20_combo",
+      "role": "mild combo: EC 2500 + U_sei 0.38 + h=100 (T_max margin: V16 322.92 K is only 0.23 K under 323.15)"
+    }
+  ],
+  "llm_reason": "Round-6: thin-pos hypothesis CONFIRMED — plating cleared across the family (V13 amin +0.0337, V14 +0.0407, V15 +0.0288, V16 +0.0387, all plated=False), and V16 (pos 60 um + SEI k 5e-14 + h 80) passes 4/5: ED 1087.3, plateau 4.1648, T_max 322.92, plating clear; ONLY SEI 606.2 nm vs 500 fails. 1C discharge delivered 5.056 Ah on pos 60 um -> capacity >= 5 Ah (>= nominal 4.5), honest. Model audit (pybamm sei_growth.py, Yang2017 ec-reaction-limited): j_sei = -F*c_ec_0*k_exp/(1 + L*k_exp/D_ec), k_exp = k_sei*exp(-alpha*F*(delta_phi - U_sei - j*L*R_sei)/RT); thickness L_sei ~ c_sei*V_bar. Remaining honest levers beyond the already-used k_sei: (a) EC concentration c_ec_0 — physically REQUIRED to be lower in a 4.7 V cell; (b) U_sei reduction stability — electrolyte formulation; (c) V_bar SEI density — additive chemistry; (d) h=100 for T_max margin. V17-V19 isolate each SEI lever on the V16 platform; V20 is the mild-combo assembly with thermal margin."
+}

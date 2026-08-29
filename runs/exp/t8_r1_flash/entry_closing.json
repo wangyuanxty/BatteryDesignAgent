@@ -1,0 +1,27 @@
+[
+  {
+    "action": "funnel",
+    "passed": 0,
+    "rejected": 0,
+    "disputed": 0,
+    "detail": "Molecular funnel not executed in this case: all candidates were system/architecture/formulation type (no SMILES candidates). Per protocol candidate table, formulation candidates (electrolyte transport overrides) skip molecular screening; architecture/system candidates go directly to Stage 3/4 simulation. Transport values sourced literature (sigma/D) or marked estimate (t+=0.45/0.5)."
+  },
+  {
+    "action": "endorse",
+    "skipped": true,
+    "reason": "real_compute=false (meta, per task default): no true DFT/MD endorsement requested; cell-scale DFN verification and protocol screening stand as the evidence chain. No fabricated DFT/MD values."
+  },
+  {
+    "action": "final",
+    "recommendation": "Final design: V4 Thermal-tuned (Chen2020 NMC811/graphite + fast package). Spec: 3.45 Ah, 3.9 V midpoint, 13.4 Wh, 473.0 Wh/kg contract-caliber, 26.8 g stack mass, 5C retention 99.0% (DFN), 4C-charge@45C T_max 331.98 K (<=333.15), no lithium plating (anode potential min +0.025 V), 5C-discharge T_max 321.2 K. Key levers: nano particles (pos 1.0 um / neg 1.5 um), high-transport electrolyte (sigma 1.4 S/m, D 4.5e-10 m2/s, t+ 0.5 estimate), thin collectors (Al 8 um / Cu 6 um), thin electrodes (51.4/57.9 um), separator porosity 0.55, flatter-pouch cooling area 0.0075 m2. Comparison: baseline Chen2020 ED 400.8/retention 8.7%/mass 43.5 g -> V4 all-contract pass. Attribution: transport+particles ~2.6 K, cooling area ~2.8 K on 4C T_max (V5 control 334.7 K). Informational: aging 100 cyc SEI 467 nm (climb-then-saturate artifact labeled), overcharge T_max 300.6 K no thermal runaway.",
+    "verdict": "achieved",
+    "contract_check": {
+      "energy_density_wh_kg": {"value": 473.0, "threshold": {"min": 446.18}, "pass": true},
+      "capacity_retention_5c": {"value": 0.990, "threshold": {"min": 0.90}, "pass": true},
+      "mass_kg": {"value": 0.0268, "threshold": {"max": 0.04}, "pass": true},
+      "T_max_K_4c_charge": {"value": 331.98, "threshold": {"max": 333.15}, "pass": true},
+      "plated": {"value": false, "pass": true}
+    },
+    "limitations": "Cell mass excludes electrolyte/casing (contract formula, electrolyte density not in parameter set); 5C/1C retention uses self-consistent nameplate capacity (nominal=actual within 1.5%); t+ 0.5 is a domain estimate (high-transference electrolyte, not simulation-derived); T_max margin only 1.2 K at 4C/45C with h=10; no physical-prototype validation; no nail/crush/drop verification (beyond simulation boundary)."
+  }
+]

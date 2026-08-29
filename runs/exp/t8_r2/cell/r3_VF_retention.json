@@ -1,0 +1,6 @@
+{
+  "retention_5c": 0.9640140597142708,
+  "capacity_ah_1c": 5.036077845040502,
+  "capacity_ah_5c": 4.854849848434591,
+  "note": "retention_5c = capacity_ah_5c / capacity_ah_1c (same-parameter DFN runs; mechanical division)"
+}

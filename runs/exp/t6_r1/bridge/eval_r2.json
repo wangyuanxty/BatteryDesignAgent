@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "lnmo_arch_default",
+    "outputs": ["cell/r2_lnmo_aging.json", "cell/r2_lnmo_4c_def.json", "cell/r1_lnmo_1c_spme.json", "cell/r1_lnmo_energy.json"],
+    "note": "Round 2 gap quantification at default architecture (params {}): sei_thickness_nm_end = 753.09 nm > 500 nm FAIL (SEI kinetics reduction of ~33.6% required); 4C_charge_45C T_max_K = 328.86 K > 323.15 K FAIL at contract-default h=10 (5 K headroom at 45C ambient exceeded by 5.7 K); anode_potential_v min = -0.176 V < 0 -> plated FAIL (dip confined to the final ~2 s of the 4C charge, end-of-charge anode overpotential, h-independent). ED/midpoint carried from round 1 (1005.3 Wh/L, 4.166 V, both PASS). Aging capacity_ah_per_cycle shows the known non-monotonic climb artifact (values negative in this protocol's accounting) - annotated, not treated as normal degradation; the criterion reads sei_thickness_nm_end only."
+  },
+  {
+    "candidate": "lnmo_h200",
+    "outputs": ["cell/r2_lnmo_aging.json", "cell/r2_lnmo_4c_h200.json", "cell/r1_lnmo_1c_spme.json", "cell/r1_lnmo_energy.json"],
+    "note": "Thermal probe h=200 W/m2K: T_max_K = 320.72 K <= 323.15 K PASS (margin 2.43 K). Plating unchanged in character: anode_potential_v min = -0.1735 V < 0 -> plated FAIL (confirms plating is driven by anode kinetics, not temperature). SEI shared from the isothermal aging run (h does not enter isothermal aging) = 753.09 nm FAIL. ED/midpoint inherited from round 1 (no geometry change)."
+  },
+  {
+    "candidate": "lnmo_h500",
+    "outputs": ["cell/r2_lnmo_aging.json", "cell/r2_lnmo_4c_h500.json", "cell/r1_lnmo_1c_spme.json", "cell/r1_lnmo_energy.json"],
+    "note": "Thermal probe h=500 W/m2K: T_max_K = 319.82 K <= 323.15 K PASS (margin 3.33 K; T_max asymptote ~319.8 K at 318.15 K ambient, i.e. residual ~1.65 K is irreversible heat, not cooling-limited). Plating: anode_potential_v min = -0.1732 V < 0 -> plated FAIL. SEI shared = 753.09 nm FAIL. T_max(h) map: 328.86/320.72/319.82 K at h = 10/200/500 -> h >= ~150-200 satisfies the thermal criterion; h=200 carries sufficient margin."
+  }
+]

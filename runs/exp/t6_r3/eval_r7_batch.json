@@ -1,0 +1,42 @@
+[
+  {
+    "candidate": "V17_ec2000",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r7_V17_ec2000_1c.json",
+      "runs/exp/t6_r3/cell/r7_V17_ec2000_aging.json",
+      "runs/exp/t6_r3/cell/r7_V17_ec2000_energy.json",
+      "runs/exp/t6_r3/cell/r7_V17_ec2000_4c.json"
+    ],
+    "note": "EC-lean electrolyte 4541->2000 mol/m3 (~4.5M->2M EC): SEI 394.5 nm PASS (j_sei proportional to c_ec_0, Yang2017 ec-reaction-limited law confirmed empirically) — ALL FIVE CRITERIA PASS: ED 1087.3 Wh/L, plateau 4.1648 V, T_max 322.92 K (margin 0.23 K), plated=False (amin +0.0387 V), SEI 394.5 nm (margin 105 nm). EC lever thermally inert (T_max identical to V16) and electrochemically inert (ED/plateau/amin unchanged)"
+  },
+  {
+    "candidate": "V18_usei035",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r7_V18_usei035_1c.json",
+      "runs/exp/t6_r3/cell/r7_V18_usei035_aging.json",
+      "runs/exp/t6_r3/cell/r7_V18_usei035_energy.json",
+      "runs/exp/t6_r3/cell/r7_V18_usei035_4c.json"
+    ],
+    "note": "U_sei 0.4->0.35 V (higher-reduction-stability electrolyte): SEI 546.3 nm — lever ACTIVE but weak (-60 nm, vs predicted ~x0.38; formation threshold also shifts) and insufficient alone; kept as supporting lever in combos"
+  },
+  {
+    "candidate": "V19_vbar7",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r7_V19_vbar7_1c.json",
+      "runs/exp/t6_r3/cell/r7_V19_vbar7_aging.json",
+      "runs/exp/t6_r3/cell/r7_V19_vbar7_energy.json",
+      "runs/exp/t6_r3/cell/r7_V19_vbar7_4c.json"
+    ],
+    "note": "SEI partial molar volume 9.585e-5->7.0e-5 (denser inorganic-rich SEI): SEI 507.9 nm — lever ACTIVE (-98 nm) but just misses 500; alone insufficient"
+  },
+  {
+    "candidate": "V20_combo",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r7_V20_combo_1c.json",
+      "runs/exp/t6_r3/cell/r7_V20_combo_aging.json",
+      "runs/exp/t6_r3/cell/r7_V20_combo_energy.json",
+      "runs/exp/t6_r3/cell/r7_V20_combo_4c.json"
+    ],
+    "note": "EC 2500 + U_sei 0.38 + h 100: ALL FIVE CRITERIA PASS — ED 1087.2, plateau 4.1647, T_max 322.26 K (margin 0.89 K; h=100 buys 0.66 K over h=80), plated=False (amin +0.0392), SEI 425.8 nm. Two independent passing designs now in hand (V17, V20)"
+  }
+]

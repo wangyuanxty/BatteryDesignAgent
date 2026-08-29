@@ -1,0 +1,34 @@
+[
+  {
+    "candidate": "F1 final candidate (anode r3um + por0.42 + ceramic coating k_SEI x0.4)",
+    "round": 5,
+    "outputs": [
+      "cell/r5_f1_1c_spme.json",
+      "cell/r5_f1_energy.json",
+      "cell/r5_f1_4c_dfn.json",
+      "cell/r5_f1_lowT_spme.json",
+      "cell/r5_f1_aging100_spme.json",
+      "derived/r5_f1_sei500.json",
+      "derived/r5_f1_retention.json"
+    ],
+    "note": "FINAL CANDIDATE. ED 435.44 Wh/kg pass, 1C cap 5.0282 Ah, lowT retention 99.45% pass, 4C min anode +0.0071 V -> NO PLATING (first plating pass across all rounds: porosity 0.42 crossed zero from V6's -0.0017 V), charge-in 0.3472 Ah, SEI@100 439.52 nm pass, SEI@500 738.43 nm FAIL (>550). Best overall design: 4 of 5 criteria passed; SEI@500 is the documented-unreachable criterion (three-strike analysis in R6)"
+  },
+  {
+    "candidate": "F2 coating strength x0.1 (k_SEI 1e-13)",
+    "round": 5,
+    "outputs": [
+      "cell/r5_f2_aging100_spme.json",
+      "derived/r5_f2_sei500.json"
+    ],
+    "note": "coating-strength x0.1: SEI@100 384.96 pass, SEI@500 701.36 fail. k-sensitivity pinned with two measured points: x0.4 -> 745.7, x0.1 -> 701.4 (only -5.9% more for 4x stronger suppression) - k_SEI drops out of the grown-regime growth law j=F*c0*D_ec/L as predicted; even the strongest plausible coating cannot reach 550 nm @500cyc. Other criteria not re-measured (identical discharge physics to C1: ED 400.3, retention 99.43)"
+  },
+  {
+    "candidate": "S1 system-switch strike: OKane2022 baseline SEI",
+    "round": 5,
+    "outputs": [
+      "cell/r5_s1_aging100_spme.json",
+      "derived/r5_s1_sei500.json"
+    ],
+    "note": "system-switch strike (--base OKane2022, params empty): SEI@100 626.81 FAIL (>500), SEI@500 1067.65 FAIL. Measured confirmation of the pre-screen parameter dump (pure-graphite OCP graphite_LGM50_ocp_Chen2020, identical SEI growth constants to Chen2020, z_sei=1 -> 2x growth per Li flux). No alternative aging-capable system in the library improves SEI (Prada2013 LFP-class ED cannot meet 327; LNMO.json is a Chen2020-base override with identical SEI kinetics): the SEI@500 criterion is unreachable across systems"
+  }
+]

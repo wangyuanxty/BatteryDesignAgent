@@ -1,0 +1,20 @@
+[
+  {
+    "candidate": "B4-electrolyte",
+    "round": 2,
+    "outputs": [
+      "cell/r2_B4_1c_probe.json",
+      "cell/r2_B4_energy.json",
+      "cell/r2_B4_retention.json"
+    ],
+    "note": "B4-electrolyte (high-transport proxy sigma 1.2/D 2.2e-10/t+ 0.45, T-independent scalars): W2 403.22 PASS, W3 849.65 FAIL (-30.4 vs 880) - electrolyte transport alone does not raise volumetric ED. W1 retention 0.9944 PASS (cold-soak lowT). B4 probe at nominal 5.0A measured 4.9535Ah (within 3% re-nom threshold) -> nominal kept and the probe IS the 1C discharge of record (same current/conditions as a 1C run; energy/retention 25C inputs derive from it). T_max_K here is 1C-discharge heating - screen-grade"
+  },
+  {
+    "candidate": "B4-electrolyte",
+    "round": 2,
+    "outputs": [
+      "cell/r2_B4_4c.json"
+    ],
+    "note": "4C_charge_45C SPMe screen-grade: T_max 330.70 PASS; plated FAIL (min -0.4425) - higher electrolyte conductivity does not fix end-of-charge anode saturation. SPMe caveat as B1 - DFN verdict-grade in round 3"
+  }
+]

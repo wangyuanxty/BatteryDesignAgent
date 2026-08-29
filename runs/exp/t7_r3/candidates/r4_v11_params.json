@@ -1,0 +1,6 @@
+{
+  "Negative particle radius [m]": 2.0e-06,
+  "Negative electrode thickness [m]": 110e-06,
+  "Cation transference number": 0.4,
+  "Electrolyte conductivity [S.m-1]": 1.5
+}

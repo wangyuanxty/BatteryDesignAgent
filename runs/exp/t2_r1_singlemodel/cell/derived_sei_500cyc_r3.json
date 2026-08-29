@@ -1,0 +1,6 @@
+{
+ "sei_thickness_nm_end_500cyc": 439.7369497679217,
+ "cycles_completed": 500,
+ "source_file": "cell/r3_aging500_d1e19.json",
+ "formula": "sei_thickness_nm_end of aging-500 output, max over x at last completed cycle"
+}

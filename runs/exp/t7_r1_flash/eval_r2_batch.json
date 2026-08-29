@@ -1,0 +1,35 @@
+[
+  {
+    "candidate": "FC-1",
+    "outputs": [
+      "runs/exp/t7_r1_flash/cell/r2_fc1_energy.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc1_4c_dfn.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc1_aging45.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc1_nail.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc1_nail_hot.json"
+    ],
+    "note": "FC-1 (electrolyte sigma1.35/t+0.35/D2.3e-10 + r_neg 3um + porosities + sep 9um, no cooling): ED 422.4 pass; SEI 506.3 nm pass; 4C DFN anode_pot min +0.0126 V pass (marginal, at T_max 353.8 K - uncooled cell rides high temperature which helps transport); nail hA0.05 triggers at 313 s (298 K) / 70 s (hot 353.8 K) FAIL. Isolates: transport levers fix plating (vs baseline DFN -0.19 V) but nail needs cooling FC-2 has."
+  },
+  {
+    "candidate": "FC-2",
+    "outputs": [
+      "runs/exp/t7_r1_flash/cell/r2_fc2_energy.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc2_4c_dfn.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc2_aging45.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc2_nail.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc2_nail_hot.json"
+    ],
+    "note": "FC-2 (FC-1 + h_total 170 W/m2K, hA0.90): ED 419.2 pass; SEI 506.3 nm pass; nail PASS both starts (T_max 309.3 K / 324.1 K, no trigger - steady state far below side-reaction onset); 4C DFN anode_pot min -0.0263 V FAIL - cooling keeps cell at 324 K, Arrhenius transport collapse re-introduces plating. Demonstrates cooling-vs-fast-charge trade in-model: nail safety requires hA~0.9, plating margin must be earned at the cooled temperature."
+  },
+  {
+    "candidate": "FC-3",
+    "outputs": [
+      "runs/exp/t7_r1_flash/cell/r2_fc3_energy.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc3_4c_dfn.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc3_aging45.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc3_nail.json",
+      "runs/exp/t7_r1_flash/cell/r2_fc3_nail_hot.json"
+    ],
+    "note": "FC-3 (architecture-only control: r_neg 3um + porosities + sep 9um, no electrolyte override, no cooling): ED 421.0 pass; SEI 485.3 nm pass; 4C DFN anode_pot min -0.0387 V FAIL; nail hA0.05 triggers FAIL. Control attributes the FC-1 4C gain specifically to the electrolyte transport overrides (FC-1 vs FC-3 at similar T: +51 mV)."
+  }
+]

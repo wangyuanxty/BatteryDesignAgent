@@ -1,0 +1,7 @@
+{
+  "Total heat transfer coefficient [W.m-2.K-1]": 400,
+  "Negative electrode thickness [m]": 1.022e-4,
+  "Negative particle radius [m]": 3.0e-6,
+  "EC initial concentration in electrolyte [mol.m-3]": 2270.5,
+  "EC diffusivity [m2.s-1]": 1.0e-18
+}

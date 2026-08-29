@@ -1,0 +1,7 @@
+[
+  {
+    "candidate": "OKane2022 system",
+    "outputs": ["cell/r2_okane_4c_dfn.json", "cell/r2_okane_energy.json"],
+    "note": "Cross-check vs Chen2020 baseline: identical mass basis confirmed (0.04345 kg) but ED 405.62 < 500.94 fails; plating PASSES under native plating physics (anode_potential_v min +0.016 V, near-zero margin) while T_max 367.42 K fails worse than Chen2020 (4C charge accepted 3.59 Ah vs 0.88 Ah -> more heat). Dual-judgment rule in force: Chen2020 binds plating, OKane2022 binds T_max; final design must pass 4C under BOTH parameter sets."
+  }
+]

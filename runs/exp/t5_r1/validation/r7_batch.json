@@ -1,0 +1,10 @@
+[
+  {"candidate": "R7A negR 3.5um - Chen2020", "outputs": ["cell/r7a_chen_4c_dfn.json", "cell/r7a_chen_energy.json"], "note": "PLATING CLOSED: anode min +0.0063 V > 0. ED 639.4 passes; T_max 327.55 passes. Negative particle radius 3.5um (solid-diffusion lever from three-strike questioning) is the decisive fix."},
+  {"candidate": "R7A negR 3.5um - OKane2022", "outputs": ["cell/r7a_okane_4c_dfn.json", "cell/r7a_okane_energy.json"], "note": "PLATING CLOSED: anode min +0.0066 V > 0. ED 638.0 passes; T_max 328.91 passes."},
+  {"candidate": "R7B negR 2.61um - Chen2020", "outputs": ["cell/r7b_chen_4c_dfn.json", "cell/r7b_chen_energy.json"], "note": "PLATING CLOSED with 18 mV margin: anode min +0.0183 V. ED 642.1 passes; T_max 326.83 passes. 2.61um matches cathode particle size; more robust margin than R7A."},
+  {"candidate": "R7B negR 2.61um - OKane2022", "outputs": ["cell/r7b_okane_4c_dfn.json", "cell/r7b_okane_energy.json"], "note": "PLATING CLOSED: anode min +0.0180 V. ED 641.1 passes; T_max 328.19 passes. OKane2022 concentration-dependent Ds also safe."},
+  {"candidate": "R7C negR 2.0um - Chen2020", "outputs": ["cell/r7c_chen_4c_dfn.json", "cell/r7c_chen_energy.json"], "note": "PLATING CLOSED with 27.7 mV margin: anode min +0.0277 V. ED 643.8 passes; T_max 326.26 passes. Best margins but 2um ultrafine graphite has manufacturability/SEI-area penalties."},
+  {"candidate": "R7C negR 2.0um - OKane2022", "outputs": ["cell/r7c_okane_4c_dfn.json", "cell/r7c_okane_energy.json"], "note": "PLATING CLOSED: anode min +0.0273 V. ED 643.1 passes; T_max 327.60 passes."},
+  {"candidate": "R7D negR 2.61um + sep 6um - Chen2020", "outputs": ["cell/r7d_chen_4c_dfn.json", "cell/r7d_chen_energy.json"], "note": "PLATING CLOSED: anode min +0.0183 V. ED 642.8 passes; T_max 326.77 passes. Sep 6um adds short-circuit risk with no gain over R7B (sep 8um)."},
+  {"candidate": "R7D negR 2.61um + sep 6um - OKane2022", "outputs": ["cell/r7d_okane_4c_dfn.json", "cell/r7d_okane_energy.json"], "note": "PLATING CLOSED: anode min +0.0180 V. ED 641.8 passes; T_max 328.13 passes."}
+]

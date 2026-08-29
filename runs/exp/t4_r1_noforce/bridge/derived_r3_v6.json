@@ -1,0 +1,8 @@
+{
+  "lowT_retention": 0.9936240429669562,
+  "lowT_capacity_ah": 5.004657099020382,
+  "rt_capacity_ah": 5.036771336648117,
+  "lowT_source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t4_r1_noforce\\cell\\r3_v6_lowT_spme.json",
+  "rt_source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t4_r1_noforce\\cell\\r3_v6_1c_spme.json",
+  "label": "r3_v6_spme"
+}

@@ -1,0 +1,9 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false: true-compute endorsement (run-orca/run-cp2k/run-md) is skipped per protocol; no DFT/MD computed and none fabricated. Top-N candidates that would go to true-compute endorsement in a real_compute=true run: V11-combo and V12-HiP-final (champion).",
+  "candidates": [
+    {"name": "V11-combo", "endorsement": null},
+    {"name": "V12-HiP-final", "endorsement": null}
+  ]
+}

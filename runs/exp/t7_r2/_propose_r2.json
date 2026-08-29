@@ -1,0 +1,32 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "struct": {"Negative particle radius [m]": 3.0e-6},
+      "name": "R2_V1_FineAnode",
+      "role": "halve anode particle size 5.86->3.0 um: ~2x kinetic surface area lowers local charge-transfer polarization, the main end-of-charge plating driver at 4C"
+    },
+    {
+      "struct": {"Negative electrode thickness [m]": 1.0e-4},
+      "name": "R2_V2_NP117",
+      "role": "thicker anode 85.2->100 um (N/P ~1.17): end-of-charge anode lithiation fraction drops from saturation -> less diffusion/kinetic polarization at 4C end-of-charge"
+    },
+    {
+      "struct": {"Electrolyte conductivity [S.m-1]": 1.5},
+      "name": "R2_V3_Sigma15",
+      "role": "high-conductivity electrolyte formulation: constant sigma=1.5 S/m (literature: 1M LiPF6 EC/EMC at 45 C ~1.4-1.6 S/m; constant removes low-c interior regions under high current) - transport bridge, source=literature+constant approximation"
+    },
+    {
+      "struct": {"Cation transference number": 0.4},
+      "name": "R2_V4_Tplus04",
+      "role": "advanced electrolyte t+=0.4 (up from 0.2594): cuts transference-limited concentration polarization in the anode during 4C charge - source=literature range for advanced/concentrated electrolytes, marked estimate"
+    },
+    {
+      "struct": {"Total heat transfer coefficient [W.m-2.K-1]": 50.0},
+      "name": "R2_V5_CoolH50",
+      "role": "HEV pack active liquid cooling h=50 W/m2/K (thermal-management freedom; domain estimate: liquid-cooled packs effective 20-100; consistent hA=50x0.00531=0.2655 W/K for nail run-tr): lowers 4C T_max and makes the 10 W nail source reach equilibrium ~336 K, below SEI-decomposition ignition (~360-370 K measured R1)"
+    }
+  ],
+  "llm_reason": "R1 failures: (a) 4C plating (anode min -0.1918 V): polarization at end-of-charge when graphite OCP plateau is only 0.092 V above Li - attack both kinetic (V1 finer particles) and balance/diffusion (V2 N/P up) plus electrolyte transport (V3 sigma, V4 t+). (b) Nail TR: R1 probes showed 10 W source + weak cooling always reaches SEI-decomposition ignition ~360-370 K regardless of cell mass (trigger 322 s at hA=0.05; 419 s at hA=0.1062) -> the cooling chain must keep T_eq below ignition: h=50 gives T_eq 335.7 K (nearly 2x margin below ignition). Plating levers (V1-V4) are architecture, V5 is thermal management - 4 architecture variants satisfy exploration_force. OCP diagnostic: OKane2022 negative OCP near-full-lithiation is 0.076 V - not better than Chen2020 (0.092 V) -> system switch would not fix plating; staying in Chen2020 family."
+}

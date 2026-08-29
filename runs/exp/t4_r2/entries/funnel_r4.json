@@ -1,0 +1,13 @@
+{
+  "action": "funnel",
+  "round": 4,
+  "passed": 0,
+  "rejected": 2,
+  "disputed": 1,
+  "detail": "R4 D-family at DFN verdict grade: transport+h is the winning architecture - D2 missed by 0.76K (T_max 333.91) and 0.078V (ap_min -0.0778), from C-family gaps of 21.4K and 0.19V. Thick-stack family (D3, 27.2A areal) rejected: transport did not rescue high-areal-current charge (ap_min -0.2357 with 31.9% negative). Branch vote 3/3: final bracket on D2 base - h isolation (h80), transport-max (sigma1.6/D3.2e-10/t+0.6), anode-porosity headroom (0.26). Strike ledger: unchanged (strike 1 = geometry-only R2+R3); transport-branch shows monotone large progress -> not a strike. If R5 bracket fails, escalation layer 2 fires (re-question criterion calibration / ambient-stress realism) before any further tuning.",
+  "dispositions": [
+    {"name": "D1-transport-h40", "status": "rejected", "reason": "superseded by D2 (same cell, higher h dominates); served h-sensitivity datum -6.12K per +20 h"},
+    {"name": "D2-transport-h60", "status": "disputed", "reason": "closest to full pass (T_max -0.76K, ap_min -0.0778V); held as R5 base for final bracket, not yet a passer"},
+    {"name": "D3-deepAnode-transport", "status": "rejected", "reason": "27.2A areal charge saturates despite transport boost (ap_min -0.2357, T_max 342.61) - thick family shed"}
+  ]
+}

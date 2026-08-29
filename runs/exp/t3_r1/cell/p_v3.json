@@ -1,0 +1,6 @@
+{
+  "Nominal cell capacity [A.h]": 4.95,
+  "Electrolyte conductivity [S.m-1]": 1.5,
+  "Electrolyte diffusivity [m2.s-1]": 2.5e-10,
+  "Cation transference number": 0.35
+}

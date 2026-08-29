@@ -1,0 +1,6 @@
+[
+  {"candidate": "V1-thinfoil", "outputs": ["cell/r2_v1_energy.json", "cell/r2_v1_5c_dfn.json", "cell/r2_v1_retention.json"], "note": "ED fix confirmed in isolation (487.62 Wh/kg, mass 35.72 g); retention unchanged 8.7% as foil mass does not affect kinetics; T_max judged on 5C discharge (317.4 K, pass)"},
+  {"candidate": "V2-nano", "outputs": ["cell/r2_v2_energy.json", "cell/r2_v2_5c_dfn.json", "cell/r2_v2_retention.json"], "note": "particle radius down -> retention 8.7%->22.7% (2.6x, diffusion still binding); T_max judged on 5C discharge 340.4 K fails red line"},
+  {"candidate": "V3-transport", "outputs": ["cell/r2_v3_energy.json", "cell/r2_v3_5c_dfn.json", "cell/r2_v3_retention.json"], "note": "transport formulation alone -> retention 62.6%; T_max on 5C discharge 366.0 K fails (more delivered energy, high polarization heat)"},
+  {"candidate": "V4-powerpack", "outputs": ["cell/r2_v4_energy.json", "cell/r2_v4_5c_dfn.json", "cell/r2_v4_retention.json", "cell/r2_v4_4c45_dfn.json"], "note": "combined: ED 592.99 Wh/kg pass, retention 98.6% pass, mass 31.28 g pass, exam no plating (anode min +0.0119 V, thin margin) but exam T_max 351.93 K fails 333.15 K; 5C-discharge T_max 349.2 K also above red line"}
+]

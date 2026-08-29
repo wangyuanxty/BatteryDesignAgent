@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>t4_r1_luna · Virtual Battery Factory Design Report</title>
+<style>
+/* ============================================================
+   虚拟电池工厂 · 工程蓝图纸报告模板 (BLUEPRINT)
+   数据位由 bda/report.py 以模板占位符确定性填充，无外部资源。
+   ============================================================ */
+:root{
+  --ink:#14283C;
+  --blue:#1E5A8A;
+  --paper:#F4F7FA;
+  --grid:#D8E2EC;
+  --accent:#C97B3D;
+  --ok:#2E7D4F;
+  --bad:#B3402A;
+  --ok-dark:#7FC79B;   /* 深底上的达标色 */
+  --bad-dark:#E08A73;  /* 深底上的不达标色 */
+  --mono:"Cascadia Mono",ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace;
+  --sans:system-ui,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body{
+  margin:0;
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.65;
+  color:var(--ink);
+  background-color:var(--paper);
+  /* 晒图纸蓝图网格 */
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  min-height:100vh;
+}
+::selection{background:rgba(201,123,61,.28)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--blue)}
+.mono,code,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- 图纸头 ---------- */
+.drawing-head{
+  background:var(--ink);
+  color:#EDF3F9;
+  border-bottom:3px solid var(--accent);
+  padding:40px clamp(16px,4vw,48px) 28px;
+  background-image:
+    linear-gradient(rgba(216,226,236,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(216,226,236,.07) 1px,transparent 1px);
+  background-size:22px 22px;
+}
+.head-row{
+  display:flex;flex-wrap:wrap;gap:28px;
+  justify-content:space-between;align-items:flex-start;
+}
+.head-main{max-width:680px;min-width:0}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--blue);
+  margin:0 0 6px;
+}
+.eyebrow::before{content:"▍";color:var(--accent)}
+.eyebrow.light{color:#9FB7CC}
+.case-name{
+  font-size:clamp(26px,4vw,40px);font-weight:700;letter-spacing:.02em;
+  margin:0 0 10px;color:#fff;overflow-wrap:anywhere;
+}
+.goal{font-size:16px;color:#C9D7E3;margin:0 0 10px;max-width:56ch}
+.head-meta{font-family:var(--mono);font-size:12px;color:#8CA5BC;margin:0}
+.head-meta span{
+  display:inline-block;border:1px solid rgba(159,183,204,.35);
+  padding:1px 8px;margin:2px 6px 2px 0;border-radius:2px;
+}
+.verdict-block{text-align:right;min-width:190px}
+.verdict{
+  font-family:var(--mono);font-weight:700;
+  font-size:clamp(30px,5vw,52px);line-height:1.05;letter-spacing:.02em;
+  text-transform:uppercase;
+}
+.verdict.ok{color:var(--ok-dark)}
+.verdict.bad{color:var(--bad-dark)}
+.verdict.neutral{color:var(--accent)}
+
+/* ---------- 关键结果大数字 ---------- */
+.kpi-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
+  background:rgba(216,226,236,.2);border:1px solid rgba(216,226,236,.28);
+  margin-top:28px;
+}
+.kpi-item{background:rgba(20,40,60,.55);padding:14px 16px 12px;min-width:0}
+.kpi-label{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#9FB7CC;margin-bottom:6px;
+}
+.kpi-num{
+  font-family:var(--mono);font-size:clamp(22px,3vw,30px);font-weight:600;
+  color:#fff;line-height:1.1;overflow-wrap:anywhere;
+}
+.kpi-num.ok{color:var(--ok-dark)}
+.kpi-num.bad{color:var(--bad-dark)}
+.kpi-num.mute{color:#8CA5BC}
+.kpi-sub{font-family:var(--mono);font-size:11px;color:#8CA5BC;margin-top:5px}
+.kpi-unit{font-size:.55em;color:#8CA5BC;margin-left:4px;font-weight:400}
+
+/* ---------- 顶部导航 ---------- */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:var(--ink);border-bottom:1px solid var(--blue);
+  display:flex;align-items:stretch;gap:2px;padding:0 14px;overflow-x:auto;
+}
+.nav-brand{
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#9FB7CC;
+  display:flex;align-items:center;white-space:nowrap;
+  padding-right:12px;margin-right:8px;border-right:1px solid rgba(159,183,204,.3);
+}
+.nav-brand b{color:var(--accent);font-weight:700}
+.nav a{
+  color:#C9D7E3;text-decoration:none;font-family:var(--mono);font-size:12px;
+  letter-spacing:.04em;padding:12px 12px;white-space:nowrap;
+  border-bottom:2px solid transparent;display:flex;align-items:center;
+}
+.nav a .n{color:#7C96AC;margin-right:6px}
+.nav a:hover{color:#fff;background:rgba(216,226,236,.08)}
+.nav a.active{color:#fff;border-bottom-color:var(--accent)}
+.nav a.active .n{color:var(--accent)}
+
+/* ---------- 布局与图纸区块 ---------- */
+main{max-width:1120px;margin:0 auto;padding:34px clamp(14px,3vw,32px) 8px}
+.sheet{
+  position:relative;
+  background:rgba(255,255,255,.93);
+  border:1px solid var(--blue);
+  border-radius:2px;
+  box-shadow:0 2px 0 rgba(20,40,60,.1);
+  padding:28px clamp(18px,3vw,36px) 32px;
+  margin:0 0 30px;
+  scroll-margin-top:64px;
+}
+.sheet::before,.sheet::after{
+  content:"+";position:absolute;font-family:var(--mono);
+  font-size:13px;color:var(--blue);line-height:1;
+}
+.sheet::before{top:6px;left:8px}
+.sheet::after{bottom:6px;right:8px}
+.sheet h2{font-size:20px;margin:2px 0 16px;letter-spacing:.02em}
+.sheet h2::after{
+  content:"";display:block;width:56px;height:3px;
+  background:var(--accent);margin-top:6px;
+}
+.empty{color:#5E768C;font-style:italic;margin:6px 0}
+.hint{font-style:normal;font-family:var(--mono);font-size:12px;color:#7C96AC}
+
+/* ---------- 表格 ---------- */
+.tbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13px}
+.tbl th{
+  text-align:left;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--blue);border-bottom:2px solid var(--blue);
+  padding:6px 10px;font-weight:600;white-space:nowrap;
+}
+.tbl td{border-bottom:1px solid var(--grid);padding:7px 10px;vertical-align:top;overflow-wrap:anywhere}
+.tbl td.num{text-align:right;white-space:nowrap}
+.tbl tr:hover td{background:rgba(216,226,236,.35)}
+.crit-meta{font-size:11.5px;color:#5E768C;overflow-wrap:anywhere}
+/* 候选表格：定列宽，候选/部件/类型窄列，说明/内容宽列 */
+.tbl.cand{table-layout:fixed}
+.tbl.cand th:nth-child(1),.tbl.cand td:nth-child(1){width:16%}
+.tbl.cand th:nth-child(2),.tbl.cand td:nth-child(2){width:11%}
+.tbl.cand th:nth-child(3),.tbl.cand td:nth-child(3){width:9%}
+.tbl.cand th:nth-child(4),.tbl.cand td:nth-child(4){width:26%}
+.tbl.cand th:nth-child(5),.tbl.cand td:nth-child(5){width:38%}
+
+/* ---------- 徽章与标签 ---------- */
+.badge{
+  font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;border:1px solid currentColor;border-radius:2px;
+  padding:2px 8px;white-space:nowrap;background:rgba(216,226,236,.15);
+}
+.badge.ok{color:var(--ok);background:rgba(46,125,79,.08)}
+.badge.bad{color:var(--bad);background:rgba(179,64,42,.08)}
+.badge.mute{color:#6B8296;background:rgba(107,130,150,.08)}
+.badge.stage{color:var(--blue);background:rgba(30,90,138,.06)}
+.badge.stage.end{color:var(--accent);background:rgba(201,123,61,.08)}
+.chip{
+  font-family:var(--mono);font-size:12px;background:#EEF3F8;
+  border:1px solid var(--grid);border-radius:2px;padding:2px 9px;
+  white-space:nowrap;overflow-wrap:anywhere;max-width:100%;
+}
+.chip b{color:var(--ink)}
+.chip .sm{color:#5E768C}
+.chip.tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6B8296;background:#fff}
+.chip.tag.seed{color:var(--blue);border-color:rgba(30,90,138,.45)}
+.chip.tag.free{color:var(--accent);border-color:rgba(201,123,61,.55)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+
+/* ---------- 概览区流程一览条 ---------- */
+.flow{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 0}
+.flow-item{
+  flex:1 1 180px;min-width:170px;
+  border:1px solid var(--grid);border-top:3px solid var(--blue);
+  background:#fff;border-radius:2px;padding:10px 14px;
+}
+.flow-item.end{border-top-color:var(--accent)}
+.flow-name{font-size:14px;font-weight:600;margin:7px 0 2px}
+.flow-count{font-family:var(--mono);font-size:11.5px;color:#5E768C}
+.flow-goal{
+  font-family:var(--mono);font-size:11px;color:#44586C;
+  margin-top:5px;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap;
+}
+.flow-goal .g-label{
+  color:#7C96AC;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+}
+.flow-goal b.goal-ok{color:var(--ok)}
+.flow-goal b.goal-bad{color:var(--bad)}
+
+/* ---------- 达标标准：按阶段分层 ---------- */
+.stage-goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:10px 0 4px}
+.stage-goal{
+  border:1px solid var(--grid);border-top:3px solid var(--blue);
+  background:#fff;border-radius:2px;padding:12px 14px 14px;min-width:0;
+}
+.stage-goal.meta{border-top-color:#6B8296}
+.stage-goal-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.stage-goal-name{font-size:13.5px;font-weight:600}
+.stage-goal .tbl{font-size:12px}
+.stage-goal .tbl td{padding:5px 8px}
+.stage-goal .tbl td.num{white-space:normal}
+.stage-goal .empty{margin:0}
+
+/* ---------- 迭代轨迹：轮次总览表与趋势图 ---------- */
+.ov-head{font-size:14px;font-weight:600;margin:20px 0 8px;color:var(--ink)}
+.tbl.ov{margin:2px 0 4px}
+.tbl.ov td.num{white-space:nowrap}
+.trends{display:flex;flex-wrap:wrap;gap:18px;margin:6px 0 4px}
+.trend{min-width:280px}
+.trend-caption{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  color:var(--blue);margin-bottom:4px;
+}
+.trend svg.chart{border:1px solid var(--grid);background:#fff;border-radius:2px}
+svg.chart text{font-family:var(--mono);font-size:10px;fill:var(--blue)}
+svg.chart .grid{stroke:var(--grid);stroke-width:1}
+svg.chart .axis{stroke:var(--ink);stroke-width:1;opacity:.55}
+svg.chart .bar{fill:var(--blue);fill-opacity:.85}
+svg.chart .thr{stroke:var(--bad);stroke-width:1.2;stroke-dasharray:4 3}
+svg.chart .t-label{fill:var(--bad)}
+.badge.warn{color:var(--accent);background:rgba(201,123,61,.08)}
+
+/* ---------- 迭代轨迹：轮次可折叠卡片 ---------- */
+details.round{
+  border:1px solid var(--grid);border-left:3px solid var(--blue);
+  margin-bottom:12px;background:#fff;border-radius:2px;
+}
+details.round summary{
+  cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;
+  padding:10px 14px;user-select:none;
+}
+details.round summary::-webkit-details-marker{display:none}
+details.round summary::before{
+  content:"+";font-family:var(--mono);font-weight:700;color:var(--blue);
+  transition:transform .15s ease;display:inline-block;font-size:14px;
+}
+details.round[open] summary::before{transform:rotate(45deg)}
+details.round summary .round-no{
+  font-family:var(--mono);font-weight:700;font-size:13px;
+  letter-spacing:.08em;color:var(--ink);
+}
+details.round summary .round-sub{
+  font-family:var(--mono);font-size:11.5px;color:#5E768C;
+  margin-left:auto;text-align:right;
+}
+details.round summary:hover{background:rgba(216,226,236,.4)}
+details.round summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.round-body{padding:4px 16px 16px;border-top:1px solid var(--grid)}
+.blk{margin:16px 0}
+.blk p{margin:6px 0 0;color:#44586C;font-size:14px}
+.blk-label{
+  font-family:var(--mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;
+}
+.reason{font-size:14px;color:#44586C;margin:8px 0 0;max-width:95ch}
+
+/* ---------- 漏斗统计 ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:10px 0 20px}
+.stat{
+  border:1px solid var(--grid);border-top:3px solid var(--blue);
+  background:#fff;padding:12px 16px;border-radius:2px;
+}
+.stat.rej{border-top-color:var(--bad)}
+.stat.dis{border-top-color:var(--accent)}
+.stat-num{font-family:var(--mono);font-size:30px;font-weight:600;line-height:1.1}
+.stat.pass .stat-num{color:var(--ok)}
+.stat.rej .stat-num{color:var(--bad)}
+.stat.dis .stat-num{color:var(--accent)}
+.stat-label{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#5E768C;margin-top:4px;
+}
+.funnel-detail{border-left:2px solid var(--grid);padding:2px 0 2px 14px;margin:0 0 12px}
+.funnel-detail p{margin:6px 0 0;color:#44586C;font-size:14px}
+
+/* ---------- 阶段结果：内联 SVG 曲线 ---------- */
+figure.plot{margin:0 0 28px}
+figcaption{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}
+figcaption .fname{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink);overflow-wrap:anywhere}
+.plot-wrap{position:relative;border:1px solid var(--grid);background:#fff;border-radius:2px;overflow:hidden}
+svg.plot{display:block;width:100%;height:auto}
+svg.plot text{font-family:var(--mono);font-size:10px;fill:var(--blue)}
+svg.plot .grid{stroke:var(--grid);stroke-width:1}
+svg.plot .axis{stroke:var(--ink);stroke-width:1;opacity:.55}
+svg.plot .s-voltage{stroke:var(--blue);stroke-width:1.8;fill:none}
+svg.plot .s-anode{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+.tooltip{
+  position:absolute;pointer-events:none;z-index:10;
+  background:var(--ink);color:#E8F0F8;border:1px solid var(--accent);
+  font-family:var(--mono);font-size:11px;line-height:1.55;padding:6px 10px;
+  border-radius:2px;box-shadow:0 2px 8px rgba(20,40,60,.35);white-space:nowrap;
+}
+.tooltip .t-t{color:var(--accent)}
+
+/* ---------- 真DFT/MD 验证背书 ---------- */
+pre.term{
+  background:var(--ink);color:#DCE9F5;border-left:3px solid var(--accent);
+  border-radius:2px;padding:14px 16px;overflow-x:auto;
+  font-family:var(--mono);font-size:12.5px;line-height:1.55;margin:8px 0 20px;
+}
+.endorse-cand{margin-bottom:22px}
+.endorse-head{font-family:var(--mono);font-size:13px;margin:2px 0 4px;overflow-wrap:anywhere}
+.endorse-head .sm{color:#5E768C}
+.skipped{
+  border:1px dashed #B9C6D2;background:rgba(216,226,236,.25);
+  color:#5E768C;font-style:italic;padding:12px 16px;margin:10px 0;border-radius:2px;
+}
+.skipped .reason{font-family:var(--mono);font-style:normal;color:#44586C}
+
+/* ---------- 最终推荐 ---------- */
+.final-quote{
+  font-size:14px;line-height:1.7;border-left:4px solid var(--accent);
+  padding:4px 0 4px 20px;margin:10px 0 16px;
+}
+.final-verdict{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* ---------- 设计说明 ---------- */
+.note{border-left:2px solid var(--grid);padding:2px 0 2px 14px;margin:0 0 16px}
+.note p{margin:6px 0 0;color:#44586C;font-size:14px}
+.note .chip{font-size:10.5px}
+
+/* ---------- 底部标尺与页脚 ---------- */
+.ruler{
+  height:34px;margin-top:48px;border-top:2px solid var(--ink);position:relative;
+  background-image:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 10px);
+  background-size:100% 8px;background-repeat:no-repeat;background-position:0 100%;
+}
+.ruler::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:16px;
+  background-image:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 50px);
+  background-size:auto 16px;background-repeat:no-repeat;
+}
+.ruler span{
+  position:absolute;bottom:2px;font-family:var(--mono);font-size:9px;color:#7C96AC;
+  transform:translateX(-50%);
+}
+.page-foot{
+  max-width:1120px;margin:0 auto;padding:12px clamp(14px,3vw,32px) 44px;
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;color:#7C96AC;letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:760px){
+  .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .verdict-block{text-align:left}
+  .stats{grid-template-columns:1fr}
+  .stage-goals{grid-template-columns:1fr}
+  .nav-brand{display:none}
+  .sheet{padding:22px 16px 26px}
+}
+</style>
+</head>
+<body>
+
+<header class="drawing-head">
+<div class="head-row"><div class="head-main"><div class="eyebrow light">Virtual Battery Factory · Case Design Report</div><h1 class="case-name">t4_r1_luna</h1><p class="goal">(Goal not recorded in config.yaml)</p><p class="head-meta"><span>Real compute off</span></p></div><div class="verdict-block"><div class="eyebrow light">Conclusion</div><div class="verdict neutral">achieved</div></div></div><div class="kpi-grid"><div class="kpi-item"><div class="kpi-label">Energy density</div><div class="kpi-num ok">480.7<span class="kpi-unit">Wh/kg</span></div><div class="kpi-sub">Threshold ≥ 327.18</div></div><div class="kpi-item"><div class="kpi-label">Capacity</div><div class="kpi-num ">4.948<span class="kpi-unit">Ah</span></div><div class="kpi-sub"></div></div><div class="kpi-item"><div class="kpi-label">Max temperature</div><div class="kpi-num ">298.1<span class="kpi-unit">K</span></div><div class="kpi-sub">≈ 25.0 °C</div></div><div class="kpi-item"><div class="kpi-label">Plating</div><div class="kpi-num mute">N/A</div><div class="kpi-sub">Not provided</div></div></div>
+</header>
+
+<nav class="nav" aria-label="Section navigation">
+  <span class="nav-brand"><b>▦ VBF</b>&nbsp;Virtual Battery Factory</span>
+  <a href="#overview"><span class="n">01</span>Overview</a>
+  <a href="#trajectory"><span class="n">02</span>Trajectory</a>
+  <a href="#funnel"><span class="n">03</span>Funnel</a>
+  <a href="#stages"><span class="n">04</span>Stage Results</a>
+  <a href="#endorse"><span class="n">05</span>True DFT/MD Endorsement</a>
+  <a href="#final"><span class="n">06</span>Final Recommendation</a>
+  <a href="#notes"><span class="n">07</span>Design Notes</a>
+</nav>
+
+<main>
+
+<section id="overview" class="sheet" aria-labelledby="overview-title">
+  <div class="eyebrow">SHEET 01 · OVERVIEW</div>
+  <h2 id="overview-title">Overview &amp; Criteria</h2>
+  <div class="stage-goals"><div class="stage-goal"><div class="stage-goal-head"><span class="badge stage">STAGE 1 Plan</span><span class="stage-goal-name">Materials design</span><span class="badge mute">Not run</span></div><table class="tbl"><tr><th>Metric</th><th>Threshold</th><th>Note</th></tr><tr><th scope='row'>max_energy_ev</th><td class='num'>≤ 0</td><td class='crit-meta'></td></tr><tr><th scope='row'>max_homo_ev</th><td class='num'>≤ -6</td><td class='crit-meta'></td></tr></table></div><div class="stage-goal"><div class="stage-goal-head"><span class="badge stage">STAGE 2 Materials</span><span class="stage-goal-name">Cell design</span><span class="badge ok">All achieved</span></div><table class="tbl"><tr><th>Metric</th><th>Threshold</th><th>Achieved</th><th>Note</th></tr><tr><th scope='row'>energy_density_wh_kg</th><td class='num'>≥ 327.18</td><td class='num'>480.7 <span class="badge ok">✓</span></td><td class='crit-meta'></td></tr><tr><th scope='row'>energy_density_wh_l</th><td class='num'>≥ 880</td><td class='num'>907.8 <span class="badge ok">✓</span></td><td class='crit-meta'></td></tr><tr><th scope='row'>lowT_capacity_retention</th><td class='num'>≥ 0.95</td><td class='num'>0.9943 <span class="badge ok">✓</span></td><td class='crit-meta'></td></tr></table></div><div class="stage-goal"><div class="stage-goal-head"><span class="badge stage">STAGE 3 Cell</span><span class="stage-goal-name">Safety assessment</span><span class="badge mute">Not run</span></div><p class="empty">No separate targets (see other stages)</p></div><div class="stage-goal meta"><div class="stage-goal-head"><span class="badge mute">META</span><span class="stage-goal-name">Case parameters</span></div><table class="tbl"><tr><th>Parameter</th><th>Value</th></tr><tr><th scope='row'>start_stage</th><td class='num'>3</td></tr><tr><th scope='row'>base_params</th><td class='num'>Chen2020</td></tr><tr><th scope='row'>real_compute</th><td class='num'>false</td></tr><tr><th scope='row'>exploration_force</th><td class='num'>true</td></tr><tr><th scope='row'>ceiling_escalation</th><td class='num'>true</td></tr><tr><th scope='row'>funnel_voting</th><td class='num'>true</td></tr><tr><th scope='row'>freedoms</th><td class='num'>{'electrode_system': 'adjustable', 'electrolyte_formulation': 'adjustable', 'electrode_modification': 'adjustable', 'cell_architecture': 'adjustable', 'thermal_management': 'adjustable'}</td></tr><tr><th scope='row'>objective_parsing</th><td class='num'>1C discharge capacity retention &gt;=95% at -20C; gravimetric ED &gt;=327.18 Wh/kg; volumetric ED &gt;=880 Wh/L; no safety thresholds specified</td></tr></table></div></div>
+  <h3 style="font-size:14px;margin:22px 0 8px">Flow overview</h3>
+  <div class="flow"><div class="flow-item "><span class="badge stage">STAGE 1 Plan</span><div class="flow-name">Stage 1 · Overall planning</div><div class="flow-count">plan 1 · design_plan.md</div></div><div class="flow-item "><span class="badge stage">STAGE 2 Materials</span><div class="flow-name">Stage 2 · Materials design</div><div class="flow-count">mol. propose 0 · funnel 0</div><div class="flow-goal"><span class="g-label">Goal</span><span>E ≤ 0 · HOMO ≤ -6</span></div><div class="flow-goal"><span class="g-label">Achieved</span><span>—</span></div></div><div class="flow-item "><span class="badge stage">STAGE 3 Cell</span><div class="flow-name">Stage 3 · Cell design</div><div class="flow-count">struct. propose 0 · discharge curves 0</div><div class="flow-goal"><span class="g-label">Goal</span><span>Energy density ≥ 327.18 · energy_density_wh_l ≥ 880 · lowT_capacity_retention ≥ 0.95</span></div><div class="flow-goal"><span class="g-label">Achieved</span><span>480.7<b class="goal-ok">✓</b> · 907.8<b class="goal-ok">✓</b> · 0.9943<b class="goal-ok">✓</b></span></div></div><div class="flow-item "><span class="badge stage">STAGE 4 Safety</span><div class="flow-name">Stage 4 · Safety assessment</div><div class="flow-count">4C charge curves 0</div><div class="flow-goal"><span class="g-label">Goal</span><span>No targets</span></div><div class="flow-goal"><span class="g-label">Achieved</span><span>—</span></div></div><div class="flow-item end"><span class="badge stage end">STAGE 5 True DFT/MD</span><div class="flow-name">Stage 5 · True DFT/MD endorsement</div><div class="flow-count">Endorse 1 · Final 1 · Verdict achieved</div></div></div>
+  <h3 style="font-size:14px;margin:22px 0 8px">Candidates</h3>
+  <table class="tbl cand"><tr><th>Candidate</th><th>Component</th><th>Type</th><th>Role</th><th>Content</th></tr><tr><td><b>archA</b></td><td>Electrolyte</td><td>Molecule</td><td></td><td class='mono'></td></tr></table>
+</section>
+
+<section id="trajectory" class="sheet" aria-labelledby="trajectory-title">
+  <div class="eyebrow">SHEET 02 · TRAJECTORY</div>
+  <h2 id="trajectory-title">Iteration Trajectory</h2>
+  <div class="ov-head">Round overview</div><table class="tbl ov"><tr><th>Round</th><th>Stage</th><th>Cands</th><th>Energy density Wh/kg</th><th>Capacity Ah</th><th>T_max K</th><th>Plating</th><th>Verdict</th></tr><tr><td class='num'>R01</td><td><span class="badge stage">STAGE 4 Safety</span></td><td class='num'>0</td><td class='num'>400.3</td><td class='num'>4.948</td><td class='num'>298.1</td><td><span class="badge mute">—</span></td><td><span class="badge bad">fail</span></td></tr><tr><td class='num'>R02</td><td><span class="badge stage">STAGE 4 Safety</span></td><td class='num'>0</td><td class='num'>480.7</td><td class='num'>4.948</td><td class='num'>298.1</td><td><span class="badge mute">—</span></td><td><span class="badge ok">pass</span></td></tr><tr><td class='num'>R03</td><td><span class="badge stage">STAGE 4 Safety</span></td><td class='num'>0</td><td class='num'>480.7</td><td class='num'>4.948</td><td class='num'>298.1</td><td><span class="badge mute">—</span></td><td><span class="badge ok">pass</span></td></tr></table>
+  <div class="ov-head">Trends</div><div class="trends"><div class="trend"><div class="trend-caption">Energy density trend (per evaluate round)</div><svg class="chart" viewBox="0 0 340 200" role="img" aria-label="Energy density trend (per evaluate round)"><title>Energy density trend (per evaluate round)</title><line class="grid" x1="42" y1="16.0" x2="328" y2="16.0"/><text x="38" y="19.0" text-anchor="end">480.7</text><line class="grid" x1="42" y1="94.0" x2="328" y2="94.0"/><text x="38" y="97.0" text-anchor="end">240.4</text><line class="grid" x1="42" y1="172.0" x2="328" y2="172.0"/><text x="38" y="175.0" text-anchor="end">0</text><line class="axis" x1="42" y1="16" x2="42" y2="172"/><line class="axis" x1="42" y1="172" x2="328" y2="172"/><rect class="bar" x="53.4" y="42.1" width="34.3" height="129.9"/><text x="70.6" y="187.0" text-anchor="middle">R01</text><text x="70.6" y="37.1" text-anchor="middle">400.3</text><rect class="bar" x="110.6" y="16.0" width="34.3" height="156.0"/><text x="127.8" y="187.0" text-anchor="middle">R02</text><text x="127.8" y="11.0" text-anchor="middle">480.7</text><rect class="bar" x="167.8" y="41.3" width="34.3" height="130.7"/><text x="185.0" y="187.0" text-anchor="middle">R02</text><text x="185.0" y="36.3" text-anchor="middle">402.9</text><rect class="bar" x="225.0" y="37.9" width="34.3" height="134.1"/><text x="242.2" y="187.0" text-anchor="middle">R02</text><text x="242.2" y="32.9" text-anchor="middle">413.2</text><rect class="bar" x="282.2" y="16.0" width="34.3" height="156.0"/><text x="299.4" y="187.0" text-anchor="middle">R03</text><text x="299.4" y="11.0" text-anchor="middle">480.7</text><line class="thr" x1="42" y1="65.8" x2="328" y2="65.8"/><text class="t-label" x="328" y="60.8" text-anchor="end">Target ≥ 327.18</text></svg></div><div class="trend"><div class="trend-caption">T_max trend (per evaluate round)</div><svg class="chart" viewBox="0 0 340 200" role="img" aria-label="T_max trend (per evaluate round)"><title>T_max trend (per evaluate round)</title><line class="grid" x1="42" y1="16.0" x2="328" y2="16.0"/><text x="38" y="19.0" text-anchor="end">298.1</text><line class="grid" x1="42" y1="94.0" x2="328" y2="94.0"/><text x="38" y="97.0" text-anchor="end">149.1</text><line class="grid" x1="42" y1="172.0" x2="328" y2="172.0"/><text x="38" y="175.0" text-anchor="end">0</text><line class="axis" x1="42" y1="16" x2="42" y2="172"/><line class="axis" x1="42" y1="172" x2="328" y2="172"/><rect class="bar" x="53.4" y="16.0" width="34.3" height="156.0"/><text x="70.6" y="187.0" text-anchor="middle">R01</text><text x="70.6" y="11.0" text-anchor="middle">298.1</text><rect class="bar" x="110.6" y="16.0" width="34.3" height="156.0"/><text x="127.8" y="187.0" text-anchor="middle">R02</text><text x="127.8" y="11.0" text-anchor="middle">298.1</text><rect class="bar" x="167.8" y="16.0" width="34.3" height="156.0"/><text x="185.0" y="187.0" text-anchor="middle">R02</text><text x="185.0" y="11.0" text-anchor="middle">298.1</text><rect class="bar" x="225.0" y="16.0" width="34.3" height="156.0"/><text x="242.2" y="187.0" text-anchor="middle">R02</text><text x="242.2" y="11.0" text-anchor="middle">298.1</text><rect class="bar" x="282.2" y="16.0" width="34.3" height="156.0"/><text x="299.4" y="187.0" text-anchor="middle">R03</text><text x="299.4" y="11.0" text-anchor="middle">298.1</text></svg></div></div>
+  <details class="round" open><summary><span class="round-no">ROUND 01</span><span class="badge stage">STAGE 4 Safety</span><span class="badge bad">fail</span><span class="round-sub">T_max 298.1 K</span></summary><div class="round-body"><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>capacity_ah</td><td class='num'>4.948</td></tr><tr><td>T_max_K</td><td class='num'>298.1</td></tr><tr><td>energy_wh</td><td class='num'>17.39</td></tr><tr><td>mass_kg</td><td class='num'>0.04345</td></tr><tr><td>energy_density_wh_kg</td><td class='num'>400.3</td></tr><tr><td>volume_m3</td><td class='num'>2.062e-05</td></tr><tr><td>energy_density_wh_l</td><td class='num'>843.5</td></tr><tr><td>thickness_m</td><td class='num'>0.0002008</td></tr><tr><td>midpoint_voltage_v</td><td class='num'>3.935</td></tr><tr><td>dcr_ohm</td><td class='num'>0.0003476</td></tr><tr><td>power_density_w_kg</td><td class='num'>2.697e+05</td></tr><tr><td>area_m2</td><td class='num'>0.1027</td></tr><tr><td>electrolyte_included</td><td class='num'>false</td></tr></table><p class="reason">Baseline characterization; low-temperature retention inferred mechanically from lowT and 25C capacities.｜未检查 criteria: max_energy_ev, max_homo_ev, lowT_capacity_retention</p></div></div></details><details class="round"><summary><span class="round-no">ROUND 02</span><span class="badge stage">STAGE 4 Safety</span><span class="badge ok">pass</span><span class="round-sub">T_max 298.1 K</span></summary><div class="round-body"><div class="blk"><div class="blk-label">Evaluate <span class="badge ok">pass</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>capacity_ah</td><td class='num'>4.948</td></tr><tr><td>T_max_K</td><td class='num'>298.1</td></tr><tr><td>energy_wh</td><td class='num'>17.42</td></tr><tr><td>mass_kg</td><td class='num'>0.03623</td></tr><tr><td>energy_density_wh_kg</td><td class='num'>480.7</td></tr><tr><td>volume_m3</td><td class='num'>1.918e-05</td></tr><tr><td>energy_density_wh_l</td><td class='num'>907.8</td></tr><tr><td>thickness_m</td><td class='num'>0.0001868</td></tr><tr><td>midpoint_voltage_v</td><td class='num'>3.935</td></tr><tr><td>dcr_ohm</td><td class='num'>0.0004235</td></tr><tr><td>power_density_w_kg</td><td class='num'>2.655e+05</td></tr><tr><td>area_m2</td><td class='num'>0.1027</td></tr><tr><td>electrolyte_included</td><td class='num'>false</td></tr></table><p class="reason">Thinner separator/current collectors improve both volumetric and gravimetric density; retention derived from paired capacities.｜未检查 criteria: max_energy_ev, max_homo_ev, lowT_capacity_retention</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>capacity_ah</td><td class='num'>4.953</td></tr><tr><td>T_max_K</td><td class='num'>298.1</td></tr><tr><td>energy_wh</td><td class='num'>17.51</td></tr><tr><td>mass_kg</td><td class='num'>0.04345</td></tr><tr><td>energy_density_wh_kg</td><td class='num'>402.9</td></tr><tr><td>volume_m3</td><td class='num'>2.062e-05</td></tr><tr><td>energy_density_wh_l</td><td class='num'>849</td></tr><tr><td>thickness_m</td><td class='num'>0.0002008</td></tr><tr><td>midpoint_voltage_v</td><td class='num'>3.956</td></tr><tr><td>dcr_ohm</td><td class='num'>0.0002227</td></tr><tr><td>power_density_w_kg</td><td class='num'>4.225e+05</td></tr><tr><td>area_m2</td><td class='num'>0.1027</td></tr><tr><td>electrolyte_included</td><td class='num'>false</td></tr></table><p class="reason">Higher electrolyte transport is a targeted low-temperature variant; retention remains above threshold but volumetric density remains limiting.｜未检查 criteria: max_energy_ev, max_homo_ev, lowT_capacity_retention</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>capacity_ah</td><td class='num'>5.016</td></tr><tr><td>T_max_K</td><td class='num'>298.1</td></tr><tr><td>energy_wh</td><td class='num'>17.95</td></tr><tr><td>mass_kg</td><td class='num'>0.04344</td></tr><tr><td>energy_density_wh_kg</td><td class='num'>413.2</td></tr><tr><td>volume_m3</td><td class='num'>2.062e-05</td></tr><tr><td>energy_density_wh_l</td><td class='num'>870.3</td></tr><tr><td>thickness_m</td><td class='num'>0.0002008</td></tr><tr><td>midpoint_voltage_v</td><td class='num'>3.971</td></tr><tr><td>dcr_ohm</td><td class='num'>0.0002679</td></tr><tr><td>power_density_w_kg</td><td class='num'>3.543e+05</td></tr><tr><td>area_m2</td><td class='num'>0.1027</td></tr><tr><td>electrolyte_included</td><td class='num'>false</td></tr></table><p class="reason">Small particles and higher separator porosity target low-temperature polarization; volumetric density remains below threshold.｜未检查 criteria: max_energy_ev, max_homo_ev, lowT_capacity_retention</p></div></div></details><details class="round"><summary><span class="round-no">ROUND 03</span><span class="badge stage">STAGE 4 Safety</span><span class="badge ok">pass</span><span class="round-sub">T_max 298.1 K</span></summary><div class="round-body"><div class="blk"><div class="blk-label">Evaluate <span class="badge ok">pass</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>capacity_ah</td><td class='num'>4.948</td></tr><tr><td>T_max_K</td><td class='num'>298.1</td></tr><tr><td>energy_wh</td><td class='num'>17.42</td></tr><tr><td>mass_kg</td><td class='num'>0.03623</td></tr><tr><td>energy_density_wh_kg</td><td class='num'>480.7</td></tr><tr><td>volume_m3</td><td class='num'>1.918e-05</td></tr><tr><td>energy_density_wh_l</td><td class='num'>907.8</td></tr><tr><td>thickness_m</td><td class='num'>0.0001868</td></tr><tr><td>midpoint_voltage_v</td><td class='num'>3.935</td></tr><tr><td>dcr_ohm</td><td class='num'>0.0004235</td></tr><tr><td>power_density_w_kg</td><td class='num'>2.655e+05</td></tr><tr><td>area_m2</td><td class='num'>0.1027</td></tr><tr><td>electrolyte_included</td><td class='num'>false</td></tr><tr><td>capacity_ah_25C</td><td class='num'>4.948</td></tr><tr><td>capacity_ah_minus20C</td><td class='num'>4.92</td></tr><tr><td>lowT_capacity_retention</td><td class='num'>0.9943</td></tr></table><p class="reason">Architecture A satisfies all registered metrics; low-temperature retention is mechanically derived from paired 1C capacities.｜未检查 criteria: max_energy_ev, max_homo_ev</p></div></div></details>
+</section>
+
+<section id="funnel" class="sheet" aria-labelledby="funnel-title">
+  <div class="eyebrow">SHEET 03 · FUNNEL</div>
+  <h2 id="funnel-title">Funnel Statistics</h2>
+  <p class="empty">No data</p>
+</section>
+
+<section id="stages" class="sheet" aria-labelledby="stages-title">
+  <div class="eyebrow">SHEET 04 · STAGE RESULTS</div>
+  <h2 id="stages-title">Stage Results</h2>
+  <figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 01</span><span class="fname">archA_25.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 311.6 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="archA_25.json curves (model SPMe）" data-series='{&quot;voltage_v&quot;: [[0.0, 4.0366], [0.0, 4.0366], [0.0, 4.0366], [0.01, 4.0366], [0.02, 4.0365], [0.04, 4.0364], [0.07, 4.0362], [0.11, 4.036], [0.18, 4.0356], [0.26, 4.0353], [0.41, 4.0345], [0.55, 4.0337], [0.7, 4.033], [0.99, 4.0315], [1.29, 4.0301], [1.88, 4.0273], [2.41, 4.0248], [2.94, 4.0225], [3.47, 4.0202], [4.0, 4.0181], [5.06, 4.014], [6.12, 4.0102], [7.47, 4.0057], [8.82, 4.0016], [10.17, 3.9979], [11.52, 3.9944], [12.86, 3.9912], [15.56, 3.9854], [18.26, 3.9803], [20.95, 3.9759], [23.65, 3.9719], [26.35, 3.9684], [29.04, 3.9652], [34.44, 3.9599], [39.83, 3.9555], [45.22, 3.9519], [50.62, 3.949], [56.01, 3.9466], [61.4, 3.9446], [66.8, 3.943], [72.19, 3.9417], [77.58, 3.9406], [82.98, 3.9397], [88.37, 3.939], [93.76, 3.9383], [99.16, 3.9378], [104.55, 3.9373], [109.94, 3.9369], [115.34, 3.9365], [120.73, 3.9362], [126.12, 3.9358], [131.52, 3.9354], [136.91, 3.9351], [142.3, 3.9347], [147.69, 3.9342], [153.09, 3.9338], [158.48, 3.9333], [163.87, 3.9327], [169.27, 3.9321], [174.66, 3.9315], [180.05, 3.9308], [185.45, 3.9301], [190.84, 3.9294], [196.23, 3.9286], [201.63, 3.9277], [207.02, 3.9268], [212.41, 3.9259], [217.81, 3.9249], [223.2, 3.9239], [228.59, 3.9228], [239.38, 3.9206], [250.17, 3.9182], [271.74, 3.913], [293.31, 3.9075], [314.89, 3.9017], [336.46, 3.8958], [358.03, 3.8897], [379.6, 3.8836], [422.75, 3.8716], [465.9, 3.86], [509.04, 3.8489], [552.19, 3.8385], [595.33, 3.8286], [681.63, 3.8104], [767.92, 3.7937], [854.21, 3.7774], [940.5, 3.7603], [1026.79, 3.7398], [1113.08, 3.7127], [1199.38, 3.6804], [1371.96, 3.6246], [1527.28, 3.5856], [1734.83, 3.5447], [1921.62, 3.5147], [2108.41, 3.4855], [2295.2, 3.4508], [2481.99, 3.4033], [2668.79, 3.348], [3042.37, 3.2455], [3415.95, 2.903], [3509.35, 2.7052], [3562.57, 2.5]]}'><title>archA_25.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.1 L56.0,16.1 L56.0,16.2 L56.0,16.2 L56.1,16.4 L56.1,16.5 L56.1,16.6 L56.2,16.9 L56.2,17.1 L56.3,17.6 L56.4,18.0 L56.5,18.4 L56.5,18.8 L56.6,19.2 L56.8,19.9 L57.0,20.5 L57.2,21.3 L57.4,22.0 L57.6,22.7 L57.8,23.3 L58.0,23.8 L58.5,24.8 L58.9,25.7 L59.3,26.4 L59.7,27.1 L60.2,27.7 L60.6,28.3 L61.5,29.2 L62.3,29.9 L63.2,30.5 L64.0,31.1 L64.9,31.5 L65.7,31.8 L66.6,32.1 L67.4,32.3 L68.3,32.5 L69.1,32.6 L70.0,32.8 L70.8,32.9 L71.7,33.0 L72.6,33.1 L73.4,33.1 L74.3,33.2 L75.1,33.3 L76.0,33.3 L76.8,33.4 L77.7,33.4 L78.5,33.5 L79.4,33.6 L80.2,33.7 L81.1,33.8 L81.9,33.8 L82.8,33.9 L83.7,34.1 L84.5,34.2 L85.4,34.3 L86.2,34.4 L87.1,34.6 L87.9,34.7 L88.8,34.9 L89.6,35.0 L90.5,35.2 L91.3,35.4 L92.2,35.6 L93.9,35.9 L95.6,36.3 L99.0,37.2 L102.4,38.2 L105.9,39.2 L109.3,40.2 L112.7,41.2 L116.1,42.3 L122.9,44.3 L129.8,46.3 L136.6,48.2 L143.4,50.0 L150.2,51.7 L163.9,54.9 L177.6,57.7 L191.2,60.5 L204.9,63.5 L218.6,67.0 L232.2,71.7 L245.9,77.2 L273.2,86.8 L297.8,93.5 L330.6,100.5 L360.2,105.7 L389.8,110.7 L419.4,116.6 L448.9,124.8 L478.5,134.3 L537.6,151.9 L596.8,210.8 L611.6,244.7 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.037</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 311.6 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">1781</text><text x="620.0" y="298" text-anchor="end">3563</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure><figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 02</span><span class="fname">archA_lowT.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 298.1 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="archA_lowT.json curves (model SPMe）" data-series='{&quot;voltage_v&quot;: [[0.0, 4.0366], [0.0, 4.0366], [0.0, 4.0366], [0.01, 4.0366], [0.02, 4.0365], [0.04, 4.0364], [0.07, 4.0362], [0.11, 4.036], [0.18, 4.0356], [0.26, 4.0352], [0.41, 4.0344], [0.55, 4.0337], [0.7, 4.0329], [0.99, 4.0314], [1.29, 4.0299], [1.88, 4.027], [2.41, 4.0245], [2.94, 4.0221], [3.47, 4.0198], [4.0, 4.0175], [5.06, 4.0133], [6.12, 4.0094], [7.47, 4.0047], [8.82, 4.0005], [10.17, 3.9965], [11.52, 3.9929], [12.86, 3.9895], [15.56, 3.9834], [18.26, 3.978], [20.95, 3.9732], [23.65, 3.9689], [26.35, 3.965], [29.04, 3.9615], [34.44, 3.9555], [39.83, 3.9505], [45.22, 3.9463], [50.62, 3.9427], [56.01, 3.9397], [61.4, 3.9371], [66.8, 3.9348], [72.19, 3.9329], [77.58, 3.9312], [82.98, 3.9297], [88.37, 3.9283], [93.76, 3.9271], [99.16, 3.9259], [104.55, 3.9249], [109.94, 3.9239], [115.34, 3.9229], [120.73, 3.922], [126.12, 3.9211], [131.52, 3.9201], [136.91, 3.9192], [142.3, 3.9182], [147.69, 3.9172], [153.09, 3.9162], [158.48, 3.9152], [163.87, 3.9141], [169.27, 3.913], [174.66, 3.9118], [180.05, 3.9106], [185.45, 3.9094], [190.84, 3.9081], [196.23, 3.9068], [201.63, 3.9054], [207.02, 3.904], [212.41, 3.9026], [217.81, 3.9011], [223.2, 3.8996], [228.59, 3.8981], [239.38, 3.8949], [250.17, 3.8915], [271.74, 3.8845], [293.31, 3.8772], [314.89, 3.8697], [336.46, 3.8621], [358.03, 3.8544], [379.6, 3.8467], [422.75, 3.8317], [465.9, 3.8173], [509.04, 3.8036], [552.19, 3.7907], [595.33, 3.7786], [681.63, 3.7562], [767.92, 3.7359], [854.21, 3.7165], [940.5, 3.6966], [1026.79, 3.6736], [1113.08, 3.6443], [1199.38, 3.6101], [1371.96, 3.5512], [1527.28, 3.5098], [1734.75, 3.4666], [1921.46, 3.4349], [2108.18, 3.4042], [2294.89, 3.3683], [2481.61, 3.3197], [2668.32, 3.2634], [3041.75, 3.1588], [3415.18, 2.8147], [3508.54, 2.6178], [3542.26, 2.5]]}'><title>archA_lowT.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.1 L56.0,16.1 L56.0,16.2 L56.0,16.2 L56.1,16.4 L56.1,16.5 L56.1,16.6 L56.2,16.9 L56.2,17.2 L56.3,17.7 L56.4,18.1 L56.5,18.5 L56.6,18.9 L56.6,19.3 L56.8,20.0 L57.0,20.7 L57.2,21.5 L57.4,22.2 L57.6,22.9 L57.8,23.5 L58.0,24.1 L58.5,25.1 L58.9,26.1 L59.3,26.9 L59.8,27.6 L60.2,28.3 L60.6,28.9 L61.5,29.9 L62.3,30.8 L63.2,31.5 L64.1,32.1 L64.9,32.7 L65.8,33.1 L66.6,33.5 L67.5,33.8 L68.4,34.1 L69.2,34.4 L70.1,34.6 L70.9,34.8 L71.8,35.0 L72.6,35.2 L73.5,35.4 L74.4,35.5 L75.2,35.7 L76.1,35.9 L76.9,36.0 L77.8,36.2 L78.7,36.3 L79.5,36.5 L80.4,36.7 L81.2,36.9 L82.1,37.0 L83.0,37.2 L83.8,37.4 L84.7,37.6 L85.5,37.9 L86.4,38.1 L87.2,38.3 L88.1,38.5 L89.0,38.8 L89.8,39.0 L90.7,39.3 L91.5,39.5 L92.4,39.8 L94.1,40.4 L95.8,40.9 L99.3,42.1 L102.7,43.4 L106.1,44.7 L109.6,46.0 L113.0,47.3 L116.4,48.6 L123.3,51.2 L130.2,53.7 L137.0,56.0 L143.9,58.2 L150.8,60.3 L164.5,64.2 L178.3,67.7 L192.0,71.0 L205.7,74.4 L219.5,78.4 L233.2,83.4 L247.0,89.3 L274.4,99.4 L299.2,106.5 L332.2,113.9 L361.9,119.4 L391.7,124.6 L421.4,130.8 L451.1,139.2 L480.9,148.8 L540.3,166.8 L599.8,225.9 L614.6,259.8 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.037</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 298.1 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">1771</text><text x="620.0" y="298" text-anchor="end">3542</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure><figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 03</span><span class="fname">archB_25.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 310 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="archB_25.json curves (model SPMe）" data-series='{&quot;voltage_v&quot;: [[0.0, 4.061], [0.0, 4.061], [0.0, 4.061], [0.01, 4.061], [0.02, 4.0609], [0.04, 4.0608], [0.07, 4.0606], [0.11, 4.0604], [0.18, 4.06], [0.26, 4.0597], [0.41, 4.0589], [0.55, 4.0582], [0.7, 4.0575], [0.99, 4.0562], [1.29, 4.0549], [1.88, 4.0524], [2.41, 4.0504], [2.94, 4.0486], [3.47, 4.0469], [4.0, 4.0452], [5.06, 4.0423], [6.12, 4.0396], [7.47, 4.0365], [8.82, 4.0337], [10.17, 4.031], [11.52, 4.0286], [12.87, 4.0263], [15.57, 4.0221], [18.26, 4.0183], [20.96, 4.0149], [23.66, 4.0117], [26.35, 4.0088], [29.05, 4.0061], [34.45, 4.0012], [39.84, 3.997], [45.24, 3.9932], [50.63, 3.9899], [56.02, 3.987], [61.42, 3.9843], [66.81, 3.982], [72.21, 3.9799], [77.6, 3.978], [83.0, 3.9763], [88.39, 3.9747], [93.79, 3.9734], [99.18, 3.9721], [104.58, 3.9711], [109.97, 3.9701], [115.37, 3.9692], [120.76, 3.9684], [126.16, 3.9677], [131.55, 3.9671], [136.94, 3.9666], [142.34, 3.9661], [147.73, 3.9657], [153.13, 3.9654], [158.52, 3.965], [163.92, 3.9648], [169.31, 3.9645], [174.71, 3.9643], [180.1, 3.9641], [185.5, 3.964], [190.89, 3.9639], [196.29, 3.9637], [201.68, 3.9636], [212.47, 3.9635], [223.26, 3.9633], [234.05, 3.9631], [244.84, 3.9629], [266.42, 3.9624], [287.99, 3.9617], [313.63, 3.9603], [336.71, 3.9586], [359.78, 3.9564], [382.86, 3.9538], [405.93, 3.9506], [452.08, 3.9431], [498.23, 3.9341], [563.93, 3.9196], [623.06, 3.9057], [682.19, 3.8916], [741.33, 3.8778], [859.59, 3.8515], [977.85, 3.8265], [1096.12, 3.7981], [1332.65, 3.7259], [1569.18, 3.6672], [2042.23, 3.5591], [2467.98, 3.4705], [2893.74, 3.3544], [3106.61, 3.2869], [3365.19, 3.062], [3611.33, 2.5]]}'><title>archB_25.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.1 L56.0,16.1 L56.0,16.2 L56.0,16.2 L56.1,16.4 L56.1,16.5 L56.1,16.6 L56.2,16.8 L56.2,17.0 L56.3,17.4 L56.4,17.8 L56.5,18.1 L56.5,18.4 L56.6,18.7 L56.8,19.2 L57.0,19.6 L57.2,20.1 L57.4,20.6 L57.6,21.1 L57.8,21.5 L58.0,21.9 L58.4,22.6 L58.9,23.2 L59.3,23.8 L59.7,24.3 L60.1,24.8 L60.5,25.3 L61.4,26.1 L62.2,26.8 L63.1,27.5 L63.9,28.0 L64.7,28.5 L65.6,29.0 L66.4,29.4 L67.3,29.7 L68.1,30.0 L69.0,30.3 L69.8,30.6 L70.6,30.8 L71.5,31.0 L72.3,31.2 L73.2,31.4 L74.0,31.5 L74.9,31.7 L75.7,31.8 L76.5,31.9 L77.4,32.0 L78.2,32.0 L79.1,32.1 L79.9,32.2 L80.8,32.2 L81.6,32.3 L82.4,32.3 L83.3,32.4 L84.1,32.4 L85.0,32.4 L85.8,32.4 L86.7,32.4 L87.5,32.5 L89.2,32.5 L90.9,32.5 L92.6,32.6 L94.2,32.6 L97.6,32.7 L101.0,32.8 L105.0,33.0 L108.6,33.3 L112.2,33.7 L115.8,34.1 L119.4,34.7 L126.6,35.9 L133.8,37.5 L144.1,39.9 L153.3,42.3 L162.5,44.6 L171.8,47.0 L190.2,51.4 L208.7,55.7 L227.2,60.5 L264.1,72.7 L301.1,82.6 L374.9,100.9 L441.4,115.9 L507.9,135.5 L541.2,146.9 L581.6,185.0 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.061</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 310 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">1806</text><text x="620.0" y="298" text-anchor="end">3611</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure><figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 04</span><span class="fname">archB_lowT.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 298.1 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="archB_lowT.json curves (model SPMe）" data-series='{&quot;voltage_v&quot;: [[0.0, 4.061], [0.0, 4.061], [0.0, 4.061], [0.01, 4.061], [0.02, 4.0609], [0.04, 4.0608], [0.07, 4.0606], [0.11, 4.0604], [0.18, 4.06], [0.26, 4.0596], [0.41, 4.0589], [0.55, 4.0581], [0.7, 4.0574], [0.99, 4.056], [1.29, 4.0547], [1.88, 4.0522], [2.41, 4.0502], [2.94, 4.0482], [3.47, 4.0465], [4.0, 4.0448], [5.06, 4.0417], [6.12, 4.0389], [7.47, 4.0356], [8.82, 4.0326], [10.17, 4.0299], [11.52, 4.0273], [12.87, 4.0248], [15.57, 4.0203], [18.26, 4.0162], [20.96, 4.0125], [23.66, 4.009], [26.35, 4.0058], [29.05, 4.0028], [34.45, 3.9974], [39.84, 3.9925], [45.24, 3.9882], [50.63, 3.9843], [56.02, 3.9808], [61.42, 3.9776], [66.81, 3.9747], [72.21, 3.9721], [77.6, 3.9696], [83.0, 3.9674], [88.39, 3.9653], [93.79, 3.9634], [99.18, 3.9617], [104.58, 3.9601], [109.97, 3.9586], [115.37, 3.9572], [120.76, 3.9559], [126.16, 3.9547], [131.55, 3.9536], [136.94, 3.9526], [142.34, 3.9516], [147.73, 3.9507], [153.13, 3.9499], [158.52, 3.9491], [163.92, 3.9483], [169.31, 3.9476], [174.71, 3.947], [180.1, 3.9463], [185.5, 3.9457], [190.89, 3.9451], [196.29, 3.9445], [201.68, 3.944], [212.47, 3.9429], [223.26, 3.9419], [234.05, 3.9408], [244.84, 3.9398], [266.42, 3.9376], [287.99, 3.9352], [313.63, 3.932], [336.71, 3.9287], [359.78, 3.925], [382.86, 3.9209], [405.93, 3.9163], [452.08, 3.906], [498.23, 3.8945], [563.92, 3.8766], [623.05, 3.8599], [682.17, 3.8433], [741.29, 3.8271], [859.54, 3.7968], [977.79, 3.7683], [1096.04, 3.737], [1214.29, 3.6974], [1450.79, 3.6294], [1687.28, 3.5664], [1923.78, 3.5092], [2160.28, 3.4633], [2396.77, 3.4129], [2869.77, 3.2808], [3342.76, 3.001], [3461.01, 2.8652], [3594.38, 2.5]]}'><title>archB_lowT.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.1 L56.0,16.1 L56.0,16.2 L56.0,16.2 L56.1,16.4 L56.1,16.5 L56.1,16.6 L56.2,16.8 L56.2,17.1 L56.3,17.5 L56.4,17.8 L56.5,18.2 L56.5,18.5 L56.6,18.7 L56.8,19.3 L57.0,19.7 L57.2,20.3 L57.4,20.8 L57.6,21.3 L57.8,21.7 L58.0,22.1 L58.4,22.9 L58.9,23.6 L59.3,24.2 L59.7,24.8 L60.1,25.3 L60.6,25.8 L61.4,26.8 L62.3,27.6 L63.1,28.3 L63.9,29.0 L64.8,29.6 L65.6,30.1 L66.5,30.6 L67.3,31.0 L68.2,31.5 L69.0,31.8 L69.9,32.2 L70.7,32.5 L71.6,32.8 L72.4,33.1 L73.3,33.3 L74.1,33.6 L74.9,33.8 L75.8,34.0 L76.6,34.2 L77.5,34.3 L78.3,34.5 L79.2,34.7 L80.0,34.8 L80.9,34.9 L81.7,35.1 L82.6,35.2 L83.4,35.3 L84.3,35.4 L85.1,35.5 L86.0,35.6 L86.8,35.7 L87.6,35.8 L89.3,36.0 L91.0,36.1 L92.7,36.3 L94.4,36.5 L97.8,36.9 L101.2,37.3 L105.2,37.8 L108.8,38.4 L112.5,39.0 L116.1,39.7 L119.7,40.5 L126.9,42.2 L134.2,44.2 L144.5,47.2 L153.8,50.0 L163.0,52.8 L172.3,55.6 L190.9,60.7 L209.4,65.5 L228.0,70.8 L246.5,77.5 L283.6,89.0 L320.8,99.7 L357.9,109.3 L395.0,117.1 L432.1,125.6 L506.3,148.0 L580.5,195.3 L599.1,218.2 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.061</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 298.1 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">1797</text><text x="620.0" y="298" text-anchor="end">3594</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure><figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 05</span><span class="fname">baseline_25.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 311.6 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="baseline_25.json curves (model SPMe）" data-series='{&quot;voltage_v&quot;: [[0.0, 4.0363], [0.0, 4.0363], [0.0, 4.0363], [0.01, 4.0362], [0.02, 4.0362], [0.04, 4.0361], [0.07, 4.0359], [0.11, 4.0357], [0.18, 4.0353], [0.33, 4.0346], [0.48, 4.0338], [0.63, 4.033], [0.92, 4.0316], [1.22, 4.0301], [1.81, 4.0273], [2.34, 4.0248], [2.87, 4.0225], [3.4, 4.0202], [3.93, 4.018], [4.99, 4.0139], [6.05, 4.0101], [7.39, 4.0056], [8.72, 4.0015], [10.06, 3.9978], [11.39, 3.9943], [12.73, 3.9911], [15.4, 3.9853], [18.07, 3.9802], [20.74, 3.9758], [23.41, 3.9718], [26.09, 3.9682], [28.76, 3.9651], [31.43, 3.9622], [36.77, 3.9574], [42.11, 3.9534], [47.46, 3.9501], [52.8, 3.9474], [58.14, 3.9452], [63.48, 3.9434], [68.83, 3.9419], [74.17, 3.9406], [79.51, 3.9396], [84.86, 3.9387], [90.2, 3.938], [95.54, 3.9374], [100.88, 3.9369], [106.23, 3.9364], [111.57, 3.936], [116.91, 3.9356], [122.25, 3.9352], [127.6, 3.9349], [132.94, 3.9345], [138.28, 3.9341], [143.63, 3.9337], [148.97, 3.9332], [154.31, 3.9328], [159.65, 3.9323], [165.0, 3.9317], [170.34, 3.9311], [175.68, 3.9305], [181.03, 3.9298], [186.37, 3.9291], [191.71, 3.9283], [197.05, 3.9275], [202.4, 3.9266], [207.74, 3.9257], [213.08, 3.9248], [223.77, 3.9228], [234.45, 3.9206], [255.82, 3.9159], [275.06, 3.9112], [294.29, 3.9062], [313.53, 3.9011], [332.76, 3.8958], [351.99, 3.8904], [371.23, 3.885], [409.69, 3.8742], [448.16, 3.8637], [486.63, 3.8536], [525.1, 3.8439], [563.57, 3.8348], [640.5, 3.8178], [717.44, 3.8023], [794.37, 3.7877], [871.31, 3.7732], [948.24, 3.7577], [1025.18, 3.7393], [1179.05, 3.6871], [1332.92, 3.6349], [1486.79, 3.5941], [1640.66, 3.561], [1794.53, 3.5339], [1948.4, 3.5097], [2102.27, 3.4856], [2410.02, 3.4225], [2717.76, 3.3339], [3025.5, 3.2519], [3333.24, 2.9994], [3562.39, 2.5]]}'><title>baseline_25.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.1 L56.0,16.1 L56.0,16.2 L56.1,16.3 L56.1,16.4 L56.1,16.6 L56.1,16.8 L56.2,17.1 L56.3,17.6 L56.4,18.0 L56.5,18.4 L56.5,18.8 L56.6,19.1 L56.8,19.9 L57.0,20.5 L57.2,21.3 L57.4,22.0 L57.6,22.6 L57.8,23.2 L58.0,23.8 L58.4,24.8 L58.9,25.6 L59.3,26.4 L59.7,27.1 L60.1,27.7 L60.6,28.2 L61.0,28.7 L61.8,29.6 L62.7,30.2 L63.5,30.8 L64.4,31.3 L65.2,31.7 L66.1,32.0 L66.9,32.2 L67.7,32.4 L68.6,32.6 L69.4,32.8 L70.3,32.9 L71.1,33.0 L72.0,33.1 L72.8,33.2 L73.7,33.2 L74.5,33.3 L75.4,33.4 L76.2,33.4 L77.0,33.5 L77.9,33.6 L78.7,33.6 L79.6,33.7 L80.4,33.8 L81.3,33.9 L82.1,34.0 L83.0,34.1 L83.8,34.2 L84.7,34.3 L85.5,34.4 L86.4,34.6 L87.2,34.7 L88.0,34.8 L88.9,35.0 L89.7,35.2 L91.4,35.5 L93.1,35.9 L96.5,36.7 L99.5,37.5 L102.6,38.3 L105.6,39.2 L108.7,40.1 L111.7,41.1 L114.8,42.0 L120.9,43.9 L127.0,45.7 L133.0,47.4 L139.1,49.1 L145.2,50.6 L157.4,53.5 L169.6,56.2 L181.8,58.7 L193.9,61.2 L206.1,63.9 L218.3,67.0 L242.7,76.0 L267.0,85.0 L291.4,92.0 L315.8,97.7 L340.1,102.3 L364.5,106.5 L388.8,110.6 L437.6,121.5 L486.3,136.7 L535.0,150.8 L583.7,194.2 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.036</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 311.6 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">1781</text><text x="620.0" y="298" text-anchor="end">3562</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure><figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 06</span><span class="fname">baseline_lowT.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 298.1 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="baseline_lowT.json curves (model SPMe）" data-series='{&quot;voltage_v&quot;: [[0.0, 4.0363], [0.0, 4.0363], [0.0, 4.0363], [0.01, 4.0362], [0.02, 4.0362], [0.04, 4.0361], [0.07, 4.0359], [0.11, 4.0357], [0.18, 4.0353], [0.33, 4.0345], [0.48, 4.0337], [0.63, 4.033], [0.92, 4.0314], [1.22, 4.0299], [1.81, 4.027], [2.34, 4.0245], [2.87, 4.0221], [3.4, 4.0198], [3.93, 4.0175], [4.99, 4.0133], [6.05, 4.0093], [7.39, 4.0047], [8.72, 4.0004], [10.06, 3.9965], [11.39, 3.9929], [12.73, 3.9895], [15.4, 3.9834], [18.07, 3.978], [20.74, 3.9732], [23.41, 3.9689], [26.09, 3.965], [28.76, 3.9615], [31.43, 3.9584], [36.77, 3.9529], [42.11, 3.9483], [47.46, 3.9444], [52.8, 3.9411], [58.14, 3.9382], [63.48, 3.9358], [68.83, 3.9337], [74.17, 3.9319], [79.51, 3.9303], [84.86, 3.9288], [90.2, 3.9275], [95.54, 3.9263], [100.88, 3.9252], [106.23, 3.9242], [111.57, 3.9232], [116.91, 3.9223], [122.25, 3.9214], [127.6, 3.9204], [132.94, 3.9195], [138.28, 3.9186], [143.63, 3.9176], [148.97, 3.9167], [154.31, 3.9157], [159.65, 3.9146], [165.0, 3.9135], [170.34, 3.9124], [175.68, 3.9113], [181.03, 3.9101], [186.37, 3.9089], [191.71, 3.9076], [197.05, 3.9063], [202.4, 3.905], [207.74, 3.9036], [213.08, 3.9022], [223.77, 3.8992], [234.45, 3.8961], [255.82, 3.8895], [275.06, 3.8832], [294.29, 3.8767], [313.53, 3.87], [332.76, 3.8632], [351.99, 3.8564], [371.23, 3.8496], [409.69, 3.8362], [448.16, 3.8231], [486.63, 3.8107], [525.1, 3.7988], [563.57, 3.7875], [640.5, 3.7667], [717.44, 3.7477], [794.37, 3.73], [871.31, 3.7127], [948.24, 3.6948], [1025.18, 3.6742], [1179.05, 3.6182], [1332.92, 3.563], [1486.79, 3.5197], [1640.66, 3.4846], [1794.53, 3.4558], [1948.4, 3.4302], [2102.27, 3.4048], [2410.02, 3.3396], [2717.76, 3.2491], [3025.5, 3.1651], [3333.24, 2.9106], [3542.09, 2.5]]}'><title>baseline_lowT.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.1 L56.0,16.1 L56.0,16.2 L56.1,16.3 L56.1,16.4 L56.1,16.6 L56.1,16.8 L56.2,17.1 L56.3,17.6 L56.4,18.0 L56.5,18.4 L56.5,18.8 L56.6,19.2 L56.8,20.0 L57.0,20.6 L57.2,21.4 L57.4,22.2 L57.6,22.8 L57.8,23.5 L58.0,24.0 L58.5,25.1 L58.9,26.0 L59.3,26.8 L59.7,27.6 L60.2,28.2 L60.6,28.8 L61.0,29.4 L61.9,30.3 L62.7,31.1 L63.6,31.8 L64.4,32.4 L65.3,32.8 L66.1,33.3 L67.0,33.6 L67.8,33.9 L68.7,34.2 L69.5,34.5 L70.4,34.7 L71.2,34.9 L72.1,35.1 L72.9,35.3 L73.8,35.4 L74.6,35.6 L75.5,35.8 L76.3,35.9 L77.2,36.1 L78.0,36.2 L78.9,36.4 L79.7,36.6 L80.6,36.7 L81.4,36.9 L82.3,37.1 L83.1,37.3 L84.0,37.5 L84.8,37.7 L85.7,37.9 L86.5,38.1 L87.4,38.3 L88.2,38.6 L89.1,38.8 L89.9,39.1 L91.6,39.6 L93.3,40.1 L96.7,41.2 L99.8,42.3 L102.9,43.4 L105.9,44.6 L109.0,45.7 L112.0,46.9 L115.1,48.1 L121.2,50.4 L127.4,52.6 L133.5,54.8 L139.6,56.8 L145.7,58.8 L158.0,62.3 L170.2,65.6 L182.5,68.6 L194.7,71.6 L207.0,74.7 L219.2,78.2 L243.7,87.8 L268.2,97.3 L292.7,104.8 L317.2,110.8 L341.7,115.8 L366.2,120.2 L390.7,124.5 L439.7,135.7 L488.7,151.3 L537.7,165.7 L586.7,209.4 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.036</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 298.1 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">1771</text><text x="620.0" y="298" text-anchor="end">3542</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure><figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 07</span><span class="fname">transport_25.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 310 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="transport_25.json curves (model SPMe）" data-series='{&quot;voltage_v&quot;: [[0.0, 4.0438], [0.0, 4.0438], [0.0, 4.0438], [0.01, 4.0437], [0.02, 4.0437], [0.04, 4.0436], [0.08, 4.0434], [0.15, 4.043], [0.23, 4.0427], [0.39, 4.0419], [0.54, 4.0412], [0.69, 4.0405], [1.0, 4.0391], [1.31, 4.0377], [1.93, 4.035], [2.55, 4.0324], [3.16, 4.0299], [3.78, 4.0276], [4.4, 4.0253], [5.01, 4.0232], [6.25, 4.0192], [7.48, 4.0155], [8.72, 4.0121], [9.95, 4.009], [11.18, 4.0061], [13.65, 4.0008], [16.12, 3.9963], [18.59, 3.9923], [21.06, 3.9887], [23.53, 3.9855], [25.99, 3.9826], [28.46, 3.98], [33.4, 3.9755], [38.34, 3.9719], [43.27, 3.9688], [48.21, 3.9663], [53.15, 3.9642], [63.02, 3.961], [72.89, 3.9588], [82.76, 3.9573], [92.64, 3.9563], [102.51, 3.9556], [112.38, 3.955], [122.26, 3.9544], [132.13, 3.9539], [151.88, 3.9525], [168.86, 3.9509], [185.85, 3.9488], [202.83, 3.9463], [219.82, 3.9433], [236.81, 3.9399], [253.79, 3.9361], [270.78, 3.932], [287.76, 3.9276], [321.74, 3.9185], [355.71, 3.9089], [389.68, 3.8993], [423.65, 3.8897], [457.62, 3.8805], [525.57, 3.8631], [593.51, 3.8471], [661.45, 3.8325], [729.4, 3.819], [797.34, 3.806], [865.28, 3.7932], [933.23, 3.7797], [1069.12, 3.7452], [1205.0, 3.696], [1340.89, 3.6512], [1476.78, 3.615], [1612.66, 3.585], [1748.55, 3.56], [1884.44, 3.538], [2020.33, 3.5171], [2292.1, 3.469], [2563.88, 3.3963], [2835.65, 3.323], [3107.43, 3.2263], [3379.2, 2.9679], [3566.02, 2.5]]}'><title>transport_25.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.1 L56.0,16.1 L56.0,16.2 L56.1,16.3 L56.1,16.4 L56.1,16.6 L56.2,16.8 L56.2,17.0 L56.3,17.5 L56.4,17.9 L56.5,18.4 L56.6,18.8 L56.7,19.2 L56.8,19.5 L57.0,20.2 L57.2,20.8 L57.4,21.4 L57.6,22.0 L57.8,22.5 L58.2,23.3 L58.5,24.1 L58.9,24.8 L59.3,25.4 L59.7,26.0 L60.1,26.5 L60.5,26.9 L61.3,27.7 L62.1,28.3 L62.8,28.8 L63.6,29.3 L64.4,29.6 L66.0,30.2 L67.5,30.5 L69.1,30.8 L70.7,31.0 L72.2,31.1 L73.8,31.2 L75.3,31.3 L76.9,31.4 L80.0,31.6 L82.7,31.9 L85.4,32.2 L88.1,32.7 L90.8,33.2 L93.5,33.8 L96.1,34.4 L98.8,35.1 L101.5,35.9 L106.9,37.4 L112.3,39.1 L117.6,40.7 L123.0,42.3 L128.4,43.9 L139.1,46.9 L149.9,49.6 L160.6,52.1 L171.4,54.4 L182.1,56.7 L192.9,58.9 L203.6,61.2 L225.1,67.1 L246.6,75.5 L268.1,83.1 L289.6,89.3 L311.1,94.5 L332.5,98.7 L354.0,102.5 L375.5,106.1 L418.5,114.3 L461.5,126.7 L504.5,139.3 L547.5,155.8 L590.5,200.0 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.044</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 310 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">1783</text><text x="620.0" y="298" text-anchor="end">3566</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure><figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 08</span><span class="fname">transport_lowT.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 298.1 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="transport_lowT.json curves (model SPMe）" data-series='{&quot;voltage_v&quot;: [[0.0, 4.0438], [0.0, 4.0438], [0.0, 4.0438], [0.01, 4.0437], [0.02, 4.0437], [0.04, 4.0436], [0.08, 4.0434], [0.15, 4.043], [0.23, 4.0426], [0.39, 4.0419], [0.54, 4.0411], [0.69, 4.0404], [1.0, 4.0389], [1.31, 4.0375], [1.93, 4.0347], [2.55, 4.0321], [3.16, 4.0295], [3.78, 4.0271], [4.4, 4.0248], [5.01, 4.0226], [6.25, 4.0184], [7.48, 4.0145], [8.72, 4.011], [9.95, 4.0077], [11.18, 4.0047], [13.65, 3.9991], [16.12, 3.9943], [18.59, 3.9899], [21.06, 3.986], [23.53, 3.9825], [25.99, 3.9794], [28.46, 3.9765], [33.4, 3.9714], [38.34, 3.9671], [43.27, 3.9635], [48.21, 3.9604], [53.15, 3.9577], [63.02, 3.9534], [72.89, 3.9501], [82.76, 3.9475], [92.64, 3.9454], [102.51, 3.9435], [112.38, 3.9419], [122.26, 3.9403], [132.13, 3.9387], [151.88, 3.9353], [168.86, 3.932], [185.85, 3.9283], [202.83, 3.9242], [219.82, 3.9196], [236.81, 3.9146], [253.79, 3.9093], [270.78, 3.9038], [287.76, 3.898], [321.74, 3.8861], [355.71, 3.8739], [389.68, 3.8618], [423.65, 3.8499], [457.62, 3.8384], [525.57, 3.8168], [593.51, 3.7971], [661.45, 3.7791], [729.4, 3.7624], [797.34, 3.7467], [865.28, 3.7313], [933.23, 3.7155], [1069.12, 3.6771], [1205.0, 3.6246], [1340.89, 3.577], [1476.78, 3.5386], [1612.66, 3.5067], [1748.55, 3.4801], [1884.44, 3.4568], [2020.33, 3.4346], [2292.1, 3.3845], [2563.88, 3.3102], [2835.65, 3.2353], [3107.43, 3.1371], [3415.82, 2.8294], [3492.92, 2.6775], [3546.06, 2.5]]}'><title>transport_lowT.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.1 L56.0,16.1 L56.0,16.2 L56.1,16.3 L56.1,16.5 L56.1,16.6 L56.2,16.8 L56.2,17.1 L56.3,17.5 L56.4,18.0 L56.5,18.4 L56.6,18.9 L56.7,19.2 L56.8,19.6 L57.0,20.3 L57.2,21.0 L57.4,21.6 L57.6,22.2 L57.8,22.7 L58.2,23.6 L58.6,24.5 L59.0,25.2 L59.3,25.9 L59.7,26.5 L60.1,27.0 L60.5,27.5 L61.3,28.4 L62.1,29.1 L62.9,29.7 L63.7,30.3 L64.5,30.7 L66.0,31.5 L67.6,32.0 L69.2,32.5 L70.7,32.8 L72.3,33.1 L73.9,33.4 L75.4,33.7 L77.0,34.0 L80.2,34.5 L82.9,35.1 L85.6,35.7 L88.3,36.5 L91.0,37.2 L93.7,38.1 L96.4,39.0 L99.1,39.9 L101.8,40.9 L107.2,43.0 L112.6,45.1 L118.0,47.1 L123.4,49.2 L128.8,51.1 L139.6,54.8 L150.4,58.2 L161.2,61.3 L172.0,64.1 L182.8,66.8 L193.6,69.4 L204.4,72.1 L226.0,78.7 L247.7,87.7 L269.3,95.8 L290.9,102.4 L312.5,107.8 L334.1,112.4 L355.7,116.4 L377.3,120.2 L420.6,128.7 L463.8,141.4 L507.0,154.3 L550.2,171.1 L599.3,223.7 L611.5,249.6 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.044</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 298.1 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">1773</text><text x="620.0" y="298" text-anchor="end">3546</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure>
+</section>
+
+<section id="endorse" class="sheet" aria-labelledby="endorse-title">
+  <div class="eyebrow">SHEET 05 · ENDORSEMENT</div>
+  <h2 id="endorse-title">True DFT/MD Endorsement</h2>
+  <div class="endorse-cand"><div class="endorse-head"><b>archA</b> <span class="sm"></span></div><pre class="term">{
+  "skipped": true,
+  "reason": "real_compute=false"
+}</pre></div>
+</section>
+
+<section id="final" class="sheet" aria-labelledby="final-title">
+  <div class="eyebrow">SHEET 06 · FINAL</div>
+  <h2 id="final-title">Final Recommendation</h2>
+  <blockquote class="final-quote">Architecture A using Chen2020 with 10 um separator, 10 um positive collector, and 6 um negative collector. Tool outputs show 480.728 Wh/kg, 907.774 Wh/L, and 0.99430 1C capacity retention at -20 C. These exceed all three registered thresholds. True DFT/MD endorsement was skipped by pre-registered real_compute=false. Safety criteria were not specified in the task and therefore are not claimed.</blockquote><div class="final-verdict">Conclusion <span class="badge neutral">achieved</span></div>
+</section>
+
+<section id="notes" class="sheet" aria-labelledby="notes-title">
+  <div class="eyebrow">SHEET 07 · DESIGN NOTES</div>
+  <h2 id="notes-title">Design Notes</h2>
+  <div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>Baseline characterization; low-temperature retention inferred mechanically from lowT and 25C capacities.｜未检查 criteria: max_energy_ev, max_homo_ev, lowT_capacity_retention</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>Thinner separator/current collectors improve both volumetric and gravimetric density; retention derived from paired capacities.｜未检查 criteria: max_energy_ev, max_homo_ev, lowT_capacity_retention</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>Higher electrolyte transport is a targeted low-temperature variant; retention remains above threshold but volumetric density remains limiting.｜未检查 criteria: max_energy_ev, max_homo_ev, lowT_capacity_retention</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>Small particles and higher separator porosity target low-temperature polarization; volumetric density remains below threshold.｜未检查 criteria: max_energy_ev, max_homo_ev, lowT_capacity_retention</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>Architecture A satisfies all registered metrics; low-temperature retention is mechanically derived from paired 1C capacities.｜未检查 criteria: max_energy_ev, max_homo_ev</p></div>
+</section>
+
+</main>
+
+<div class="ruler" aria-hidden="true">
+  <span style="left:0%">0</span><span style="left:20%">10</span><span style="left:40%">20</span>
+  <span style="left:60%">30</span><span style="left:80%">40</span><span style="left:100%">50</span>
+</div>
+<footer class="page-foot">
+  <span>Virtual Battery Factory · Design Report</span>
+  <span>Deterministically rendered from log.jsonl · zero-LLM rendering</span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* 锚点平滑滚动（reduced-motion 下直接跳转） */
+  var links = Array.prototype.slice.call(document.querySelectorAll(".nav a[href^='#']"));
+  links.forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      var target = document.getElementById(a.getAttribute("href").slice(1));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        if (history.replaceState) {
+          history.replaceState(null, "", a.getAttribute("href"));
+        }
+      }
+    });
+  });
+
+  /* 导航高亮当前章节 */
+  var sections = document.querySelectorAll("main section[id]");
+  if ("IntersectionObserver" in window && sections.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) { return; }
+        links.forEach(function (a) {
+          a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id);
+        });
+      });
+    }, { rootMargin: "-15% 0px -75% 0px" });
+    sections.forEach(function (s) { io.observe(s); });
+  }
+
+  /* SVG 曲线 hover 十字线 + 数值 tooltip（读 data-series 属性） */
+  var NS = "http://www.w3.org/2000/svg";
+  var esc = function (s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  };
+  document.querySelectorAll("svg.plot").forEach(function (svg) {
+    var series;
+    try { series = JSON.parse(svg.getAttribute("data-series") || "{}"); }
+    catch (err) { return; }
+    var keys = Object.keys(series);
+    if (!keys.length || !series[keys[0]].length) { return; }
+    var wrap = svg.parentElement;
+    var tip = wrap ? wrap.querySelector(".tooltip") : null;
+    var vb = svg.viewBox.baseVal;
+    var cross = document.createElementNS(NS, "line");
+    cross.setAttribute("y1", "0");
+    cross.setAttribute("y2", vb ? vb.height : 320);
+    cross.setAttribute("stroke", "#C97B3D");
+    cross.setAttribute("stroke-width", "1");
+    cross.setAttribute("stroke-dasharray", "3 3");
+    cross.style.opacity = "0";
+    svg.appendChild(cross);
+    svg.addEventListener("pointermove", function (e) {
+      var rect = svg.getBoundingClientRect();
+      if (!rect.width) { return; }
+      var fx = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      var first = series[keys[0]];
+      var idx = Math.round(fx * (first.length - 1));
+      var px = fx * (vb ? vb.width : 640);
+      cross.setAttribute("x1", px);
+      cross.setAttribute("x2", px);
+      cross.style.opacity = "0.9";
+      if (tip) {
+        var lines = keys.map(function (k) {
+          var row = series[k][Math.min(idx, series[k].length - 1)];
+          return esc(k) + ": " + row[1];
+        });
+        tip.innerHTML = "<span class='t-t'>t = " + first[idx][0] + " s</span><br>" + lines.join("<br>");
+        tip.hidden = false;
+        var wx = Math.min(wrap.clientWidth - tip.offsetWidth - 8, Math.max(4, e.clientX - rect.left + 12));
+        var wy = Math.min(wrap.clientHeight - tip.offsetHeight - 8, Math.max(4, e.clientY - rect.top - 36));
+        tip.style.left = wx + "px";
+        tip.style.top = wy + "px";
+      }
+    });
+    svg.addEventListener("pointerleave", function () {
+      cross.style.opacity = "0";
+      if (tip) { tip.hidden = true; }
+    });
+  });
+})();
+</script>
+</body>
+</html>

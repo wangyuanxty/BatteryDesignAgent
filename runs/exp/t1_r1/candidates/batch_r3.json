@@ -1,0 +1,6 @@
+[
+  {"candidate": "r3-I full", "outputs": ["cell/r3_I_4c_dfn.json", "cell/r3_I_energy.json"], "note": "full anode transport+kinetic package (t+ 0.55, porosity 0.40 + 120 um anode, particles 2.5 um, separator 6 um) vs remaining 15 mV; DFN authoritative; TR deferred to finalist"},
+  {"candidate": "r3-J light", "outputs": ["cell/r3_J_4c_dfn.json", "cell/r3_J_energy.json"], "note": "t+ 0.55 + particles 2.5 um only (isolate kinetic+concentration contribution); DFN authoritative; TR deferred to finalist"},
+  {"candidate": "r3-K mid", "outputs": ["cell/r3_K_4c_dfn.json", "cell/r3_K_energy.json"], "note": "t+ 0.55 + porosity 0.40 with 120 um thickness compensation (isolate pore-transport contribution); DFN authoritative; TR deferred to finalist"},
+  {"candidate": "r3-L sep", "outputs": ["cell/r3_L_4c_dfn.json", "cell/r3_L_energy.json"], "note": "t+ 0.55 + separator 6 um (isolate separator contribution); DFN authoritative; TR deferred to finalist"}
+]

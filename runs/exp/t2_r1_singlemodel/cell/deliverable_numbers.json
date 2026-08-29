@@ -1,0 +1,81 @@
+{
+ "criteria": {
+  "energy_density_wh_kg": {
+   "min": 327.18
+  },
+  "sei_thickness_nm_end": {
+   "max": 500
+  },
+  "sei_thickness_nm_end_500cyc": {
+   "max": 550
+  },
+  "retention_lowT_pct": {
+   "min": 90
+  }
+ },
+ "capacity_ah_1C": 6.955522857609939,
+ "capacity_ah_lowT": 6.927072396678716,
+ "retention_lowT_pct": 99.59,
+ "energy_wh": 25.03318547930693,
+ "energy_density_wh_kg": 358.0063868669201,
+ "energy_density_wh_l": 625.0015099819469,
+ "mass_kg": 0.06992385163400001,
+ "midpoint_voltage_v": 3.574187933223573,
+ "dcr_ohm": 0.012374219064363956,
+ "power_density_w_kg": 4944.4263271861055,
+ "area_m2": 0.10270000000000001,
+ "layer_kg_m2": {
+  "positive_electrode": 0.216923,
+  "negative_electrode": 0.3106875,
+  "positive_cc": 0.043199999999999995,
+  "negative_cc": 0.10752,
+  "separator": 0.00252492
+ },
+ "t_max_1C": 322.6780188449701,
+ "t_max_lowT": 279.17116754775947,
+ "t_max_4C45": 342.454984968658,
+ "ap_min_4C45": 0.11197365644610574,
+ "ap_min_4C25": 0.11130333959067437,
+ "sei_100_nm": 194.5551159628549,
+ "sei_500_nm": 439.7369497679217,
+ "aging500_cycles": 500,
+ "aging500_source": "cell/r3_aging500_d1e19.json",
+ "aging500_cap_last_ah": 1.3990099850280955,
+ "tr_triggered": false,
+ "tr_t_max_k": 322.6780188449701,
+ "tr_nail_triggered": true,
+ "tr_nail_t_max_k": 408.4321555777476,
+ "tr_nail_trigger_time_s": 1159.2,
+ "v_min": 2.5,
+ "v_max": 4.2,
+ "nominal_capacity_ah": 5.0,
+ "l_pos_m": 0.0001,
+ "l_neg_m": 0.00025,
+ "l_sep_m": 1.2e-05,
+ "por_pos": 0.335,
+ "por_neg": 0.25,
+ "por_sep": 0.47,
+ "rho_pos": 3262.0,
+ "rho_neg": 1657.0,
+ "l_cc_pos_m": 1.6e-05,
+ "l_cc_neg_m": 1.2e-05,
+ "rho_cc_pos": 2700.0,
+ "rho_cc_neg": 8960.0,
+ "height_m": 0.065,
+ "width_m": 1.58,
+ "t_plus": 0.2594,
+ "c_e0": 1000.0,
+ "eps_pos_am": 0.665,
+ "eps_neg_am": 0.75,
+ "r_pos_m": 3e-06,
+ "r_neg_m": 3.5e-06,
+ "h_conv": 10.0,
+ "k_sei": 3e-13,
+ "j0_sei": 7.5e-08,
+ "d_ec": 1e-19,
+ "r_sei_ohm_m": 200000.0,
+ "neg_i0": 2.0,
+ "t_init_4C45": 318.15,
+ "t_init_4C25": 298.15,
+ "t_lowT": 253.15
+}

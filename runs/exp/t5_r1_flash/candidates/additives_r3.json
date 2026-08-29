@@ -1,0 +1,8 @@
+{
+  "candidates": [
+    {"smiles": "C1OC(=O)OC1F", "name": "FEC", "role": "fluoroethylene carbonate film-forming additive"},
+    {"smiles": "C1=COC(=O)O1", "name": "VC", "role": "vinylene carbonate film-forming additive"},
+    {"smiles": "C1CCS(=O)(=O)O1", "name": "PES", "role": "1,3-propanesultone film-forming additive"},
+    {"smiles": "C1COS(=O)(=O)O1", "name": "DTD", "role": "1,3,2-dioxathiolane-2,2-dioxide SEI stabilizer"}
+  ]
+}

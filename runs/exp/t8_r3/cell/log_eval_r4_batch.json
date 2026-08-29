@@ -1,0 +1,24 @@
+[
+  {
+    "candidate": "V12 cooled_anodefast2",
+    "outputs": [
+      "runs/exp/t8_r3/cell/r4_V12_cooled_anodefast2_5c_dfn.json",
+      "runs/exp/t8_r3/cell/r4_V12_cooled_anodefast2_derived.json",
+      "runs/exp/t8_r3/cell/r4_V12_cooled_anodefast2_1c_dfn.json",
+      "runs/exp/t8_r3/cell/r4_V12_cooled_anodefast2_energy.json",
+      "runs/exp/t8_r3/cell/r4_V12_cooled_anodefast2_4c_safety.json"
+    ],
+    "note": "V8 winner + negative particle 1.2 um: ALL pass - retention 0.9881, ED 488.8 Wh/kg, mass 38.05 g, 4C/45C T_max 326.84 K, anode_min +0.0132 V. Negative-particle lever confirms: 1.2 um widens anode margin +7.3 -> +13.2 mV at unchanged thermal margin 6.3 K. | file order: 4C safety last -> T_max_K judged from the safety-protocol run."
+  },
+  {
+    "candidate": "V13 porousanode",
+    "outputs": [
+      "runs/exp/t8_r3/cell/r4_V13_porousanode_5c_dfn.json",
+      "runs/exp/t8_r3/cell/r4_V13_porousanode_derived.json",
+      "runs/exp/t8_r3/cell/r4_V13_porousanode_1c_dfn.json",
+      "runs/exp/t8_r3/cell/r4_V13_porousanode_energy.json",
+      "runs/exp/t8_r3/cell/r4_V13_porousanode_4c_safety.json"
+    ],
+    "note": "V8 winner + negative porosity 0.30: ALL pass with the best margin set of the campaign - retention 0.9866, ED 497.5 Wh/kg (mass 37.32 g), 4C/45C T_max 326.53 K (6.6 K margin), anode_min +0.0177 V (2.4x V8). Coating-density route (porosity 0.30) beats the finer-particle route on ED and both safety margins. SELECTED AS FINAL. | file order: 4C safety last -> T_max_K judged from the safety-protocol run."
+  }
+]

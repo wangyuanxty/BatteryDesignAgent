@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "B1_nano_100_200",
+    "outputs": [
+      "cell/r3_B1_1c_spme.json",
+      "cell/r3_B1_energy.json",
+      "cell/r3_B1_4c_spme.json",
+      "cell/r3_B1_aging_spme.json"
+    ],
+    "note": "B1: nano electrodes R_p 100 nm / R_n 200 nm + h 200. 4C charge died ~43 s (cap 0.048 Ah duration-proxy; anode surface potential plunged through zero, min -0.158 V -> plated). T 319.9 PASS, SEI 129.2 PASS, ED 1119.4 PASS, midpoint 4.2757 PASS. Failure mode re-diagnosed in R4 propose as anode-interface salt depletion (electrolyte transport), not solid diffusion."
+  },
+  {
+    "candidate": "B2_nano_100_300",
+    "outputs": [
+      "cell/r3_B2_1c_spme.json",
+      "cell/r3_B2_energy.json",
+      "cell/r3_B2_4c_spme.json",
+      "cell/r3_B2_aging_spme.json"
+    ],
+    "note": "B2: sensitivity, R_n 300 nm. 4C dead (0.048 Ah, plated min -0.176 V). T 320.1 PASS, SEI 187.4 PASS. Same salt-depletion failure mode as B1."
+  }
+]

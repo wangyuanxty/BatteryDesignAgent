@@ -1,0 +1,8 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false (headless session, no explicit true-compute request): Stage 5 true DFT/MD endorsement skipped by configuration. This case runs start_stage=3 on the Chen2020 baseline (no new materials invented), so there are no molecular candidates requiring run-orca/run-cp2k/run-md/QE endorsement; all cell physics come from PyBaMM DFN/SPMe (plating, aging, lumped thermal) and the run-tr three-reaction ODE. No DFT/MD values fabricated.",
+  "candidates": [
+    {"name": "R4_F1_Fine2_Tp05_Por32_H80", "note": "selected cell design; endorsement scope (molecular) not applicable"}
+  ]
+}

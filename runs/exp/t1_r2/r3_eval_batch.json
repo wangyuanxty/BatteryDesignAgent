@@ -1,0 +1,32 @@
+[
+  {
+    "candidate": "V3a Liquid-cooled assembly",
+    "outputs": ["cell/r3_v3a_1c_spme.json", "cell/r3_v3a_energy.json", "cell/r3_v3a_4c_dfn.json"],
+    "note": "ED 563.6 Wh/kg pass. 4C: plating fixed (anode min +0.020 V), true acceptance 4.05 Ah / 74% SOC (mechanical: 729 s x 20 A). T_max 335.1 K fails by 2.0 K -> h=30 insufficient; h=45 variants pass."
+  },
+  {
+    "candidate": "V3b Strong liquid cooling",
+    "outputs": ["cell/r3_v3b_1c_spme.json", "cell/r3_v3b_energy.json", "cell/r3_v3b_4c_dfn.json"],
+    "note": "ED 563.4 Wh/kg pass. 4C: plating fixed (anode min +0.015 V), acceptance 4.01 Ah / 74% SOC. T_max 330.4 K pass (margin 2.75 K). All mechanical criteria pass; margins thin -> robustness round to widen."
+  },
+  {
+    "candidate": "V3c Max-margin assembly",
+    "outputs": ["cell/r3_v3c_1c_spme.json", "cell/r3_v3c_energy.json", "cell/r3_v3c_4c_dfn.json"],
+    "note": "ED 567.7 Wh/kg pass. 4C: plating fixed (anode min +0.016 V), acceptance 4.25 Ah / 78% SOC (best). T_max 329.6 K pass (margin 3.55 K). All mechanical criteria pass; margins thin -> robustness round to widen."
+  },
+  {
+    "candidate": "V3a Liquid-cooled assembly",
+    "outputs": ["cell/r3_v3a_overcharge.json", "cell/r3_v3a_tr.json"],
+    "note": "Overcharge to 4.7 V: T_max 301.1 K; run-tr (mcp=mass x 900=31.3 J/K, hA=30x0.00531=0.1593 design-consistent) triggered false. Pass."
+  },
+  {
+    "candidate": "V3b Strong liquid cooling",
+    "outputs": ["cell/r3_v3b_overcharge.json", "cell/r3_v3b_tr.json"],
+    "note": "Overcharge to 4.7 V: T_max 300.2 K; run-tr (mcp=31.3 J/K, hA=45x0.00531=0.23895 design-consistent) triggered false. Pass."
+  },
+  {
+    "candidate": "V3c Max-margin assembly",
+    "outputs": ["cell/r3_v3c_overcharge.json", "cell/r3_v3c_tr.json"],
+    "note": "Overcharge to 4.7 V: T_max 300.0 K; run-tr (mcp=31.3 J/K, hA=0.23895 design-consistent) triggered false. Pass."
+  }
+]

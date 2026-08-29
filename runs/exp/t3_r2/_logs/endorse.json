@@ -1,0 +1,6 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false; no true-compute endorsement performed (no run-orca/run-cp2k/run-qe/run-md executed). Additionally this is a Stage-3 architecture run: no molecular system was changed, so there is no Top-N material candidate to endorse; the delivered values are DFN cell-simulation outputs (mechanically evaluated by log-evaluate round 2, verdict=pass). No DFT/MD values were fabricated.",
+  "candidates": []
+}

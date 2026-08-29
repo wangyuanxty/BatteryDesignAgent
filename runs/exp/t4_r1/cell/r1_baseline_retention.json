@@ -1,0 +1,9 @@
+{
+  "lowT_retention": 0.9942494698616124,
+  "lowT_retention_coldsoak_spme": 0.9942658034815627,
+  "lowT_retention_warmstart": 0.9942847697911101,
+  "capacity_ah_298K": 4.94738704643111,
+  "capacity_ah_253K_coldsoak": 4.9189369481143395,
+  "capacity_ah_253K_warmstart": 4.919111590528276,
+  "note": "lowT_retention = capacity_ah(lowT_discharge, Initial temperature 253.15K) / capacity_ah(1C_discharge 298.15K), DFN; derived mechanically from run-pyamm outputs"
+}

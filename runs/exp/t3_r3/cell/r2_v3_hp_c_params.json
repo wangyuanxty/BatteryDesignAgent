@@ -1,0 +1,14 @@
+{
+  "Electrolyte conductivity [S.m-1]": 1.5,
+  "Cation transference number": 0.35,
+  "Electrolyte diffusivity [m2.s-1]": 5e-10,
+  "Positive current collector thickness [m]": 8e-06,
+  "Negative current collector thickness [m]": 6e-06,
+  "Separator porosity": 0.5,
+  "Positive electrode thickness [m]": 4.62521e-05,
+  "Negative electrode thickness [m]": 5.61158e-05,
+  "Positive electrode porosity": 0.5,
+  "Negative electrode porosity": 0.45,
+  "Positive particle radius [m]": 1.2e-06,
+  "Negative particle radius [m]": 1.5e-06
+}

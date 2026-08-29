@@ -1,0 +1,45 @@
+{
+  "criteria": {
+    "stage1": {},
+    "stage2": {
+      "energy_density_wh_l": {"min": 950},
+      "midpoint_voltage_v": {"min": 4.1},
+      "sei_thickness_nm_end": {"max": 500}
+    },
+    "stage3": {
+      "T_max_K": {"max": 323.15},
+      "plated": false
+    },
+    "meta": {
+      "case_id": "t6_r1_noceiling",
+      "task": "smartphone battery: volumetric energy density >= 950 Wh/L; 4C fast charge with no lithium plating; maximum temperature <= 50 C; anode SEI thickness <= 500 nm after 100 cycles; voltage plateau >= 4.1 V",
+      "threshold_notes": {
+        "T_max_K_max_323.15": "50 degC mechanically converted: 50 + 273.15 = 323.15 K",
+        "plateau_key": "midpoint_voltage_v (calc-energy plateau approximation: voltage at discharge-time midpoint)",
+        "energy_density_wh_l": "calc-energy contract caliber (electrolyte/casing excluded, annotated by tool)"
+      },
+      "real_compute": false,
+      "start_stage": 3,
+      "base_params": "Chen2020",
+      "base_selection_basis": "task text names no electrode system -> anchor table default Chen2020; verified by parameter dump: NMC811/graphite (OCP functions nmc_LGM50_ocp_Chen2020), nominal 5 Ah, full thermal/geometry set, SEI kinetics present, no plating parameters (standard defaults injected at runtime)",
+      "ablation": {
+        "ceiling_escalation": "OFF (task text: no proactive escalation into material design; only materials/systems named in task text may be used; otherwise tune within the existing cell/architecture formulation space)",
+        "exploration_force": "ON (default; not disabled by task text)",
+        "funnel_voting": "ON (default; unused - no Stage 2 in this case)"
+      },
+      "freedoms": {
+        "electrode_system": "locked: Chen2020 (no system named in task text; ceiling_escalation OFF forbids proactive system switch)",
+        "electrolyte_formulation": "locked: baseline transport parameters (no materials/additives named in task text)",
+        "electrode_modification": "locked: no coating/doping (not named in task text)",
+        "cell_architecture": "adjustable: thickness / porosity / N-P / separator / current collectors / particle size (parameter keys verified against Chen2020); plus electrode formulation keys (active material volume fraction, with porosity co-adjusted to keep volume fractions physical) and nominal capacity (kept consistent with designed loading so 1C remains a true 1C) as part of the cell/architecture formulation space - widest interpretation recorded",
+        "thermal_management": "adjustable: Total heat transfer coefficient (cooling h) within smartphone passive-cooling range 10-25 W/m2K; cell cooling surface area kept at parameter-set value - widest interpretation recorded"
+      },
+      "protocols": {
+        "energy": "run-pyamm 1C_discharge (spme) + calc-energy (contract formula)",
+        "fast_charge": "run-pyamm 4C_charge_45C --thermal lumped --plating (45 C ambient, charge from empty)",
+        "aging": "run-pyamm aging_1C_100cyc (spme, isothermal, SEI ec reaction limited, 100 cycles)",
+        "plating_judgment": "anode_potential_v min < 0 -> plated=true (mechanical, by log-evaluate)"
+      }
+    }
+  }
+}

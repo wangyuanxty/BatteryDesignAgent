@@ -1,0 +1,35 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {
+      "name": "B0_baseline",
+      "role": "Chen2020 baseline stack characterization (native values only) plus the global fully-charged test fixture",
+      "struct": {
+        "Initial concentration in positive electrode [mol.m-3]": 63104.0,
+        "Initial concentration in negative electrode [mol.m-3]": 33133.0
+      }
+    },
+    {
+      "name": "V1_porosity_power",
+      "role": "power-direction variant: both electrode porosities raised (pos 0.335->0.40, neg 0.25->0.35) to shorten the effective ionic path and raise 4C anode charge acceptance",
+      "struct": {
+        "Initial concentration in positive electrode [mol.m-3]": 63104.0,
+        "Initial concentration in negative electrode [mol.m-3]": 33133.0,
+        "Positive electrode porosity": 0.40,
+        "Negative electrode porosity": 0.35
+      }
+    },
+    {
+      "name": "V2_thin_electrodes",
+      "role": "thin-electrode variant (pos 75.6->50 um, neg 85.2->56 um; base thickness ratio ~1.12 kept) to lower DCR and improve 5C/4C rate capability with predicted ~3.3 Ah capacity (still >= 2 Ah)",
+      "struct": {
+        "Initial concentration in positive electrode [mol.m-3]": 63104.0,
+        "Initial concentration in negative electrode [mol.m-3]": 33133.0,
+        "Positive electrode thickness [m]": 5.0e-05,
+        "Negative electrode thickness [m]": 5.6e-05
+      }
+    }
+  ],
+  "llm_reason": "Power/rate-dominated objective: round 1 spans the two strongest ionic-transport lever families (porosity, electrode thickness) against a bare baseline; charge/discharge heat measured at contract h=10 to expose the raw thermal gap before cooling is sized in round 2 (thermal DoF reserved). All variant values are protocol-managed parameter keys (SKILL 1.5/Stage 3 lists); fixture keys fixed and constant across candidates."
+}

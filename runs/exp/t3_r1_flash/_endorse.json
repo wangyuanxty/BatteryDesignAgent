@@ -1,0 +1,9 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false: true DFT/MD endorsement (run-orca/run-md) skipped per protocol; no fabricated DFT/MD values. All conclusion-grade values sourced from DFN cell simulations (run-pyamm) and calc-energy.",
+  "candidates": [
+    {"name": "V4 Margin-fix", "role": "final design"},
+    {"name": "V5 Anode-only", "role": "conservative alternative"}
+  ]
+}

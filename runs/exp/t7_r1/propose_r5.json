@@ -1,0 +1,8 @@
+{
+  "action": "propose",
+  "round": 5,
+  "candidates": [
+    {"struct": {"Negative particle radius [m]": 1.5e-06, "Positive particle radius [m]": 3.5e-06, "Electrolyte conductivity [S.m-1]": 2.5, "Cation transference number": 0.55, "Electrolyte diffusivity [m2.s-1]": 6.0e-10, "Negative electrode thickness [m]": 1.15e-04, "Negative electrode porosity": 0.36, "Total heat transfer coefficient [W.m-2.K-1]": 50.0, "Nominal cell capacity [A.h]": 6.05}, "name": "V11-final", "role": "final design = V8 transport/porosity set + h=50: nail margin raised (T_max 336 K vs 349 K at h=40; h=30 fails at 666 s) at negligible plating cost; DFN-precision verification round"}
+  ],
+  "llm_reason": "R4 sensitivity sweep mapped the nail cooling floor at h~40 W/m2K (h=40 passes T_max 348.7 K, h=30 triggers at 666 s). Choosing h=50 as the design value gives comfortable nail margin while the plating margin loss from slightly cooler operation is negligible (V6 vs V1: h had minor effect on anode min). V11 = V8 + h=50 is the final candidate; R5 verifies it at DFN precision (1C discharge DFN + calc-energy + 4C DFN + aging + nail)."
+}

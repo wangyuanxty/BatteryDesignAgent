@@ -1,0 +1,6 @@
+{
+ "lowT_retention": 0.9926745477024824,
+ "capacity_ah_298K": 5.036770510969165,
+ "capacity_ah_253K_coldsoak": 4.999873888857517,
+ "note": "DFN cold-soak 253.15K (h=80 removes self-heating; T_max 255.97K). SPMe agrees: 4.999793269076499/5.03670516518935=0.992671. lowT_retention = capacity(lowT cold-soak)/capacity(1C 298.15K), same parameters"
+}

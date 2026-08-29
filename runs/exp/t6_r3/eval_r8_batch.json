@@ -1,0 +1,32 @@
+[
+  {
+    "candidate": "V21_final",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r8_V21_final_1c.json",
+      "runs/exp/t6_r3/cell/r8_V21_final_aging.json",
+      "runs/exp/t6_r3/cell/r8_V21_final_energy.json",
+      "runs/exp/t6_r3/cell/r8_V21_final_4c.json"
+    ],
+    "note": "fusion of V17+V20 (pos 60 um + SEI k 5e-14 + EC 2000 + h 100): ALL FIVE PASS — ED 1087.2, plateau 4.1647, T_max 322.26 (margin 0.89 K), plated=False (amin +0.0392), SEI 394.5 (margin 105.5 nm). Designated finalist A"
+  },
+  {
+    "candidate": "V22_h120",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r8_V22_h120_1c.json",
+      "runs/exp/t6_r3/cell/r8_V22_h120_aging.json",
+      "runs/exp/t6_r3/cell/r8_V22_h120_energy.json",
+      "runs/exp/t6_r3/cell/r8_V22_h120_4c.json"
+    ],
+    "note": "h 120 probe: T_max 322.18 K (only -0.08 K vs h 100, response saturated) — h 100 retained, extra cooling demand not justified"
+  },
+  {
+    "candidate": "V23_ec1500",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r8_V23_ec1500_1c.json",
+      "runs/exp/t6_r3/cell/r8_V23_ec1500_aging.json",
+      "runs/exp/t6_r3/cell/r8_V23_ec1500_energy.json",
+      "runs/exp/t6_r3/cell/r8_V23_ec1500_4c.json"
+    ],
+    "note": "EC 1500 (1.5 M) probe: SEI 337.4 nm (margin 162.6 nm, -57 nm vs EC 2000; sublinear in c_ec_0). Designated finalist B (deeper electrolyte reformulation, larger SEI margin)"
+  }
+]

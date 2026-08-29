@@ -1,0 +1,46 @@
+[
+  {
+    "candidate": "V_A transport",
+    "round": 2,
+    "outputs": [
+      "cell/r2_VA_1c_dfn.json",
+      "cell/r2_VA_energy.json",
+      "cell/r2_VA_5c_dfn.json",
+      "cell/r2_VA_retention.json"
+    ],
+    "note": "Formulation-only (D=4.0e-10, t+=0.36, sigma=1.2): retention 0.087->0.676 (electrolyte salt depletion relief), ED 404.0, mass 43.5 g. Stage-3 safety (4C charge) not yet run this round - plated unchecked for R2 screen variants."
+  },
+  {
+    "candidate": "V_B reservoir",
+    "round": 2,
+    "outputs": [
+      "cell/r2_VB_1c_dfn.json",
+      "cell/r2_VB_energy.json",
+      "cell/r2_VB_5c_dfn.json",
+      "cell/r2_VB_retention.json"
+    ],
+    "note": "Porosity reservoir eps_pos 0.40: retention 0.722, ED 390.2 (porosity cost ~3.4% vs V_A), mass 45.0 g. Safety unchecked this round."
+  },
+  {
+    "candidate": "V_C thin-loading",
+    "round": 2,
+    "outputs": [
+      "cell/r2_VC_1c_dfn.json",
+      "cell/r2_VC_energy.json",
+      "cell/r2_VC_5c_dfn.json",
+      "cell/r2_VC_retention.json"
+    ],
+    "note": "Thin electrodes (60/67.6 um) area-scaled to 5 Ah: retention 0.722, ED 370.4 (area growth -> more inactive mass per energy), mass 47.5 g. Area-for-loading trades ED poorly vs direct thickness choice at fixed area. Safety unchecked this round."
+  },
+  {
+    "candidate": "V_D thin+inactive",
+    "round": 2,
+    "outputs": [
+      "cell/r2_VD_1c_dfn.json",
+      "cell/r2_VD_energy.json",
+      "cell/r2_VD_5c_dfn.json",
+      "cell/r2_VD_retention.json"
+    ],
+    "note": "Best of round: ED 467.0 Wh/kg >= 446.18 PASS, mass 37.7 g <= 40 g PASS, retention 0.722 < 0.9 FAIL. Diagnostic: salt depletion resolved (c_e pos-side 355 mol/m3), limiter = positive solid-phase surface depletion (tau_diff~6812 s). Next round: particle-radius microstructure lever. Safety unchecked this round."
+  }
+]

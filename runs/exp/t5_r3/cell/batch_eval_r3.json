@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "W1 arch+transport+h30",
+    "outputs": ["cell/r3_w1_energy.json", "cell/r3_w1_1c_spme.json", "cell/r3_w1_4c_45c.json"],
+    "note": "ED 525.7 pass; no plating (min_ap +0.0222V) pass; T_max 339.27K fail (66.1C, h=30 insufficient once 4C charge actually proceeds 578s)"
+  },
+  {
+    "candidate": "W2 arch+transport-mod",
+    "outputs": ["cell/r3_w2_energy.json", "cell/r3_w2_1c_spme.json", "cell/r3_w2_4c_45c.json"],
+    "note": "ED 524.7 pass; T_max 326.66K pass; but moderated transport (sigma3.2/t+0.42/De4e-10) re-loses plating margin (min_ap -0.4727V) -> formulation envelope confirmed: sigma~5 needed"
+  },
+  {
+    "candidate": "W3 arch+transport+h50",
+    "outputs": ["cell/r3_w3_energy.json", "cell/r3_w3_1c_spme.json", "cell/r3_w3_4c_45c.json"],
+    "note": "ED 525.3 pass; T_max 332.39K pass (0.76K margin); min_ap +0.0120V pass (thin margin). PASS on all checked criteria; margins thin -> round 4 tightens + probes honesty of 4C rate vs actual capacity"
+  },
+  {
+    "candidate": "W4 okane+arch+transport",
+    "outputs": ["cell/r3_w4_energy.json", "cell/r3_w4_1c_spme.json", "cell/r3_w4_4c_45c.json"],
+    "note": "ED 525.5 pass; T_max 343.05K fail; borderline plating min_ap -0.0011V fail -> system switch to local OKane2022 (graphite+cracking, no SiOx) offers no advantage over Chen2020+transport"
+  }
+]

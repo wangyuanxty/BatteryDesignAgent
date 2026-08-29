@@ -1,0 +1,11 @@
+{
+  "candidate": "V8_cooled_anodefast",
+  "capacity_1c_ah": 5.072427794956888,
+  "capacity_5c_ah": 5.0023766162898555,
+  "retention_5c": 0.9861898125515598,
+  "formula": "retention_5c = capacity_5c_ah / capacity_1c_ah (5C_discharge DFN vs same-params 1C_discharge DFN)",
+  "sources": {
+    "one_c": "runs\\exp\\t8_r3\\cell\\r3_V8_cooled_anodefast_1c_dfn.json",
+    "five_c": "runs\\exp\\t8_r3\\cell\\r3_V8_cooled_anodefast_5c_dfn.json"
+  }
+}

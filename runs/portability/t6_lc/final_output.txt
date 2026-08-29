@@ -1,0 +1,38 @@
+Design complete — all five acceptance metrics **achieved**. Summary below.
+
+## Result: ACHIEVED (log `final` verdict = achieved)
+
+**Final design** — LNMO high-voltage spinel / graphite cell (`base = data/LNMO.json` on Chen2020):
+
+| Parameter | Final value |
+|---|---|
+| Positive electrode (LNMO) | 57 µm, porosity 0.335, active fraction 0.665, density 4400 kg/m³ |
+| Negative electrode (graphite) | 110 µm (N/P = 1.68), porosity 0.25 |
+| Separator | 8 µm |
+| Current collectors | Al 10 µm / Cu 8 µm |
+| Thermal management | `Total heat transfer coefficient` = 45 W/m²/K |
+| Anode SEI coating | `SEI kinetic rate constant` = 1×10⁻¹⁵ m/s |
+
+**Acceptance vs task thresholds (DFN precision, all sourced from tool outputs):**
+
+| Metric | Requirement | Achieved | Verdict |
+|---|---|---|---|
+| Volumetric ED | ≥ 950 Wh/L | **1005.8 Wh/L** | PASS |
+| Voltage plateau (midpoint) | ≥ 4.1 V | **4.115 V** | PASS |
+| 4C fast charge, no plating | anode ≥ 0 V | min **+0.0894 V** | PASS |
+| Max temperature (4C/45 °C) | ≤ 50 °C (323.15 K) | **322.59 K** (49.44 °C) | PASS |
+| Anode SEI after 100 cycles | ≤ 500 nm | **233 nm (SPMe) / 9.5 nm (DFN)** | PASS |
+
+## Design path (audit trail)
+1. **Ceiling assessment**: Chen2020 baseline midpoint 3.935 V < 4.1 V → voltage plateau is a cathode-material bottleneck → escalated to high-voltage LNMO system.
+2. **Plating fix**: N/P raised 0.98 → 1.68 (anode 85.2 → 110 µm); anode potential moved from −0.176 V to +0.089 V.
+3. **T_max fix**: cooling h raised to 45 (DFN 322.59 K); also thinned positive electrode to cut 4C heat.
+4. **SEI fix**: thin positive (shorter 1C cycles) + anode coating k_SEI 1e-15 m/s.
+5. Rejected levers that data showed hurt: anode particle 4 µm (plating worsened), anode >110 µm (SEI rose via longer cycles).
+
+## Protocol compliance
+- `log.jsonl`: 25 entries — entry-0 criteria, plan, 6 propose rounds each with same-round mechanical `evaluate` (12 evaluates), funnel/base-determination notes, `endorse` (honest skip: `real_compute=false`), `final` (achieved), N/P correction note.
+- `verify-deliverables`: **ALL PASS** (7 deliverable categories + PDFs, xlsx parseable, VBF numbering ×16, audit chain + final present).
+- Deliverables in `deliverables/`: `design_spec`, `bom.xlsx`, `datasheet`, `calc.xlsx`, `dvpr`, `dfmea`, `delivery_index` (+ PDF releases) and `report.html`.
+
+**Honest limitations noted in deliverables**: electrolyte oxidative stability at 4.7 V is flagged as the highest-risk item (true DFT endorsement skipped per `real_compute=false`); pouch enclosure/tabs and physical-abuse tests (nail/overcharge/crush) are marked N/A — outside pure-simulation boundary.

@@ -1,0 +1,27 @@
+[
+  {
+    "candidate": "FC-A",
+    "outputs": ["cell/r2_fca_energy.json", "cell/r2_fca_aging100.json", "cell/r2_fca_derived.json", "cell/r2_fca_4c.json"],
+    "note": "FC-A (transport sigma1.5/t+0.45 + particles 3.0/4.0um + SEI k x0.2): plating improved -0.192->-0.062V but still plated; T_max 361.1K (h=10, more heat than baseline because higher delivered capacity); SEI@500 744.5nm barely moved (k insensitive at x0.2)."
+  },
+  {
+    "candidate": "FC-B",
+    "outputs": ["cell/r2_fcb_energy.json", "cell/r2_fcb_4c.json"],
+    "note": "FC-B (FC-A + h=30 + negative 100um + particle 2.5um): T_max down to 347.2K; anode dip WORSE -0.125V - 100um negative lengthens electrolyte path in negative electrode (4C current is nominal-based, unchanged); SEI not re-run on FC-B geometry (scans SEI-a/SEI-b below)."
+  },
+  {
+    "candidate": "SEI-a",
+    "outputs": ["cell/r2_seia_derived.json"],
+    "note": "SEI lever scan on FC-B basis: SEI reaction exchange current density x0.1 -> 790.6nm@500, no improvement (electron-migration parameter not controlling ec-reaction-limited growth)."
+  },
+  {
+    "candidate": "SEI-b",
+    "outputs": ["cell/r2_seib_derived.json"],
+    "note": "SEI lever scan on FC-B basis: SEI kinetic rate constant x0.01 (1e-14) -> 583.3nm@500 (from 744.5 at k=2e-13): k IS the lever, delta~k^0.08; extrapolate k=2e-15 -> ~510nm."
+  },
+  {
+    "candidate": "FC-C",
+    "outputs": ["cell/r2_fcc_energy.json", "cell/r2_fcc_aging100.json", "cell/r2_fcc_derived.json", "cell/r2_fcc_4c.json"],
+    "note": "FC-C FINAL (85.2um neg geometry + particle 2.5um + neg porosity 0.30 + sigma 2.0/D 2.5e-10/t+ 0.55 + SEI k 2e-15 + h=60): ALL METRICS PASS - ED 425.4, SEI 78.2/262.0nm, lowT 99.4%, anode min +0.012V no plating, T_max 329.2K."
+  }
+]

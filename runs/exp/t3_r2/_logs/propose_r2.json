@@ -1,0 +1,33 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "name": "P1_power_stack",
+      "role": "full power stack: sub-2um particles eat the solid-diffusion bottleneck (tau ~ r^2), high porosity and thin electrodes shorten ionic paths, electrolyte overrides lift liquid transport above Chen2020 baseline",
+      "struct": {
+        "Positive particle radius [m]": 1.3e-06,
+        "Negative particle radius [m]": 1.6e-06,
+        "Positive electrode porosity": 0.45,
+        "Negative electrode porosity": 0.40,
+        "Positive electrode thickness [m]": 4.5e-05,
+        "Negative electrode thickness [m]": 5.6e-05,
+        "Electrolyte conductivity [S.m-1]": 1.5,
+        "Electrolyte diffusivity [m2.s-1]": 6.0e-10
+      }
+    },
+    {
+      "name": "P2_no_particles",
+      "role": "attribution isolate: same liquid-transport/thickness/porosity levers as P1 but base particle radii (5.22/5.86 um) to separate the particle-size contribution to 5C retention",
+      "struct": {
+        "Positive electrode porosity": 0.45,
+        "Negative electrode porosity": 0.40,
+        "Positive electrode thickness [m]": 4.5e-05,
+        "Negative electrode thickness [m]": 5.6e-05,
+        "Electrolyte conductivity [S.m-1]": 1.5,
+        "Electrolyte diffusivity [m2.s-1]": 6.0e-10
+      }
+    }
+  ],
+  "llm_reason": "Ceiling assessment attributed the 5C collapse to solid-diffusion + liquid transport (both Stage 3). P1 stacks the two strongest levers (r^2 particle scaling; sigma/D_e/porosity/thickness); P2 isolates attribution. Parameter values and sources (pre-run listing): r_pos 1.3 um / r_neg 1.6 um = commercially available sub-2 um NMC and fine graphite powders (domain experience, no precise source pinned); sigma 1.5 S/m, D_e 6e-10 m2/s = high-transport liquid-electrolyte formulation values (literature-informed estimate; baseline Nyman2008 function evaluates ~0.9-1.0 S/m at 1M 25C); nominal capacity re-based per candidate to its delivered 1C capacity (audited design rule in plan update r1) so 5C/4C are true C-rates."
+}

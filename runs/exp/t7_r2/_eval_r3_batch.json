@@ -1,0 +1,46 @@
+[
+  {
+    "candidate": "R3_T1_Fine3_Tp04_H80",
+    "round": 3,
+    "outputs": [
+      "cell/r3_t1_aging45.json",
+      "validation/r3_t1_nail.json",
+      "cell/r3_t1_4c45.json",
+      "cell/r3_t1_energy.json"
+    ],
+    "note": "Combo 3um+t+0.4+h80: 4C anode min -0.103->-0.0827 V (R2 gains carry over additively); T_max 333.4 K; cap 0.284 Ah; ED 409.1; SEI 484.4 nm; nail PASS (hA=0.4248, T_max 321.7 K) and hot-soak probe PASS (321.7 K, no trigger) - cooling problem solved; plating needs one more lever step."
+  },
+  {
+    "candidate": "R3_T2_Fine3_Tp04_Por32_H80",
+    "round": 3,
+    "outputs": [
+      "cell/r3_t2_aging45.json",
+      "validation/r3_t2_nail.json",
+      "cell/r3_t2_4c45.json",
+      "cell/r3_t2_energy.json"
+    ],
+    "note": "T1 + anode porosity 0.25->0.32: 4C anode min -0.0363 V (+0.0464 V porosity gain - larger than either R2 lever); cap 0.328 Ah; ED 419.9; SEI 496.3 nm (within margin); nail + hot probe PASS (321.7 K)."
+  },
+  {
+    "candidate": "R3_T3_Fine2_Tp04_Por32_H80",
+    "round": 3,
+    "outputs": [
+      "cell/r3_t3_aging45.json",
+      "validation/r3_t3_nail.json",
+      "cell/r3_t3_4c45.json",
+      "cell/r3_t3_energy.json"
+    ],
+    "note": "T2 with 2.0 um particles: 4C anode min -0.0175 V (+0.0188 V particle step); cap 0.348 Ah; ED 422.9; SEI 460.7 nm (LOWEST - fine particles reduce per-particle current, less SEI); nail + hot probe PASS."
+  },
+  {
+    "candidate": "R3_T4_Fine3_Tp05_Por32_H80",
+    "round": 3,
+    "outputs": [
+      "cell/r3_t4_aging45.json",
+      "validation/r3_t4_nail.json",
+      "cell/r3_t4_4c45.json",
+      "cell/r3_t4_energy.json"
+    ],
+    "note": "T2 with t+=0.5: 4C anode min -0.0097 V (best; +0.0266 V transference step - still slightly negative, ~10 mV from no-plating); T_max 330.6 K; cap 0.366 Ah; ED 420.6; SEI 503.4 nm (still <550); nail + hot probe PASS. R4 stacks the remaining ~10 mV (2um surface + porosity/separator/transference increments)."
+  }
+]

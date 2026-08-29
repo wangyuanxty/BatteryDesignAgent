@@ -1,0 +1,8 @@
+{
+  "low_temperature_retention": 0.9928638283416307,
+  "capacity_1c_ah": 3.9547204484316785,
+  "capacity_lowt_ah": 3.926498884450807,
+  "ref_source": "final_b7_1c_dfn.json",
+  "lowt_source": "final_b7_lowt_dfn.json",
+  "derived_by": "mechanical ratio, DFN"
+}

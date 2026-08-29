@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "start_stage=3: this case starts at Stage 3 (cell design); materials use system baseline parameters, no molecular funnel screening. Base parameter set determination (deterministic anchor-table mapping): task text names no electrode system -> default Chen2020. Dump verification (93 keys): contains 'SEI kinetic rate constant [m.s-1]' and full SEI parameter block (aging-capable); pure-graphite negative parameterization (no SiOx/cracking keys, discriminant anchor for OKane2022 absent); NMC811 positive OCP; complete geometry/thermal keys present (collector thickness, separator, particle radii, heat transfer coefficient, cell volume) so lumped-thermal and architecture levers are native. props source = baseline (literature values, Chen2020 parameterization). Opening ceiling assessment will be executed during baseline characterization and appended as a funnel entry (ceiling_escalation OFF: assessment only, no proactive material-design escalation)."
+}

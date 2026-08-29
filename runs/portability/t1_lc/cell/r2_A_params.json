@@ -1,0 +1,5 @@
+{
+  "Negative particle radius [m]": 2.0e-6,
+  "Positive particle radius [m]": 2.0e-6,
+  "Total heat transfer coefficient [W.m-2.K-1]": 50.0
+}

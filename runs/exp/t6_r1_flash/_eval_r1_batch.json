@@ -1,0 +1,4 @@
+[
+  {"candidate": "systemLNMO", "outputs": ["cell/r1_LNMO_1c_spme.json", "cell/r1_LNMO_1c_calc.json", "cell/r1_LNMO_aging.json", "cell/r1_LNMO_4c_safety.json"], "note": "LNMO baseline: M1 ED 1005.3 Wh/L pass, M2 plateau 4.166 V pass; M3 SEI 753.1 nm fail (<=500), M4 plated (anode min -0.176 V) fail, M5 T_max 328.86 K fail (<=323.15). Gaps: SEI kinetics (material scale), 4C plating + temperature (electrolyte/architecture/thermal scale)."},
+  {"candidate": "baselineNMC811", "outputs": ["cell/r1_Chen2020_1c_spme.json", "cell/r1_Chen2020_1c_calc.json"], "note": "Opening ceiling assessment: NMC811 midpoint 3.935 V < 4.1 V -> plateau unreachable on NMC811; system switch to LNMO justified. ED 843.5 Wh/L also below target."}
+]

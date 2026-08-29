@@ -1,0 +1,10 @@
+{
+  "Electrolyte conductivity [S.m-1]": 1.6,
+  "Cation transference number": 0.45,
+  "Electrolyte diffusivity [m2.s-1]": 3.0e-10,
+  "Negative particle radius [m]": 2.5e-6,
+  "Negative electrode porosity": 0.34,
+  "Separator porosity": 0.58,
+  "Separator thickness [m]": 8.0e-6,
+  "Total heat transfer coefficient [W.m-2.K-1]": 170.0
+}

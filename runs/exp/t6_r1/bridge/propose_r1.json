@@ -1,0 +1,17 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "name": "systemLNMO",
+      "role": "high-voltage LNMO spinel cathode system switch (4.7 V-class OCP, bulk plateau ~4.40-4.45 V verified by dump) to meet voltage plateau >= 4.1 V; inherits graphite anode / electrolyte / SEI params from Chen2020 base"
+    },
+    {
+      "base": "Chen2020",
+      "name": "baselineChen2020",
+      "role": "anchor-table default system (task names no electrode system): baseline characterization for the opening ceiling assessment - expected plateau ~3.6 V < 4.1 V, evidencing the material bottleneck"
+    }
+  ],
+  "llm_reason": "Task text names no electrode system (anchor-table default Chen2020), but the plateau >= 4.1 V criterion cannot be met by NMC811-class cathodes whose cell midpoint is ~3.61 V per the anchor table - architecture tuning cannot raise a cathode OCP plateau. This is a material-bottleneck: escalate from the default system into Stage 2 with the LNMO high-voltage system candidate (deterministic base mapping via anchor table, discriminant verified by parameter dump). baselineChen2020 is simulated in the same round so the escalation has tool-sourced evidence (midpoint_voltage_v < 4.1 V). Both are system-type candidates: molecular funnel skipped, direct Stage 3 evaluation."
+}

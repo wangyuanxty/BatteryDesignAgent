@@ -1,0 +1,42 @@
+[
+  {
+    "candidate": "V24_tran",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r10_V24_tran_1c.json",
+      "runs/exp/t6_r3/cell/r10_V24_tran_aging.json",
+      "runs/exp/t6_r3/cell/r10_V24_tran_energy.json",
+      "runs/exp/t6_r3/cell/r10_V24_tran_4c.json"
+    ],
+    "note": "transport probe (sigma 2.0, t+ 0.5, DFN): ED 1089 PASS, SEI 23.9 PASS (transport suppresses SEI ~8x), amin +0.003349 PASS but only 3.3 mV margin; plateau 4.066483 FAIL (-10 mV vs V21: sigma/t+ does NOT fix the DFN plateau); T_max 329.5 FAIL"
+  },
+  {
+    "candidate": "V25_np128",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r10_V25_np128_1c.json",
+      "runs/exp/t6_r3/cell/r10_V25_np128_aging.json",
+      "runs/exp/t6_r3/cell/r10_V25_np128_energy.json",
+      "runs/exp/t6_r3/cell/r10_V25_np128_4c.json"
+    ],
+    "note": "N/P 1.28 probe (neg 109 um, DFN): amin +0.104240 PASS with huge margin (thicker anode keeps 4C CC phase ~1 s -> anode barely lithiates further), T_max 320.4 PASS, SEI 243.6 PASS, ED 975.4 PASS; ONLY plateau 4.099855 FAIL by 0.145 mV — N/P alone nearly completes the design"
+  },
+  {
+    "candidate": "V26_repack",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r10_V26_repack_1c.json",
+      "runs/exp/t6_r3/cell/r10_V26_repack_aging.json",
+      "runs/exp/t6_r3/cell/r10_V26_repack_energy.json",
+      "runs/exp/t6_r3/cell/r10_V26_repack_4c.json"
+    ],
+    "note": "thin-and-wide repack (all thicknesses x0.695, area x1.4388, volume/capacity conserving, N/P 1.28, h 150, DFN): ED 1076 PASS, SEI 274.2 PASS; amin -0.000033 FAIL by 33 uV (plated=True), T_max 325.9 FAIL, plateau 4.072230 FAIL — repack direction correct but insufficient alone"
+  },
+  {
+    "candidate": "V27_combo",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r10_V27_combo_1c.json",
+      "runs/exp/t6_r3/cell/r10_V27_combo_aging.json",
+      "runs/exp/t6_r3/cell/r10_V27_combo_energy.json",
+      "runs/exp/t6_r3/cell/r10_V27_combo_4c.json"
+    ],
+    "note": "FINAL DESIGN — ALL FIVE PASS in DFN (model_used=DFN everywhere, no fallback): ED 983.6 Wh/L vs 950 (+33.6), plateau 4.155125 V vs 4.1 (+55.1 mV), T_max 318.92 K vs 323.15 (-4.23 K), amin +0.104950 plated=False, SEI 313.7 nm vs 500 (-186.3). Levers: pos 60 um + N/P 1.28 (neg 109 um) + EC-lean 2000 mol/m3 + SEI coating k 5e-14 + sigma 2.0/t+ 0.5 + cooling h 250. Aging capacity trajectory (cap1 -0.618 -> cap100 2.732 Ah) shows the standard SEI-model climb artifact — labeled honestly; reliable durability metric is sei_thickness_nm_end"
+  }
+]

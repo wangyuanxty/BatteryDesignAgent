@@ -1,0 +1,37 @@
+[
+  {
+    "candidate": "V1 Power-thin 0.55x",
+    "outputs": [
+      "cell/r1_v1_1c_dfn.json",
+      "cell/r1_v1_5c_dfn.json",
+      "cell/r1_v1_4c_dfn.json",
+      "cell/r1_v1_energy.json",
+      "cell/r1_v1_derived.json"
+    ],
+    "round": 1,
+    "note": "V1: capacity 3.08 Ah, retention 0.983, power density 112930 W/kg, T_max 323.3 K all pass; plated=true marginal (-3.9 mV only at the final charge instant at 4.2 V cutoff)"
+  },
+  {
+    "candidate": "V2 Power-thin 0.47x",
+    "outputs": [
+      "cell/r1_v2_1c_dfn.json",
+      "cell/r1_v2_5c_dfn.json",
+      "cell/r1_v2_4c_dfn.json",
+      "cell/r1_v2_energy.json",
+      "cell/r1_v2_derived.json"
+    ],
+    "round": 1,
+    "note": "V2: capacity 2.61 Ah, retention 0.981, T_max 323.4 K pass; plated=true marginal (-8.6 mV at final charge instant)"
+  },
+  {
+    "candidate": "V3 Transport-only",
+    "outputs": [
+      "cell/r1_v3_1c_dfn.json",
+      "cell/r1_v3_5c_dfn.json",
+      "cell/r1_v3_4c_dfn.json",
+      "cell/r1_v3_derived.json"
+    ],
+    "round": 1,
+    "note": "V3 diagnostic: 5C DFN solver failed (IDA_CONV_FAIL) -> model_used=SPMe(fallback), retention 0.064 not judgment-grade (SPMe underestimates at 5C); plated=true (-0.062 V), T_max 328.3 K pass; electrolyte transport alone does not fix 5C"
+  }
+]

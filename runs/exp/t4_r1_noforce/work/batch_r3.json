@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "V5_cooled_40",
+    "outputs": ["cell/r3_v5_energy.json", "cell/r3_v5_1c_spme.json", "cell/r3_v5_lowT_spme.json", "bridge/derived_r3_v5.json", "cell/r3_v5_4C45_safety_spme.json"],
+    "note": "V3+h=40: T_max 337.36 K still over 333.15; cooling also brought anode back below 0 V (-9.6 mV, kinetics cool-down) -> plated fails again; ED/retention fine"
+  },
+  {
+    "candidate": "V6_cooled_60",
+    "outputs": ["cell/r3_v6_energy.json", "cell/r3_v6_1c_spme.json", "cell/r3_v6_lowT_spme.json", "bridge/derived_r3_v6.json", "cell/r3_v6_4C45_safety_spme.json"],
+    "note": "V3+h=60: T_max 332.06 K passes but anode min -17.0 mV -> plated; stronger cooling worsens charge kinetics, confirming the T_max vs plating trade couples through cell temperature"
+  },
+  {
+    "candidate": "V7_deep_transport_cooled30",
+    "outputs": ["cell/r3_v7_energy.json", "cell/r3_v7_1c_spme.json", "cell/r3_v7_lowT_spme.json", "bridge/derived_r3_v7.json", "cell/r3_v7_4C45_safety_spme.json"],
+    "note": "deep transport (sigma 4.0, t+ 0.45, particles 3/2 um, porosities 0.40/0.35, h=30): plating passes with +25.1 mV margin, ED 564.88/969.56 and retention 0.9947 pass; T_max 333.81 K is 0.66 K over -> needs slightly stronger cooling without losing the anode margin"
+  }
+]

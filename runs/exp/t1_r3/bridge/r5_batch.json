@@ -1,0 +1,3 @@
+[
+  {"candidate": "V11_final", "outputs": ["cell/r5_v11_energy.json", "cell/r5_v11_4c.json"], "note": "V9 + nominal corrected to measured 1C capacity 5.085 Ah: ED 605.33 Wh/kg; true-4C protocol (20.34 A = 4x5.085) accepted 0.9197 C-h x5.085 = 4.677 Ah = 92.0% of measured 1C capacity (5.0849 Ah) in 13.8 min to the 4.2 V event; anode potential min +0.0425 V (no plating, margin held at true 4C); T_max 321.2 K. All stage2/stage3 criteria pass. Finalist for Stage 4 safety."}
+]

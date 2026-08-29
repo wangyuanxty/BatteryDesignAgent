@@ -1,0 +1,6 @@
+[
+  {"candidate": "Baseline Chen2020", "outputs": ["cell/r1_base_1c.json", "cell/r1_base_energy.json"], "note": "baseline characterization; plating and SEI unchecked until R2/R3"},
+  {"candidate": "ED-Compact A", "outputs": ["cell/r1_a_1c.json", "cell/r1_a_energy.json"], "note": "dead-layer thinning expected +5-6% Wh/L, capacity unchanged"},
+  {"candidate": "ED-Compact B", "outputs": ["cell/r1_b_1c.json", "cell/r1_b_energy.json"], "note": "compaction raises negative-limited capacity ~5.6 Ah at same thickness"},
+  {"candidate": "ED-Thick C", "outputs": ["cell/r1_c_1c.json", "cell/r1_c_energy.json"], "note": "thick negative dilutes dead layers; ED and 4C stress both expected up"}
+]

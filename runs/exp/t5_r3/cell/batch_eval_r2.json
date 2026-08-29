@@ -1,0 +1,47 @@
+[
+  {
+    "candidate": "V1 thin-overhead",
+    "outputs": ["cell/r2_v1_energy.json", "cell/r2_v1_1c_spme.json", "cell/r2_v1_4c_45c.json"],
+    "note": "ED 488.5 still short; plating persists (min_ap -0.437V); T_max pass"
+  },
+  {
+    "candidate": "V2 thin-overhead+thick",
+    "outputs": ["cell/r2_v2_energy.json", "cell/r2_v2_1c_spme.json", "cell/r2_v2_4c_45c.json"],
+    "note": "ED 518.9 pass; T_max 334.67K fail (61.5C, h=10 kept); plating persists (min_ap -0.420V)"
+  },
+  {
+    "candidate": "V3 V2+rate-mitigation",
+    "outputs": ["cell/r2_v3_energy.json", "cell/r2_v3_1c_spme.json", "cell/r2_v3_4c_45c.json"],
+    "note": "ED 529.7 pass; T_max 325.64K pass (h=30); BUT plating persists (min_ap -0.437V): particle radius 3um + sigma 2.2 + t+ 0.4 insufficient"
+  },
+  {
+    "candidate": "V4 moderate-thick+mitigation",
+    "outputs": ["cell/r2_v4_energy.json", "cell/r2_v4_1c_spme.json", "cell/r2_v4_4c_45c.json"],
+    "note": "ED 514.6 pass; T_max 324.99K pass; plating persists (min_ap -0.444V)"
+  },
+  {
+    "candidate": "isoA neg-particle-1um",
+    "outputs": ["cell/r2_isoA_4c_45c.json"],
+    "note": "diagnostic: anode solid-diffusion lever alone does not lift min_ap (-0.464V) -> anode solid transport not binding"
+  },
+  {
+    "candidate": "isoB pos-particle-1.5um",
+    "outputs": ["cell/r2_isoB_4c_45c.json"],
+    "note": "diagnostic: cathode solid-diffusion lever alone does not lift min_ap (-0.455V)"
+  },
+  {
+    "candidate": "isoC transport-upgrade",
+    "outputs": ["cell/r2_isoC_4c_45c.json"],
+    "note": "diagnostic: sigma=5+t+=0.5+De=6e-10 lifts min_ap to +0.0337V (no plating) -> ELECTROLYTE SALT TRANSPORT is the binding constraint; T_max 348.84K high because charge actually proceeds at h=10"
+  },
+  {
+    "candidate": "isoD thin-neg-electrode",
+    "outputs": ["cell/r2_isoD_4c_45c.json"],
+    "note": "diagnostic: halving N/P thickness improves min_ap to -0.1226V but still negative -> loading reduction helps, insufficient alone"
+  },
+  {
+    "candidate": "okanebase system-switch",
+    "outputs": ["cell/r2_okanebase_4c_45c.json"],
+    "note": "system probe: OKane2022 native plating kinetics (i0 function) keeps min_ap +0.0092V -> no plating; but T_max 368.33K fail badly at default cooling; OKane2022 local set = graphite anode + Ai2020 cracking (no SiOx keys in pybamm 26.7.1)"
+  }
+]

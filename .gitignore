@@ -3,24 +3,18 @@
 __pycache__/
 *.egg-info/
 *.pyc
-runs/
 .superpowers/
 .pytest_cache/
 .coverage
 .claude/settings.json
 .vscode/
-.claude/skills/cad-skill/
 docs/backups/
 
-# calibration raw dataset (Zenodo LG M50T extracted members — ignorable, re-downloadable)
-calibration/lgm50t/extracted/
-calibration/lgm50t/*.zip
 # pip sdist build products
 .claude/skills/virtual-battery-factory/scripts/build/
 
-# user-requested ignores (2026-08-26)
-/paper/
+# user-requested ignores (2026-08-26; /runs/ /docs/ /references/ /calibration/ /cad-skill un-ignored 2026-08-27)
 /data/
-/docs/
-/references/
 /superpower/
+texput.log
+param_dump.txt

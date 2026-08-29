@@ -1,0 +1,14 @@
+[
+  {
+    "candidate": "Baseline Chen2020",
+    "outputs": [
+      "cell/r0_base_1c_dfn.json",
+      "cell/r0_base_5c_dfn.json",
+      "cell/r0_base_4c_dfn.json",
+      "cell/r0_base_energy.json",
+      "cell/r0_base_derived.json"
+    ],
+    "round": 0,
+    "note": "Baseline: capacity and power density pass (4.95 Ah, 22383 W/kg); 5C retention 0.087 fails hard (positive solid D=4e-15 m2/s -> tau ~6.8 ks), 4C charge plated (anode min -0.19 V) and T_max 354.3 K > 333.15 K fail"
+  }
+]

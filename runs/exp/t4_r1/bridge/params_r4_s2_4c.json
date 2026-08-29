@@ -1,0 +1,9 @@
+{
+  "Positive current collector thickness [m]": 1e-05,
+  "Negative current collector thickness [m]": 8e-06,
+  "Separator thickness [m]": 1e-05,
+  "Negative particle radius [m]": 3e-06,
+  "Cation transference number": 0.5,
+  "Negative electrode thickness [m]": 9.5e-05,
+  "Initial temperature [K]": 318.15
+}

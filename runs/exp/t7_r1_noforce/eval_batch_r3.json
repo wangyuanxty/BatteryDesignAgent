@@ -1,0 +1,14 @@
+[
+  {
+    "candidate": "Cooled h100 + Rate-Ready Anode",
+    "round": 3,
+    "outputs": [
+      "cell/r3_anode_1c_dfn.json",
+      "cell/r3_anode_energy.json",
+      "cell/r3_anode_aging45.json",
+      "validation/r3_anode_nail.json",
+      "cell/r3_anode_4c45.json"
+    ],
+    "note": "All four criteria pass: ED 514.79 Wh/kg, SEI 547.58 nm (<=550), plated=false (anode min +0.0126 V), triggered=false (T_final 317 K). Margins thin: SEI +2.4 nm headroom, plating +12.6 mV - one margin round (R4: negative coating SEI k x0.75 + N/P 1.35) before finalizing. Aging trajectory climb artifact (0.83->1.37 Ah, lithium-loss window shift) annotated; sei_thickness_nm_end is the reliable indicator."
+  }
+]

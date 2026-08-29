@@ -1,0 +1,43 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 327.18},
+      "sei_thickness_nm_end": {"max": 500.0},
+      "sei_thickness_nm_500cyc": {"max": 550.0},
+      "lowT_retention_pct": {"min": 90.0}
+    },
+    "stage3": {
+      "plated": false
+    },
+    "meta": {
+      "case": "t2_r1_noforce",
+      "task": "Design a battery for grid energy storage: energy density >= 327.18 Wh/kg; 4C fast charge without lithium plating; anode SEI thickness <= 500 nm after 100 cycles of 1C cycling; discharge capacity retention >= 90% at -20 degC; SEI <= 550 nm after 500 cycles.",
+      "application": "grid energy storage",
+      "real_compute": false,
+      "ablation": {
+        "exploration_force": "OFF (task text)",
+        "ceiling_escalation": "ON (default, not mentioned in task text)",
+        "funnel_voting": "ON (default, not mentioned in task text)"
+      },
+      "freedoms": {
+        "electrode_system": "adjustable (widest; task text silent) - baseline Chen2020 per anchor-table default rule (no electrode system named)",
+        "electrolyte_formulation": "adjustable (widest; task text silent) - sigma/t+/D transport parameter overrides allowed",
+        "electrode_modification": "adjustable (widest; task text silent) - coating/dopant candidates allowed (SEI suppression via parameter bridge)",
+        "cell_architecture": "adjustable (widest; task text silent) - thickness/porosity/N-P/separator/current collector/particle size all levers",
+        "thermal_management": "adjustable (widest; task text silent) - cooling h lever available"
+      },
+      "start_stage": 3,
+      "base": "Chen2020",
+      "base_reason": "task text names no electrode system -> anchor-table default Chen2020 (NMC811/graphite teaching parameterization; aging-capable with SEI kinetics; cell-level thermal/geometry defaults injected by run-pyamm with trace)",
+      "derived_metrics": {
+        "sei_thickness_nm_500cyc": "mechanical copy of aging_1C_100cyc --cycles 500 output key sei_thickness_nm_end, renamed with cycle-count suffix so the 500-cycle contract (max 550 nm) and 100-cycle contract (max 500 nm) are judged under distinct criteria keys (run-pyamm emits the same key name for both aging files)",
+        "lowT_retention_pct": "100 x capacity_ah(lowT_discharge at 253.15 K) / capacity_ah(1C_discharge at 298.15 K), same parameter set and same params overrides; mechanically computed from the two run-pyamm outputs"
+      },
+      "notes": "headless zero-interaction run: no clarification questions; thresholds parsed verbatim from task text; unspecified parameters take protocol defaults (real_compute=false; start_stage=3 since task names no new materials; freedoms widest per t1_r1 lesson)"
+    }
+  }
+}

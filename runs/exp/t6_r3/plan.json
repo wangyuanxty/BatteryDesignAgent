@@ -1,0 +1,8 @@
+{
+  "action": "plan",
+  "objective_breakdown": "plateau>=4.1 V is chemistry-bound (NMC811 midpoint ~3.6 V -> system switch necessary, zero architecture leverage); ED>=950 Wh/L conflicts with 4C no-plating and T_max<=323.15 K (dense stack hurts anode kinetics/heating) -> Pareto: use electrolyte transport (sigma/t+) and cooling h first (zero volume cost), geometry levers second; SEI<=500 nm moderate (baseline ~449 nm, coating bridge x0.1 available)",
+  "candidate_strategy": "R1 baseline Chen2020 + ceiling assessment (expect plateau fail -> escalate); R2 system switch to LNMO (lib data/LNMO.json, Chen2020-inherited SEI/geometry, 4.7 V spinel); R3+ closure loop: transport formulation, cooling, architecture variants (2-4/round), SEI coating bridge if needed; DFN for threshold-near candidates",
+  "budget_allocation": "~14 rounds: R1 baseline/ceiling (4 runs), R2 LNMO baseline (4 runs), R3-R8 transport+cooling+architecture loop, R9-R12 targeted ED/plating margin refinement, R13-R14 aging verification + DFN finalization; deliverables after closure",
+  "risk_and_fallback": "R1 950 Wh/L unreachable -> three-strike questioning (system/boundary/metric) then honest negative with relaxation note; R2 plating-ED conflict -> plating-safe first, ED recovered via particle-size/transport levers; R3 LNMO aging -> inherited SEI params verified in library, bda error would be recorded N/A; R4 solver failures -> verbatim read + informed rerun; fallback routing: ED/T_max -> Stage 3, plateau -> Stage 2",
+  "detail": "design_plan.md"
+}

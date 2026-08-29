@@ -1,0 +1,7 @@
+{
+  "action": "plan",
+  "update": true,
+  "reason": "R1-R5 evidence resolves the planned thermal tension (insulation-down for cold retention vs cooling-up for 4C exam): Chen2020 electrolyte/solid transport is temperature-independent (measured, Nyman2008), so -20C retention stays 99.3% even at h=40 forced-air cooling; no insulation needed. Plating at 4C was fixed by electrolyte transport (t+ 0.6 / D 5e-10 / sigma 2.0), NOT by thickness or particle levers (measured). Final design = B7_ThinCellE2_h40 (thin 60/68um electrodes + 8um separator + 10/6um CC + strong electrolyte + h=40).",
+  "candidate_strategy": "final candidate B7 confirmed at DFN precision, then overcharge/TR exam, then closing (endorse skip real_compute=false, render, deliverables)",
+  "budget_allocation": "R1-R5 executed (28 runs); remaining: DFN x3, overcharge+run-tr, closing"
+}

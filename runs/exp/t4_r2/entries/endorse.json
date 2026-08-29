@@ -1,0 +1,8 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false in entry-0 meta (headless session, no true DFT/MD budget; 8GB personal computer). Stage 5 true-compute endorsement skipped HONESTLY per protocol: the finalist E3 is a cell-architecture/formulation design (electrode thicknesses/porosities/particle radii/electrolyte transport overrides/h), with no new molecular species or structures to validate by DFT/MD. No run-qe/run-orca/run-cp2k/run-md artifacts exist, and none are claimed. All endorsement-grade claims in the final entry are simulation verdict-grade (DFN, lumped thermal + plating) at the protocol's own verdict level, not true-compute grade - this distinction is carried into the final entry and deliverables.",
+  "candidates": [
+    {"name": "E3-porheadroom", "note": "finalist cell design; no molecular candidates"}
+  ]
+}

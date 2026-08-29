@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "Baseline Chen2020",
+    "outputs": ["cell/r1_baseline_1c_dfn.json", "cell/r1_baseline_calc_dfn.json", "cell/r1_baseline_4c_spme.json"],
+    "note": "baseline ED 400.75 (fail, gap -100.19); 4C charge tripped v_max after ~5 s (0.029 Ah) and plated (anode min -0.4385 V); T_max passes but charge is non-functional — 4C not supported"
+  },
+  {
+    "candidate": "A1 ThickCCslim",
+    "outputs": ["cell/r1_A1_1c_spme.json", "cell/r1_A1_calc_spme.json", "cell/r1_A1_4c_spme.json"],
+    "note": "ED 553.84 pass (true capacity ~10.2 Ah slightly truncates 7200 s cap, energy under-counted ~1-2%); 4C charge step NEVER EXECUTED — pre-discharge hit PyBaMM 7200 s default-duration cap (experiment infeasible, V_end 2.507 V); capacity_ah=8.0 is runner artifact of truncated cycle bounds, not a charge; T_max 333.87 K fail (+0.72 K, discharge-phase heat at h=10); plating unverified (no charge ran)"
+  },
+  {
+    "candidate": "A2 TransportCool",
+    "outputs": ["cell/r1_A2_1c_spme.json", "cell/r1_A2_calc_spme.json", "cell/r1_A2_4c_spme.json"],
+    "note": "ED 418.04 fail (area x1.5 at baseline loading dilutes fixed-mass advantage insufficiently); 4C charge accepted only 1.13 Ah then tripped v_max; anode min -0.0028 V → plated (marginal); T_max 321.1 K pass (h=200 effective) — transport/cooling levers work for heat, insufficient for charge acceptance"
+  },
+  {
+    "candidate": "CeilProbe",
+    "outputs": ["cell/r1_ceil_1c_spme.json", "cell/r1_ceil_calc_spme.json", "cell/r1_ceil_4c_spme.json"],
+    "note": "ceiling probe: 1C discharge truncated at 7200 s (10 Ah of est. ~30 Ah true; V_end 3.871 V) → calc ED 227.17 is truncation artifact; mechanical untruncated estimate ≈ 620-630 Wh/kg (estimate, marked: energy tail ~21 Wh missing); 4C charge never executed (pre-discharge truncated); T_max 318.27 pass at h=300. Ceiling conclusion: architecture+formulation ED ceiling > 500.94 objective → objective reachable without material escalation (which is disabled anyway); evaluable-space designs must keep true capacity ≤ ~9.8 Ah (7200 s cap at 5 A)"
+  }
+]

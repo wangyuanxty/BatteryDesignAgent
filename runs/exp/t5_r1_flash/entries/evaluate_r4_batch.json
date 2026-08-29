@@ -1,0 +1,23 @@
+[
+  {
+    "candidate": "LNMO-R1",
+    "outputs": [
+      "cell/r4_lnmo_r1_1c_spme.json",
+      "cell/r4_lnmo_r1_4c45.json",
+      "cell/r4_lnmo_r1_4c45_dfn.json",
+      "cell/r4_lnmo_r1_energy.json"
+    ],
+    "round": 4,
+    "note": "ED gate PASSED (520.2 Wh/kg, +19.2 margin). Plating remains: DFN 4C anode min -0.139 V (SPMe -0.208). T_max 324.3 K DFN passes. Next: LNMO-R2 with smaller negative particles (2 um), higher t+ (0.6), sigma 3.0 S/m, N/P up (neg 115 um)."
+  },
+  {
+    "candidate": "OKane2022-C1",
+    "outputs": [
+      "cell/r4_okane_c1_1c_spme.json",
+      "cell/r4_okane_c1_4c45.json",
+      "cell/r4_okane_c1_energy.json"
+    ],
+    "round": 4,
+    "note": "ED gate PASSED (514.5 Wh/kg). Plating: anode min -0.464 V (SPMe). T_max 322.5 K passes. SiOx system viable on ED but worse plating margin than LNMO; parked as alternative."
+  }
+]

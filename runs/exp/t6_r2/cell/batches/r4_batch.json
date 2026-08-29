@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "SEI_densefilm",
+    "outputs": ["cell/r4_c1_aging.json"],
+    "note": "R4 c1: SEI solvent diffusivity x25 (2.5e-18 -> 6.25e-23) + k_sei x0.3. SEI unchanged at 708.1 nm -> lever is a NO-OP: pybamm ec-reaction-limited aging model does not wire 'SEI solvent diffusivity'; the wired diffusion-limited parameter is EC diffusivity (D_ec). Rejected; corrected in R5."
+  },
+  {
+    "candidate": "Plating_push",
+    "outputs": ["cell/r4_c2_4c45.json"],
+    "note": "R4 c2: negative thickness 100 um + negative particle 2.5 um on LNMO base (control for plating margin). Min anode potential -0.0196 V at the 4.7 V cutoff instant -> still plated, but plating is now a knife-edge terminal cliff (ap collapses from +0.5 V to <0 only in the final ~2 s of the 4C charge). T_max 328.57 K still fails (cooling untouched, h=10)."
+  },
+  {
+    "candidate": "Merge_R4",
+    "outputs": ["cell/r4_c3_energy.json", "cell/r4_c3_1c_spme.json", "cell/r4_c3_4c45.json", "cell/r4_c3_aging.json"],
+    "note": "R4 c3: neg 100 um + neg particle 2.5 um + h=30 + (no-op SEI levers). ED 1128.4 PASS, midV 4.201 PASS, T_max 324.06 FAIL (h=30 insufficient, need h=50), SEI 716.7 FAIL (D_ec untouched), plated FAIL (min -0.0176 V). Three criteria resolved by this merge; SEI and thermal levers carried into R5."
+  }
+]

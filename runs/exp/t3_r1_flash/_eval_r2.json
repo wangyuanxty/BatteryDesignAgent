@@ -1,0 +1,26 @@
+[
+  {
+    "candidate": "V4 Margin-fix",
+    "outputs": [
+      "cell/r2_v4_1c_dfn.json",
+      "cell/r2_v4_5c_dfn.json",
+      "cell/r2_v4_4c_dfn.json",
+      "cell/r2_v4_energy.json",
+      "cell/r2_v4_derived.json"
+    ],
+    "round": 2,
+    "note": "V4: all 5 criteria pass; plating fixed (anode min +22.6 mV); retention 0.987, T_max 321.9 K"
+  },
+  {
+    "candidate": "V5 Anode-only",
+    "outputs": [
+      "cell/r2_v5_1c_dfn.json",
+      "cell/r2_v5_5c_dfn.json",
+      "cell/r2_v5_4c_dfn.json",
+      "cell/r2_v5_energy.json",
+      "cell/r2_v5_derived.json"
+    ],
+    "round": 2,
+    "note": "V5: all 5 criteria pass; anode-geometry-only fix clears plating (anode min +16.0 mV) even with V1-level transport; retention 0.983, T_max 322.5 K"
+  }
+]

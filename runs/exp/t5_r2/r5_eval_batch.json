@@ -1,0 +1,6 @@
+[
+  {"candidate": "e5_A", "outputs": ["cell/r5_a_energy.json", "cell/r5_a_4c45.json"], "note": "t+/D/particle + h60: ED 581.6 PASS; ap_min +0.0432 NO PLATING (transport-first fix confirmed: plating detached from cooling); T_max 333.73 fails by 0.6 K"},
+  {"candidate": "e5_B", "outputs": ["cell/r5_b_energy.json", "cell/r5_b_4c45.json"], "note": "ALL THREE CRITERIA PASS: ED 627.49; ap_min +0.0535 no plating; T_max 332.76 <= 333.15. h=60 channel-cooling class, T margin 0.4 K thin"},
+  {"candidate": "e5_C", "outputs": ["cell/r5_c_energy.json", "cell/r5_c_4c45.json"], "note": "ALL PASS with max ED 665.48 (N/P buffer deepened cathode swing, cap 7.17 Ah); ap_min +0.0528; T_max 332.68 (margin 0.47 K thin)"},
+  {"candidate": "e5_D", "outputs": ["cell/r5_d_energy.json", "cell/r5_d_4c45.json"], "note": "ALL PASS: ED 627.19; ap_min +0.0458; T_max 327.71 (5.4 K margin) at h=100 immersion-class cooling"}
+]

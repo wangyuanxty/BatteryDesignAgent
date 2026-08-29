@@ -1,0 +1,7 @@
+[
+  {"candidate": "coatSEI50", "outputs": ["cell/r2_coatSEI50_aging.json"], "note": "SEI kinetics x0.5: SEI 729 nm, only -3% vs baseline 753 - kinetics lever weak; capacity trajectory shows climb-saturate artifact (negative convention), reliable indicator is sei_thickness_nm_end"},
+  {"candidate": "coatSEI25", "outputs": ["cell/r2_coatSEI25_aging.json"], "note": "SEI kinetics x0.25: SEI 700 nm (-7%), still >500 - kinetics lever alone insufficient; need dual-path or charge-condition lever"},
+  {"candidate": "thermH30", "outputs": ["cell/r2_thermH30_4c.json"], "note": "h=30: Tmax 324.04 K (50.9C) - close but still >323.15; h~35-40 should pass; plated still true (anode min -0.175 V)"},
+  {"candidate": "hiTrans", "outputs": ["cell/r2_hiTrans_1c.json", "cell/r2_hiTrans_1c_calc.json", "cell/r2_hiTrans_4c.json"], "note": "transport up: ED 1012.4 Wh/L pass, midpoint 4.188 V pass, 1C Tmax lower; but 4C charge runs deeper (1.19 Ah) -> longer plating window (anode min -0.243 V) and Tmax 362.9 K (89.7C) - electrolyte alone not enough; combine with thin sep/CC + h"},
+  {"candidate": "smallNegParticle", "outputs": ["cell/r2_smallNegParticle_4c.json"], "note": "negative r 4um: anode min -0.213 V - no plating margin gain (anode potential vs cell voltage nearly unchanged; cathode-limited cutoff dominates)"}
+]

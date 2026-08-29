@@ -1,0 +1,13 @@
+[
+  {
+    "candidate": "FC-4a",
+    "outputs": [
+      "runs/exp/t7_r1_flash/cell/r3_fc4a_energy.json",
+      "runs/exp/t7_r1_flash/cell/r3_fc4a_4c_dfn.json",
+      "runs/exp/t7_r1_flash/cell/r3_fc4a_aging45.json",
+      "runs/exp/t7_r1_flash/cell/r3_fc4a_nail.json",
+      "runs/exp/t7_r1_flash/cell/r3_fc4a_nail_hot.json"
+    ],
+    "note": "FC-4a integrated final (h170 cooling + sigma1.6/t+0.45/D3.0e-10 + r_neg 2.5um + neg por 0.34/sep por 0.58/sep 9um): ED 427.04 Wh/kg (criterion 327.18) PASS; 4C DFN anode_pot min +0.0285 V (T_max 322.65 K) no plating PASS with 28.5 mV margin; SEI 496.9 nm (criterion 550) PASS; nail 10 W hA0.903 no trigger, T_max 309.2 K (298 K start) and 322.65 K (post-4C hot start) PASS. All four contract metrics cleared."
+  }
+]

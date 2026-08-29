@@ -1,0 +1,8 @@
+{
+  "retention_5c": 0.087356,
+  "T_max_K": 354.2894,
+  "_derivation": {
+    "retention_5c": "capacity_ah(5C)=0.4321844482320448 / capacity_ah(1C)=4.94738704643111",
+    "T_max_K": "max over protocols = {'1C': 311.96056450311863, '5C': 316.5495945024589, '4C_charge': 354.2893519454146} (5C discharge 25C amb, 4C charge 45C amb)"
+  }
+}

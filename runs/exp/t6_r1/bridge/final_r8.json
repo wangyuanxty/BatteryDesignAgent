@@ -1,0 +1,22 @@
+{
+  "action": "final",
+  "recommendation": "LNMO/graphite smartphone cell (base: LNMO.json 4.7 V-class spinel cathode parameter set): 6.203 Ah, 25.41 Wh, volumetric energy density 1135.8 Wh/L (criterion 950), gravimetric 493.3 Wh/kg, discharge midpoint voltage 4.1145 V (criterion 4.1), 4C charge at 45 C ambient reaches T_max 321.42 K = 48.27 C (criterion 323.15 K / 50 C), no lithium plating (min anode potential +10.96 mV), SEI thickness 385.3 nm after 100 cycles at DFN (criterion 500 nm). All five criteria PASS at DFN fidelity from one params file (bridge/params_final.json). Design levers: LNMO system switch (material escalation, R1); electrolyte fast-charge formulation - EC initial concentration 2270.5 mol/m3 + EC diffusivity 1.0e-18 m2/s (SEI diffusion-limited lever, R4-R5) + electrolyte diffusivity 6.0e-10 m2/s constant (low-viscosity fast-charge formulation, R7-R8, honest caveat: upper bound of reported carbonate ranges, replaces Nyman2008 concentration function); anode 102.2 um (N/P 1.2) + negative particle radius 3.5 um (plating, R3-R4); cooling h = 400 W/m2K (thermal, R2-R7). Honest limitations: DFN is the highest proxy fidelity available (real_compute=false, no true DFT/MD endorsement); electrolyte excluded from mass/volume (parameter set lacks density); 4C T_max margin 1.73 K is modest; D_e = 6e-10 requires a real low-viscosity formulation to materialize.",
+  "verdict": "achieved",
+  "escalation": {
+    "rule": "three-strike",
+    "strikes": [
+      {"round": 2, "candidate": "lnmo_arch_default", "failed_metric": "anode_potential_v min -0.176 V (plated)"},
+      {"round": 3, "candidate": "lnmo_h200_np120", "failed_metric": "anode_potential_v min -0.0049 V (plated)"},
+      {"round": 3, "candidate": "lnmo_h200_nr35", "failed_metric": "anode_potential_v min -0.168 V (plated)"},
+      {"round": 3, "candidate": "lnmo_h200_elyte", "failed_metric": "anode_potential_v min -0.191 V (plated)"},
+      {"round": 4, "candidate": "lnmo_h200_np125", "failed_metric": "anode_potential_v min -0.00678 V (plated, N/P non-monotonic - backfire recorded)"},
+      {"round": 6, "candidate": "lnmo_final (DFN)", "failed_metric": "anode_potential_v min -0.0193 V (plated at DFN after SPMe pass)"}
+    ],
+    "questions": [
+      {"assumption": "plating is h-insensitive and purely kinetic (surface saturation collapse of exchange-current density)", "conclusion": "partially wrong: the end-of-charge dip has a strong transport component - electrolyte diffusivity 5e-10/6e-10 recovered +22.7/+30.3 mV at DFN, far more than the radius lever (+3.2 mV for r 3.0 um)", "why continue/stop": "continue - transport lever found, mechanism re-attributed"},
+      {"assumption": "N/P 1.25 would add plating margin beyond N/P 1.2", "conclusion": "wrong - non-monotonic (np125: -6.78 mV vs np120: -4.9 mV at SPMe); empirical verdict ruled, direction dropped", "why continue/stop": "continue with N/P 1.2 + other levers"},
+      {"assumption": "SPMe pass implies DFN pass", "conclusion": "wrong - DFN flips midpoint (4.0974), T_max (323.80 K), plating (-19.3 mV) because it resolves through-plane electrolyte depletion and the anode potential distribution", "why continue/stop": "continue - DFN becomes the judgment fidelity for Stage 3/4 verdicts from R6 onward"}
+    ],
+    "decision": "continue with direction change (succeeded: D_e transport lever + h=400 closed all three DFN gaps; final design passes all five criteria at DFN)"
+  }
+}

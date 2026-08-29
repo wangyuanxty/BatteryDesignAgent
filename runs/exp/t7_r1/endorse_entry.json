@@ -1,0 +1,6 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "candidates": [],
+  "reason": "real_compute=false (entry 0 meta): true DFT/MD endorsement (run-orca/run-cp2k/run-md) not executed, per protocol. start_stage=3 additionally means the Stage 2 molecular proxy funnel was not entered (task names no new materials; system uses Chen2020 NMC811/graphite baseline). No first-principles values are fabricated; all conclusion-grade values come from run-pyamm / calc-energy / run-tr output files (see R1-R5 evaluate evidence)."
+}

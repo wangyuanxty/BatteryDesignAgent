@@ -1,0 +1,24 @@
+[
+  {
+    "candidate": "V8_sys_ORegan2022",
+    "round": 4,
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t4_r3/cell/r4_V8_1c_lowT_spme.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t4_r3/cell/r4_V8_1c_25C_spme.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t4_r3/cell/r4_V8_4C_45C_spme.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t4_r3/cell/r4_V8_energy.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t4_r3/bridge/r4_V8_lowT_retention.json"
+    ]
+  },
+  {
+    "candidate": "V9_sys_OKane2022",
+    "round": 4,
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t4_r3/cell/r4_V9_1c_lowT_spme.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t4_r3/cell/r4_V9_1c_25C_spme.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t4_r3/cell/r4_V9_4C_45C_spme.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t4_r3/cell/r4_V9_energy.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t4_r3/bridge/r4_V9_lowT_retention.json"
+    ]
+  }
+]

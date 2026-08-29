@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "R10a_rate3x",
+    "outputs": ["cell/r10_a_4c45_dfn.json"],
+    "note": "R10a: positive reaction rate constant 1e-9 -> 3e-9. Output bit-identical to R9s2 (T 329.47, min_ap 0.0356): the model uses exchange-current-density FUNCTIONS, so the scalar reaction-rate constant is a NO-OP lever. Documented and dropped."
+  },
+  {
+    "candidate": "R10b_area_h100",
+    "outputs": ["cell/r10_b_4c45_dfn.json"],
+    "note": "R10b: cooling area 0.00531 -> 0.0106 m2 (double-sided thin-pouch exposure, realistic for 6.4 Ah pouch) + h=100. T_max 324.32 K (dT 6.17, still 1.2 K over), plating resolved (+0.0281). Cooling area doubles effective hA as expected."
+  },
+  {
+    "candidate": "R10c_combined",
+    "outputs": ["cell/r10_c_4c45_dfn.json"],
+    "note": "R10c: rate 3x + A=0.0106 + h=100. Identical to R10b (rate constant no-op confirmed twice). T 324.32 K, plated False (+0.0281)."
+  }
+]

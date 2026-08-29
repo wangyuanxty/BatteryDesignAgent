@@ -1,0 +1,41 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0
+    },
+    "stage2": {
+      "capacity_ah": {"min": 2.0},
+      "retention_5c": {"min": 0.95},
+      "power_density_w_kg": {"min": 4000.0}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false
+    },
+    "meta": {
+      "task_id": "t3",
+      "case": "power-tool battery",
+      "task_text": "Design a battery for power tools: nominal capacity >= 2 Ah, support 5C discharge (capacity retention >= 95%), support 4C fast charge (no lithium plating), maximum temperature <= 60C, power density >= 4000 W/kg.",
+      "real_compute": false,
+      "start_stage": 3,
+      "ablation_flags": {"exploration_force": "ON", "ceiling_escalation": "ON", "funnel_voting": "ON"},
+      "freedoms": {
+        "electrode_system": "adjustable (widest interpretation; task text names no system; default mapping Chen2020 recorded in funnel log)",
+        "electrolyte_formulation": "adjustable (sigma/t+/D transport parameter overrides allowed as design levers)",
+        "electrode_modification": "adjustable (not exercised unless plating/SEI requirement forces Stage 2 escalation)",
+        "cell_architecture": "adjustable (thickness/porosity/N-P/separator/collectors/particle size)",
+        "thermal_management": "adjustable (cooling coefficient h; contract default 10 W/m2/K otherwise)"
+      },
+      "parsing_notes": {
+        "capacity_ah": "nominal capacity >= 2 Ah judged on 1C_discharge capacity_ah (task-verbatim threshold 2.0)",
+        "retention_5c": "5C discharge capacity retention = 5C_discharge capacity_ah / same-parameter 1C_discharge capacity_ah, mechanically derived from tool outputs and written to a derived-values JSON for log-evaluate",
+        "plating": "4C fast charge without lithium plating -> 4C_charge_45C protocol, anode_potential_v min < 0 V => plated=true (mechanical rule)",
+        "T_max_K": "maximum temperature <= 60C = 333.15 K; judged on the hotter of the 5C_discharge / 4C_charge_45C lumped-thermal runs",
+        "power_density_w_kg": "calc-energy contract formula V_OC^2/(4*DCR)/mass_kg from 1C discharge + parameter-set mass"
+      },
+      "zero_interaction": true,
+      "zero_interaction_note": "headless session: thresholds parsed verbatim from task text; degrees of freedom not declared in task text take the widest interpretation (t1_r1 lesson); no human clarification performed"
+    }
+  }
+}

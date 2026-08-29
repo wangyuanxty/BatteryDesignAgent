@@ -1,0 +1,7 @@
+[
+ {"candidate": "V8_sigma2.0", "round": 4, "outputs": ["cell/r2_v4_energy.json", "cell/r4_v8_4c45c_dfn.json"], "note": "DFN: sigma 2.0 no effect (-0.109 V) — ohmic not dominant"},
+ {"candidate": "V9_t0.6", "round": 4, "outputs": ["cell/r4_v9_energy.json", "cell/r4_v9_4c45c_dfn.json"], "note": "DFN: t+ 0.6 -> PLATED FALSE, anode min +0.008 V, charge 0.52 Ah — transference number is the key lever"},
+ {"candidate": "V10_De6e-10", "round": 4, "outputs": ["cell/r4_v10_energy.json", "cell/r4_v10_4c45c_dfn.json"], "note": "DFN: D_e 6e-10 -> PLATED FALSE, anode min +0.035 V, charge 0.556 Ah — salt diffusion releases concentration polarization"},
+ {"candidate": "V11_negR2.0", "round": 4, "outputs": ["cell/r2_v4_energy.json", "cell/r4_v11_4c45c_dfn.json"], "note": "DFN: radius 2.0 um still plated (-0.098 V)"},
+ {"candidate": "V12_noThk", "round": 4, "outputs": ["cell/r2_v4_energy.json", "cell/r4_v12_4c45c_dfn.json"], "note": "DFN: neg 85.2 um variant of combo still plated (-0.052 V)"}
+]

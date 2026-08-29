@@ -1,0 +1,12 @@
+[
+  {
+    "candidate": "baseline Chen2020 (1C+ED)",
+    "outputs": ["cell/r1_baseline_1c_dfn.json", "cell/r1_baseline_energy.json"],
+    "note": "Baseline stage2: contract ED 400.75 Wh/kg already passes 392.61; binding constraints are the stage3 safety metrics."
+  },
+  {
+    "candidate": "baseline Chen2020 (4C+overcharge safety)",
+    "outputs": ["validation/r1_baseline_tr.json", "cell/r1_baseline_oc.json", "cell/r1_baseline_4c.json"],
+    "note": "Baseline stage3: T_max 354.3 K (1C discharge phase at 45 C ambient dominates) and anode potential min -0.192 V (plated); 4C charge terminated at 4.2 V after ~0.18 Ah; overcharge-to-4.7V run-tr judged by triggered."
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "candidate": "system_LNMO",
+    "outputs": ["cell/r2_lnmo_energy.json", "cell/r2_lnmo_1c_spme.json", "cell/r2_lnmo_4c45.json", "cell/r2_lnmo_aging.json"],
+    "note": "R2 ceiling-escalation candidate: system switch Chen2020 NMC811 -> LNMO 4.7 V-class spinel (NMC811 midpoint ceiling ~3.9 V is structurally below the 4.1 V plateau requirement - see funnel entry). SPMe/energy evaluation: ED 1006.6 Wh/L PASS (>950), midpoint voltage 4.0976 V FAIL (0.0024 below 4.1 at this stage), T_max 328.86 K FAIL, plated FAIL (min -0.1762 V), SEI 753.1 nm FAIL. System switch validated the plateau direction; refinement rounds R3+ address plating, thermal and SEI."
+  }
+]

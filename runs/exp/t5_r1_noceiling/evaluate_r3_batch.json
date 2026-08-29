@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "R3A SmallParticles1p5",
+    "outputs": ["cell/r3_A_1c_spme.json", "cell/r3_A_calc_spme.json", "cell/r3_A_4c_spme.json"],
+    "note": "ED 581.12 pass; T_max 323.60 pass; 4C charge true span 65.5 s = 0.36 Ah then tripped 4.216 V, anode min -0.4862 V -> plated. Small particles alone at area 1.0 insufficient (asinh-log regime: doubling active area barely reduces the empty-anode activation overpotential); current-density dilution + small particles combined is the effective path (see R3C)."
+  },
+  {
+    "candidate": "R3B NP1p2_Small",
+    "outputs": ["cell/r3_B_1c_spme.json", "cell/r3_B_calc_spme.json", "cell/r3_B_4c_spme.json"],
+    "note": "ED 572.57 pass; T_max 318.42 pass; BUT 4C charge step NEVER EXECUTED: pre-discharge truncated at 7200 s (V_end 3.262 V, capacity_ah 8.0 artifact) because N/P=1.2 keeps the anode half-full at cathode exhaustion (OCV floor ~3.4 V) so the fixed 2.5 V cut-off is unreachable. Safety criterion UNMEASURED - mechanical pass must NOT be treated as a real pass. N/P>1 branch declared structurally dead (protocol cut-off fixed at 2.5 V)."
+  },
+  {
+    "candidate": "R3C Area1p5_Small",
+    "outputs": ["cell/r3_C_1c_spme.json", "cell/r3_C_calc_spme.json", "cell/r3_C_4c_spme.json"],
+    "note": "FIRST FULL PASS (SPMe): ED 549.20 pass; T_max 320.72 pass; 4C charge true span 1435.8 s = 7.98 Ah at 20 A (capacity_ah 1.595 is runner last-cycle-fragment artifact, corrected by span from argmin-V to t_end), charge ends at the 4.2 V ceiling at ~83% SOC, anode min +0.0162 V -> no plating (vs R2C -0.0057 V at same geometry with default particles: particle radii 2.61/2.93 -> 1.5 um flipped the end-of-charge anode surface positive). Mechanism: area x1.5 dilutes the empty-anode polarization; r=1.5 um lowers the high-SOC anode overpotential (OCP_n floor 0.092 V at x_n=0.75 - eta 0.076 V -> surface +0.016 V). DFN validation pending (anode margin is thin)."
+  },
+  {
+    "candidate": "R3D NP1p15_Area1p5_r1p0",
+    "outputs": ["cell/r3_D_1c_spme.json", "cell/r3_D_calc_spme.json", "cell/r3_D_4c_spme.json"],
+    "note": "ED 551.15 pass; T_max 318.28 pass; BUT 4C charge step NEVER EXECUTED: pre-discharge truncated at 7200 s (V_end 3.193 V) - N/P=1.15 keeps the 2.5 V cut-off unreachable, same structural dead end as R3B. Safety criterion UNMEASURED - mechanical pass must NOT be treated as a real pass."
+  }
+]

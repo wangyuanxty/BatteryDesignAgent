@@ -1,0 +1,40 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0
+    },
+    "stage2": {
+      "energy_density_wh_l": {"min": 950},
+      "midpoint_voltage_v": {"min": 4.1},
+      "sei_thickness_nm_end": {"max": 500}
+    },
+    "stage3": {
+      "T_max_K": {"max": 323.15},
+      "plated": false
+    },
+    "meta": {
+      "task": "Design a battery for a smartphone: volumetric energy density ≥ 950 Wh/L, support 4C fast charge (no lithium plating), maximum temperature ≤ 50°C, anode SEI thickness ≤ 500 nm after 100 cycles, voltage plateau ≥ 4.1 V.",
+      "task_type": "smartphone_battery_design",
+      "start_stage": 3,
+      "base_params": "Chen2020",
+      "real_compute": false,
+      "exploration_force": true,
+      "ceiling_escalation": true,
+      "funnel_voting": true,
+      "freedoms": {
+        "electrode_system": "adjustable",
+        "electrolyte_formulation": "adjustable",
+        "electrode_modification": "adjustable",
+        "cell_architecture": "adjustable",
+        "thermal_management": "adjustable"
+      },
+      "freedom_basis": "task text declares no degree-of-freedom restrictions → widest interpretation per zero-interaction rule (t1_r1 lesson)",
+      "start_stage_basis": "task text names no new materials/additives/electrolyte/coating → start at Stage 3; materials use system baseline",
+      "base_params_basis": "task text names no electrode system → default Chen2020 (anchor-table default, §1.5)",
+      "plateau_metric_basis": "voltage plateau ≥ 4.1 V judged via calc-energy midpoint_voltage_v (discharge-time midpoint, plateau approximation)",
+      "T_max_basis": "50°C = 323.15 K, judged on 4C_charge_45C protocol output T_max_K (lumped thermal)",
+      "sei_basis": "judged via aging_1C_100cyc output sei_thickness_nm_end (100 cycles)"
+    }
+  }
+}

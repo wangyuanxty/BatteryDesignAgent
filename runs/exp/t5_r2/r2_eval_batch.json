@@ -1,0 +1,6 @@
+[
+  {"candidate": "systemLNMO_default", "outputs": ["cell/r2_lnmo_energy.json", "cell/r2_lnmo_4c45.json"], "note": "system screening: LNMO ED 420.3 (midV 4.166) despite 4.7V class - measured, voltage lever NOT competitive for 500.94 (vs arch_A 488.6); plating least severe in round (ap_min -0.0857V) but still plated; T_max 335.2 fails by 2 K"},
+  {"candidate": "arch_A_slim", "outputs": ["cell/r2_a1_energy.json", "cell/r2_a1_4c45.json"], "note": "overhead cut alone: ED 488.61 (+88.3 over baseline) - confirmed primary ED lever; still plating (ap_min -0.178V) and T_max 356.1 (thinner stack = lower heat capacity)"},
+  {"candidate": "arch_B_slim_thick1.3", "outputs": ["cell/r2_a2_energy.json", "cell/r2_a2_4c45.json"], "note": "ED 509.06 PASSES (target 500.94); safety fails: plated ap_min -0.234V, T_max 353.0 - binding constraint is 4C transport/thermal, next round adds electrolyte transport + N-P + particle-size + cooling levers"},
+  {"candidate": "arch_C_slim_thick1.5", "outputs": ["cell/r2_a3_energy.json", "cell/r2_a3_4c45.json"], "note": "ED 512.23 PASSES with more margin; plated ap_min -0.204V, T_max 369.9 worst in round (thickest stack)"}
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "C1_concentrated_electrolyte",
+    "outputs": [
+      "cell/r4_C1_1c_spme.json",
+      "cell/r4_C1_energy.json",
+      "cell/r4_C1_4c_spme.json",
+      "cell/r4_C1_aging_spme.json"
+    ],
+    "note": "C1: concentrated electrolyte c0 2000 / t+ 0.6 / D 3e-10 / kappa 2.0. 4C charge accepted 1.555 Ah (311 s at 18 A; runner duration-proxy metric) then 4.7 V trip with plating (min -0.243 V) - 32x better than B1 but anode interface still depletes. T 319.4 PASS, SEI 126.9 PASS, ED 1138.8 PASS, midpoint 4.2941 PASS."
+  },
+  {
+    "candidate": "C2_h150_sensitivity",
+    "outputs": [
+      "cell/r4_C2_1c_spme.json",
+      "cell/r4_C2_energy.json",
+      "cell/r4_C2_4c_spme.json",
+      "cell/r4_C2_aging_spme.json"
+    ],
+    "note": "C2: thermal sensitivity of C1 (h 150). Same 4C outcome (plated). T 319.8 PASS. Confirms h 150 suffices thermally; failure is transport, not thermal."
+  }
+]

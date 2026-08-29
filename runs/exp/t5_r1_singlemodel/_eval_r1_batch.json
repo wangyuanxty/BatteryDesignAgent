@@ -1,0 +1,42 @@
+[
+  {
+    "candidate": "baseline_Chen2020",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r1_baseline_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r1_baseline_energy.json"
+    ],
+    "note": "baseline fails all three criteria: ED 400.8 (gap 100.1), Tmax 354.29>333.15, plated (anode min -0.192 V, plating params are injected standard defaults — Chen2020 has no native plating set)"
+  },
+  {
+    "candidate": "sys_OKane2022",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r1_OKane_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r1_OKane_energy.json"
+    ],
+    "note": "ED 405.6 (gap 95.3); Tmax 367.42 fail; no plating (+0.016 V) under native OKane2022 plating model — preferred safety-judgment vehicle"
+  },
+  {
+    "candidate": "archA_EDmax",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r1_archA_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r1_archA_energy.json"
+    ],
+    "note": "mass cut 43.45->37.50 g lifts ED to 468.9 (capacity unaffected at 4.972 Ah); Tmax 370.36 fail; plating margin thin (+0.0071 V)"
+  },
+  {
+    "candidate": "archB_4Csafe",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r1_archB_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r1_archB_energy.json"
+    ],
+    "note": "transport bridge + halved particles + h=40: energy 17.63->18.15 Wh (+3%), Tmax 334.22 (1.1 K over 333.15), no plating (+0.0077 V); ED 417.6 at baseline mass"
+  },
+  {
+    "candidate": "archC_thin",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r1_archC_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r1_archC_energy.json"
+    ],
+    "note": "capacity is material-limited: -15% electrode thickness -> -15.7% capacity (4.191 Ah), ED drops to 377.6; electrode thinning at fixed 5 A rejected"
+  }
+]

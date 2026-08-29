@@ -1,0 +1,32 @@
+{
+  "candidates": [
+    {
+      "smiles": "C1OC(=O)OC1F",
+      "metrics": {
+        "homo_ev": -12.8198,
+        "lumo_ev": -7.196
+      }
+    },
+    {
+      "smiles": "C1=COC(=O)O1",
+      "metrics": {
+        "homo_ev": -11.9981,
+        "lumo_ev": -7.0894
+      }
+    },
+    {
+      "smiles": "C1CCS(=O)(=O)O1",
+      "metrics": {
+        "homo_ev": -11.9424,
+        "lumo_ev": -4.8452
+      }
+    },
+    {
+      "smiles": "C1COS(=O)(=O)O1",
+      "metrics": {
+        "homo_ev": -12.5916,
+        "lumo_ev": -5.4572
+      }
+    }
+  ]
+}

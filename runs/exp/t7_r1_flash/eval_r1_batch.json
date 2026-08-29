@@ -1,0 +1,12 @@
+[
+  {
+    "candidate": "baseline_Chen2020",
+    "outputs": [
+      "runs/exp/t7_r1_flash/cell/r1_base_energy.json",
+      "runs/exp/t7_r1_flash/cell/r1_base_4c.json",
+      "runs/exp/t7_r1_flash/cell/r1_base_aging45.json",
+      "runs/exp/t7_r1_flash/cell/r1_base_nail.json"
+    ],
+    "note": "baseline: ED 400.75 passes, SEI 476 nm passes, but 4C charge plates (anode_pot min -0.44 V; only 0.145 Ah accepted in 26 s before 4.2 V limit) and nail 10 W triggers TR at 174.6 s (post-charge t-init). Diagnosis: transport/polarization-limited charging + insufficient nail heat rejection (hA 0.053 W/K)."
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "candidates": [
+    {
+      "smiles": "C1OC(=O)OC1F",
+      "metrics": {
+        "energy_ev": -64.09980297088623,
+        "converged": true
+      },
+      "model": "chgnet"
+    },
+    {
+      "smiles": "O=C1OC=CO1",
+      "metrics": {
+        "energy_ev": -54.98968505859375,
+        "converged": true
+      },
+      "model": "chgnet"
+    }
+  ]
+}

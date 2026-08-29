@@ -1,0 +1,39 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 327.18},
+      "sei_thickness_nm_end": {"max": 550.0}
+    },
+    "stage3": {
+      "plated": false,
+      "triggered": false
+    },
+    "meta": {
+      "goal": "Design a battery for a hybrid electric vehicle: energy density >= 327.18 Wh/kg, support 4C fast charge (no lithium plating), SEI <= 550 nm after 100 cycles at 45C, nail penetration (10 W short-circuit heat generation) without triggering thermal runaway.",
+      "real_compute": false,
+      "start_stage": 3,
+      "start_stage_basis": "task text names no new materials/additives/electrolyte; it is a performance objective -> start at cell scale (Stage 3) with system baseline materials; opening ceiling assessment decides escalation into Stage 2 material design if the gap is material-property (ED ceiling / transport / SEI kinetics)",
+      "base_params": "Chen2020",
+      "base_basis": "task text names no electrode system -> anchor-table default Chen2020 (recorded default). Verified by dumping: Chen2020 loads; OKane2022 adds cracking-rate functions (SiOx family) and ORegan2022 changes densities/c_max - anchors distinguish the sets",
+      "freedoms": {
+        "electrode_system": "adjustable (widest interpretation; task text locks nothing)",
+        "electrolyte_formulation": "adjustable (conductivity/transference/diffusivity overrides + additive invention if escalated)",
+        "electrode_modification": "adjustable (coating/doping via SEI kinetic rate constant / SEI reaction exchange current density)",
+        "cell_architecture": "adjustable (thickness/porosity/N-P/separator/current collector/particle size)",
+        "thermal_management": "adjustable (Total heat transfer coefficient; run-tr hA kept consistent = h x cooling surface area)"
+      },
+      "excluded_levers": [
+        "solid-phase conductivity",
+        "solid-phase diffusivity",
+        "initial concentration/lithiation",
+        "Initial SEI thickness",
+        "charge cut-off voltage"
+      ],
+      "nail_scenario": "q-nail=10 W sustained short-circuit heat source, t-init coupled from 4C_charge_45C T_max_K (worst case: nail right after fast charge at 45C), mass-kg from calc-energy (mcp=mass*900)"
+    }
+  }
+}

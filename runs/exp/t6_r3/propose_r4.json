@@ -1,0 +1,27 @@
+{
+  "action": "propose",
+  "round": 4,
+  "candidates": [
+    {
+      "struct": {"Negative electrode thickness [m]": 9.56e-05},
+      "name": "V5_np_up",
+      "role": "N/P 0.98->1.12 (negative 85.2->95.6 um): shallower anode lithiation swing -> lower SEI growth + higher anode OCP at charge end"
+    },
+    {
+      "struct": {"Negative electrode porosity": 0.35},
+      "name": "V6_negpor",
+      "role": "negative porosity 0.25->0.35: more electrolyte volume at the anode -> lower salt depletion / concentration polarization at 4C"
+    },
+    {
+      "struct": {"Separator thickness [m]": 8.0e-06, "Separator porosity": 0.55},
+      "name": "V7_sep",
+      "role": "separator 12->8 um and porosity 0.47->0.55: shorter higher-porosity ion path -> less ohmic/concentration drop at 4C, +ED from thinner stack"
+    },
+    {
+      "struct": {"Electrolyte conductivity [S.m-1]": 2.0, "Cation transference number": 0.5, "Total heat transfer coefficient [W.m-2.K-1]": 50.0},
+      "name": "V8_transport_cooling",
+      "role": "combined transport formulation (2.0 S/m, t+=0.5) + cooling h=50: T_max already proven pass at h=50; measure combined effect on plating depth"
+    }
+  ],
+  "llm_reason": "Round-3 attribution: h=50 fixes T_max (322.72 K); SEI kinetics x0.1 cuts SEI 753->654 (insufficient alone); transport up deepens the 4C charge end-state and worsens amin (-0.210); particle radius 3.0 um marginal. 4C trajectory diagnosis (r2_lnmo_4c.json): plating occurs at charge END (idx 153, v=4.7 V, ~519 s of 18 A charge after time-capped 1C discharge) — anode potential driven below 0 by ~0.33 V end-state polarization. Round 4 isolates anode-capacity (V5), anode porosity (V6), separator path (V7) for plating/SEI, and a combined transport+cooling stack (V8). Values within commercial design space (domain estimates)."
+}

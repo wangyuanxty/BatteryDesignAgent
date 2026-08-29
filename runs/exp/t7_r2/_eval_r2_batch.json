@@ -1,0 +1,57 @@
+[
+  {
+    "candidate": "R2_V1_FineAnode",
+    "round": 2,
+    "outputs": [
+      "cell/r2_v1_aging45.json",
+      "validation/r2_v1_nail.json",
+      "cell/r2_v1_4c45.json",
+      "cell/r2_v1_energy.json"
+    ],
+    "note": "Anode particles 5.86->3.0 um: 4C anode min -0.1918->-0.1379 V (best single architecture gain +0.054 V, still plated); ED 408.98 (up); SEI 468.2 (down); nail near-adiabatic still triggers (cooling lever separate, see V5)."
+  },
+  {
+    "candidate": "R2_V2_NP117",
+    "round": 2,
+    "outputs": [
+      "cell/r2_v2_aging45.json",
+      "validation/r2_v2_nail.json",
+      "cell/r2_v2_4c45.json",
+      "cell/r2_v2_energy.json"
+    ],
+    "note": "Thicker anode 85.2->100 um BACKFIRES for plating: 4C anode min -0.2482 V (worse than baseline -0.1918) and T_max 361.9 K up, SEI 542.7 nm dangerously near 550 -> thickness-based N/P direction rejected; ED 440.8 achieved but at safety cost."
+  },
+  {
+    "candidate": "R2_V3_Sigma15",
+    "round": 2,
+    "outputs": [
+      "cell/r2_v3_aging45.json",
+      "validation/r2_v3_nail.json",
+      "cell/r2_v3_4c45.json",
+      "cell/r2_v3_energy.json"
+    ],
+    "note": "Constant electrolyte conductivity 1.5 S/m: no plating gain (4C anode min -0.191 V vs baseline -0.1918 V) -> sigma not the binding limitation at 45 C (baseline sigma(c,T) already high); kept out of R3 combos. SEI 481.5, ED 401.8."
+  },
+  {
+    "candidate": "R2_V4_Tplus04",
+    "round": 2,
+    "outputs": [
+      "cell/r2_v4_aging45.json",
+      "validation/r2_v4_nail.json",
+      "cell/r2_v4_4c45.json",
+      "cell/r2_v4_energy.json"
+    ],
+    "note": "t+ 0.2594->0.4: best single plating gain (+0.089 V; 4C anode min -0.103 V, still plated); ED 402.3; SEI 486.3; superlinear direction -> combined with fine particles in R3."
+  },
+  {
+    "candidate": "R2_V5_CoolH50",
+    "round": 2,
+    "outputs": [
+      "cell/r2_v5_aging45.json",
+      "validation/r2_v5_nail.json",
+      "cell/r2_v5_4c45.json",
+      "cell/r2_v5_energy.json"
+    ],
+    "note": "HEV liquid cooling h=50 (hA=0.2655): nail PASS at protocol defaults (triggered=false, T_max 336.3 K, dTdt_max 0.254 K/s) - 10 W source equilibrates well below SEI-decomposition ignition; hot-start probe (318.15 K start/ambient) triggers at 588.6 s -> R3 raises water-cooling design to h=80 for hot-soak margin; 4C T_max drops 354.3->338.8 K; ED 398.8; SEI 476.1."
+  }
+]

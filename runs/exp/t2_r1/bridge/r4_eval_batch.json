@@ -1,0 +1,34 @@
+[
+  {
+    "candidate": "GridStore-D1",
+    "outputs": [
+      "cell/r4_d1_aging100.json",
+      "cell/r4_d1_aging500.json",
+      "cell/r4_d1_sei100.json",
+      "cell/r4_d1_sei500.json",
+      "cell/r4_d1_lowT.json",
+      "cell/r4_d1_lowT_ret.json",
+      "cell/r4_d1_lowT_soak.json",
+      "cell/r4_d1_1c.json",
+      "cell/r4_d1_4c.json",
+      "cell/r4_d1_energy.json"
+    ],
+    "note": "D1 = FastCharge-B + neg r 2.0um + transport constants sigma3.0/D2.5e-9/t+0.35 + pos por 0.40 + k_sei 1e-16. ED 449.49 (>=327.18); 4C min anode pot +0.0909 V -> no plating, acceptance 0.553 Ah, T_max 340.9 K; lowT 99.47% and true-soak 99.47% (soak T_max 267.8 K); SEI 7.88 nm @100cyc / 19.08 nm @500cyc. All five contracts pass. Strictly better than R3's ALD-coat-B on ED/acceptance/4C margin."
+  },
+  {
+    "candidate": "GridStore-Final",
+    "outputs": [
+      "cell/r3_c2_aging100.json",
+      "cell/r3_c2_aging500.json",
+      "cell/r3_c2_sei100.json",
+      "cell/r3_c2_sei500.json",
+      "cell/r3_c2_lowT.json",
+      "cell/r3_c2_lowT_ret.json",
+      "cell/r4_final_lowT_soak.json",
+      "cell/r3_c2_1c.json",
+      "cell/r3_c2_4c.json",
+      "cell/r3_c2_energy.json"
+    ],
+    "note": "GridStore-Final is identical to R3's ALD-coat-B by construction (same params, same outputs; the R4 r4_final_lowT_soak probe adds true-soak lowT evidence: 5.00875 Ah -> 99.46% retention vs 1C 5.03575 Ah, soak T_max 269.2 K). Metrics: ED 446.6; 4C min +0.0770 V no plating, acceptance 0.537 Ah; SEI 8.4/21.7 nm. All five pass; superseded by GridStore-D1 (ED 449.5 vs 446.6, acceptance 0.553 vs 0.537, 4C margin +0.091 vs +0.077)."
+  }
+]

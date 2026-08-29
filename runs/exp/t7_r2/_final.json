@@ -1,0 +1,21 @@
+{
+  "action": "final",
+  "verdict": "achieved",
+  "recommendation": "HEV battery achieved all four contract criteria with candidate R4_F1 (Chen2020 NMC811/graphite baseline + 4 deltas): (1) ED 423.6 Wh/kg >= 327.18 (calc-energy contract formula, evidence cell/r4_f1_energy.json); (2) 4C charge at 45 C without lithium plating - anode separator-interface potential min +0.0090 V above Li/Li+ through the whole charge (cell/r4_f1_4c45.json:anode_potential_v); (3) SEI 463.1 nm <= 550 nm after 100 1C cycles at 45 C (cell/r4_f1_aging45.json); (4) nail penetration with 10 W short-circuit generation - no thermal runaway, T_max 321.73 K, dT/dt max 0.259 K/s (validation/r4_f1_nail.json), hot-soak probe 318.15 K start also passes (validation/r4_f1_nail_hot.json, dT/dt 0.039 K/s).",
+  "design_params": {
+    "base": "Chen2020",
+    "Negative particle radius [m]": 2.0e-6,
+    "Cation transference number": 0.5,
+    "Negative electrode porosity": 0.32,
+    "Total heat transfer coefficient [W.m-2.K-1]": 80.0
+  },
+  "design_story": "R1 baseline: ED/SEI pass, plating -0.1918 V and nail (near-adiabatic) fail. R2 single levers: t+ 0.4 (+0.089 V) and 3 um particles (+0.054 V) best; thicker anode rejected; h=50 solves ambient nail but hot-soak probe ignites -> cooling design raised to h=80 (hA=0.4248). R3 combos: nail solved (T_max 321.7 K even hot start), plating -0.0097 V. R4: F1 stacks 2.0 um particles + t+ 0.5 + anode porosity 0.32 + h=80 -> min +0.0090 V, all criteria pass (mechanical log-evaluate verdict=pass, checked=4/unchecked=0). Engineering choice: F1 over F4 (separator porosity 0.55, +2 mV only) to keep standard-separator mechanical/melt-integrity margin in an abuse-design context.",
+  "evidence_summary": [
+    {"metric": "energy_density_wh_kg", "value": 423.62, "threshold": {"min": 327.18}, "verdict": "pass", "source": "cell/r4_f1_energy.json:energy_density_wh_kg"},
+    {"metric": "plated", "value": false, "threshold": false, "verdict": "pass", "source": "cell/r4_f1_4c45.json:anode_potential_v min=+0.009007V>0 derived by log-evaluate"},
+    {"metric": "sei_thickness_nm_end", "value": 463.14, "threshold": {"max": 550}, "verdict": "pass", "source": "cell/r4_f1_aging45.json:sei_thickness_nm_end"},
+    {"metric": "triggered", "value": false, "threshold": false, "verdict": "pass", "source": "validation/r4_f1_nail.json:triggered (T_max 321.73 K, dTdt_max 0.259 K/s)"},
+    {"metric": "nail_hot_probe_robustness", "value": false, "note": "start 318.15 K -> still no trigger, T_max 321.73 K (validation/r4_f1_nail_hot.json)"}
+  ],
+  "escalation": "not triggered - criteria achieved in round 4 (plating cause was cell-scale transport/kinetics, addressed within allowed architecture freedoms; no three consecutive strikes on the same cause: R1 baseline, R2 lever probe, R3 combination, R4 close)."
+}

@@ -1,0 +1,8 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {"name": "Baseline Chen2020", "role": "system baseline characterization: all-default Chen2020 cell (NMC811/graphite), no parameter overrides; establishes the ED / aging-SEI / lowT / 4C-plating gap profile"}
+  ],
+  "llm_reason": "start_stage=3: no molecular candidates this case. Round 1 = baseline characterization on the deterministic default base Chen2020 (task text names no electrode system). Parameter overrides before running: NONE (empty params) - all values are base defaults. Baseline numbers anchor the architecture exploration and feed the opening ceiling assessment (ceiling_escalation OFF: assess only, no material escalation)."
+}

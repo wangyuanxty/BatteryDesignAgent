@@ -1,0 +1,23 @@
+[
+  {
+    "candidate": "S1 V3+antip (Stage4 exam)",
+    "outputs": [
+      "cell/r4_s1_4c45C_dfn.json"
+    ],
+    "note": "S1 anti-plating: anode min -0.0119V (near-miss vs -0.185V baseline) but T_max 359.0K>333.15K; still fails both"
+  },
+  {
+    "candidate": "S2 V3+antip+N/P (Stage4 exam)",
+    "outputs": [
+      "cell/r4_s2_4c45C_dfn.json"
+    ],
+    "note": "S2 thicker negative WORSE: anode min -0.0251V, T_max 364.2K -> thicker anode lengthens ionic path, aggravates salt depletion; N/P lever dropped"
+  },
+  {
+    "candidate": "S3 V3+antip+N/P+h30 (Stage4 exam)",
+    "outputs": [
+      "cell/r4_s3_4c45C_dfn.json"
+    ],
+    "note": "S3 h=30: T_max 346.69K still >333.15K; anode min -0.0416V worse (cooler cell -> more polarization) -> h alone insufficient, needs kappa flat to kill depletion conductivity collapse"
+  }
+]

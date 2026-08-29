@@ -1,0 +1,34 @@
+[
+  {
+    "candidate": "archD_combine",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r2_archD_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r2_archD_energy.json"
+    ],
+    "note": "R1 winners combined: ED 484.9 (gap 16.0), Tmax 334.73 fail, plating margin razor-thin (+0.0004 V, min at end of 4C charge)"
+  },
+  {
+    "candidate": "archE_posPoro",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r2_archE_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r2_archE_energy.json"
+    ],
+    "note": "FIRST ED PASS 528.1 >= 500.94 (pos porosity 0.40: -17% pos active mass, capacity unchanged 5.023 Ah -> positive electrode has capacity slack); Tmax 335.20 fail (2.05 K over); no plating (+0.0021 V)"
+  },
+  {
+    "candidate": "archF_npTrim",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r2_archF_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r2_archF_energy.json"
+    ],
+    "note": "negative electrode is the binding capacity constraint: -8% neg thickness -> -7.9% capacity (4.628 Ah), ED 460.6; N/P trim rejected"
+  },
+  {
+    "candidate": "archG_cool60",
+    "outputs": [
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r2_archG_4c_dfn.json",
+      "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t5_r1_singlemodel\\cell\\r2_archG_energy.json"
+    ],
+    "note": "h=60 overcools the cell: Tmax 329.89 pass but plating FAIL (anode min -0.0048 V) - cooling/temperature vs plating trade-off measured; h must stay <=~50"
+  }
+]

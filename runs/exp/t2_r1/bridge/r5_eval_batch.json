@@ -1,0 +1,18 @@
+[
+  {
+    "candidate": "GridStore-D2",
+    "outputs": [
+      "cell/r5_d2_aging100.json",
+      "cell/r5_d2_aging500.json",
+      "cell/r5_d2_sei100.json",
+      "cell/r5_d2_sei500.json",
+      "cell/r5_d2_lowT.json",
+      "cell/r5_d2_lowT_ret.json",
+      "cell/r5_d2_lowT_soak.json",
+      "cell/r5_d2_1c.json",
+      "cell/r5_d2_4c.json",
+      "cell/r5_d2_energy.json"
+    ],
+    "note": "D2 = D1 + pos r 2.5um (cathode kinetics): ED 458.13 (>=327.18); 4C min anode pot +0.0484 V -> no plating, acceptance 0.828 Ah (+50% vs D1), T_max 342.6 K; lowT 99.57% and true-soak 99.57% (soak T_max 266.5 K); SEI 9.08 nm @100cyc / 25.32 nm @500cyc. All five contracts pass with margin. Aging capacity trajectory flat (no window-shift artifact)."
+  }
+]

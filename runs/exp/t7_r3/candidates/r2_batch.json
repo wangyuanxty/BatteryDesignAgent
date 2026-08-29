@@ -1,0 +1,6 @@
+[
+ {"candidate": "V1_negR3.0", "round": 2, "outputs": ["cell/r2_v1_energy.json", "cell/r2_v1_4c45c.json"], "note": "SPMe screen (SPMe overestimates 4C plating vs DFN, see R3)"},
+ {"candidate": "V2_negTh110", "round": 2, "outputs": ["cell/r2_v2_energy.json", "cell/r2_v2_4c45c.json"], "note": "SPMe screen: thicker neg worsens anode min (-0.485 V)"},
+ {"candidate": "V3_transport", "round": 2, "outputs": ["cell/r2_v3_energy.json", "cell/r2_v3_4c45c.json"], "note": "SPMe screen: transport alone minor (-0.432 V)"},
+ {"candidate": "V4_combo", "round": 2, "outputs": ["cell/r2_v4_energy.json", "cell/r2_v4_4c45c.json"], "note": "SPMe screen: best combo but still plated; ED up to 438.5 (neg-limited discharge released)"}
+]

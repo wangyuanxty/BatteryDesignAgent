@@ -1,0 +1,5 @@
+[
+  {"candidate": "V8-margin", "outputs": ["cell/r4_v8_energy.json", "cell/r4_v8_aging45.json", "cell/r4_v8_nail.json", "cell/r4_v8_4c45.json"], "note": "Passes all four: plated=false with widest margin yet (anode min +0.0494 V, DFN), ED 482.9 Wh/kg, SEI 465.0 nm, nail not triggered at h=40 (hA=0.2124, T_max 348.7 K). Nail sensitivity: h=30 triggers at 666 s -> design cooling floor ~40 W/m2K."},
+  {"candidate": "V9-poro36", "outputs": ["cell/r4_v9_energy.json", "cell/r4_v9_aging45.json", "cell/r4_v9_nail.json", "cell/r4_v9_4c45.json"], "note": "Passes all four: plated=false (anode min +0.0418 V), ED 482.7 Wh/kg, SEI 464.6 nm, nail not triggered at h=50 (hA=0.2655, T_max 336.3 K). Porosity 0.36 confirms as the dominant plating lever."},
+  {"candidate": "V10-h40", "outputs": ["cell/r4_v10_energy.json", "cell/r4_v10_aging45.json", "cell/r4_v10_nail.json", "cell/r4_v10_4c45.json"], "note": "Passes all four: plated=false (anode min +0.0375 V), ED 474.3 Wh/kg, SEI 464.2 nm, nail not triggered at h=40 (T_max 348.7 K). Warmer operation h=40 gives a smaller plating-margin gain than porosity/transport levers."}
+]

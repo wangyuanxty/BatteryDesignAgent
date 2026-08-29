@@ -1,0 +1,27 @@
+{
+  "action": "propose",
+  "round": 3,
+  "candidates": [
+    {
+      "struct": {"Negative particle radius [m]": 3.0e-6, "Cation transference number": 0.4, "Total heat transfer coefficient [W.m-2.K-1]": 80.0},
+      "name": "R3_T1_Fine3_Tp04_H80",
+      "role": "combine the two measured best plating levers (R2: +0.054 V fine particles, +0.089 V t+=0.4) with h=80 liquid cooling (nail hot-soak margin; hA=80x0.00531=0.4248 W/K)"
+    },
+    {
+      "struct": {"Negative particle radius [m]": 3.0e-6, "Cation transference number": 0.4, "Negative electrode porosity": 0.32, "Total heat transfer coefficient [W.m-2.K-1]": 80.0},
+      "name": "R3_T2_Fine3_Tp04_Por32_H80",
+      "role": "T1 + anode porosity 0.25->0.32: lower anode ionic resistance shrinks the through-plane electrolyte-potential droop measured at the separator interface at 4C"
+    },
+    {
+      "struct": {"Negative particle radius [m]": 2.0e-6, "Cation transference number": 0.4, "Negative electrode porosity": 0.32, "Total heat transfer coefficient [W.m-2.K-1]": 80.0},
+      "name": "R3_T3_Fine2_Tp04_Por32_H80",
+      "role": "T2 with even finer 2.0 um anode particles (~2.9x surface area): further kinetic-area leverage on 4C anode overpotential"
+    },
+    {
+      "struct": {"Negative particle radius [m]": 3.0e-6, "Cation transference number": 0.5, "Negative electrode porosity": 0.32, "Total heat transfer coefficient [W.m-2.K-1]": 80.0},
+      "name": "R3_T4_Fine3_Tp05_Por32_H80",
+      "role": "T2 with t+=0.5 (advanced concentrated-electrolyte class; literature range 0.5-0.7, marked estimate): pushes the transference-limited term (1-t+)/sigma further down"
+    }
+  ],
+  "llm_reason": "R2 measured plating gains are approximately additive by mechanism (kinetic area vs transference transport): V1 +0.054 V, V4 +0.089 V -> T1 expect anode min ~ -0.05 V; porosity adds anode-side ionic-path relief; T3/T4 probe the lever saturation. All carry h=80 liquid cooling (R2 hot-soak probe at hA=0.2655 triggered at 588.6 s -> hA 0.4248 gives hot equilibrium ~341.7 K, ~15 K below the ~356 K ignition seen in the probe). Sources: particle-size/fast-charge direction Collasclasure-line kinetics (R2 measured); t+ values advanced-electrolyte literature, marked estimate; liquid cooling h=80 domain estimate (pack active liquid cooling)."
+}

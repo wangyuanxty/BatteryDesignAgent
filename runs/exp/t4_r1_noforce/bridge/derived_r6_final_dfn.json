@@ -1,0 +1,8 @@
+{
+  "lowT_retention": 0.9944425496333386,
+  "lowT_capacity_ah": 5.0336832716743025,
+  "rt_capacity_ah": 5.06181405203375,
+  "lowT_source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t4_r1_noforce\\cell\\r6_final_lowT_dfn.json",
+  "rt_source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t4_r1_noforce\\cell\\r6_final_1c_dfn.json",
+  "label": "R6 final h45 Chen2020 DFN"
+}

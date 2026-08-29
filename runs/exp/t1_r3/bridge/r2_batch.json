@@ -1,0 +1,6 @@
+[
+  {"candidate": "V1_transport", "outputs": ["cell/r2_v1_energy.json", "cell/r2_v1_4c.json"], "note": "transport pack: plating cleared (+0.0048V), T_max 327.8K; 4C acceptance 0.40Ah still low"},
+  {"candidate": "V2_thin", "outputs": ["cell/r2_v2_energy.json", "cell/r2_v2_4c.json"], "note": "thin electrodes: no plating (+0.0138V), T_max 324.9K; acceptance 0.43Ah"},
+  {"candidate": "V3_particles", "outputs": ["cell/r2_v3_energy.json", "cell/r2_v3_4c.json"], "note": "half particle radii: no plating (+0.0061V), T_max 326.0K; acceptance 0.70Ah (best)"},
+  {"candidate": "V4_cooling", "outputs": ["cell/r2_v4_energy.json", "cell/r2_v4_4c.json"], "note": "cooling only: plated (-0.2022V), T_max 334.4K — h alone cannot fix 4C leg"}
+]

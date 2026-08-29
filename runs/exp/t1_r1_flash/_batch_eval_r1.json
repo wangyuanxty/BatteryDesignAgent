@@ -1,0 +1,28 @@
+[
+  {
+    "candidate": "Baseline-OKane2022",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/baseline_tr.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/baseline_4c.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/baseline_energy.json"
+    ],
+    "note": "Baseline full suite: ED pass (405.6); T_max 367.4 K > 333.15 budget (h=10 default cooling too weak); no plating (+16 mV anode margin); overcharge->TR not triggered",
+    "round": 1
+  },
+  {
+    "candidate": "Arch-A",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_energy.json"
+    ],
+    "note": "ED probe only: thin collectors (16/12->10/8 um) ED 462.6; 4C/overcharge not yet tested",
+    "round": 1
+  },
+  {
+    "candidate": "Arch-B",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archB_energy.json"
+    ],
+    "note": "ED probe only: thick positive 95um + thin collectors ED 492.5; 4C/overcharge not yet tested",
+    "round": 1
+  }
+]

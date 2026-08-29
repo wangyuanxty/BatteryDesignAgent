@@ -1,0 +1,5 @@
+[
+  {"candidate": "V4_rate_full", "round": 3, "outputs": ["cell/r3_v4_energy.json", "cell/r3_v4_retention.json"], "note": "all rate levers combined: retention 0.9524 vs 0.9 pass; ED 493.6 pass; mass 33.0 g pass - first candidate meeting all stage2 criteria"},
+  {"candidate": "V5_rate_full_thin", "round": 3, "outputs": ["cell/r3_v5_energy.json", "cell/r3_v5_retention.json"], "note": "V4 -20% thickness: retention 0.9796 pass (best margin), ED 463.2 pass, mass 27.0 g pass - thinner stack trades ED/capacity for rate margin"},
+  {"candidate": "V6_rate_full_hie", "round": 3, "outputs": ["cell/r3_v6_energy.json", "cell/r3_v6_retention.json"], "note": "V4 + porosity 0.45/0.40: retention 0.9806 pass, ED 484.9 pass, mass 31.0 g pass"}
+]

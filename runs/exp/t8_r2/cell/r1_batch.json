@@ -1,0 +1,14 @@
+[
+  {
+    "candidate": "Baseline Chen2020",
+    "round": 1,
+    "outputs": [
+      "cell/r1_base_1c_dfn.json",
+      "cell/r1_base_energy.json",
+      "cell/r1_base_5c_dfn.json",
+      "cell/r1_base_retention.json",
+      "cell/r1_base_safety.json"
+    ],
+    "note": "Baseline (no overrides): ED 400.75 vs 446.18; retention_5c 0.0874 vs 0.90; mass 43.45 g vs 40 g; 4C-charge plating anode_potential_v min=-0.192 V -> plated. Root cause diagnosed: positive-electrode electrolyte salt depletion at high rate (c_e->0 within ~62 s at 5C) - electrolyte-transport-limited, routed to Stage-3 formulation/architecture levers."
+  }
+]

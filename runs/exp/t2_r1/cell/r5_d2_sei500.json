@@ -1,0 +1,6 @@
+{
+  "sei_500cyc_nm": 25.324781384253193,
+  "source": "sei_thickness_nm_end (verbatim copy, nm)",
+  "source_file": "runs\\exp\\t2_r1\\cell\\r5_d2_aging500.json",
+  "formula": "copy"
+}

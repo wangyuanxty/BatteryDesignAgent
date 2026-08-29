@@ -1,0 +1,8 @@
+{
+  "action": "funnel",
+  "ceiling_assessment": true,
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "Opening ceiling assessment (Stage 3, executed at R1 baseline). Levers assessed: porosity (+0.065/+0.10), electrode thickness (-25.6/-29.2 um), particle radii, electrolyte sigma/D_e, cooling h. Measured R1: retention 8.7% (baseline) -> 18.7/18.9% (porosity/thickness families, ~2.2x each); power density already 22.4-24.5 kW/kg vs 4 kW/kg target (contract formula; DCR 4.1-5.4 mOhm); capacity 3.2-4.95 Ah > 2 Ah. Gap attribution: 5C collapse is transport, not ohmic - positive solid-diffusion tau ~ 6800 s (r=5.22 um, D=4e-15) vs 720 s test, plus liquid-phase limitations; 4C plating is anode charge-acceptance (r_neg, eps_neg, N/P, sigma); 4C T_max is heat-vs-cooling (h). Conclusion: objective is within architecture+formulation reach - particle-size (tau ~ r^2), electrolyte transport overrides, porosity/thickness composition and cooling h close the gap; NO Stage-2 material escalation (gap is transport kinetics, not potential-window/stability, which are the Stage-2 responsibility)."
+}

@@ -1,0 +1,17 @@
+EC initial concentration in electrolyte [mol.m-3] = 4541.0
+Cell cooling surface area [m2] = 0.00531
+Negative current collector specific heat capacity [J.kg-1.K-1] = 385.0
+Positive current collector specific heat capacity [J.kg-1.K-1] = 897.0
+Nominal cell capacity [A.h] = 5.0
+Maximum concentration in negative electrode [mol.m-3] = 33133.0
+Negative electrode active material volume fraction = 0.75
+Negative electrode double-layer capacity [F.m-2] = 0.2
+Negative electrode specific heat capacity [J.kg-1.K-1] = 700.0
+Maximum concentration in positive electrode [mol.m-3] = 63104.0
+Positive electrode active material volume fraction = 0.665
+Positive electrode double-layer capacity [F.m-2] = 0.2
+Positive electrode specific heat capacity [J.kg-1.K-1] = 700.0
+Separator specific heat capacity [J.kg-1.K-1] = 700.0
+Initial concentration in electrolyte [mol.m-3] = 1000.0
+Initial concentration in negative electrode [mol.m-3] = 29866.0
+Initial concentration in positive electrode [mol.m-3] = 17038.0

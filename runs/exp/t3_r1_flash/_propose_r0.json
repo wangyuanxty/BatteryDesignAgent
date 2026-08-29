@@ -1,0 +1,12 @@
+{
+  "action": "propose",
+  "round": 0,
+  "candidates": [
+    {
+      "struct": {},
+      "name": "Baseline Chen2020",
+      "role": "baseline characterization: 1C discharge (dfn) + 5C discharge (dfn) + 4C charge at 45C (dfn, lumped thermal, plating) on the unmodified Chen2020 parameter set; quantifies gaps and supports the opening ceiling assessment"
+    }
+  ],
+  "llm_reason": "R0 runs the unmodified system to measure where each metric stands (5C retention, power density, T_max, plating) before proposing architecture variants; zero parameter overrides so gaps are attributable to the system itself."
+}

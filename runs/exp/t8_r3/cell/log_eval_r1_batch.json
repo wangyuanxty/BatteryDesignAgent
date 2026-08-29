@@ -1,0 +1,46 @@
+[
+  {
+    "candidate": "C0 baseline",
+    "outputs": [
+      "runs/exp/t8_r3/cell/r1_C0_5c_dfn.json",
+      "runs/exp/t8_r3/cell/r1_C0_derived.json",
+      "runs/exp/t8_r3/cell/r1_C0_1c_dfn.json",
+      "runs/exp/t8_r3/cell/r1_C0_energy.json",
+      "runs/exp/t8_r3/cell/r1_C0_4c_safety.json"
+    ],
+    "note": "(corrected re-evaluation, supersedes earlier same-round entry of this candidate: T_max_K is now sourced from the 4C/45C safety-protocol output file per the thermal criterion intent; the earlier entry accidentally judged T_max from the 1C file because the extractor is last-wins over the listed files. capacity_ah scalar in metrics is the 4C-safety protocol capacity; design capacities are the *_1c_dfn/capacity_1c_ah interface. plated is derived from the most complete anode_potential_v time series.) baseline characterization (Chen2020 defaults): mass 43.45 g exceeds 40 g cap; ED 400.8 Wh/kg below 446.18; 5C retention 8.7%; 4C/45C T_max 354.3 K > 333.15 K and anode potential dips to -0.19 V (plated). All targets fail at baseline."
+  },
+  {
+    "candidate": "V1 massfit",
+    "outputs": [
+      "runs/exp/t8_r3/cell/r1_V1_5c_dfn.json",
+      "runs/exp/t8_r3/cell/r1_V1_derived.json",
+      "runs/exp/t8_r3/cell/r1_V1_1c_dfn.json",
+      "runs/exp/t8_r3/cell/r1_V1_energy.json",
+      "runs/exp/t8_r3/cell/r1_V1_4c_safety.json"
+    ],
+    "note": "(corrected re-evaluation, supersedes earlier same-round entry of this candidate: T_max_K is now sourced from the 4C/45C safety-protocol output file per the thermal criterion intent; the earlier entry accidentally judged T_max from the 1C file because the extractor is last-wins over the listed files. capacity_ah scalar in metrics is the 4C-safety protocol capacity; design capacities are the *_1c_dfn/capacity_1c_ah interface. plated is derived from the most complete anode_potential_v time series.) thin collectors/separator fix mass (38.05 g) and ED (457.9 Wh/kg); 5C retention 9.1% (far below 0.9); 4C T_max 355.6 K and plated. Rate bottleneck diagnosed as positive-particle surface saturation (scratch/diag_physics.py)."
+  },
+  {
+    "candidate": "V2 activeboost",
+    "outputs": [
+      "runs/exp/t8_r3/cell/r1_V2_5c_dfn.json",
+      "runs/exp/t8_r3/cell/r1_V2_derived.json",
+      "runs/exp/t8_r3/cell/r1_V2_1c_dfn.json",
+      "runs/exp/t8_r3/cell/r1_V2_energy.json",
+      "runs/exp/t8_r3/cell/r1_V2_4c_safety.json"
+    ],
+    "note": "(corrected re-evaluation, supersedes earlier same-round entry of this candidate: T_max_K is now sourced from the 4C/45C safety-protocol output file per the thermal criterion intent; the earlier entry accidentally judged T_max from the 1C file because the extractor is last-wins over the listed files. capacity_ah scalar in metrics is the 4C-safety protocol capacity; design capacities are the *_1c_dfn/capacity_1c_ah interface. plated is derived from the most complete anode_potential_v time series.) thicker electrodes raise 1C energy (18.61 Wh, ED 466.7 Wh/kg, mass 39.87 g) but 5C retention drops to 8.4%: thicker electrodes worsen cathode-surface saturation at fixed current, matching diagnosis."
+  },
+  {
+    "candidate": "V3 ratemargin",
+    "outputs": [
+      "runs/exp/t8_r3/cell/r1_V3_5c_dfn.json",
+      "runs/exp/t8_r3/cell/r1_V3_derived.json",
+      "runs/exp/t8_r3/cell/r1_V3_1c_dfn.json",
+      "runs/exp/t8_r3/cell/r1_V3_energy.json",
+      "runs/exp/t8_r3/cell/r1_V3_4c_safety.json"
+    ],
+    "note": "(corrected re-evaluation, supersedes earlier same-round entry of this candidate: T_max_K is now sourced from the 4C/45C safety-protocol output file per the thermal criterion intent; the earlier entry accidentally judged T_max from the 1C file because the extractor is last-wins over the listed files. capacity_ah scalar in metrics is the 4C-safety protocol capacity; design capacities are the *_1c_dfn/capacity_1c_ah interface. plated is derived from the most complete anode_potential_v time series.) negative-only particle downsize (5.86->4.0 um) moves retention 8.7->9.7%: negative side was not the 5C bottleneck (cathode is); positive particle size targeted next round."
+  }
+]

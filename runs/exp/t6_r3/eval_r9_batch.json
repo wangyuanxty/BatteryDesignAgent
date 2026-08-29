@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "V21_final_dfn",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r9_V21_final_dfn_1c.json",
+      "runs/exp/t6_r3/cell/r9_V21_final_dfn_aging.json",
+      "runs/exp/t6_r3/cell/r9_V21_final_dfn_energy.json",
+      "runs/exp/t6_r3/cell/r9_V21_final_dfn_4c.json"
+    ],
+    "note": "DFN-precision verification REJECTS the SPMe finalist (model_used=DFN, no fallback): ED 1080.6 PASS, SEI 191.1 PASS (DFN resolves SEI spatially, far under SPMe's 394.5), but plateau 4.0766 FAIL (-23 mV), T_max 330.57 FAIL (+7.4 K), amin -0.0522 plated=True FAIL. SPMe margins (+0.89 K / +39 mV / +65 mV) were proxy artifacts: DFN resolves electrolyte concentration gradients and full electrode polarization, so the 4C CC phase at 18 A lasts 36 s (vs 6 s in SPMe), driving the anode negative and heating the cell"
+  },
+  {
+    "candidate": "V23_ec1500_dfn",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r9_V23_ec1500_dfn_1c.json",
+      "runs/exp/t6_r3/cell/r9_V23_ec1500_dfn_aging.json",
+      "runs/exp/t6_r3/cell/r9_V23_ec1500_dfn_energy.json",
+      "runs/exp/t6_r3/cell/r9_V23_ec1500_dfn_4c.json"
+    ],
+    "note": "DFN verification of finalist B: identical 4C/ED/plateau behavior to V21 (electrolyte reformulation does not touch 4C polarization), SEI 174.8 PASS. Both SPMe finalists fail the same three DFN criteria -> SPMe screening layer discredited for this cell class; rounds 10+ run in DFN mode"
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "candidate": "V2a Power-ED balance",
+    "outputs": ["cell/r2_v2a_1c_spme.json", "cell/r2_v2a_energy.json", "cell/r2_v2a_4c_dfn.json"],
+    "note": "ED 532.5 Wh/kg pass (thin CC/sep pays the bill). 4C: plating fixed (anode min +0.038 V), true 4C acceptance 3.26 Ah / 71% SOC (mechanically derived from voltage curve: charge duration 586 s x 20 A; runner capacity_ah key is a PyBaMM cycle-split artifact). T_max 353.5 K still fails -> thermal lever next round."
+  },
+  {
+    "candidate": "V2b Kinetics-transport boost",
+    "outputs": ["cell/r2_v2b_1c_spme.json", "cell/r2_v2b_energy.json", "cell/r2_v2b_4c_dfn.json"],
+    "note": "ED 422.5 Wh/kg pass. 4C: plating fixed (anode min +0.024 V, thin margin), true 4C acceptance 3.67 Ah / 72.5% SOC (661 s x 20 A, mechanical). T_max 352.5 K fails -> h increase + N/P margin next round. Attribution: particles+electrolyte carry the fix (V2c geometry-only still plates at -0.049 V)."
+  },
+  {
+    "candidate": "V2c Architecture-only",
+    "outputs": ["cell/r2_v2c_1c_spme.json", "cell/r2_v2c_energy.json", "cell/r2_v2c_4c_dfn.json"],
+    "note": "ED 508.2 Wh/kg pass. 4C: still plates (anode min -0.049 V), acceptance 1.41 Ah (254 s x 20 A), T_max 369.1 K worst of the three (thinner cell mass accelerates heating). Geometry alone insufficient - kinetics/transport levers are the required combination."
+  },
+  {
+    "candidate": "V2a Power-ED balance",
+    "outputs": ["cell/r2_v2a_overcharge.json", "cell/r2_v2a_tr.json"],
+    "note": "Overcharge to 4.7 V: T_max 306.6 K; run-tr (mcp=mass x 900=28.0 J/K, hA=0.0531) triggered false. Pass."
+  },
+  {
+    "candidate": "V2b Kinetics-transport boost",
+    "outputs": ["cell/r2_v2b_overcharge.json", "cell/r2_v2b_tr.json"],
+    "note": "Overcharge to 4.7 V: T_max 305.5 K; run-tr (mcp=39.2 J/K, hA=0.0531) triggered false. Pass."
+  },
+  {
+    "candidate": "V2c Architecture-only",
+    "outputs": ["cell/r2_v2c_overcharge.json", "cell/r2_v2c_tr.json"],
+    "note": "Overcharge to 4.7 V: T_max 311.2 K; run-tr (mcp=28.0 J/K, hA=0.0531) triggered false. Pass."
+  }
+]

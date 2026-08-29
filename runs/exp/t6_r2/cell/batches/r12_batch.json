@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "R12a_h140",
+    "outputs": ["cell/r12_a_4c45_dfn.json"],
+    "note": "R12a: negpart 1.5 + A=0.0106 + h=140. T_max 322.70 K PASS (0.45 K margin), plating False with +0.0382 V margin. Meets both stage-3 DFN gates."
+  },
+  {
+    "candidate": "R12b_sep16",
+    "outputs": ["cell/r12_b_4c45_dfn.json"],
+    "note": "R12b: separator 25 -> 16 um + h=120. T_max 323.44 K still 0.29 over - separator thinning does not reduce the terminal-cliff heat materially. Kept as optional ED bonus (~4%), not the thermal fix."
+  },
+  {
+    "candidate": "R12c_sep16_h140",
+    "outputs": ["cell/r12_c_4c45_dfn.json"],
+    "note": "R12c: sep 16 um + h=140. T_max 322.81 K PASS, plating False (+0.0358). Also viable; R12a preferred (fewer changes, better margins)."
+  },
+  {
+    "candidate": "R12a_full_verification_DFN",
+    "outputs": ["cell/r12_a_energy_dfn.json", "cell/r12_a_4c45_dfn.json", "cell/r12_a_aging.json", "cell/r12_a_1c_dfn.json"],
+    "note": "FINAL VERIFICATION of R12a on the precise DFN model (all five criteria): ED 1096.0 Wh/L PASS (+146), midpoint voltage 4.1301 V PASS (+0.030), T_max 322.70 K PASS (-0.45), plated False PASS (min anode potential +0.0382 V), SEI 415.6 nm PASS (-84.4). SPMe cross-check (r12_a_energy_spme / r12_a_4c45_spme): ED 1106.3, midV 4.2202, T 320.30, plated False - consistent. Candidate is the final design."
+  }
+]

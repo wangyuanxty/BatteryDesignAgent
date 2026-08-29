@@ -1,0 +1,6 @@
+{
+  "retention_5c": 0.06385489479817312,
+  "capacity_ah_1c": 4.949233163372837,
+  "capacity_ah_5c": 0.316032762978802,
+  "note": "V3; WARNING 5C model_used=SPMe(fallback) (DFN solver failed, auto-degraded); SPMe severely underestimates at 5C, retention not judgment-grade; retention = 0.3160/4.9492 = 0.0639"
+}

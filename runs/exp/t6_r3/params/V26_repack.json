@@ -1,0 +1,12 @@
+{
+  "Positive electrode thickness [m]": 4.17e-05,
+  "Negative electrode thickness [m]": 6.162e-05,
+  "Separator thickness [m]": 8.34e-06,
+  "Positive current collector thickness [m]": 1.112e-05,
+  "Negative current collector thickness [m]": 8.34e-06,
+  "Electrode height [m]": 0.07797,
+  "Electrode width [m]": 1.8952,
+  "SEI kinetic rate constant [m.s-1]": 5.0e-14,
+  "Total heat transfer coefficient [W.m-2.K-1]": 150.0,
+  "EC initial concentration in electrolyte [mol.m-3]": 2000.0
+}

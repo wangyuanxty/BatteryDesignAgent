@@ -1,0 +1,67 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "base": "Chen2020",
+      "name": "V1 Nano-fast",
+      "role": "architecture candidate: baseline electrode thickness (75.6/85.2 um) + fast package (nano particles, high-transport electrolyte, thin collectors); ED-max probe at fixed loading",
+      "struct": {
+        "Positive particle radius [m]": 1.5e-06,
+        "Negative particle radius [m]": 2.0e-06,
+        "Electrolyte conductivity [S.m-1]": 1.3,
+        "Electrolyte diffusivity [m2.s-1]": 4.0e-10,
+        "Cation transference number": 0.45,
+        "Positive current collector thickness [m]": 8.0e-06,
+        "Negative current collector thickness [m]": 6.0e-06,
+        "Positive electrode thickness [m]": 7.56e-05,
+        "Negative electrode thickness [m]": 8.52e-05,
+        "Nominal cell capacity [A.h]": 5.0
+      }
+    },
+    {
+      "base": "Chen2020",
+      "name": "V2 Mid-ED",
+      "role": "architecture candidate: 20% thinner electrodes (60.5/68.2 um) + fast package; ED-rate balance probe",
+      "struct": {
+        "Positive particle radius [m]": 1.5e-06,
+        "Negative particle radius [m]": 2.0e-06,
+        "Electrolyte conductivity [S.m-1]": 1.3,
+        "Electrolyte diffusivity [m2.s-1]": 4.0e-10,
+        "Cation transference number": 0.45,
+        "Positive current collector thickness [m]": 8.0e-06,
+        "Negative current collector thickness [m]": 6.0e-06,
+        "Positive electrode thickness [m]": 6.048e-05,
+        "Negative electrode thickness [m]": 6.816e-05,
+        "Nominal cell capacity [A.h]": 4.0
+      }
+    },
+    {
+      "base": "Chen2020",
+      "name": "V3 Rate-lean",
+      "role": "architecture candidate: 32% thinner electrodes (51.4/57.9 um) + fast package; 5C-retention probe at ED floor ~450",
+      "struct": {
+        "Positive particle radius [m]": 1.5e-06,
+        "Negative particle radius [m]": 2.0e-06,
+        "Electrolyte conductivity [S.m-1]": 1.3,
+        "Electrolyte diffusivity [m2.s-1]": 4.0e-10,
+        "Cation transference number": 0.45,
+        "Positive current collector thickness [m]": 8.0e-06,
+        "Negative current collector thickness [m]": 6.0e-06,
+        "Positive electrode thickness [m]": 5.1408e-05,
+        "Negative electrode thickness [m]": 5.7936e-05,
+        "Nominal cell capacity [A.h]": 3.4
+      }
+    }
+  ],
+  "llm_reason": "Baseline diagnosis (R1 evaluate): ED 400.8 close but below 446.18 (mass 43.5 g > 40 g); 5C retention 8.7% catastrophically low - solid-diffusion limited (D_s,pos=4e-15 m2/s, r=5.22 um -> tau~6800 s). Opening ceiling assessment: thin collectors (Al 8 um/Cu 6 um, literature high-ED cell practice) cut inactive mass 0.1506->0.0779 kg/m2 => ED(f)=17.41f/(0.2699f+0.0779) reaches 446 at f>=0.68; all variants mass < 40 g. 5C fix = physical levers only: particle radius (r^2/D scaling; nano NMC ~1.5 um literature high-power practice; neg 2 um fine graphite), electrolyte transport formulation (sigma 1.3 S/m literature high-conductivity LiPF6 EC/EMC; D 4e-10 m2/s literature range; t+ 0.45 ESTIMATE high-transference formulation - marked estimate, not simulation output). Nominal cell capacity set self-consistent (5.0/4.0/3.4 Ah = 5 Ah x f) so '5C' protocol is a true 5C rate (mislabeled-current trap avoided; will verify |actual-nominal|<=3%). N/P ratio preserved (1.127). Funnel: no molecular candidates (architecture+formulation only; t+ and D are formulation candidates with literature/estimate source, no funnel needed per protocol table).",
+  "params_sources": {
+    "Positive particle radius": "literature (high-power nano-NMC practice; estimate-adjacent, marked)",
+    "Negative particle radius": "literature (fine graphite, domain)",
+    "Electrolyte conductivity 1.3 S.m-1": "literature (1 M LiPF6 EC/EMC high-conductivity range)",
+    "Electrolyte diffusivity 4e-10 m2.s-1": "literature (LiPF6 EC/EMC range 2-5e-10)",
+    "Cation transference number 0.45": "estimate (high-t+ electrolyte formulation direction; NOT simulation output)",
+    "Current collector thickness 8/6 um": "literature (high-ED commercial cell practice)",
+    "Electrode thickness / nominal capacity": "design choice (Pareto scan; nominal = 5 Ah x f, self-consistent C-rate)"
+  }
+}

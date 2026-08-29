@@ -1,0 +1,44 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "name": "FC-1",
+      "role": "fast-charge transport: electrolyte sigma 1.35 S/m (x1.42), t+ 0.35, D 2.3e-10 m2/s (x1.30) [literature-basis estimate, marked], negative particle 3 um, negative porosity 0.32, separator porosity 0.55, separator 9 um",
+      "struct": {
+        "Electrolyte conductivity [S.m-1]": 1.35,
+        "Cation transference number": 0.35,
+        "Electrolyte diffusivity [m2.s-1]": 2.3e-10,
+        "Negative particle radius [m]": 3.0e-6,
+        "Negative electrode porosity": 0.32,
+        "Separator porosity": 0.55,
+        "Separator thickness [m]": 9.0e-6
+      }
+    },
+    {
+      "name": "FC-2",
+      "role": "FC-1 + thermal management: Total heat transfer coefficient 170 W/m2K (hA=0.90 W/K consistent for nail)",
+      "struct": {
+        "Electrolyte conductivity [S.m-1]": 1.35,
+        "Cation transference number": 0.35,
+        "Electrolyte diffusivity [m2.s-1]": 2.3e-10,
+        "Negative particle radius [m]": 3.0e-6,
+        "Negative electrode porosity": 0.32,
+        "Separator porosity": 0.55,
+        "Separator thickness [m]": 9.0e-6,
+        "Total heat transfer coefficient [W.m-2.K-1]": 170.0
+      }
+    },
+    {
+      "name": "FC-3",
+      "role": "architecture-only control: same geometry/particle changes as FC-1 without electrolyte transport override (attribute the transport lever)",
+      "struct": {
+        "Negative particle radius [m]": 3.0e-6,
+        "Negative electrode porosity": 0.32,
+        "Separator porosity": 0.55,
+        "Separator thickness [m]": 9.0e-6
+      }
+    }
+  ],
+  "llm_reason": "Baseline 4C charge fails by transport-limited anode polarization (anode_pot -0.44 V after only 26 s; t+ 0.2594 low, sigma_e 0.949 S/m). FC-1 attacks salt depletion with a high-transport electrolyte (values within literature range for high-conductivity/fast-charge formulations; marked estimate) plus smaller negative particles (solid-diffusion lever) and higher porosities (salt-transport path). FC-2 adds the cooling design needed for the 10 W nail (hA 0.90 W/K steady-state below side-reaction onset). FC-3 isolates the architecture contribution. ED margin (+22% over threshold) is intentionally spent on rate/safety."
+}

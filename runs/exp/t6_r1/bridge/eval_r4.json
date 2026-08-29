@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "lnmo_h200_np125",
+    "outputs": ["cell/r4_np125_1c_spme.json", "cell/r4_np125_energy.json", "cell/r4_np125_4c.json"],
+    "note": "Plating closure attempt 1 (N/P 1.25, anode 106.5 um, h=200): anode_potential_v min = -0.0068 V - marginally WORSE than N/P 1.20 (-0.0049 V) -> plated FAIL. The end-of-charge dip is a delicate balance of anode OCP position vs electrolyte/kinetic overpotentials, not monotonic in N/P - the empirical verdict rules: this direction is dropped. T_max_K = 321.53 K PASS. 1C: capacity 6.371 Ah, energy 26.16 Wh (calc-energy), ED_vol ~1169 Wh/L PASS, midpoint_voltage_v 4.1675 V PASS (V45 index)."
+  },
+  {
+    "candidate": "lnmo_h200_np120_nr35",
+    "outputs": ["cell/r4_np120nr35_1c_spme.json", "cell/r4_np120nr35_energy.json", "cell/r4_np120nr35_4c.json"],
+    "note": "Plating closure attempt 2 (N/P 1.20, anode 102.2 um + negative particle radius 3.5 um, h=200): anode_potential_v min = +0.00663 V > 0 -> plated = false PASS (first plating pass of the case; margin +6.6 mV - thin but positive; DFN confirmation to follow). T_max_K = 321.09 K PASS (margin 2.06 K). 1C: capacity 6.220 Ah, ED_vol from calc-energy (with matching params geometry), midpoint_voltage_v 4.1882 V PASS. SEI not yet evidenced for this variant (formulation levers carried in separate probes; combined candidate aging to follow)."
+  },
+  {
+    "candidate": "lnmo_sei_c2270_d12",
+    "outputs": ["cell/r4_sei1_aging.json"],
+    "note": "SEI fix probe 1 (EC initial concentration 4541 -> 2270.5 mol/m3 = 0.5x, EC diffusivity in SEI 2e-18 -> 1.2e-18 m2/s = 0.6x): sei_thickness_nm_end = 430.5 nm <= 500 nm PASS (margin 69.5 nm). Validates the diffusion-limited sqrt(c0*D_ec) scaling derived from the tool-code rate law (predicted ~412 nm). Gentler formulation cut than probe 2; selected as the final design lever set."
+  },
+  {
+    "candidate": "lnmo_sei_c2270_d10",
+    "outputs": ["cell/r4_sei2_aging.json"],
+    "note": "SEI fix probe 2 (c0 x0.5 + D_ec x0.5): sei_thickness_nm_end = 395.2 nm PASS (margin 104.8 nm; predicted ~377 nm). Deeper cut than needed - kept as the fallback if the combined candidate needs more SEI margin."
+  }
+]

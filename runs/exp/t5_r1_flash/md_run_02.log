@@ -1,0 +1,2 @@
+Using Materials Project MACE for MACECalculator with C:\Users\evari\.cache\mace/20231203mace128L1_epoch199model
+Using float32 for MACECalculator, which is faster but less accurate. Recommended for MD. Use float64 for geometry optimization.

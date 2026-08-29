@@ -1,0 +1,16 @@
+[
+  {"round": 1, "candidate": "V1-high-conductivity-electrolyte", "outputs": ["cell/V1_4c_spme.json"], "note": "Chen2020 + sigma2.0/t+0.5: plating persists (anode -0.42 V)"},
+  {"round": 1, "candidate": "V2-transport-plus-nano-particles", "outputs": ["cell/V2_4c_spme.json"], "note": "Chen2020 + transport + 3um particles: plating persists (anode -0.45 V)"},
+  {"round": 1, "candidate": "V3-max-transport", "outputs": ["cell/V3_4c_spme.json"], "note": "Chen2020 aggressive transport: plating persists (anode -0.43 V)"},
+  {"round": 2, "candidate": "T1-cooling-50", "outputs": ["cell/T1_4c_spme.json"], "note": "OKane2022 h=50: T_max ok but cooling slows kinetics -> plating (anode -0.40 V)"},
+  {"round": 2, "candidate": "T2-cooling-100", "outputs": ["cell/T2_4c_spme.json"], "note": "OKane2022 h=100: plating persists (anode -0.40 V)"},
+  {"round": 2, "candidate": "T3-cooling-200-transport", "outputs": ["cell/T3_4c_spme.json"], "note": "OKane2022 h=200 + transport: near pass (anode -0.046 V)"},
+  {"round": 3, "candidate": "T4-neg3um", "outputs": ["cell/T4_4c_spme.json"], "note": "h=120 + sigma2.5: anode -0.035 V, still plating"},
+  {"round": 3, "candidate": "T5-neg2um", "outputs": ["cell/T5_4c_spme.json"], "note": "T4 + neg 2um: anode -0.0185 V, smaller particle helps"},
+  {"round": 3, "candidate": "T6-NP-boost", "outputs": ["cell/T6_4c_spme.json"], "note": "T4 + neg thickness 9um: anode -0.040 V, thickness does not help"},
+  {"round": 3, "candidate": "T7-neg1um", "outputs": ["cell/T7_4c_spme.json"], "note": "h=100 + neg 1um: anode +0.003 V, pass (thin margin)"},
+  {"round": 3, "candidate": "T8-neg1um-h80", "outputs": ["cell/T8_4c_spme.json"], "note": "h=80 + neg 1um: anode +0.005 V, pass (thin margin)"},
+  {"round": 3, "candidate": "T9-negpos1um", "outputs": ["cell/T9_4c_spme.json"], "note": "h=100 + neg&pos 1um: anode +0.002 V, pass (thin margin)"},
+  {"round": 4, "candidate": "T10-final", "outputs": ["cell/T10_4c_dfn.json", "cell/T10_energy_dfn.json"], "note": "final design DFN: 4C no-plating + T_max + ED all pass"},
+  {"round": 4, "candidate": "T10-final", "outputs": ["cell/T10_tr.json"], "note": "final design overcharge -> thermal runaway: not triggered"}
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "candidate": "Probe A + Liquid Cooling h100",
+    "round": 2,
+    "outputs": [
+      "cell/r2_cool1_1c_dfn.json",
+      "cell/r2_cool1_energy.json",
+      "cell/r2_cool1_aging45.json",
+      "validation/r2_cool1_nail.json",
+      "cell/r2_cool1_4c45.json"
+    ],
+    "note": "Cooling fixed nail (triggered=false, T_final 317 K physical, hA=0.531 W/K = h100 x A 0.00531 m2); but 4C plating margin lost under cooler operation (anode min -0.008 V -> plated=true; probeA was +0.0254 V at T_max 350 K); ED 484.14 and SEI 507.94 still pass. Fallback to Stage 3: rate-capability levers (particle radius / N-P) to recover anode margin without losing cooling."
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "action": "final",
+  "verdict": "achieved",
+  "recommendation": "Adopt V10a_final_h45 (round 6, all five entry-0 criteria satisfied on both parameter sets): current collectors 8/6 um, separator 10 um, electrolyte sigma 4.0 S/m + D 3.539e-10 m2/s + t+ 0.45, particle radii 3/2 um, anode porosity 0.35, cathode porosity 0.40, cooling h 45 W/m2K. Chen2020 DFN judged set: retention 0.9944 (lowT 5.0337 / 1C 5.0618 Ah, derived_r6_final_dfn.json), ED 564.84 Wh/kg, ED_vol 969.50 Wh/L (r6_final_energy_dfn.json), T_max 329.33 K (3.82 K margin), no plating (anode min +28.96 mV, r6_final_4C45_safety_dfn.json). OKane2022 robustness: retention 0.9788 (derived_r6_final_ok_spme.json), DFN safety T_max 331.78 K (1.37 K margin), anode min +24.96 mV (r6_final_ok_4C45_safety_dfn.json). Cold-start honesty (Initial temperature 253.15 K): retention 0.9944 identical to warm-start (derived_r6_final_coldstart.json). Design trajectory: R1 baseline (ED_vol 844.45 < 880, 4C plating) -> R2/R3 thinning CC/separator + porosity fixes -> R4 deep transport (plating margin) + h=40 (T_max) -> R5 DFN verify + OKane2022 h=40 T_max 333.315 K over line -> R6 h=45 passes both bases at DFN grade."
+}

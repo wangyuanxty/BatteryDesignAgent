@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "Y1 X1+nanoparticle-anode+thermal-warm",
+    "outputs": ["cell/r5_y1_energy.json", "cell/r5_y1_1c_spme.json", "cell/r5_y1_4c_45c.json"],
+    "note": "ED 534.6 pass (anode 3um lifts discharge voltage); T_max 328.68K pass; min_ap +0.0088V pass (thin); actual 5.044Ah = honest true 4C"
+  },
+  {
+    "candidate": "Y2 Y1+h20",
+    "outputs": ["cell/r5_y2_energy.json", "cell/r5_y2_1c_spme.json", "cell/r5_y2_4c_45c.json"],
+    "note": "ED 534.6 pass; T_max 331.24K pass (2K margin); min_ap +0.0113V pass"
+  },
+  {
+    "candidate": "Y3 manufacturability+warm",
+    "outputs": ["cell/r5_y3_energy.json", "cell/r5_y3_1c_spme.json", "cell/r5_y3_4c_45c.json"],
+    "note": "ED 525.3 pass with Al8um/sep9um; T_max 329.48K pass; min_ap +0.0095V pass"
+  },
+  {
+    "candidate": "Y4 Y1+transport-boost",
+    "outputs": ["cell/r5_y4_energy.json", "cell/r5_y4_1c_spme.json", "cell/r5_y4_4c_45c.json"],
+    "note": "ED 530.5 pass; T_max 327.59K pass (5.6K margin); min_ap +0.0171V pass (best margin); t+0.6/De9e-10 transport"
+  }
+]

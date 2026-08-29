@@ -1,0 +1,26 @@
+[
+  {
+    "candidate": "Baseline Chen2020",
+    "round": 1,
+    "outputs": [
+      "cell/r1_base_1c_dfn.json",
+      "cell/r1_base_energy.json",
+      "cell/r1_base_aging45.json",
+      "validation/r1_base_nail.json",
+      "cell/r1_base_4c45.json"
+    ],
+    "note": "ED 400.75 + SEI 476.09 pass; plating fails (anode min -0.1918 V -> plated=true); nail triggered at 70.2 s under near-adiabatic hA=0.05 W/K; post-trigger ODE temperatures are numerical blow-up artifacts (not physical), trigger judgment is mechanical."
+  },
+  {
+    "candidate": "Ceiling Probe A",
+    "round": 1,
+    "outputs": [
+      "cell/r1_probeA_1c_dfn.json",
+      "cell/r1_probeA_energy.json",
+      "cell/r1_probeA_aging45.json",
+      "validation/r1_probeA_nail.json",
+      "cell/r1_probeA_4c45.json"
+    ],
+    "note": "ED 486.38 + SEI 507.94 + plating pass (anode min +0.0254 V, thin margin); nail triggered at 72.0 s under default near-adiabatic hA=0.05 W/K; failure cause lives at thermal management (Stage 3 lever h), not materials."
+  }
+]

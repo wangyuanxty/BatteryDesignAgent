@@ -1,0 +1,24 @@
+{
+  "action": "propose",
+  "round": 6,
+  "candidates": [
+    {
+      "name": "V10a_final_h45",
+      "role": "final design: V8 deep-transport architecture with cooling h=40->45 W/m2K — adopted after OKane2022 robustness showed T_max 333.315 K at h=40 (0.165 K over the 333.15 line); h=45 passes both bases (OKane2022 SPMe: T_max 331.883 K, anode +17.3 mV)",
+      "struct": {
+        "Positive current collector thickness [m]": 8e-6,
+        "Negative current collector thickness [m]": 6e-6,
+        "Separator thickness [m]": 10e-6,
+        "Electrolyte conductivity [S.m-1]": 4.0,
+        "Electrolyte diffusivity [m2.s-1]": 3.539e-10,
+        "Cation transference number": 0.45,
+        "Positive particle radius [m]": 3e-6,
+        "Negative particle radius [m]": 2e-6,
+        "Negative electrode porosity": 0.35,
+        "Positive electrode porosity": 0.40,
+        "Total heat transfer coefficient [W.m-2.K-1]": 45.0
+      }
+    }
+  ],
+  "llm_reason": "R5 established V8 (h=40) passes all criteria on Chen2020 DFN (ret 0.9945, ED 564.88 Wh/kg, ED_vol 969.56 Wh/L, T_max 330.47 K, anode +30.1 mV) and passed the cold-start honesty check (ret 0.9945 from genuine 253.15 K start, T_max 257.5 K confirms cold). OKane2022 re-validation at h=40: retention 0.9793 passes, anode +17.5 mV passes, but T_max 333.315 K fails by 0.165 K -> one notch stronger cooling. h=45 passes OKane2022 SPMe (T_max 331.883, anode +17.3 mV); h=50 erodes the anode margin further (+15.1 mV). Adopt h=45; verify the full DFN set on Chen2020 (judged) and DFN safety+retention on OKane2022 (robustness)."
+}

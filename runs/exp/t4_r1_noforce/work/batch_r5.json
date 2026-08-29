@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "V8_dfn_verify",
+    "outputs": ["cell/r5_v8_energy_dfn.json", "cell/r5_v8_1c_dfn.json", "cell/r5_v8_lowT_dfn.json", "bridge/derived_r5_v8_dfn.json", "cell/r5_v8_4C45_safety_dfn.json"],
+    "note": "DFN-grade verification on Chen2020: all five criteria pass — retention 0.9945, ED 564.88 Wh/kg, ED_vol 969.56 Wh/L, T_max 330.47 K (2.68 K margin), anode +30.1 mV; DFN confirms SPMe screen"
+  },
+  {
+    "candidate": "V8_coldstart_check",
+    "outputs": ["cell/r5_v8_energy_dfn.json", "cell/r5_v8_1c_dfn.json", "cell/r5_v8_coldstart_lowT_dfn.json", "bridge/derived_r5_v8_coldstart.json", "cell/r5_v8_4C45_safety_dfn.json"],
+    "note": "honesty check with Initial temperature=253.15 K (true -20C equilibrium; T_max 257.5 K confirms cold start): retention 0.9945 identical to warm-start — protocol warm-start artifact is immaterial for this design under the model"
+  },
+  {
+    "candidate": "V8_OKane2022_recheck",
+    "outputs": ["cell/r5_v8ok_energy.json", "cell/r5_v8ok_1c_spme.json", "cell/r5_v8ok_lowT_spme.json", "bridge/derived_r5_v8ok_spme.json", "cell/r5_v8ok_4C45_safety_spme.json"],
+    "note": "robustness re-validation on OKane2022 base (SPMe): retention 0.9793 and anode +17.5 mV pass, but T_max 333.315 K exceeds 333.15 by 0.165 K -> one notch stronger cooling needed (h=45), adopted as final design"
+  }
+]

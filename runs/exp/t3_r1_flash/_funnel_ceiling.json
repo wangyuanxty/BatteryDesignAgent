@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "Opening ceiling assessment (baseline characterization): levers assessed = electrode thickness/porosity, particle radius (positive solid D fixed 4e-15 m2/s -> particle size is the only allowed diffusion lever), electrolyte transport (sigma/t+/D), cooling h. Baseline limits measured: retention_5c=0.087 (bottleneck: positive particle diffusion tau~6.8 ks at r=5.22 um vs 720 s 5C window), plated=true, T_max=354.3 K (h=10). Gap to objective: retention +86.3 pts, T -21.2 K, plating margin -0.19 V. Ceiling assessment conclusion: Chen2020 architecture space with small particles (r<=1 um -> tau<=250 s), thin electrodes (<=42 um), raised porosity and high-transport electrolyte + forced-air cooling (h=100) is estimated to reach all objectives; no material escalation (Stage 2) needed - architecture/electrolyte/thermal levers suffice (confirmed empirically in R1-R2)."
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "candidate": "T1 S6+flatD+t06 (Stage4 exam)",
+    "outputs": [
+      "cell/r6_t1_4c45C_dfn.json"
+    ],
+    "note": "flat D_e + t+0.6 fixes EOC depletion: anode +0.0122V (no plating), T_max 328.05K; both safety criteria pass"
+  },
+  {
+    "candidate": "T3 T2+h100 (Stage4 exam)",
+    "outputs": [
+      "cell/r6_t3_4c45C_dfn.json"
+    ],
+    "note": "h=100 margin variant: T_max 326.05K, anode +0.0182V; passes both but h=100 unnecessary (T2 h=80 has 5.4K margin)"
+  },
+  {
+    "candidate": "T2 T1+R25 (lead)",
+    "outputs": [
+      "cell/r6_t2_energy.json",
+      "cell/r6_t2_1c_spme.json",
+      "cell/r6_t2_retention.json",
+      "cell/r6_t2_4c45C_dfn.json"
+    ],
+    "note": "LEAD: ED 471.55, VED 925.77, retention 0.99267 (cold-soak, self-heating removed), 1C T_max 299.6, 4C/45C T_max 327.7, anode min +0.0205V no plating. ALL FIVE criteria pass"
+  }
+]

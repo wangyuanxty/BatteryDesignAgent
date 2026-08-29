@@ -1,0 +1,17 @@
+[
+  {"candidate": "V2A", "round": 2,
+   "outputs": ["runs/exp/t2_r2/cell/r2_vA_calc.json", "runs/exp/t2_r2/derived/r2_vA_retention.json", "runs/exp/t2_r2/cell/r2_vA_4c_dfn.json"],
+   "note": "Thick+rate-opt: ED 517.9 OK but 4C DFN plates (ap min -0.028 V, 0.81 Ah accepted). Thickness beats plating safety unless anode fully rate-optimized."},
+  {"candidate": "V2B", "round": 2,
+   "outputs": ["runs/exp/t2_r2/cell/r2_vB_calc.json", "runs/exp/t2_r2/derived/r2_vB_retention.json", "runs/exp/t2_r2/cell/r2_vB_4c_dfn.json"],
+   "note": "Mid rate-opt: ED 437.5 OK, 4C DFN plating-free (ap min +0.010 V, 0.56 Ah accepted). First plating-clean cell; margin thin -> R3 pushes margin levers."},
+  {"candidate": "V2C", "round": 2,
+   "outputs": ["runs/exp/t2_r2/cell/r2_vC_calc.json", "runs/exp/t2_r2/derived/r2_vC_retention.json", "runs/exp/t2_r2/cell/r2_vC_4c_dfn.json"],
+   "note": "Transport-only isolate: ED 403.4 OK but 4C DFN still plates (ap min -0.057 V). Electrolyte upgrade alone insufficient - anode geometry needed as well."},
+  {"candidate": "V2D", "round": 2,
+   "outputs": ["runs/exp/t2_r2/cell/r2_vD_aging100.json", "runs/exp/t2_r2/derived/r2_vD_sei500.json"],
+   "note": "SEI-k mapping k=1e-13: SEI@100 385 OK; SEI@500 701 > 550 FAIL. Coating x0.1 insufficient at 500 cyc."},
+  {"candidate": "V2E", "round": 2,
+   "outputs": ["runs/exp/t2_r2/cell/r2_vE_aging100.json", "runs/exp/t2_r2/derived/r2_vE_sei500.json"],
+   "note": "SEI-k mapping k=1e-14: SEI@100 266 OK; SEI@500 578 > 550 FAIL. Need deeper suppression (>=x0.001)."}
+]

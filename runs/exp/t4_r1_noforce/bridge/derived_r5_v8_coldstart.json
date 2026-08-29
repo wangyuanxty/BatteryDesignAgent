@@ -1,0 +1,8 @@
+{
+  "lowT_retention": 0.9944965362017736,
+  "lowT_capacity_ah": 5.03404269087997,
+  "rt_capacity_ah": 5.061900678011624,
+  "lowT_source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t4_r1_noforce\\cell\\r5_v8_coldstart_lowT_dfn.json",
+  "rt_source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t4_r1_noforce\\cell\\r5_v8_1c_dfn.json",
+  "label": "r5_v8_coldstart_dfn"
+}

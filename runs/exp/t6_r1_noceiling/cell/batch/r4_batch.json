@@ -1,0 +1,5 @@
+[
+  {"candidate": "Middle-M1", "outputs": ["cell/r4_m1_1c.json", "cell/r4_m1_energy.json", "cell/r4_m1_4c.json"], "note": "Pareto-knee probe: ED near 950 vs plating-free 4C (SEI unchecked)"},
+  {"candidate": "Middle-M2", "outputs": ["cell/r4_m2_1c.json", "cell/r4_m2_energy.json", "cell/r4_m2_4c.json"], "note": "Pareto-knee probe, ED side (SEI unchecked)"},
+  {"candidate": "Rate-4C-h25", "outputs": ["cell/r3_rate_1c.json", "cell/r3_rate_energy.json", "cell/r4_rateh25_4c.json"], "note": "plating-free candidate at h=25: T_max boundary quantification"}
+]

@@ -1,0 +1,17 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {
+      "struct": {},
+      "name": "Baseline Chen2020",
+      "role": "baseline characterization on all protocols (1C SPMe/DFN, calc-energy, lowT, 4C_charge_45C+plating, aging 100 and 500 cycles) + opening ceiling assessment"
+    },
+    {
+      "struct": {"Initial temperature [K]": 253.15},
+      "name": "Baseline lowT test-condition fix",
+      "role": "cold-start lowT discharge: the harness lowT protocol sets only ambient temperature (253.15 K); the lumped model's initial condition would otherwise stay at 298.15 K, so the -20 C contract is measured on a cell that starts warm (measured artifact: T_max_K=298.15, retention 99.4%). Initial temperature override makes the cell truly start at -20 C."
+    }
+  ],
+  "llm_reason": "exploration_force is OFF: no forced variant count; round 1 is baseline characterization only (plus one test-condition fix discovered during baseline). Baseline measurements: ED 400.75 Wh/kg (>=327.18 pass with margin, electrolyte-excluded contract caliber); SEI 449.1 nm @100cyc (pass); SEI 777.9 nm @500cyc (fail vs 550); 4C@45C charge min anode potential -0.192 V < 0 -> plated (fail), charge only reaches 17.6% SOC before 4.2 V cutoff, plating builds toward the CC-charge end (anode polarization). lowT warm-start artifact detected (T_max_K=298.15 in the lowT run) -> cold-start rerun with Initial temperature [K]=253.15. Ceiling assessment conclusion (written to funnel entry): ED ceiling already exceeded at baseline (no ED escalation needed); ec-limited SEI thickness is a material-scale property (no architecture lever scales per-area SEI growth) -> Stage 2 coating candidate needed for SEI@500 (ceiling_escalation ON); 4C plating and lowT retention get architecture levers first (negative particle radius, N/P, porosity), electrolyte-formulation escalation only if architecture saturates."
+}

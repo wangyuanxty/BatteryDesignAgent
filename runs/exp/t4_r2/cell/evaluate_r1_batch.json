@@ -1,0 +1,20 @@
+[
+  {
+    "candidate": "baseline-Chen2020",
+    "round": 1,
+    "outputs": [
+      "cell/r1_base_1c.json",
+      "cell/r1_base_energy.json",
+      "cell/r1_base_retention.json"
+    ],
+    "note": "baseline design profile (Chen2020 defaults, cold-soak retention): W2 energy_density_wh_kg PASS 400.29; W3 energy_density_wh_l FAIL 843.49 vs 880; W1 retention PASS 0.9943; T_max here is 1C-discharge heating (311.62K), 4C-charge T_max judged in the safety entry"
+  },
+  {
+    "candidate": "baseline-Chen2020",
+    "round": 1,
+    "outputs": [
+      "cell/r1_base_4c.json"
+    ],
+    "note": "baseline safety profile (4C_charge_45C, lumped + plating): T_max PASS 332.35K (margin 0.8K vs 333.15); plated FAIL (anode_potential_v min -0.4385V < 0) - end-of-charge anode saturation; 4C charge accepted only 0.029 Ah before 4.2V cutoff"
+  }
+]

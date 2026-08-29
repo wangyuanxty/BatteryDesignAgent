@@ -1,0 +1,22 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "struct": {"Negative particle radius [m]": 3e-06},
+      "name": "V1 anode particles 3um",
+      "role": "reduce anode activation+concentration overpotential at 4C charge (surface area x1.95, solid diffusion length halved) to keep anode surface potential above 0 V"
+    },
+    {
+      "struct": {"Negative electrode thickness [m]": 100e-06},
+      "name": "V2 N/P up (neg 85.2->100um)",
+      "role": "shallower anode lithiation at charge cutoff raises anode OCP, reducing end-of-CC plating"
+    },
+    {
+      "struct": {"Negative electrode porosity": 0.35},
+      "name": "V3 neg porosity 0.25->0.35",
+      "role": "better ionic access in anode lowers electrolyte concentration polarization near the anode during 4C charge"
+    }
+  ],
+  "llm_reason": "plating mechanism from baseline: anode_potential_v declines through the 4C CC charge and reaches -0.192 V exactly at the 4.2 V cutoff (charge-in only 17.6% SOC); in the cutoff-limited regime anode surface potential at cutoff is phi_neg = phi_pos - V_cell, so anode-side polarization controls how deep the anode is driven before the voltage limit cuts the charge. Anode-side levers reduce plating without worsening charge acceptance: V1 smaller anode particles (kinetics + solid diffusion), V2 higher N/P (anode OCP stays higher), V3 anode porosity (ionic access). Cathode-side improvements are deliberately NOT proposed: lowering eta_pos would lengthen the CC phase and drive the anode deeper at cutoff (worse phi_neg). Electrolyte sigma/D scalar overrides held in reserve (Chen2020 transport is temperature-dependent Nyman2008 functions; a constant override would remove the low-T transport degradation and flatter -20 C retention - only with an honest upper-bound caveat if architecture saturates). Architecture parameter sources: design choices from baseline Chen2020 values (design space, no literature source). exploration_force OFF: 3 targeted variants at the relevant moment, not a forced grid."
+}

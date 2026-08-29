@@ -1,0 +1,39 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": {"max": 0.0},
+      "max_homo_ev": {"max": -6.0}
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 327.18},
+      "sei_thickness_nm_end": {"max": 550}
+    },
+    "stage3": {
+      "plated": false,
+      "triggered": false
+    },
+    "meta": {
+      "case_id": "t7_r1",
+      "task": "Design a battery for a hybrid electric vehicle: energy density >= 327.18 Wh/kg, 4C fast charge without lithium plating, SEI <= 550 nm after 100 cycles at 45C, nail penetration (10 W short-circuit heat generation) without triggering thermal runaway",
+      "real_compute": false,
+      "start_stage": 3,
+      "base": "Chen2020",
+      "base_reason": "task text names no electrode system -> anchor-table default Chen2020 (recorded)",
+      "thermal": "lumped",
+      "cycles": 100,
+      "aging_protocol": "aging_1C_100cyc_45C",
+      "aging_temp_C": 45,
+      "q_nail_W": 10,
+      "h_contract_W_m2K": 10,
+      "freedoms": {
+        "electrode_system": "adjustable",
+        "electrolyte_formulation": "adjustable",
+        "electrode_modification": "adjustable",
+        "cell_architecture": "adjustable",
+        "thermal_management": "adjustable"
+      },
+      "freedoms_note": "headless zero-interaction run: task text declares no degree-of-freedom restrictions -> widest interpretation recorded (t1_r1 lesson)",
+      "not_adjudicated": "capacity_ah, volumetric ED, 5C retention, lowT retention, overcharge, 4C T_max threshold, cell mass/dimension constraints — absent from task text, not criteria"
+    }
+  }
+}

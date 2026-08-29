@@ -1,0 +1,6 @@
+{
+  "retention_1c_m20c": 0.9931874775949804,
+  "capacity_ah_m20c": 6.298751341174024,
+  "capacity_ah_25c": 6.341956058917047,
+  "formula": "capacity_ah(lowT_discharge T0=253.15K soaked)/capacity_ah(1C_discharge 298.15K), design params identical except cold-soak initial temperature; current = nominal cell capacity of the respective params file"
+}

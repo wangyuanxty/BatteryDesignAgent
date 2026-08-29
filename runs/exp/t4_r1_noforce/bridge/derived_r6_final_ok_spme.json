@@ -1,0 +1,8 @@
+{
+  "lowT_retention": 0.978777101144933,
+  "lowT_capacity_ah": 4.930211879486932,
+  "rt_capacity_ah": 5.037114041307029,
+  "lowT_source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t4_r1_noforce\\cell\\r6_final_ok_lowT_spme.json",
+  "rt_source": "D:\\research\\degradation_prognostics\\Battery_Design_Agent\\runs\\exp\\t4_r1_noforce\\cell\\r6_final_ok_1c_spme.json",
+  "label": "R6 final h45 OKane2022 SPMe"
+}

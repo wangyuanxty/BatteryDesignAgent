@@ -1,0 +1,105 @@
+{
+  "Positive electrode conductivity [S.m-1]": {
+    "value": 0.18
+  },
+  "Negative electrode conductivity [S.m-1]": {
+    "value": 215.0
+  },
+  "Electrode height [m]": {
+    "value": 0.065
+  },
+  "Electrode width [m]": {
+    "value": 1.58
+  },
+  "Positive electrode thickness [m]": {
+    "value": 7.56e-05
+  },
+  "Negative electrode thickness [m]": {
+    "value": 8.52e-05
+  },
+  "Separator thickness [m]": {
+    "value": 1.2e-05
+  },
+  "Positive current collector thickness [m]": {
+    "value": 1.6e-05
+  },
+  "Negative current collector thickness [m]": {
+    "value": 1.2e-05
+  },
+  "Positive electrode porosity": {
+    "value": 0.335
+  },
+  "Negative electrode porosity": {
+    "value": 0.25
+  },
+  "Separator porosity": {
+    "value": 0.47
+  },
+  "Positive particle radius [m]": {
+    "value": 5.22e-06
+  },
+  "Negative particle radius [m]": {
+    "value": 5.86e-06
+  },
+  "Positive electrode density [kg.m-3]": {
+    "value": 3262.0
+  },
+  "Negative electrode density [kg.m-3]": {
+    "value": 1657.0
+  },
+  "Separator density [kg.m-3]": {
+    "value": 397.0
+  },
+  "Positive current collector density [kg.m-3]": {
+    "value": 2700.0
+  },
+  "Negative current collector density [kg.m-3]": {
+    "value": 8960.0
+  },
+  "Nominal cell capacity [A.h]": {
+    "value": 5.0
+  },
+  "Cell volume [m3]": {
+    "value": 2.42e-05
+  },
+  "Cell cooling surface area [m2]": {
+    "value": 0.00531
+  },
+  "Total heat transfer coefficient [W.m-2.K-1]": {
+    "value": 10.0
+  },
+  "Lower voltage cut-off [V]": {
+    "value": 2.5
+  },
+  "Upper voltage cut-off [V]": {
+    "value": 4.2
+  },
+  "Initial concentration in electrolyte [mol.m-3]": {
+    "value": 1000.0
+  },
+  "Cation transference number": {
+    "value": 0.2594
+  },
+  "Negative electrode OCP [V]": {
+    "callable": true,
+    "repr": "<function graphite_LGM50_ocp_Chen2020 at 0x0000028F64F9F9C0>"
+  },
+  "_max_n_stoich": {
+    "missing": true
+  },
+  "Maximum concentration in negative electrode [mol.m-3]": {
+    "value": 33133.0
+  },
+  "Maximum concentration in positive electrode [mol.m-3]": {
+    "value": 63104.0
+  },
+  "Positive electrode active material volume fraction": {
+    "value": 0.665
+  },
+  "Negative electrode active material volume fraction": {
+    "value": 0.75
+  },
+  "SEI kinetic rate constant [m.s-1]": {
+    "value": 1e-12
+  }
+}

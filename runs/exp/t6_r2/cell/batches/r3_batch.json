@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "Arch_A_negmargin",
+    "outputs": ["cell/r3_v1_1c_spme.json", "cell/r3_v1_energy.json", "cell/r3_v1_aging.json", "cell/r3_v1_4c45.json"],
+    "note": "N/P 1.09 + negative particle 3.5 um: midV 4.1888 (SPMe) and ED 1090.8 pass; plating improved (-0.176 -> -0.128 V) but still plated; T_max 328.55 still fails (h untouched); SEI 778.6 fails (kinetics untouched)."
+  },
+  {
+    "candidate": "Arch_B_thermal",
+    "outputs": ["cell/r3_v2_1c_spme.json", "cell/r3_v2_energy.json", "cell/r3_v2_aging.json", "cell/r3_v2_4c45.json"],
+    "note": "h=30 alone: T_max 324.04 K, still 0.9 K over 323.15 (SPMe); plating and SEI unchanged (753.1) -> h alone insufficient, must combine with Arch_A levers."
+  },
+  {
+    "candidate": "Arch_C_sei_coating",
+    "outputs": ["cell/r3_v3_1c_spme.json", "cell/r3_v3_energy.json", "cell/r3_v3_aging.json", "cell/r3_v3_4c45.json"],
+    "note": "SEI kinetic rate constant x0.3: SEI 753.1 -> 708.1 nm (only -6%; growth dominated by high-voltage end-of-charge tail) -> need stronger kinetic cut and/or the i0 (electron-migration) branch."
+  },
+  {
+    "candidate": "Arch_D_transport",
+    "outputs": ["cell/r3_v4_1c_spme.json", "cell/r3_v4_energy.json", "cell/r3_v4_aging.json", "cell/r3_v4_4c45.json"],
+    "note": "constant sigma=1.8 S/m froze the T-dependent Nyman2008 function (which exceeds 1.8 S/m once heated) -> T_max 359.73 K and plating worse (min -0.245 V): constant-transport approach rejected."
+  }
+]

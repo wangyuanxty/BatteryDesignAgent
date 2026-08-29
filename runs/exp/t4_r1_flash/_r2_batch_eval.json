@@ -1,0 +1,5 @@
+[
+  {"candidate": "A1_LowT-E1", "outputs": ["cell/r2_a1_1c.json", "cell/r2_a1_lowt.json", "cell/r2_a1_energy.json", "cell/r2_a1_4c45.json", "cell/r2_a1_retention.json"], "note": "electrolyte sigma/D/t+ up: retention/ED_kg/T_max pass, ED_L still short (851), 4C plating persists (anode min -0.44V)"},
+  {"candidate": "A2_ThinInactive", "outputs": ["cell/r2_a2_1c.json", "cell/r2_a2_lowt.json", "cell/r2_a2_energy.json", "cell/r2_a2_4c45.json", "cell/r2_a2_retention.json"], "note": "thin separator+CC: ED_L passes (917), ED_kg 481; 4C plating persists"},
+  {"candidate": "A3_FineParticle", "outputs": ["cell/r2_a3_1c.json", "cell/r2_a3_lowt.json", "cell/r2_a3_energy.json", "cell/r2_a3_4c45.json", "cell/r2_a3_retention.json"], "note": "2um particles: ED_L passes (885), retention 99.6%; 4C plating persists (terminal instant)"}
+]

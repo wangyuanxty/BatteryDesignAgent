@@ -1,0 +1,36 @@
+[
+  {
+    "candidate": "V4 anode r3um + por0.35",
+    "round": 3,
+    "outputs": [
+      "cell/r3_v4_1c_spme.json",
+      "cell/r3_v4_energy.json",
+      "cell/r3_v4_4c_dfn.json",
+      "cell/r3_v4_aging100_spme.json"
+    ],
+    "note": "ED 424.1 pass, SEI@100 459.9 pass, but 4C min anode -0.0284 V < 0 still plated (fail) - combining V1+V3 got within 28 mV of no-plating; charge-in improved to 0.313 Ah"
+  },
+  {
+    "candidate": "V6 anode r3um + por0.40",
+    "round": 3,
+    "outputs": [
+      "cell/r3_v6_1c_spme.json",
+      "cell/r3_v6_energy.json",
+      "cell/r3_v6_4c_dfn.json",
+      "cell/r3_v6_aging100_spme.json"
+    ],
+    "note": "ED 432.5 pass, SEI@100 463.6 pass, 4C min anode -0.0017 V: technically plated (fail) but within 2 mV of no-plating; porosity 0.40 is the strongest single plating lever found"
+  },
+  {
+    "candidate": "C1 SEI kinetics x0.4 (ceramic-coated graphite)",
+    "round": 3,
+    "outputs": [
+      "cell/r3_c1_1c_spme.json",
+      "cell/r3_c1_energy.json",
+      "cell/r3_c1_aging100_spme.json",
+      "derived/r3_c1_sei500.json",
+      "derived/r3_c1_retention.json"
+    ],
+    "note": "ED 400.3 pass, SEI@100 424.2 pass, lowT retention pass, but SEI@500 745.7 nm > 550 fail - k_SEI x0.4 is too weak a lever for the 500-cycle contract (measured -4.2% at 500cyc); ec-reaction-limited SEI is in the grown-SEI regime where the rate constant largely drops out of the growth law; diagnosis points to time-at-low-anode-potential as the dominant factor (V2 +15% SEI matches its +16% cycle time)"
+  }
+]

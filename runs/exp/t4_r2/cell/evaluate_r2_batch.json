@@ -1,0 +1,74 @@
+[
+  {
+    "candidate": "B1-compression",
+    "round": 2,
+    "outputs": [
+      "cell/r2_B1_1c.json",
+      "cell/r2_B1_energy.json",
+      "cell/r2_B1_retention.json"
+    ],
+    "note": "B1-compression (por 0.28/0.22, sep 8um, cc 12/8um, re-nominalized n/a within 3%): W2 428.59 PASS, W3 893.12 PASS (+13.1 vs 880), W1 retention 0.9942 PASS (cold-soak lowT). T_max_K here is 1C-discharge heating - screen-grade; 4C-charge T_max verdict in the safety entry (two-entry pattern avoids key collision)"
+  },
+  {
+    "candidate": "B1-compression",
+    "round": 2,
+    "outputs": [
+      "cell/r2_B1_4c.json"
+    ],
+    "note": "4C_charge_45C SPMe screen-grade: T_max 333.01 PASS (margin 0.14K); plated FAIL (anode_potential_v min -0.4389<0). CAVEAT: SPMe plating indicator unreliable at 4C (btm-lump discharge-leg artifact; charge leg over-predicted vs DFN baseline 0.029 vs 0.176 Ah accepted) - DFN is verdict-grade, run in round 3"
+  },
+  {
+    "candidate": "B2-thicken-balanced",
+    "round": 2,
+    "outputs": [
+      "cell/r2_B2_1c.json",
+      "cell/r2_B2_energy.json",
+      "cell/r2_B2_retention.json"
+    ],
+    "note": "B2-thicken-balanced (t_pos 90um/t_neg 110um at nominal 5A; re-nominalized to measured 6.34Ah): W2 443.91 PASS, W3 913.95 PASS (+34.0), W1 retention 0.9932 PASS (cold-soak lowT). T_max_K here is 1C-discharge heating - screen-grade"
+  },
+  {
+    "candidate": "B2-thicken-balanced",
+    "round": 2,
+    "outputs": [
+      "cell/r2_B2_4c.json"
+    ],
+    "note": "4C_charge_45C SPMe screen-grade: T_max 345.64 FAIL (vs 333.15); plated FAIL (min -0.4121). SPMe indicator caveat as B1 - DFN verdict-grade in round 3"
+  },
+  {
+    "candidate": "B3-NP-up",
+    "round": 2,
+    "outputs": [
+      "cell/r2_B3_1c.json",
+      "cell/r2_B3_energy.json",
+      "cell/r2_B3_retention.json"
+    ],
+    "note": "B3-NP-up (t_pos 80um/t_neg 112um, N/P 1.49; re-nominalized to measured 5.97Ah): W2 439.74 PASS, W3 896.66 PASS (+16.7), W1 retention 0.9999 PASS (cold-soak lowT). T_max_K here is 1C-discharge heating - screen-grade"
+  },
+  {
+    "candidate": "B3-NP-up",
+    "round": 2,
+    "outputs": [
+      "cell/r2_B3_4c.json"
+    ],
+    "note": "4C_charge_45C SPMe screen-grade: T_max 343.44 FAIL; plated FAIL (min -0.4730) despite N/P 1.49 - deep margin alone does not kill end-of-charge anode saturation. SPMe caveat as B1 - DFN verdict-grade in round 3"
+  },
+  {
+    "candidate": "B4-electrolyte",
+    "round": 2,
+    "outputs": [
+      "cell/r2_B4_1c.json",
+      "cell/r2_B4_energy.json",
+      "cell/r2_B4_retention.json"
+    ],
+    "note": "B4-electrolyte (high-transport proxy sigma 1.2/D 2.2e-10/t+ 0.45, T-independent scalars): W2 403.22 PASS, W3 849.65 FAIL (-30.4 vs 880) - electrolyte transport alone does not raise volumetric ED, W1 retention 0.9944 PASS. T_max_K here is 1C-discharge heating - screen-grade"
+  },
+  {
+    "candidate": "B4-electrolyte",
+    "round": 2,
+    "outputs": [
+      "cell/r2_B4_4c.json"
+    ],
+    "note": "4C_charge_45C SPMe screen-grade: T_max 330.70 PASS; plated FAIL (min -0.4425) - higher electrolyte conductivity does not fix end-of-charge anode saturation. SPMe caveat as B1 - DFN verdict-grade in round 3"
+  }
+]

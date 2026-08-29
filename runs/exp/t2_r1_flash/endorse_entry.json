@@ -1,0 +1,5 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false (entry 0 meta default; task text did not request true DFT/MD endorsement). No run-orca/run-md/run-qe executed; no fabricated DFT/MD values. Final design endorsed by the multi-scale simulation chain (DFN 1C/lowT/4C + SPMe aging) with all bridge values marked estimate in propose rationale."
+}

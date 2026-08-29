@@ -1,0 +1,6 @@
+{
+  "action": "criteria_correction",
+  "round": 1,
+  "reason": "entry-0 stage1 contains a non-metric annotation key 'note'; log-evaluate (mechanical) treats every stage1 key as a checkable metric and lists it under unchecked on cell-scale evaluations. This entry documents the intent without modifying entry 0 (pre-registered contract not post-hoc revisable): stage1 'note' is documentation only; max_energy_ev/max_homo_ev are Stage-2 molecular-funnel elimination lines, legitimately unchecked in cell-scale rounds (no molecular candidates yet; system-switch candidates skip the molecular funnel per protocol). Verdicts are unaffected (judged on checked metrics only).",
+  "impact": "none on thresholds; unchecked annotations on evaluate entries remain honest"
+}

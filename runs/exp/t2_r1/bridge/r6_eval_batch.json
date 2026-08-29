@@ -1,0 +1,18 @@
+[
+  {
+    "candidate": "GridStore-D3",
+    "outputs": [
+      "cell/r6_d3_aging100.json",
+      "cell/r6_d3_aging500.json",
+      "cell/r6_d3_sei100.json",
+      "cell/r6_d3_sei500.json",
+      "cell/r6_d3_lowT.json",
+      "cell/r6_d3_lowT_ret.json",
+      "cell/r6_d3_lowT_soak.json",
+      "cell/r6_d3_1c.json",
+      "cell/r6_d3_4c.json",
+      "cell/r6_d3_energy.json"
+    ],
+    "note": "D3 = D2 + neg porosity 0.40 (pre-registered robustness probe, adoption rule: adopt if 4C margin improves and acceptance does not collapse). Result: 4C min +0.0498 V (vs D2 +0.0484; improvement within solve noise - porosity is not the controlling lever for the 4C anode floor), acceptance 0.838 Ah (vs 0.828), T_max 342.4 K; ED 465.62 (vs 458.13, +7.5 Wh/kg from anode active-mass -7.7% and energy -0.2%); lowT 99.57% / true-soak 99.57%; SEI 9.09/25.32 nm. All five contracts pass. Adopted as FINAL DESIGN on strict non-inferiority (no metric regressed; ED gain real). Annotations: (1) calc-energy midpoint/DCR scalars are index-based and sensitive to solver step density (D3 68 vs D2 152 samples; D3 'midpoint' is at t=46.5 s not 1800 s) - fixed-time check: v@1800s 3.722 V vs D2 3.677 V; contract metric ED (time-integral) unaffected. (2) Aging per-cycle capacity is a PyBaMM variable artifact: probe (cycles=2, same model/params) shows real steps are full 1C swings (cycle-0 discharge 5.077 Ah, charge 4.746 Ah, cathode stoich 0.27<->0.85) while the reported 'Discharge capacity' variable freezes at its first-discharge value - sei_thickness_nm_end accumulates over genuine full-depth 1C cycles and is the judged metric. (3) Part of the ED gain from porosity is contract-caliber (electrolyte excluded from mass; real-world gain smaller but still positive)."
+  }
+]

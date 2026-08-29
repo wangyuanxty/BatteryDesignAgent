@@ -1,0 +1,246 @@
+{
+  "total_key_count": 93,
+  "items": {
+    "Electrolyte conductivity [S.m-1]": {
+      "type": "function",
+      "repr": "<function electrolyte_conductivity_Nyman2008 at 0x000002985DA30360>"
+    },
+    "Electrolyte diffusivity [m2.s-1]": {
+      "type": "function",
+      "repr": "<function electrolyte_diffusivity_Nyman2008 at 0x000002985DA33920>"
+    },
+    "Cation transference number": {
+      "type": "float",
+      "value": 0.2594
+    },
+    "SEI kinetic rate constant [m.s-1]": {
+      "type": "float",
+      "value": 1e-12
+    },
+    "SEI reaction exchange current density [A.m-2]": {
+      "type": "float",
+      "value": 1.5e-07
+    },
+    "Positive electrode thickness [m]": {
+      "type": "float",
+      "value": 7.56e-05
+    },
+    "Negative electrode thickness [m]": {
+      "type": "float",
+      "value": 8.52e-05
+    },
+    "Separator thickness [m]": {
+      "type": "float",
+      "value": 1.2e-05
+    },
+    "Positive electrode porosity": {
+      "type": "float",
+      "value": 0.335
+    },
+    "Negative electrode porosity": {
+      "type": "float",
+      "value": 0.25
+    },
+    "Separator porosity": {
+      "type": "float",
+      "value": 0.47
+    },
+    "Positive current collector thickness [m]": {
+      "type": "float",
+      "value": 1.6e-05
+    },
+    "Negative current collector thickness [m]": {
+      "type": "float",
+      "value": 1.2e-05
+    },
+    "Positive current collector density [kg.m-3]": {
+      "type": "float",
+      "value": 2700.0
+    },
+    "Negative current collector density [kg.m-3]": {
+      "type": "float",
+      "value": 8960.0
+    },
+    "Positive electrode density [kg.m-3]": {
+      "type": "float",
+      "value": 3262.0
+    },
+    "Negative electrode density [kg.m-3]": {
+      "type": "float",
+      "value": 1657.0
+    },
+    "Separator density [kg.m-3]": {
+      "type": "float",
+      "value": 397.0
+    },
+    "Positive particle radius [m]": {
+      "type": "float",
+      "value": 5.22e-06
+    },
+    "Negative particle radius [m]": {
+      "type": "float",
+      "value": 5.86e-06
+    },
+    "Electrode height [m]": {
+      "type": "float",
+      "value": 0.065
+    },
+    "Electrode width [m]": {
+      "type": "float",
+      "value": 1.58
+    },
+    "Nominal cell capacity [A.h]": {
+      "type": "float",
+      "value": 5.0
+    },
+    "Lower voltage cut-off [V]": {
+      "type": "float",
+      "value": 2.5
+    },
+    "Upper voltage cut-off [V]": {
+      "type": "float",
+      "value": 4.2
+    },
+    "Initial concentration in negative electrode [mol.m-3]": {
+      "type": "float",
+      "value": 29866.0
+    },
+    "Maximum concentration in negative electrode [mol.m-3]": {
+      "type": "float",
+      "value": 33133.0
+    },
+    "Maximum concentration in positive electrode [mol.m-3]": {
+      "type": "float",
+      "value": 63104.0
+    },
+    "Initial concentration in positive electrode [mol.m-3]": {
+      "type": "float",
+      "value": 17038.0
+    },
+    "Cell volume [m3]": {
+      "type": "float",
+      "value": 2.42e-05
+    },
+    "Total heat transfer coefficient [W.m-2.K-1]": {
+      "type": "float",
+      "value": 10.0
+    },
+    "Cell cooling surface area [m2]": {
+      "type": "float",
+      "value": 0.00531
+    },
+    "Positive electrode OCP [V]": {
+      "type": "function",
+      "repr": "<function nmc_LGM50_ocp_Chen2020 at 0x000002985DA33880>"
+    },
+    "Negative electrode OCP [V]": {
+      "type": "function",
+      "repr": "<function graphite_LGM50_ocp_Chen2020 at 0x000002985D9D44A0>"
+    }
+  },
+  "thermal_missing": [],
+  "plating_missing": [
+    "Initial plated lithium concentration [mol.m-3]",
+    "Typical plated lithium concentration [mol.m-3]",
+    "Lithium plating transfer coefficient",
+    "Exchange-current density for plating [A.m-2]",
+    "Exchange-current density for stripping [A.m-2]"
+  ],
+  "has_sei_kinetics": true,
+  "negative_contains_siox": false,
+  "all_key_names": [
+    "Ambient temperature [K]",
+    "Bulk solvent concentration [mol.m-3]",
+    "Cation transference number",
+    "Cell cooling surface area [m2]",
+    "Cell thermal expansion coefficient [m.K-1]",
+    "Cell volume [m3]",
+    "Contact resistance [Ohm]",
+    "Current function [A]",
+    "EC diffusivity [m2.s-1]",
+    "EC initial concentration in electrolyte [mol.m-3]",
+    "Electrode height [m]",
+    "Electrode width [m]",
+    "Electrolyte conductivity [S.m-1]",
+    "Electrolyte diffusivity [m2.s-1]",
+    "Initial SEI thickness [m]",
+    "Initial concentration in electrolyte [mol.m-3]",
+    "Initial concentration in negative electrode [mol.m-3]",
+    "Initial concentration in positive electrode [mol.m-3]",
+    "Initial temperature [K]",
+    "Lithium interstitial reference concentration [mol.m-3]",
+    "Lower voltage cut-off [V]",
+    "Maximum concentration in negative electrode [mol.m-3]",
+    "Maximum concentration in positive electrode [mol.m-3]",
+    "Negative current collector conductivity [S.m-1]",
+    "Negative current collector density [kg.m-3]",
+    "Negative current collector specific heat capacity [J.kg-1.K-1]",
+    "Negative current collector thermal conductivity [W.m-1.K-1]",
+    "Negative current collector thickness [m]",
+    "Negative electrode Bruggeman coefficient (electrode)",
+    "Negative electrode Bruggeman coefficient (electrolyte)",
+    "Negative electrode OCP [V]",
+    "Negative electrode OCP entropic change [V.K-1]",
+    "Negative electrode active material volume fraction",
+    "Negative electrode charge transfer coefficient",
+    "Negative electrode conductivity [S.m-1]",
+    "Negative electrode density [kg.m-3]",
+    "Negative electrode double-layer capacity [F.m-2]",
+    "Negative electrode exchange-current density [A.m-2]",
+    "Negative electrode porosity",
+    "Negative electrode reaction-driven LAM factor [m3.mol-1]",
+    "Negative electrode specific heat capacity [J.kg-1.K-1]",
+    "Negative electrode thermal conductivity [W.m-1.K-1]",
+    "Negative electrode thickness [m]",
+    "Negative particle diffusivity [m2.s-1]",
+    "Negative particle radius [m]",
+    "Nominal cell capacity [A.h]",
+    "Number of cells connected in series to make a battery",
+    "Number of electrodes connected in parallel to make a cell",
+    "Open-circuit voltage at 0% SOC [V]",
+    "Open-circuit voltage at 100% SOC [V]",
+    "Positive current collector conductivity [S.m-1]",
+    "Positive current collector density [kg.m-3]",
+    "Positive current collector specific heat capacity [J.kg-1.K-1]",
+    "Positive current collector thermal conductivity [W.m-1.K-1]",
+    "Positive current collector thickness [m]",
+    "Positive electrode Bruggeman coefficient (electrode)",
+    "Positive electrode Bruggeman coefficient (electrolyte)",
+    "Positive electrode OCP [V]",
+    "Positive electrode OCP entropic change [V.K-1]",
+    "Positive electrode active material volume fraction",
+    "Positive electrode charge transfer coefficient",
+    "Positive electrode conductivity [S.m-1]",
+    "Positive electrode density [kg.m-3]",
+    "Positive electrode double-layer capacity [F.m-2]",
+    "Positive electrode exchange-current density [A.m-2]",
+    "Positive electrode porosity",
+    "Positive electrode reaction-driven LAM factor [m3.mol-1]",
+    "Positive electrode specific heat capacity [J.kg-1.K-1]",
+    "Positive electrode thermal conductivity [W.m-1.K-1]",
+    "Positive electrode thickness [m]",
+    "Positive particle diffusivity [m2.s-1]",
+    "Positive particle radius [m]",
+    "Ratio of lithium moles to SEI moles",
+    "Reference temperature [K]",
+    "SEI electron conductivity [S.m-1]",
+    "SEI growth activation energy [J.mol-1]",
+    "SEI kinetic rate constant [m.s-1]",
+    "SEI lithium interstitial diffusivity [m2.s-1]",
+    "SEI open-circuit potential [V]",
+    "SEI partial molar volume [m3.mol-1]",
+    "SEI reaction exchange current density [A.m-2]",
+    "SEI resistivity [Ohm.m]",
+    "SEI solvent diffusivity [m2.s-1]",
+    "Separator Bruggeman coefficient (electrolyte)",
+    "Separator density [kg.m-3]",
+    "Separator porosity",
+    "Separator specific heat capacity [J.kg-1.K-1]",
+    "Separator thermal conductivity [W.m-1.K-1]",
+    "Separator thickness [m]",
+    "Thermodynamic factor",
+    "Total heat transfer coefficient [W.m-2.K-1]",
+    "Upper voltage cut-off [V]",
+    "citations"
+  ]
+}

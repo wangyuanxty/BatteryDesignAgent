@@ -1,0 +1,6 @@
+{
+  "retention_1c_m20c": 0.9937764338786813,
+  "capacity_ah_m20c": 5.007820865221027,
+  "capacity_ah_25c": 5.039182551024725,
+  "formula": "DFN-grade: capacity_ah(lowT_discharge T0=253.15K soaked)/capacity_ah(1C_discharge 298.15K), cold soak = Initial temperature [K] set to protocol ambient"
+}

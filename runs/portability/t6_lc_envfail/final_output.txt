@@ -1,0 +1,26 @@
+I've confirmed the environment. Now let me write the audit trail. First, entry 0 (criteria + meta) into log.jsonl, then the Stage-1 design plan.## Session outcome — infrastructure failure (no simulation possible)
+
+**Bottom line: the task could not proceed past zero-execution planning because the `run_shell` tool is broken in this environment.** Every shell command — including the empty string — returns `[stderr] /c: /c: Is a directory` and produces no side effects (verified by redirect-to-file test). The `/c` path is the MSYS2 mapping of `C:\`, i.e. the tool is attempting to execute a directory as its shell. This is a harness-level fault, not a command-format issue (I tried 14 variations: `pwd`, `echo`, `python`, full `.venv` paths, `cmd /c`, `bash -c`, empty string — identical result).
+
+Per the protocol's iron rule against fabricating values, **no simulation output exists and none was invented.**
+
+### What I completed (all zero-execution work)
+- **Loaded `vbf_protocol`** (mandatory skill) and read the CLI reference.
+- **Parsed the task into entry-0 criteria** (written to `runs/portability/t6_lc/log.jsonl`):
+  - stage2 (cell): `energy_density_wh_l ≥ 950`, `midpoint_voltage_v ≥ 4.1`, `sei_thickness_nm_end ≤ 500`
+  - stage3 (safety): `T_max_K ≤ 323.15` (50 °C), `plated = false`
+  - stage1 (molecular, defaults): `max_energy_ev 0.0`, `max_homo_ev −6.0`
+  - meta: `real_compute=false`, all ablation switches ON, `start_stage=3`
+- **Degree-of-freedom boundary** (task is silent on all five → widest interpretation, recorded in `meta.freedoms`): electrode system / electrolyte formulation / electrode modification / cell architecture / thermal management all **adjustable**.
+- **Stage-1 design plan** → `design_plan.md`, with the audit `plan`/`funnel`/`endorse`/`final` entries appended to `log.jsonl`.
+
+### Design interpretation (what the execution would have been)
+1. **Deterministic base = Chen2020** (task names no electrode system), `start_stage=3`.
+2. **Opening ceiling assessment** would trigger immediately: Chen2020 (NMC811) discharge midpoint ≈ 3.6 V is below the 4.1 V plateau gate → escalate to the **LNMO.json system switch** (4.7 V-class spinel, cell midpoint ≈ 4.17 V, verified from `scripts/bda/simulators/data/LNMO.json`: `Upper voltage cut-off = 4.7 V`).
+3. Then architecture exploration on LNMO for the hard Pareto (volumetric ED vs 4C plating/heat), plus SEI-kinetics suppression if the 500 nm aging gate is exceeded.
+
+### Honest record
+- `log.jsonl` final entry verdict: **`not achieved`** (infrastructure failure), with the verbatim error recorded.
+- A stray nested directory `runs/portability/t6_lc/runs/` was created by one mistaken write path and contains a duplicate entry-0 file; the authoritative `log.jsonl` is at the workspace root. (No delete tool is available to remove it.)
+
+**Required to resume:** a working `run_shell` (the harness must execute `.venv/Scripts/python.exe -m bda …`). With that fixed, the funnel can begin at `R1 baseline Chen2020 1C discharge + ceiling assessment` as planned.

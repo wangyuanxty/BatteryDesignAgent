@@ -1,0 +1,8 @@
+{
+  "action": "plan",
+  "objective_breakdown": "ED >= 392.61 Wh/kg (contract caliber) | 4C charge@45C no plating | T_max <= 333.15 K | overcharge 4.7V no TR. Trade-off: ED vs 4C transport/heat (thick electrodes raise ED but worsen plating/T_max); overcharge stability conflicts with ED (high-voltage-stable cathode lowers ED).",
+  "candidate_strategy": "Round 1 baseline Chen2020 (no electrode system named -> default) with 1C+calc-energy, 4C+plating, overcharge+run-tr; ceiling assessment; if ED ceiling < 392.61 -> escalate to Stage 2 (OKane2022 SiOx switch / LNMO for overcharge stability); then architecture+thermal tuning (thin CC/separator, porosity, particle size, cooling h).",
+  "budget_allocation": "R1 baseline (4 sims + calc-energy + TR); R2-4 architecture/thermal variants 2-4/round; 1-2 rounds material/system switch if ceiling shortfall; 1-2 rounds safety fine-tune; closing endorse/render/deliverables.",
+  "risk_and_fallback": "Highest risk = 392.61 Wh/kg borderline for NMC; plating likely at 4C with thick electrodes; overcharge 4.7V TR likely for NMC811. Fallback: ED->material/architecture; plating->transport/particle size; T_max->cooling; TR->cathode stabilization. Three-strike -> question system/boundary/metric, update plan.",
+  "detail": "design_plan.md"
+}

@@ -1,0 +1,10 @@
+{
+  "lowT_retention_pct": 99.46531516966618,
+  "capacity_ah_lowT_253K": 5.008216106861637,
+  "capacity_ah_25C_1C": 5.035138227148539,
+  "formula": "100 x capacity_ah(lowT_discharge 253.15K) / capacity_ah(1C_discharge 298.15K), same params",
+  "source_files": [
+    "runs\\exp\\t2_r1\\cell\\r2_v1_lowT.json",
+    "runs\\exp\\t2_r1\\cell\\r2_v1_1c.json"
+  ]
+}

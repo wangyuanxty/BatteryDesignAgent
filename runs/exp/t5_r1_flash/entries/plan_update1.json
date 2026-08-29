@@ -1,0 +1,8 @@
+{
+  "action": "plan",
+  "update": true,
+  "reason": "Rounds 1-4 results: baseline ED 400.3 -> ceiling (idealized NMC811/graphite) 487.3 < 500.94 -> material escalation confirmed; LNMO 4.7V system passes ED (520.2 Wh/kg) and T_max (<=324.3 K) gates; binding constraint is now 4C plating (anode min -0.14 V DFN). Direction: ED strategy locked (LNMO + mass-cut architecture + HiTrans electrolyte); remaining budget spent on plating countermeasures (particle size, transport, N/P) at Stage 3/2 boundary.",
+  "candidate_strategy": "LNMO-R2 (round 5): negative particles 2 um, t+ 0.6, sigma 3.0 S/m, D 2.5e-10, negative 115 um. If plating persists: escalate transport further (negative porosity up, D up, sigma up, particles down) at Stage 3; if transport ceiling reached (sigma/t+/D at physical limits), question boundary at three-strike and consider negative exchange-current density lever (electrode modification, estimate-marked) or honest negative close on the plating gate.",
+  "budget_allocation": "R5 LNMO-R2 full sim; R6 plating-hardening variant; R7 (if needed) kinetic lever or close; closing: DFN 1C precision run for final candidate, endorse skip, render, deliverables.",
+  "risk_and_fallback": "Plating = electrolyte-transport + solid-diffusion scale issue; ED margin is +19 Wh/kg (520.2 vs 500.94) giving ~1 g mass headroom for N/P or porosity countermeasures. T_max has 9 K margin. Overcharge/nail abuse scenarios not in task text -> not required."
+}

@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "Round 1 candidates are system candidates (systemLNMO = anchor-table high-voltage entry, Chen2020 base + LNMO overlay with OCP bound to lnmo_ocp; baselineNMC811 = Chen2020 anchor default). System candidates skip the molecular funnel per protocol (inorganic ionic solids / parameter-set systems). Base determination basis: task text names no electrode system but the plateau >= 4.1 V threshold implies high-voltage cathode (NMC811 midpoint 3.61 V < 4.1 V); props source = baseline (literature-anchored parameter sets)."
+}

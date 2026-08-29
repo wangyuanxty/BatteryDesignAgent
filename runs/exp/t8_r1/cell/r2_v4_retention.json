@@ -1,0 +1,6 @@
+{
+  "capacity_retention_5c": 0.985992,
+  "_5c_capacity_ah": 4.99705870783094,
+  "_1c_capacity_ah": 5.068050009964583,
+  "_derivation": "5C_discharge capacity_ah / same-params 1C_discharge capacity_ah (both DFN), mechanically computed from tool outputs"
+}

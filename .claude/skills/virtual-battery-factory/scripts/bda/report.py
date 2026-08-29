@@ -968,6 +968,10 @@ def _load_cell_curves(case_dir: str) -> list[tuple[str, dict]]:
             data = json.loads(p.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
             continue
+        if not isinstance(data, dict):
+            # e.g. log-evaluate --batch-file inputs (rN_batch_eval.json are JSON
+            # lists) carry no curves; skip non-dict payloads instead of crashing.
+            continue
         t = data.get("time_s")
         if isinstance(t, list) and len(t) >= 2:
             if any(

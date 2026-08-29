@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 500.94}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false
+    },
+    "meta": {
+      "case_id": "t5_r1_flash",
+      "task_text": "Design a battery for a next-generation flagship vehicle: energy density >= 500.94 Wh/kg, support 4C fast charge (no lithium plating), maximum temperature <= 60 degC.",
+      "start_stage": 2,
+      "base_params": "Chen2020",
+      "base_mapping_basis": "task text specifies no electrode system -> default Chen2020 (anchor table rule), will be superseded by system candidates per ceiling assessment",
+      "real_compute": false,
+      "structure_model": false,
+      "freedoms": {
+        "electrode_system": "adjustable",
+        "electrolyte_formulation": "adjustable",
+        "electrode_modification": "adjustable",
+        "cell_architecture": "adjustable",
+        "thermal_management": "adjustable"
+      },
+      "note": "T_max_K threshold 333.15 = 60 degC; 4C charge evaluated at 45 degC ambient (4C_charge_45C protocol) so 15 K rise budget; stage1 elimination lines use protocol defaults (max_energy_ev 0.0, max_homo_ev -6.0); all five degree-of-freedom categories take widest interpretation (task text declares no locks)."
+    }
+  }
+}

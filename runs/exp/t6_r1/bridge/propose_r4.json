@@ -1,0 +1,31 @@
+{
+  "action": "propose",
+  "round": 4,
+  "candidates": [
+    {
+      "name": "lnmo_h200_np125",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 200, \"Negative electrode thickness [m]\": 1.065e-4}",
+      "role": "Plating closure attempt 1 - N/P 1.25 (anode 106.5 um). Round-3 scaling: +20% anode moved the end-of-charge dip -176 -> -4.9 mV (~8.5 mV per 1% Ln); +25% is expected to clear 0 V with margin (~+37 mV). Capacity is expected to scale ~1:1 with Ln (6.4 Ah), keeping volumetric ED well above 950 despite +21.3 um stack. Watch midpoint_voltage_v (contract value v[int(len/2)])."
+    },
+    {
+      "name": "lnmo_h200_np120_nr35",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 200, \"Negative electrode thickness [m]\": 1.022e-4, \"Negative particle radius [m]\": 3.5e-6}",
+      "role": "Plating closure attempt 2 - leaner alternative: N/P 1.20 plus negative particle radius 3.5 um (round-3 marginal contributions: -171 mV from N/P 1.2, -8 mV from radius). Expected ~ +3 mV - measures whether the combination clears 0 V without the extra 4.3 um of anode."
+    },
+    {
+      "name": "lnmo_sei_c2270_d12",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"EC initial concentration in electrolyte [mol.m-3]\": 2270.5, \"EC diffusivity [m2.s-1]\": 1.2e-18}",
+      "role": "SEI fix probe 1 - diffusion-limited-regime levers: EC fraction halved (4541 -> 2270.5 mol/m3, EC-lean formulation) and EC diffusivity in SEI reduced 2e-18 -> 1.2e-18 m2/s (densified SEI via film-forming additive). Rate-law-derived expectation: L ~ sqrt(c0 * D_ec) -> factor 0.30 -> ~753 * 0.548 ~ 412 nm. Aging protocol only."
+    },
+    {
+      "name": "lnmo_sei_c2270_d10",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"EC initial concentration in electrolyte [mol.m-3]\": 2270.5, \"EC diffusivity [m2.s-1]\": 1.0e-18}",
+      "role": "SEI fix probe 2 - deeper cut: c0 x0.5 and D_ec x0.5 (factor 0.25 -> ~377 nm expectation). Brackets the target so the combined candidate can pick the passing value with margin. Aging protocol only."
+    }
+  ],
+  "llm_reason": "Round 3 isolated the levers: N/P dominates plating (mechanism confirmed), electrolyte transport direction dropped (no benefit), particle radius is a weak secondary term, and SEI growth is diffusion-limited (k_sei nearly inert; c0*D_ec product is the lever per the Yang2017 rate law in the tool code). Round 4 closes each gap: two plating candidates (N/P 1.25 alone vs N/P 1.20 + radius) and two SEI probes bracketing the 500 nm target. All candidates systemLNMO architecture/formulation variants - molecular funnel not re-entered."
+}

@@ -1,0 +1,19 @@
+{
+  "action": "propose",
+  "round": 8,
+  "candidates": [
+    {
+      "name": "lnmo_r8_final",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 400, \"Negative electrode thickness [m]\": 1.022e-4, \"Negative particle radius [m]\": 3.5e-6, \"EC initial concentration in electrolyte [mol.m-3]\": 2270.5, \"EC diffusivity [m2.s-1]\": 1.0e-18, \"Electrolyte diffusivity [m2.s-1]\": 5.0e-10}",
+      "role": "ROUND-7 WINNER, full five-criteria confirmation battery at DFN from one params file: re-runs 1C_discharge and 4C_charge_45C (thermal lumped + plating) plus the missing piece - DFN aging_1C_100cyc for sei_thickness_nm_end (round 7 measured only 4/5 criteria on this candidate's params; DFN SEI was last measured at 346.0 nm on the R6 params, which differ in h and D_e - the aging rerun closes the audit loop on identical params)."
+    },
+    {
+      "name": "lnmo_r8_d6_margin",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 400, \"Negative electrode thickness [m]\": 1.022e-4, \"Negative particle radius [m]\": 3.5e-6, \"EC initial concentration in electrolyte [mol.m-3]\": 2270.5, \"EC diffusivity [m2.s-1]\": 1.0e-18, \"Electrolyte diffusivity [m2.s-1]\": 6.0e-10}",
+      "role": "Margin-widening probe: the round-7 winner passes plating by only +3.39 mV. D_e 5e-10 -> 6e-10 (upper bound of low-viscosity fast-charge formulations; still within reported carbonate-electrolyte ranges) tests whether midpoint and plating margins widen monotonically with D_e. 1C + 4C DFN only; adopted as shipping value ONLY if it strictly dominates the round-7 winner on all four measured criteria with wider margins - otherwise lnmo_r8_final ships."
+    }
+  ],
+  "llm_reason": "Round 7 verdict (DFN): probe A (h=400, r=3.5, D_e 5e-10) passed all four measured criteria - ED 1135.8, Vmid 4.1085 (+8.5 mV), T_max 321.62 (+1.53 K), plating +3.39 mV. The electrolyte-diffusivity lever was decisive (fixed both the 1C depletion sag and the 4C end-of-charge dip); radius reduction to 3.0 um was shown to HURT the DFN midpoint (-13 mV) and is dropped. Round 8 completes the confirmation battery: DFN aging on the winner's exact params (SEI was 346.0 nm at R6 params - must be re-measured since h/D_e differ) and probes D_e 6e-10 as a cheap margin upgrade for the thin +3.39 mV plating margin."
+}

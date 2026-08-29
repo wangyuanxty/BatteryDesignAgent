@@ -1,0 +1,14 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {"name": "Baseline Chen2020", "role": "4C/45C safety screening reference (DFN, lumped, plating)"},
+    {"name": "ED-Compact A", "role": "4C/45C safety screening"},
+    {"name": "ED-Compact B", "role": "4C/45C safety screening of the R1 ED front-runner (951.7 Wh/L)"},
+    {"name": "ED-Thick C", "role": "4C/45C safety screening"},
+    {"struct": {"Separator thickness [m]": 9e-06, "Positive current collector thickness [m]": 10e-06, "Negative current collector thickness [m]": 8e-06, "Positive electrode active material volume fraction": 0.7, "Positive electrode porosity": 0.3, "Negative electrode active material volume fraction": 0.8, "Negative electrode porosity": 0.2, "Nominal cell capacity [A.h]": 5.6, "Negative particle radius [m]": 4e-06}, "name": "ED-Compact B-p", "role": "B + smaller negative particles (5.86->4 um) for 4C plating resistance"},
+    {"name": "Baseline Chen2020", "role": "aging_1C_100cyc SEI reference"},
+    {"name": "ED-Compact B", "role": "aging_1C_100cyc SEI check of the front-runner"}
+  ],
+  "llm_reason": "R1 mechanical evaluation: B passes ED (951.7 >= 950 Wh/L); plateau fails for all (3.886-3.936 V < 4.1, material gap - recorded); T_max at 1C already 311-319 K, so 4C/45C thermal is the key risk. R2 screens 4C charge (DFN for plating fidelity, lumped thermal, plating module) and quantifies SEI via 100-cycle aging on baseline and the front-runner. B-p tests the particle-size plating lever (T1 reference: smaller negative particles +14.6 contribution)."
+}

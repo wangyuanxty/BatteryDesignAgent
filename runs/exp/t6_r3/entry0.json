@@ -1,0 +1,45 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0,
+      "note": "default elimination lines; apply only if molecular (organic additive) candidates arise via Stage-2 escalation"
+    },
+    "stage2": {
+      "energy_density_wh_l": {"min": 950},
+      "midpoint_voltage_v": {"min": 4.1},
+      "sei_thickness_nm_end": {"max": 500}
+    },
+    "stage3": {
+      "plated": false,
+      "T_max_K": {"max": 323.15}
+    },
+    "meta": {
+      "case_id": "t6_r3",
+      "task": "Design a battery for a smartphone: volumetric energy density >= 950 Wh/L, support 4C fast charge (no lithium plating), maximum temperature <= 50 degC, anode SEI thickness <= 500 nm after 100 cycles, voltage plateau >= 4.1 V.",
+      "start_stage": 3,
+      "start_stage_basis": "task text names no new materials/additives/electrolyte design (pure performance objective) -> Stage-3 cell-design entry per SKILL.md Sec 0 rule 2; opening ceiling assessment may escalate to Stage 2 (system switch) since ceiling_escalation=on",
+      "base_params": "Chen2020",
+      "base_params_basis": "task text names no electrode system -> anchor-table default Chen2020 with record (SKILL.md Sec 1.5)",
+      "real_compute": false,
+      "ablation": {
+        "exploration_force": "on (benchmark default; task text does not disable)",
+        "ceiling_escalation": "on (benchmark default)",
+        "funnel_voting": "on (benchmark default)"
+      },
+      "freedoms": {
+        "electrode_system": "adjustable (task text silent -> widest interpretation; default Chen2020, system switch allowed and expected for 4.1 V plateau)",
+        "electrolyte_formulation": "adjustable (task text silent -> widest interpretation; sigma/t+ transport overrides)",
+        "electrode_modification": "adjustable (task text silent -> widest interpretation; SEI-suppressing coating bridge)",
+        "cell_architecture": "adjustable (task text silent -> widest interpretation; thickness/porosity/N-P/separator/current collector/particle size)",
+        "thermal_management": "adjustable (task text silent -> widest interpretation; cooling coefficient)"
+      },
+      "unit_notes": {
+        "T_max": "50 degC -> 323.15 K, evaluated from 4C_charge_45C output T_max_K with thermal lumped (task couples max temperature with 4C fast charge)",
+        "plateau": "voltage plateau >= 4.1 V mapped to calc-energy midpoint_voltage_v (voltage at discharge-time midpoint = plateau-voltage approximation)",
+        "SEI": "anode SEI thickness <= 500 nm after 100 cycles mapped to aging_1C_100cyc output key sei_thickness_nm_end (100 cycles, 1C, 25 degC, per task text)"
+      },
+      "safety_scenarios": "4C fast charge no plating + T_max only; no overcharge/nail/thermal-runaway scenarios in task text"
+    }
+  }
+}

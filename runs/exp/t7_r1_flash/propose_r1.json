@@ -1,0 +1,11 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {
+      "name": "baseline_Chen2020",
+      "role": "baseline characterization, no parameter overrides (start_stage=3; base default Chen2020 per anchor table because the task text names no electrode system)"
+    }
+  ],
+  "llm_reason": "Round 1 measures the baseline gap vector on all four contract metrics (ED via 1C+calc-energy, 4C plating via 4C_charge_45C lumped+plating, SEI via aging_1C_100cyc_45C, nail via run-tr 10 W mass-coupled) before proposing variants."
+}

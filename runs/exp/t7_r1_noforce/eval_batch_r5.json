@@ -1,0 +1,14 @@
+[
+  {
+    "candidate": "h100 + r4.0 Anode + Coating, neg 85.2um",
+    "round": 5,
+    "outputs": [
+      "cell/r5_slim_1c_dfn.json",
+      "cell/r5_slim_energy.json",
+      "cell/r5_slim_aging45.json",
+      "validation/r5_slim_nail.json",
+      "cell/r5_slim_4c45.json"
+    ],
+    "note": "Final candidate, all four criteria pass with margin: ED 491.47 Wh/kg (>=327.18), SEI 510.51 nm (<=550, margin 39.5 nm - thinner negative is the dominant SEI lever at 45C), plated=false (anode min +0.0153 V), triggered=false (T_final 317 K physical, liquid cooling h=100 W/m2/K). Coating (SEI k x0.75) effect modest (~-18 nm, solvent-diffusion-limited regime) but monotone and retained. Aging trajectory climb artifact (0.84->1.39 Ah) annotated; sei_thickness_nm_end is the reliable indicator. Power density 43.2 kW/kg (HEV context)."
+  }
+]

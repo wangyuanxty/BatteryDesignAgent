@@ -1,0 +1,6 @@
+[
+  {"candidate": "Arch-A thinCC", "outputs": ["cell/r1_A_4c.json", "cell/r1_A_energy.json"], "note": "thin CC ED headroom probe; TR re-check deferred to final candidate"},
+  {"candidate": "Arch-B anode+", "outputs": ["cell/r1_B_4c.json", "cell/r1_B_energy.json"], "note": "N/P up + small anode particles vs plating; TR re-check deferred to final candidate"},
+  {"candidate": "Arch-C negPor", "outputs": ["cell/r1_C_4c.json", "cell/r1_C_energy.json"], "note": "anode transport porosity vs plating; TR re-check deferred to final candidate"},
+  {"candidate": "Arch-D liquidCool", "outputs": ["cell/r1_D_4c.json", "cell/r1_D_energy.json"], "note": "liquid cooling for Tmax margin; TR re-check deferred to final candidate"}
+]

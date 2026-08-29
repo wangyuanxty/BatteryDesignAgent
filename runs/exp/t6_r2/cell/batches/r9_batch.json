@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "R9s1_neg120",
+    "outputs": ["cell/r9_s1_4c45_dfn.json"],
+    "note": "R9s1: DFN 4C with neg 120 um + s1 kinetics, h=50. Plating resolved with margin (+0.0388 V at cutoff). T_max 332.67 K - heat reduced 3.3 K vs R7 but still 9.5 K over 323.15."
+  },
+  {
+    "candidate": "R9s2_neg120_h80",
+    "outputs": ["cell/r9_s2_4c45_dfn.json"],
+    "note": "R9s2: neg 120 + kinetics + h=80. Plating resolved (+0.0356). T_max 329.47 K, dT 11.32 -> inferred steady heat Q ~ 4.8 W; need hA >= ~1.1 W/K for dT<=4.2 with margin."
+  },
+  {
+    "candidate": "R9s3_negporo",
+    "outputs": ["cell/r9_s3_4c45_dfn.json"],
+    "note": "R9s3: neg 110 + kinetics + negative porosity 0.30. Plating resolved (+0.033) but T_max 337.98 K WORSE (more charge inserted before cutoff). Rejected."
+  }
+]

@@ -1,0 +1,104 @@
+{
+  "capacity_ah": 4.317553133979216,
+  "capacity_5c_ah": 4.258103887792518,
+  "retention_5c": 0.986231,
+  "t_max_5c_K": 319.57286096697254,
+  "t_max_4c_K": 329.7481249016685,
+  "anode_min_v": 0.04168976536074289,
+  "charge_4c_ah": 0.8111587179842606,
+  "energy_wh": 15.703468842629322,
+  "mass_kg": 0.022234191508191004,
+  "ed_wh_kg": 706.2756852141089,
+  "ed_wh_l": 994.0897977867512,
+  "volume_m3": 1.5796831310000004e-05,
+  "midpoint_v": 3.7778499551284526,
+  "dcr_ohm": 0.0010590822422752665,
+  "power_density_w_kg": 181557.06038302105,
+  "area_m2": 0.10270000000000001,
+  "total_thickness_m": 0.0001538153,
+  "v_min": 2.5,
+  "v_max": 4.2,
+  "nominal_ah": 5.0,
+  "height_m": 0.065,
+  "width_m": 1.58,
+  "c_e0": 1000.0,
+  "L_p": 5.13912e-05,
+  "eps_p": 0.55,
+  "r_p": 8e-07,
+  "L_n": 7.64241e-05,
+  "eps_n": 0.5,
+  "r_n": 1e-06,
+  "L_sep": 1.2e-05,
+  "eps_sep": 0.5,
+  "th_cc_p": 8e-06,
+  "th_cc_n": 6e-06,
+  "kappa_e": 1.5,
+  "tplus": 0.35,
+  "D_e": 8e-10,
+  "h": 25.0,
+  "rho_pos": 3262.0,
+  "rho_neg": 1657.0,
+  "rho_sep": 397.0,
+  "rho_cc_pos": 2700.0,
+  "rho_cc_neg": 8960.0,
+  "g_pos_coat": 7.747394532696,
+  "g_neg_coat": 6.502693575495001,
+  "g_sep": 0.2446314,
+  "g_cc_p": 2.2183200000000003,
+  "g_cc_n": 5.521152000000001,
+  "g_elec": 8.932091360400001,
+  "g_stack": 22.234191508191003,
+  "g_total": 31.166282868591004,
+  "pore_m3": 7.443409467000001e-06,
+  "np_ratio": 0.8393394125020947,
+  "np_baseline": 0.6456482363831976,
+  "np_x": 1.2999948969177386,
+  "areal_pos": 75.43714247999999,
+  "areal_neg": 63.31736685,
+  "comp_pos_kgm3": 1467.8999999999999,
+  "comp_neg_kgm3": 828.5,
+  "comp_pos_gcm3": 1.4678999999999998,
+  "comp_neg_gcm3": 0.8285,
+  "bom": [
+    [
+      "Positive active material NMC811",
+      7.28255086073424
+    ],
+    [
+      "Positive conductive additive (carbon black)",
+      0.23242183598087998
+    ],
+    [
+      "Positive binder (PVDF)",
+      0.23242183598087998
+    ],
+    [
+      "Negative active material (graphite)",
+      6.242585832475201
+    ],
+    [
+      "Negative conductive additive (carbon black)",
+      0.06502693575495001
+    ],
+    [
+      "Negative binder (CMC+SBR)",
+      0.19508080726485003
+    ],
+    [
+      "Separator",
+      0.2446314
+    ],
+    [
+      "Electrolyte",
+      8.932091360400001
+    ],
+    [
+      "Positive current collector (Al)",
+      2.2183200000000003
+    ],
+    [
+      "Negative current collector (Cu)",
+      5.521152000000001
+    ]
+  ]
+}

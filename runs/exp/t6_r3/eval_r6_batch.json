@@ -1,0 +1,42 @@
+[
+  {
+    "candidate": "V13_thinpos60",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r6_V13_thinpos60_1c.json",
+      "runs/exp/t6_r3/cell/r6_V13_thinpos60_aging.json",
+      "runs/exp/t6_r3/cell/r6_V13_thinpos60_energy.json",
+      "runs/exp/t6_r3/cell/r6_V13_thinpos60_4c.json"
+    ],
+    "note": "Positive electrode thinned 75.6->60 um (N/P 1.23): plating CLEARED (amin +0.0337 V, plated=False) confirming thin-pos hypothesis (at 18 A the CC phase hits 4.7 V almost immediately -> shallow anode excursion); ED 1090.5 Wh/L, plateau 4.1647 V; 1C discharge delivered 5.056 Ah (full hour, no early cut-off -> capacity >= 5 Ah, honest); T_max 330.54 K (no cooling in this variant); SEI 743.3 nm (vs 753.1 base, thin pos slightly helps)"
+  },
+  {
+    "candidate": "V14_thinpos55",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r6_V14_thinpos55_1c.json",
+      "runs/exp/t6_r3/cell/r6_V14_thinpos55_aging.json",
+      "runs/exp/t6_r3/cell/r6_V14_thinpos55_energy.json",
+      "runs/exp/t6_r3/cell/r6_V14_thinpos55_4c.json"
+    ],
+    "note": "pos 55 um (N/P 1.34): plating cleared with larger margin (amin +0.0407); ED 1040.3 Wh/L; SEI 740.6 nm ~same as 60 um; deeper thinning buys little; 60 um kept as platform"
+  },
+  {
+    "candidate": "V15_np128",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r6_V15_np128_1c.json",
+      "runs/exp/t6_r3/cell/r6_V15_np128_aging.json",
+      "runs/exp/t6_r3/cell/r6_V15_np128_energy.json",
+      "runs/exp/t6_r3/cell/r6_V15_np128_4c.json"
+    ],
+    "note": "neg 109 um (N/P 1.28): plating cleared (amin +0.0288 V), ED 1139.7 Wh/L, but SEI worsens to 839.1 nm (thicker anode stays lithiated during time-capped discharge) — anode-thickness anti-plating route now deprecated in favor of thin-pos route"
+  },
+  {
+    "candidate": "V16_assembly",
+    "outputs": [
+      "runs/exp/t6_r3/cell/r6_V16_assembly_1c.json",
+      "runs/exp/t6_r3/cell/r6_V16_assembly_aging.json",
+      "runs/exp/t6_r3/cell/r6_V16_assembly_energy.json",
+      "runs/exp/t6_r3/cell/r6_V16_assembly_4c.json"
+    ],
+    "note": "pos 60 um + SEI k 5e-14 + h 80: FIRST 4/5 candidate — T_max 322.92 K PASS (margin 0.23 K), plated=False PASS (amin +0.0387), ED 1087.3 PASS, plateau 4.1648 PASS; ONLY SEI fails: 606.2 nm (kinetics x0.05 now worth -137 nm on thin-pos platform). Round 7 targets SEI via EC-lean electrolyte / reduction-potential / SEI-density levers identified from pybamm sei_growth.py (Yang2017 ec-reaction-limited law)"
+  }
+]

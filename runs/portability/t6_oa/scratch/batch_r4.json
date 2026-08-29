@@ -1,0 +1,3 @@
+[
+  {"candidate": "LNMO-S7 DFN-verification", "round": 4, "outputs": ["cell/r4_v7_energy_dfn.json", "cell/r4_v7_4c_dfn.json", "cell/r4_v7_aging_dfn.json"], "note": "DFN overturns SPMe: plating (anode -0.020V) + T_max 330.7K; SPMe was over-optimistic for 4C"}
+]

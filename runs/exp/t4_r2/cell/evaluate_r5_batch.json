@@ -1,0 +1,56 @@
+[
+  {
+    "candidate": "E1-h80-isolation",
+    "round": 5,
+    "outputs": [
+      "cell/r5_E1_1c.json",
+      "cell/r5_E1_energy.json",
+      "cell/r5_E1_retention.json"
+    ],
+    "note": "E1-h80-isolation (D2 + h=80 only; probe 5.0368 within 3% -> nominal 5.0 kept): W2 445.85 PASS, W3 929.11 PASS, W1 0.9937 PASS (cold-soak). T_max_K here is 1C-discharge heating - 4C verdict in safety entry"
+  },
+  {
+    "candidate": "E1-h80-isolation",
+    "round": 5,
+    "outputs": [
+      "cell/r5_E1_4c_dfn.json"
+    ],
+    "note": "4C_charge_45C DFN: T_max 330.39 PASS (-2.76K margin, h80 alone fixes T_max) ; plated FAIL (ap_min -0.0803V, 15.1% negative) - confirms cooling does not touch separator-interface depletion; isolates the two levers cleanly"
+  },
+  {
+    "candidate": "E2-transportmax-h80",
+    "round": 5,
+    "outputs": [
+      "cell/r5_E2_1c.json",
+      "cell/r5_E2_energy.json",
+      "cell/r5_E2_retention.json"
+    ],
+    "note": "E2-transportmax-h80 (sigma1.6/D3.2e-10/t+0.6 + h=80; probe 5.0385 within 3% -> nominal 5.0 kept): W2 446.50 PASS, W3 930.46 PASS, W1 0.9937 PASS (cold-soak). T_max_K here is 1C-discharge heating - 4C verdict in safety entry"
+  },
+  {
+    "candidate": "E2-transportmax-h80",
+    "round": 5,
+    "outputs": [
+      "cell/r5_E2_4c_dfn.json"
+    ],
+    "note": "4C_charge_45C DFN: T_max 327.77 PASS (-5.38K); plated FAIL but narrowly (ap_min -0.0158V, 6.0% negative vs -0.0778 at 14.9% for D2) - transport-max nearly closes plating; 0.5667Ah accepted in 4C leg"
+  },
+  {
+    "candidate": "E3-porheadroom",
+    "round": 5,
+    "outputs": [
+      "cell/r5_E3_1c.json",
+      "cell/r5_E3_energy.json",
+      "cell/r5_E3_retention.json"
+    ],
+    "note": "E3-porheadroom (E2 + anode porosity 0.22->0.28, (0.28/0.22)^1.5 = +43.6% effective anode-region electrolyte transport; probe 5.0392 within 3% -> nominal kept): W2 457.14 PASS (+130 vs 327.18; porosity cut anode mass, raised gravimetric), W3 932.12 PASS (+52.1), W1 0.9938 PASS (cold-soak). T_max_K here is 1C-discharge heating - 4C verdict in safety entry"
+  },
+  {
+    "candidate": "E3-porheadroom",
+    "round": 5,
+    "outputs": [
+      "cell/r5_E3_4c_dfn.json"
+    ],
+    "note": "4C_charge_45C DFN: T_max 326.96 PASS (-6.19K margin); plated PASS (ap_min +0.0060V, 0/337 points negative) - FIRST all-pass at verdict grade; 0.5887Ah accepted. Anode porosity headroom was the final 0.078V lever"
+  }
+]

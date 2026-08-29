@@ -1,0 +1,7 @@
+{
+  "action": "funnel",
+  "passed": 0,
+  "rejected": 0,
+  "disputed": 0,
+  "detail": "start_stage=3: no molecular screening; materials use system baseline parameters (props source=baseline literature parameterization). Base determination per anchor table: task text names no electrode system -> default Chen2020; verified by dumping the parameter set (pure-graphite negative, no SiOx keys; upper cut-off 4.2 V so overcharge +0.5 V = 4.7 V matches spec exactly). Ceiling assessment will be appended after baseline characterization."
+}

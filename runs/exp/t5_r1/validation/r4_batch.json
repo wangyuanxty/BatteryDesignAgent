@@ -1,0 +1,10 @@
+[
+  {"candidate": "R4A transport - Chen2020", "outputs": ["cell/r4a_chen_4c_dfn.json", "cell/r4a_chen_energy.json"], "note": "ED 516.8 passes; plating improves (anode min -0.130 vs R3D -0.301) but still negative; T_max 342.8 > 333.15 at h=40. Transport fixes cut the dip >2x; need more (porosity/N-P/separator)."},
+  {"candidate": "R4A transport - OKane2022", "outputs": ["cell/r4a_okane_4c_dfn.json", "cell/r4a_okane_energy.json"], "note": "ED 515.3 passes; anode min -0.135 still plated; T_max 345.3 fails. Same trend as Chen2020."},
+  {"candidate": "R4B +neg porosity 0.30 - Chen2020", "outputs": ["cell/r4b_chen_4c_dfn.json", "cell/r4b_chen_energy.json"], "note": "ED 528.3 passes; neg porosity 0.30 halves dip again (-0.070); T_max 340.2 fails."},
+  {"candidate": "R4B +neg porosity 0.30 - OKane2022", "outputs": ["cell/r4b_okane_4c_dfn.json", "cell/r4b_okane_energy.json"], "note": "ED 526.7 passes; anode -0.069 plated; T_max 342.5 fails."},
+  {"candidate": "R4C +N/P 1.265 - Chen2020", "outputs": ["cell/r4c_chen_4c_dfn.json", "cell/r4c_chen_energy.json"], "note": "ED 566.9 passes (+12% capacity: discharge was anode-limited, N/P unlock); dip -0.088 slightly worse than B (more charge accepted, thicker neg) but far better than R3; T_max 340.8 fails."},
+  {"candidate": "R4C +N/P 1.265 - OKane2022", "outputs": ["cell/r4c_okane_4c_dfn.json", "cell/r4c_okane_energy.json"], "note": "ED 565.3 passes; anode -0.090 plated; T_max 343.1 fails."},
+  {"candidate": "R4D +neg porosity 0.35 - Chen2020", "outputs": ["cell/r4d_chen_4c_dfn.json", "cell/r4d_chen_energy.json"], "note": "Best so far: ED 580.7 passes, anode min -0.049 (10x better than R3D) but still plated; T_max 338.8 fails by 5.6 K. Next: separator thinning + more transport + h=60."},
+  {"candidate": "R4D +neg porosity 0.35 - OKane2022", "outputs": ["cell/r4d_okane_4c_dfn.json", "cell/r4d_okane_energy.json"], "note": "Best so far: ED 579.0 passes, anode -0.048 plated; T_max 341.0 fails by 7.9 K."}
+]

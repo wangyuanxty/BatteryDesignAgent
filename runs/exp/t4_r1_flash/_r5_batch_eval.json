@@ -1,0 +1,4 @@
+[
+  {"candidate": "B6_ThinCellE2_h30", "outputs": ["cell/r5_b6_1c.json", "cell/r5_b6_lowt.json", "cell/r5_b6_energy.json", "cell/r5_b6_4c45.json", "cell/r5_b6_retention.json"], "note": "ALL CHECKED METRICS PASS: retention 0.9931, ED 459.2 Wh/kg, 897.7 Wh/L, T_max 332.23K, no plating"},
+  {"candidate": "B7_ThinCellE2_h40", "outputs": ["cell/r5_b7_1c.json", "cell/r5_b7_lowt.json", "cell/r5_b7_energy.json", "cell/r5_b7_4c45.json", "cell/r5_b7_retention.json"], "note": "ALL CHECKED METRICS PASS with best T_max margin (329.79K, -3.36K below line): retention 0.9929, ED 459.1 Wh/kg, 897.3 Wh/L, no plating -> FINAL CANDIDATE"}
+]

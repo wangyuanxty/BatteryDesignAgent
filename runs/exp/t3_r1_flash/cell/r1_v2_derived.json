@@ -1,0 +1,6 @@
+{
+  "retention_5c": 0.9811355866192564,
+  "capacity_ah_1c": 2.6086642403586913,
+  "capacity_ah_5c": 2.5594533197570013,
+  "note": "V2; retention from DFN 5C / DFN 1C; retention = 2.5595/2.6087 = 0.9811"
+}

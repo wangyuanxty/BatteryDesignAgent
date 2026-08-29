@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 392.61}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false,
+      "triggered": false
+    },
+    "meta": {
+      "real_compute": false,
+      "exploration_force": true,
+      "ceiling_escalation": true,
+      "funnel_voting": true,
+      "start_stage": 3,
+      "base_params": "Chen2020",
+      "task_text": "Design a battery for a next-generation pure electric sedan: energy density >= 392.61 Wh/kg, support 4C fast charge (no lithium plating), maximum temperature <= 60C, overcharge to 4.7 V without triggering thermal runaway.",
+      "freedoms": {
+        "electrode_system": "adjustable",
+        "electrolyte_formulation": "adjustable",
+        "electrode_modification": "adjustable",
+        "cell_architecture": "adjustable",
+        "thermal_management": "adjustable"
+      },
+      "freedoms_note": "zero-interaction: task text does not declare degree-of-freedom boundaries; widest interpretation taken (all five categories adjustable). Electrode system not named in task -> deterministic default base Chen2020, but switchable via ceiling escalation."
+    }
+  }
+}

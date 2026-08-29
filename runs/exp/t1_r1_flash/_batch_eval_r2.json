@@ -1,0 +1,18 @@
+[
+  {
+    "candidate": "ArchA-h150",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h150_4c.json"
+    ],
+    "note": "T_max fixed (326.6 K) but plating triggered: anode min -0.077 V < 0; cooling reduces cell T -> slower kinetics -> transport-limited anode",
+    "round": 2
+  },
+  {
+    "candidate": "ArchB-h150",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archB_h150_4c.json"
+    ],
+    "note": "T_max fixed (327.7 K) but plating triggered: anode min -0.107 V < 0; thicker electrodes worse for transport",
+    "round": 2
+  }
+]

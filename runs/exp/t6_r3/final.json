@@ -1,0 +1,5 @@
+{
+  "action": "final",
+  "recommendation": "Adopt V27_combo (DFN-verified, model_used=DFN, no SPMe fallback): LNMO 4.7 V spinel system on Chen2020 base; positive electrode thinned to 60 um; negative 109 um (N/P 1.28); EC-lean 2.0 M high-voltage electrolyte with sigma 2.0 S/m and t+ 0.5; SEI-suppressing coating (SEI kinetic rate constant 5e-14 m/s); cooling h=250 W/m2K. All five criteria pass with DFN precision: volumetric ED 983.6 Wh/L (>=950), plateau 4.1551 V (>=4.1), 4C T_max 318.92 K (<=323.15, 50 C), no lithium plating (anode potential min +0.1050 V), anode SEI 313.7 nm after 100 cycles (<=500). Provenance: 10 tuning rounds + 1 DFN verification round, all evaluated via bda log-evaluate against the immutable entry-0 contract; SPMe finalists were honestly rejected at the DFN precision layer (round 9) and the design was re-solved in DFN space.",
+  "verdict": "achieved"
+}

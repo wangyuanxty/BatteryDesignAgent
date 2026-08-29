@@ -1,0 +1,12 @@
+[
+  {
+    "candidate": "R4A MarginAnode1p0 (DFN validation)",
+    "outputs": ["cell/r4_A_1c_dfn.json", "cell/r4_A_calc_dfn.json", "cell/r4_A_4c_dfn.json"],
+    "note": "DFN confirmation: ED 583.93 Wh/kg PASS (SPMe 583.46; DFN resolves through-plane gradients, slightly higher); T_max 320.36 K PASS; 4C charge true span 1461.0 s = 8.12 Ah at 20 A, ends at the 4.2 V ceiling (V_end 4.2000, ~85% SOC), anode min +0.0212 V -> no plating PASS (SPMe said +0.0270; DFN margin thinner but comfortable). 1C discharge completes at 2.5000 V in 6930 s (9.6251 Ah). ALL criteria hold at DFN. R4A dominates R4B at DFN too (margin +0.0212 vs +0.0144, ED 583.93 vs 582.72, T_max 320.36 vs 320.61) -> selected as FINAL design."
+  },
+  {
+    "candidate": "R4B EDpolish (DFN validation)",
+    "outputs": ["cell/r4_B_1c_dfn.json", "cell/r4_B_calc_dfn.json", "cell/r4_B_4c_dfn.json"],
+    "note": "DFN confirmation: ED 582.72 Wh/kg PASS; T_max 320.61 K PASS; 4C charge 1437.1 s = 7.98 Ah at 20 A to the 4.2 V ceiling, anode min +0.0144 V -> no plating PASS. 1C discharge clean at 2.5000 V (9.6177 Ah). Validated fallback design; not selected (R4A strictly better on all axes)."
+  }
+]

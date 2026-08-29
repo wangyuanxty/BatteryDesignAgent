@@ -1,0 +1,6 @@
+{
+  "capacity_ah_25C": 5.01573078534597,
+  "capacity_ah_minus20C": 4.992196671842873,
+  "lowT_capacity_retention": 0.9953079392594485,
+  "derivation": "capacity_ah_minus20C / capacity_ah_25C; values sourced from paired bda run-pyamm outputs"
+}

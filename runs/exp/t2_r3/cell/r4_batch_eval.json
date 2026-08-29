@@ -1,0 +1,62 @@
+[
+  {
+    "candidate": "sei-res-x3",
+    "outputs": [
+      "runs/exp/t2_r3/cell/r4_sei-res-x3_aging100_spme.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x3_sei_thickness_nm_100cyc.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x3_aging500_spme.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x3_sei_thickness_nm_500cyc.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x3_lowT_spme.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x3_lowT_retention.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x3_1c_spme.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x3_4c_spme.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x3_energy.json"
+    ],
+    "note": "SPMe screen round"
+  },
+  {
+    "candidate": "sei-res-x10",
+    "outputs": [
+      "runs/exp/t2_r3/cell/r4_sei-res-x10_aging100_spme.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x10_sei_thickness_nm_100cyc.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x10_aging500_spme.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x10_sei_thickness_nm_500cyc.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x10_lowT_spme.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x10_lowT_retention.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x10_1c_spme.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x10_4c_spme.json",
+      "runs/exp/t2_r3/cell/r4_sei-res-x10_energy.json"
+    ],
+    "note": "SPMe screen round"
+  },
+  {
+    "candidate": "combo-v3",
+    "outputs": [
+      "runs/exp/t2_r3/cell/r4_combo-v3_aging100_spme.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3_sei_thickness_nm_100cyc.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3_aging500_spme.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3_sei_thickness_nm_500cyc.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3_lowT_spme.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3_lowT_retention.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3_1c_spme.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3_4c_spme.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3_energy.json"
+    ],
+    "note": "SPMe screen round"
+  },
+  {
+    "candidate": "combo-v3-nr15",
+    "outputs": [
+      "runs/exp/t2_r3/cell/r4_combo-v3-nr15_aging100_spme.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3-nr15_sei_thickness_nm_100cyc.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3-nr15_aging500_spme.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3-nr15_sei_thickness_nm_500cyc.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3-nr15_lowT_spme.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3-nr15_lowT_retention.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3-nr15_1c_spme.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3-nr15_4c_spme.json",
+      "runs/exp/t2_r3/cell/r4_combo-v3-nr15_energy.json"
+    ],
+    "note": "SPMe screen round"
+  }
+]

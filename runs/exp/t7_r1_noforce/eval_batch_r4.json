@@ -1,0 +1,14 @@
+[
+  {
+    "candidate": "R3 + Al2O3 ALD Negative Coating + N/P 1.35",
+    "round": 4,
+    "outputs": [
+      "cell/r4_margin_1c_dfn.json",
+      "cell/r4_margin_energy.json",
+      "cell/r4_margin_aging45.json",
+      "validation/r4_margin_nail.json",
+      "cell/r4_margin_4c45.json"
+    ],
+    "note": "SEI 551.97 nm > 550 -> fail; the k x0.75 coating lever is nearly inert in the solvent-diffusion-limited regime (PyBaMM Yang2017 model: L*k/D_ec ~1e9 >> 1 at 500 nm SEI); thicker negative (+3 um -> +4.4 nm) wiped out the coating benefit; N/P 1.35 did not improve anode margin (+11.2 vs +12.6 mV). Diagnosis: SEI driver at 45C = negative electrode thickness (+~7 nm/um, empirical R2->R3->R4) and electrolyte state; plating margin driver = particle radius. Next: revert to 85.2 um negative + keep r=4.0 um + coating (expected SEI ~480-500, anode ~+20 mV)."
+  }
+]

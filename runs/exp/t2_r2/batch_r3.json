@@ -1,0 +1,11 @@
+[
+  {"candidate": "V3A", "round": 3,
+   "outputs": ["runs/exp/t2_r2/cell/r3_vA_calc_dfn.json", "runs/exp/t2_r2/derived/r3_vA_retention.json", "runs/exp/t2_r2/cell/r3_vA_4c_dfn.json"],
+   "note": "Thick max-rate: ED 522.45 (DFN), 4C DFN plating-free ap min +0.041 V, 0.958 Ah accepted, lowT 99.62%. SEI pending coating round."},
+  {"candidate": "V3B", "round": 3,
+   "outputs": ["runs/exp/t2_r2/cell/r3_vB_calc_dfn.json", "runs/exp/t2_r2/derived/r3_vB_retention.json", "runs/exp/t2_r2/cell/r3_vB_4c_dfn.json"],
+   "note": "Mid max-rate: ED 502.14 (DFN), 4C DFN plating-free ap min +0.043 V, 0.764 Ah accepted, lowT 99.60%. SEI pending coating round."},
+  {"candidate": "V3C", "round": 3,
+   "outputs": ["runs/exp/t2_r2/cell/r3_vC_calc.json", "runs/exp/t2_r2/cell/r3_vC_calc_dfn.json", "runs/exp/t2_r2/derived/r3_vC_retention.json", "runs/exp/t2_r2/cell/r3_vC_4c_dfn.json"],
+   "note": "V2B+margin: ED ~440, 4C DFN plating-free ap min +0.037 V, 0.619 Ah accepted, lowT 99.61%. SEI pending coating round."}
+]

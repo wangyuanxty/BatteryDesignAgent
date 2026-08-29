@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "V4a h60 robustness",
+    "outputs": ["cell/r4_v4a_1c_spme.json", "cell/r4_v4a_energy.json", "cell/r4_v4a_4c_dfn.json"],
+    "note": "ED 567.6 Wh/kg pass. 4C DFN: T_max 327.1 K pass (margin 6.05 K, widened from 329.6 by h=60); anode min +0.013 V no plating; true acceptance 4.23 Ah / 78% SOC (mechanical: 761 s x 20 A / 3600 from voltage-curve charge start; capacity_ah key unreliable for charge protocols)."
+  },
+  {
+    "candidate": "V4b h60 + anode margin",
+    "outputs": ["cell/r4_v4b_1c_spme.json", "cell/r4_v4b_energy.json", "cell/r4_v4b_4c_dfn.json"],
+    "note": "ED 583.2 Wh/kg pass (best). 4C DFN: T_max 326.5 K pass (margin 6.65 K, best); anode min +0.021 V no plating (best margin: N/P 1.35 + negative particle 1.5 um surface x1.33); true acceptance 4.53 Ah / 79% SOC (mechanical: 815 s x 20 A / 3600). All mechanical criteria pass with best combined margins -> nominated design."
+  },
+  {
+    "candidate": "V4a h60 robustness",
+    "outputs": ["cell/r4_v4a_overcharge.json", "cell/r4_v4a_tr.json"],
+    "note": "Overcharge to 4.7 V (4.2+0.5 protocol): T_max 299.6 K; run-tr (mcp=mass x 900=31.30 J/K from calc-energy, hA=60x0.00531=0.3186 design-consistent) triggered false. Pass."
+  },
+  {
+    "candidate": "V4b h60 + anode margin",
+    "outputs": ["cell/r4_v4b_overcharge.json", "cell/r4_v4b_tr.json"],
+    "note": "Overcharge to 4.7 V (4.2+0.5 protocol): T_max 299.4 K; run-tr (mcp=31.72 J/K, hA=0.3186 design-consistent) triggered false. Pass."
+  }
+]

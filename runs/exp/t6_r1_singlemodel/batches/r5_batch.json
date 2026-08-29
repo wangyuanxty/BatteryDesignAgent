@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "D1_full_formulation",
+    "outputs": [
+      "cell/r5_D1_1c_spme.json",
+      "cell/r5_D1_energy.json",
+      "cell/r5_D1_4c_spme.json",
+      "cell/r5_D1_aging_spme.json"
+    ],
+    "note": "D1: c0 2500 / t+ 0.65 / D 4e-10 / kappa 2.0 / porosity rebalance 0.30-0.27. 4C trace: charge ran 1386 s at 18 A (runner cap metric = duration x 4C / 3600 = 1.54 Ah; true charge 6.93 Ah) with anode surface potential POSITIVE for the first 1323 s (min +0.026) - salt transport fixed; then the uncapped charge step over-runs the anode-full point (~1230 s) -> over-charge tail -> plating (min -0.237) -> 4.7 V trip. T_max 319.2 PASS. Failure mode = charge-end balance (cathode strips too late), fixed in R6 by 61 um cathode."
+  },
+  {
+    "candidate": "D2_mild_formulation",
+    "outputs": [
+      "cell/r5_D2_1c_spme.json",
+      "cell/r5_D2_energy.json",
+      "cell/r5_D2_4c_spme.json",
+      "cell/r5_D2_aging_spme.json"
+    ],
+    "note": "D2: sensitivity with t+ 0.6 / D 3e-10 + porosity rebalance. Same 4C outcome as D1 (charge 1378 s, plated min -0.240). T_max 319.3 PASS. Confirms transport margin is comfortable; charge-end balance is the binding constraint."
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false (protocol default; task text did not request true DFT/MD endorsement). No run-orca/run-md/run-qe values exist and none are fabricated. F1's design elements (anode particle radius 3 um, anode porosity 0.42 - architecture freedom; k_SEI 4e-13 ceramic-coated graphite - electrode-modification freedom, ALD Al2O3/TiO2 class, estimate-magnitude literature-backed) were validated at cell scale via run-pyamm protocols; no molecular candidate entered Stage 2, so the Stage 5 molecular endorsement has nothing to sign"
+}

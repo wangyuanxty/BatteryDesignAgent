@@ -1,0 +1,16 @@
+# VBF Design FMEA (qualitative version, based on simulation signals)
+
+**Document number**: VBF-T7R3-DFMEA-01 · **Case**: t7_r3 · **Date**: 2026-08-26
+Qualitative S/O ratings are derived from the magnitude of simulation values vs thresholds. Complete FMEA including process/supplier failures: N/A (beyond pure simulation boundary). Prepared / Reviewed / Approved: ________
+
+| # | Failure mode | Failure cause | Simulation signal (detectability basis) | Severity | Occurrence | S×O risk | Design-side mitigation |
+|---|---|---|---|---|---|---|---|
+| 1 | Negative electrode plating during 4C charge | electrolyte concentration polarization / anode overpotential | anode_potential_v min +0.0171 V (margin only 17 mV) | High | **Low** (full CC charge shows 0 negative instants) | Medium | t⁺ 0.6 + Dₑ 1×10⁻⁹ m²/s + 2.0 µm anode particles implemented; margin watch: any electrolyte degradation (t⁺ drift) in service re-opens risk → consider N/P 1.05–1.15 for production intent |
+| 2 | Thermal runaway by nail penetration | internal short + heat accumulation > cooling capacity | triggered=false only with hA ≥ 0.3 W/K; at 0.2 W/K T=405 K at 2097 s (near trigger) | High | **Low** (designed cooling 0.5 W/K covers 1.7× margin) | Medium | mandatory active cooling specification hA = 0.5 W/K; add BMS redundancy + cooling-loss derating; fail-safe on cooling failure |
+| 3 | Thermal runaway by 4C-charge heat-up | 4C charge energy dissipation in lumped cell | T_max 363.2 K (90 °C) during 4C — elevated but stable (no TR criterion) | Medium | Medium | Medium | charge de-rate above 45 °C ambient; monitor T in BMS; the 363 K value is a virtual lumped estimate |
+| 4 | Electrolyte oxidative decomposition at high voltage | HOMO vs cathode potential mismatch | **No signal available**: molecular stage skipped (`real_compute=false`, start_stage 3 — HOMO/IE-EA not computed). NMC811 @4.2 V known-lower risk class (literature) | High | Unknown (unassessed) | High (unassessed) | Stage-2 true compute (DFT HOMO/IE-EA) recommended as follow-up; keep cut-off ≤ 4.2 V |
+| 5 | SEI over-thickening (capacity/ED fade) | SEI growth per ec-reaction-limited model | SEI end 512.9 nm vs 550 nm threshold (6.7 % margin after 100 cyc @45 °C) | Medium | Medium | Medium | FEC additive proposed (unvalidated in this run); lower-temperature operation; the metric is a virtual SEI-thickness proxy, not a measured capacity-loss curve |
+| 6 | Insufficient capacity / energy density | architecture trade-off | ED 482.4 vs 327.18 Wh/kg (47 % margin); 1C cap 6.257 Ah | Low | Low | Low | stability confirmed |
+| 7 | N/P imbalance (0.862 < industry 1.05–1.15) | negative thinner than industry practice | derived areal balance 0.862; plating still passes at 4C | Medium | Low (virtual) | Medium | production intent: raise N/P → thicker anode (+ plating margin via more anode capacity, −ED ~5 %) |
+
+**Conclusion**: Highest-risk items are #4 (electrolyte oxidation — unassessed because molecular stage skipped under `real_compute=false`) and #2/#3 (thermal-knife-edge — mitigated by the mandatory 0.5 W/K cooling design). All mitigations that live inside the virtual cell design have been implemented; those needing physical/material follow-up (#4 Stage-2 compute, production N/P, physical TR tests) are listed for the release book.

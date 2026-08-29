@@ -1,0 +1,1 @@
+{"retention_lowT_pct": 99.99, "capacity_ah_lowT": 8.2217, "capacity_ah_25C": 8.2222, "derived_from": "cell/v3_lowT.json:capacity_ah / cell/v3_1c.json:capacity_ah * 100", "formula": "lowT_capacity / 25C_capacity * 100"}

@@ -1,0 +1,7 @@
+{
+  "action": "plan",
+  "update": true,
+  "reason": "three-strike: three failure causes each failed 3+ consecutive rounds (plateau: R1-R4, cathode OCP ceiling ~4.0 V vs 4.1 V; T_max: R2-R4, hA capped at 0.133 W/K vs required ~1.5+ W/K; 4C-no-plating at ED>=950: R2-R4, compaction-transport conflict, plating-free ED ceiling measured ~770-840 Wh/L)",
+  "candidate_strategy": "stop blind architecture tuning; questioning executed (system/boundary/metric layers, recorded in final.escalation); direction: close as honest negative result with Pareto documentation and relaxation mapping",
+  "budget_allocation": "remaining budget to closing: endorse skip (real_compute=false), final entry, deliverables, render, verify-deliverables"
+}

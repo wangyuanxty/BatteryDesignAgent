@@ -1,0 +1,18 @@
+{
+  "action": "propose",
+  "round": 2,
+  "candidates": [
+    {
+      "name": "FC-A",
+      "role": "combined fast-charge/SEI candidate on Chen2020: smaller particles + high-transport electrolyte + SEI-suppressing coating bridge",
+      "struct": {
+        "Negative particle radius [m]": 3.0e-06,
+        "Positive particle radius [m]": 4.0e-06,
+        "Electrolyte conductivity [S.m-1]": 1.5,
+        "Cation transference number": 0.45,
+        "SEI kinetic rate constant [m.s-1]": 2.0e-13
+      }
+    }
+  ],
+  "llm_reason": "R1 gaps: 4C plating (anode min -0.192V), T_max 354.3K (>333.15), SEI@500 777.9nm (>550). ED and lowT have ample margin (400.8 Wh/kg, 99.4%), so no ED/lowT levers needed. Plating root cause = negative surface potential <0V under 4C: reduce solid-diffusion overpotential via smaller negative particles (5.86->3.0 um), reduce electrolyte ohmic drop (sigma 0.949->1.5 S/m) and concentration polarization (t+ 0.26->0.45); smaller positive particles (5.22->4.0 um) cut charge-transfer heat and polarization. SEI@500 root cause = baseline SEI kinetics: SEI kinetic rate constant x0.2 (1e-12->2e-13 m/s) as coating-suppression bridge (Al2O3-class coating). All overrides listed before running per protocol. Sources: particle radii/SEI kinetics = estimate (domain, bridge values); sigma 1.5 S/m (15 mS/cm) and t+ 0.45 = literature-order values for advanced LiFSI-based/high-transport electrolytes, marked estimate; baseline values measured from Chen2020 set (sigma(1000)=0.949 S/m, t+=0.2594)."
+}

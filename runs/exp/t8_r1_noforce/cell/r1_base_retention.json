@@ -1,0 +1,6 @@
+{
+ "capacity_retention_5c": 0.08735610215574485,
+ "q_1c_ah": 4.94738704643111,
+ "q_5c_ah": 0.4321844482320448,
+ "formula": "Q(5C_discharge dfn)/Q(1C_discharge dfn), identical params Chen2020 baseline"
+}

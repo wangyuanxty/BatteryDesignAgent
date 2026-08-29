@@ -1,0 +1,12 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {
+      "base": "Chen2020",
+      "name": "R1_Baseline_Chen2020",
+      "role": "baseline characterization across all four protocols (1C/ED, 4C plating, 45C aging, nail TR)"
+    }
+  ],
+  "llm_reason": "Task text names no electrode system -> anchor-table deterministic default Chen2020 (aging-capable, full thermal/geometry, dump-verified). Baseline anchors all four criteria and feeds the opening ceiling assessment (is 327.18 Wh/kg reachable in Chen2020 architecture space, or is a Stage-2 system escalation needed?)."
+}

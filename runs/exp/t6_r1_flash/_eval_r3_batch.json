@@ -1,0 +1,7 @@
+[
+  {"candidate": "archThin", "outputs": ["cell/r3_archThin_1c_calc.json", "cell/r3_archThin_4c.json"], "note": "thin sep 8um + thin CC 8/6um + hiTrans: M1 ED 1110 Wh/L PASS, M2 4.188 V PASS; but deeper 4C charge (1.187 Ah) -> plating window (anode min -0.245 V) + Tmax 361.9 K - heat must be managed by h~100"},
+  {"candidate": "NPup", "outputs": ["cell/r3_NPup_4c.json"], "note": "archThin + negative thickness 120um (N/P up): no plating margin gain (anode min -0.242 V), heat worse (371.9 K) - thicker anode adds heat without helping cutoff-limited plating; abandon N/P lever"},
+  {"candidate": "thermH60", "outputs": ["cell/r3_thermH60_4c.json"], "note": "h=60 on baseline electrolyte: Tmax 322.54 K (49.4C) PASS on 4C_charge_45C; plating still true (anode min -0.174 V) - thermal lever closes M5, does not touch M4"},
+  {"candidate": "seiCombo", "outputs": ["cell/r3_seiCombo_aging.json"], "note": "k_sei x0.25 + i0_sei x0.25: SEI 700 nm - i0_sei zero effect, kinetics lever saturated; SEI growth is EC-diffusion-limited through film (D_ec = EC diffusivity 2e-18), next lever is coating reducing D_ec"},
+  {"candidate": "hiTransAging", "outputs": ["cell/r3_hiTrans_aging.json"], "note": "hiTrans electrolyte: SEI 771 nm (+2.4%) - electrolyte transport has negligible SEI effect; SEI lever is strictly interphase-side"}
+]

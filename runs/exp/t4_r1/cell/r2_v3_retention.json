@@ -1,0 +1,6 @@
+{
+  "lowT_retention": 0.9942729451412664,
+  "capacity_ah_298K": 4.948009682594659,
+  "capacity_ah_253K_coldsoak": 4.9196721597008946,
+  "note": "SPMe screening; lowT_retention = capacity(lowT cold-soak) / capacity(1C 298.15K), same parameters"
+}

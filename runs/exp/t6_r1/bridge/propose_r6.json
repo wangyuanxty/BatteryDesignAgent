@@ -1,0 +1,13 @@
+{
+  "action": "propose",
+  "round": 6,
+  "candidates": [
+    {
+      "name": "lnmo_final",
+      "base": "scripts/bda/simulators/data/LNMO.json",
+      "params": "{\"Total heat transfer coefficient [W.m-2.K-1]\": 200, \"Negative electrode thickness [m]\": 1.022e-4, \"Negative particle radius [m]\": 3.5e-6, \"EC initial concentration in electrolyte [mol.m-3]\": 2270.5, \"EC diffusivity [m2.s-1]\": 1.0e-18}",
+      "role": "DFN confirmation of the combined final candidate (same candidate, same params file, mode=dfn): conclusion-grade proxy layering per protocol (SPMe screening -> DFN for the shipped numbers). Protocols: 1C discharge (calc-energy evidence), 4C_charge_45C with plating module, aging_1C_100cyc. Fallback if any criterion flips at DFN: plating -> negative particle radius 3.0 um; T_max -> h 250-300; SEI -> D_ec 8e-19."
+    }
+  ],
+  "llm_reason": "lnmo_final passed all five criteria at SPMe (round 5). Per the proxy layering rule, conclusion-grade numbers come from the higher-fidelity model (DFN) on the winning candidate before endorsement and deliverables. DFN solver auto-degrades to SPMe with the model_used record if it fails - recorded honestly if it occurs."
+}

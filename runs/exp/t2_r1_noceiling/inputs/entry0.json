@@ -1,0 +1,51 @@
+{
+  "criteria": {
+    "stage1": {},
+    "stage2": {
+      "energy_density_wh_kg": {"min": 327.18},
+      "sei_100cyc_nm": {"max": 500},
+      "sei_500cyc_nm": {"max": 550},
+      "lowT_retention": {"min": 0.9}
+    },
+    "stage3": {
+      "plated": false
+    },
+    "meta": {
+      "case": "t2_r1_noceiling",
+      "date": "2026-08-25",
+      "task": "Design a battery for grid energy storage: energy density >= 327.18 Wh/kg; support 4C fast charge (no lithium plating); anode SEI thickness <= 500 nm after 100 cycles of 1C cycling; discharge capacity retention >= 90% at -20C; SEI <= 550 nm after 500 cycles. Ablation: ceiling_escalation OFF.",
+      "goal_parse": {
+        "energy_density_wh_kg": ">= 327.18 Wh/kg (calc-energy contract caliber, electrolyte excluded from mass)",
+        "fast_charge": "4C charge at 45 C ambient (protocol 4C_charge_45C), plating = anode_potential_v min < 0 V",
+        "sei_100cyc": "anode SEI thickness <= 500 nm after 100 x 1C cycles (aging_1C_100cyc, key sei_thickness_nm_end)",
+        "sei_500cyc": "SEI <= 550 nm after 500 x 1C cycles (aging_1C_100cyc --cycles 500)",
+        "lowT_retention": "discharge capacity retention at -20 C >= 90% = capacity_ah(lowT_discharge, 253.15K) / capacity_ah(1C_discharge, 298.15K)",
+        "T_max_note": "task text specifies no maximum-temperature red line; T_max_K recorded in metrics, not adjudicated",
+        "not_in_task": ["capacity_ah", "energy_density_wh_l", "voltage plateau", "DCR/power density", "5C retention", "45C aging", "overcharge/nail thermal runaway", "cell mass/dimension constraints"]
+      },
+      "real_compute": false,
+      "start_stage": 3,
+      "start_stage_reason": "objective involves no new materials/additives/electrolyte design and no electrode-modification materials named in task text -> start at Stage 3 (cell design); materials use system baseline parameters",
+      "base": "Chen2020",
+      "base_reason": "task text names no electrode system -> anchor table deterministic mapping: default Chen2020; dump verified (93 keys, incl. 'SEI kinetic rate constant [m.s-1]' so aging-capable; pure-graphite negative, no SiOx cracking keys; NMC811 positive; full geometry/thermal keys present)",
+      "stage1_note": "start_stage=3: no molecular candidates screened; stage1 elimination lines not registered (empty)",
+      "ablation": {
+        "ceiling_escalation": {"state": "OFF", "set_by": "task text", "consequence": "no proactive material-design escalation; use only materials/systems named in task text, otherwise tune within the existing cell/architecture formulation space"},
+        "exploration_force": {"state": "ON", "set_by": "default"},
+        "funnel_voting": {"state": "ON", "set_by": "default", "note": "moot: start_stage=3, no molecular funnel runs"}
+      },
+      "freedoms": {
+        "electrode_system": {"state": "locked", "basis": "task text names no system and ablation note restricts to systems named in task text -> locked to default Chen2020"},
+        "electrolyte_formulation": {"state": "adjustable", "basis": "not declared in task text -> widest interpretation (t1_r1 lesson); levers: Electrolyte conductivity [S.m-1], Electrolyte diffusivity [m2.s-1], Cation transference number"},
+        "electrode_modification": {"state": "locked", "basis": "coating/doping is material design; no material named in task text; ceiling_escalation OFF forbids proactive material design"},
+        "cell_architecture": {"state": "adjustable", "basis": "ablation note explicitly allows tuning within the existing cell/architecture formulation space; levers: electrode thickness, porosity, N/P, separator thickness/porosity, current collector thickness, particle radius"},
+        "thermal_management": {"state": "adjustable", "basis": "not declared in task text -> widest interpretation; lever: Total heat transfer coefficient [W.m-2.K-1]"}
+      },
+      "bookkeeping": {
+        "nominal_capacity": "when architecture changes capacity, Nominal cell capacity [A.h] is updated to the design's measured 1C discharge capacity (mechanically derived) so 1C/4C C-rate definitions stay honest; consistency parameter, not a design lever",
+        "derived_metrics": "sei_100cyc_nm / sei_500cyc_nm / lowT_retention are mechanically derived from tool outputs into derived JSON files (formulas recorded in log) and passed to log-evaluate alongside raw outputs",
+        "sei_key_note": "aging output key sei_thickness_nm_end is the negative-electrode end-of-run max thickness in nm; 100c and 500c have different thresholds so distinct derived keys are used"
+      }
+    }
+  }
+}

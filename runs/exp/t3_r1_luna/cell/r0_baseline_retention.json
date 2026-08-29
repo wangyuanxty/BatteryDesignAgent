@@ -1,0 +1,7 @@
+{
+  "capacity_1c_ah": 4.947764086814652,
+  "capacity_5c_ah": 0.4321844482320448,
+  "rate_retention_5C": 0.08734944525422658,
+  "source_1c": "r0_baseline_1c.json:capacity_ah",
+  "source_5c": "r0_baseline_5c.json:capacity_ah"
+}

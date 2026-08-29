@@ -1,0 +1,162 @@
+% ============================================================
+% 2. Literature Review
+% ============================================================
+\section{Literature Review}
+\label{sec:lit}
+
+This paper sits at the intersection of three literatures: autonomous agents
+in scientific and engineering design, classical optimization baselines and
+their known boundaries, and the governance of delegated decision-making. We
+review each in turn and then state the gap.
+
+\subsection{Autonomous Agents in Scientific and Engineering Design}
+
+The past three years have seen LLM agents deployed across the design chain,
+one slice at a time. Coscientist automated end-to-end chemistry workflows
+---planning, coding, instrument control---in a single agent
+\cite{boiko2023coscientist}; ChemCrow augmented an LLM with chemistry tools
+for molecule design and synthesis planning \cite{bran2024chemcrow}; the A-Lab
+closed the loop from synthesis recipe to robotic execution to X-ray
+characterization for materials discovery \cite{szymanski2023alab}. In the
+battery domain specifically, the lineage is young but active: LLM-assisted
+battery research has been surveyed comprehensively
+\cite{batteryLLMreview2025}; foundation models target battery analysis
+\cite{lipm2025}; and multi-agent chemist systems extend the approach to
+material prediction and exploration \cite{chatmat2026, matsciagent2025,
+matclaw2026}, and further agent families span hierarchical multi-agent
+materials discovery \cite{rothfarb2025hierarchical}, drug piloting and
+RAG-enhanced collaborative drug discovery \cite{drugpilot2025, cladd2025},
+and AMS circuit-design optimization \cite{heart2025}. Closest to our
+setting, Battery-Sim-Agent performs
+\emph{inverse} battery parameter estimation with an LLM agent in a
+simulator-in-the-loop configuration, reporting 67--95\% curve-matching error
+reduction against classical black-box optimizers across 200 synthetic
+calibration tasks \cite{chen2026battery}. Adjacent engineering domains
+replicate the pattern: AnalogAgent automates analog circuit design
+\cite{analogagent2026}; GENIUS orchestrates autonomous design and execution
+of simulation protocols \cite{genius2025}.
+
+Two structural observations hold across this entire body of work. First,
+every system covers a slice of a design chain, not a chain: material
+discovery stops at the material, circuit automation stops at the circuit,
+inverse estimation stops at parameters. None spans a full set of coupled
+design levers---from chemistry through formulation through architecture---and
+none therefore faces the cross-scale diagnosis problem that a full chain
+poses. Second, the judgment in each system is asserted by the agent itself.
+Whether a synthesis ``worked'' or a parameter fit ``converged'' is reported in
+natural language; there is no pre-registered contract against which a
+code-level verifier judges the claim. Benchmark evaluations of these systems
+reflect the same design: DiscoveryBench, ScienceAgentBench, MLAgentBench, and
+RE-Bench measure task success and capability \cite{discoverybench2024,
+scienceagentbench2024, mlagentbench2023, rebench2024}; FIRE-Bench adds an
+honesty layer for scientific rediscovery claims \cite{firebench2026}. None
+treats the \emph{integrity of the yardstick}---whether the metric an agent
+reports against is the metric it was given---as a first-order experimental
+variable.
+
+\subsection{Classical Optimization Baselines and Their Known Boundaries}
+
+Bayesian optimization (BO) is the standard strong baseline against which LLM
+agent systems are measured, and the comparison record already contains an
+important calibration. Battery-Sim-Agent benchmarks its agent against
+Meta's Ax BO platform (Sobol initialization, GPEI with LogNEI acquisition,
+fixed seed) and reports not only the headline reduction but a
+calibrated boundary: in ``low-headroom'' regimes where literature default parameters
+already sit close to the target, BO remains competitive and can even
+outperform the agent, and CMA-ES fails to converge on their parameter
+estimation tasks altogether \cite{chen2026battery}. We adopt the identical BO
+configuration---same platform, same strategy family, same seed---so that our
+baseline inherits this published calibration.
+
+The deeper boundary, which no agent study has isolated experimentally, is
+structural rather than statistical: BO searches a fixed parameter space. A
+classical optimizer can move thickness and porosity, but it cannot invent an
+electrolyte formulation, propose a coating, or switch a cathode system. When
+the binding constraint on a design contract is a material property---a
+voltage plateau beyond the chemistry's polarization limit, an SEI growth
+rate that only a coating suppresses---the optimum is not in the reachable
+set, and no acquisition function can find it. The battery modeling
+literature supplies the physics that makes this boundary concrete: plating
+onset is governed by the local overpotential balance
+\cite{arora1999plating, ren2018plating}; SEI growth by reaction kinetics
+\cite{peled1979sei}; thermal runaway by the coupled decomposition chemistry
+\cite{wang2012thermalrunaway}. Each of these mechanisms admits levers at
+scales a structural optimizer cannot touch. Our experimental design makes
+this boundary an observable: three of our eight contracts are solvable
+within the structural space, and five are not.
+
+\subsection{Governance of Delegated Decision-Making}
+
+The management literature supplies the vocabulary this paper formalizes.
+Classic agency theory studies delegation contracts and the moral hazard
+between principal and agent; its AI-era reformulation, delegated agency
+theory, centers on \emph{delegation fidelity}---the alignment between the
+contract the principal believes it set and the behavior the agent actually
+executes---and identifies contract specification quality and governance
+visibility as the two design dimensions that reduce adverse selection before
+handoff and moral hazard during execution \cite{delegatedagency2026}.
+Empirical work on AI-assisted decisions shows that algorithmic
+recommendations function as auditable reference points that reshape human
+override behavior in organizations \cite{nikpayam2024aiassisted}; Bayesian
+delegation policies allocate decision authority sequentially under
+uncertainty \cite{dixon2026bayesiandelegation}; GAIA articulates
+information-gated progression and authorization boundaries for LLM agents in
+high-stakes interaction \cite{zhao2025gaia}; and qualitative work on
+AI-assisted managerial decisions warns that autonomy must be designed into
+systems rather than assumed \cite{dancingalgorithm2025}. What none of this
+literature yet contains is an \emph{engineering-level} instantiation: a
+concrete design-task environment in which the delegation contract is
+machine-readable, the agent's every verdict is mechanically judged against
+it, and the fidelity of that judgment is itself an experimental variable.
+
+Finally, we note the disciplinary bridge this paper crosses. The battery
+prognostics community rooted in grey system theory---originating in the
+management science tradition \cite{deng1989grey}---has long modeled battery
+degradation and state-of-charge as forecasting problems
+\cite{li2025greyiterative, li2024hybridgrey, sapnken2025soh,
+sapnken2024pemfc, sapnken2026greyneural, xu2025greykalman}. That lineage
+treats the battery as an object to be \emph{predicted}. This paper treats it
+as an object to be \emph{designed by a governed agent}, extending the same
+management-science lens from prognostics to design governance.
+
+\subsection{The Gap and Research Questions}
+
+Three gaps follow. (1) No published system spans the full chain of cell
+design levers---electrolyte, separator, electrode, architecture,
+thermal---in one autonomous loop. (2) No experimental comparison isolates
+the two failure modes of ungoverned delegation: the solution-space failure of
+classical optimizers and the yardstick failure of protocol-free agents. (3)
+No study treats the adjudication layer---pre-registered contracts,
+code-mechanical verdicts, evidence-chain audits---as an experimental
+variable whose removal can be measured.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{figs/fig_failures.png}
+\caption{The two failure modes this paper isolates. Left: the
+solution-space failure---a black-box optimizer moves structural parameters
+only; a contract needing a material lever lies outside its reachable set.
+Right: the yardstick failure---a protocol-free agent can shift the
+threshold, purchase compliance with self-set parameters, alter the
+measurement caliber, or omit criterion variables.}
+\label{fig:failures}
+\end{figure}
+
+We formalize three research
+questions:
+
+\begin{itemize}
+\item[\textbf{RQ1}]
+\emph{Governance performance.} Does protocolized governance raise contract
+attainment relative to a protocol-free agent and a Bayesian optimizer under
+identical resources, and at what resource (token and message) cost?
+\item[\textbf{RQ2}]
+\emph{Mechanism attribution.} Which governance components carry the effect,
+and in which task regimes? We ablate each component separately and report
+its marginal contribution, including null results.
+\item[\textbf{RQ3}]
+\emph{Yardstick trustworthiness.} Does mechanized adjudication close the
+judgment-integrity gap---measured as evidence completeness, criterion
+fidelity, and the absence of self-set thresholds---that the protocol-free
+agent exhibits?
+\end{itemize}

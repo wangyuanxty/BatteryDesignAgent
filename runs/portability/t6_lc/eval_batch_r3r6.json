@@ -1,0 +1,12 @@
+[
+  {"candidate": "R3_A anode particle 4um", "round": 3, "outputs": ["cell/R3A_1c_energy.json", "cell/R3A_4c_safety.json", "cell/R3A_aging.json"], "note": "Smaller anode particle worsened plating (-0.213V) and SEI 756nm; lever rejected."},
+  {"candidate": "R3_B cooling h=25", "round": 3, "outputs": ["cell/R3B_1c_energy.json", "cell/R3B_4c_safety.json", "cell/R3B_aging.json"], "note": "h=25 drops T to 324.6K but still >323.15K; plating persists."},
+  {"candidate": "R3_C SEI coating x0.1", "round": 3, "outputs": ["cell/R3C_1c_energy.json", "cell/R3C_4c_safety.json", "cell/R3C_aging.json"], "note": "SEI k x0.1 gives 653.7nm (~13% cut), insufficient alone."},
+  {"candidate": "R4_A NP~1.15+overhead+cool+SEI", "round": 4, "outputs": ["cell/R4A_1c_energy.json", "cell/R4A_4c_safety.json", "cell/R4A_aging.json"], "note": "neg 100um still plates (-0.037V); need thicker anode."},
+  {"candidate": "R4_B NP~1.26+overhead+cool+SEI", "round": 4, "outputs": ["cell/R4B_1c_energy.json", "cell/R4B_4c_safety.json", "cell/R4B_aging.json"], "note": "neg 110um fixes plating (+0.028V) but SEI 738nm and T 326K still fail."},
+  {"candidate": "R4_C NP~1.38+overhead+cool+SEI", "round": 4, "outputs": ["cell/R4C_1c_energy.json", "cell/R4C_4c_safety.json", "cell/R4C_aging.json"], "note": "neg 120um no plating but SEI 765nm; thicker anode raises SEI via longer cycles."},
+  {"candidate": "R5_A pos57+NP1.59+h35+k1e-14", "round": 5, "outputs": ["cell/R5A_1c_energy.json", "cell/R5A_4c_safety.json", "cell/R5A_aging.json"], "note": "All pass except SEI 553nm (close to 500)."},
+  {"candidate": "R5_B pos55+NP1.66+h35+k1e-14", "round": 5, "outputs": ["cell/R5B_1c_energy.json", "cell/R5B_4c_safety.json", "cell/R5B_aging.json"], "note": "ED 989 passes but SEI 547nm still >500."},
+  {"candidate": "R5_C pos57+h40+k1e-14", "round": 5, "outputs": ["cell/R5C_1c_energy.json", "cell/R5C_4c_safety.json", "cell/R5C_aging.json"], "note": "h40 T 320.98K passes but SEI 553nm still >500."},
+  {"candidate": "LNMO final (pos57/NP1.59/overhead-thin/h45/k1e-15)", "round": 6, "outputs": ["cell/final_1c_energy_dfn_h45.json", "cell/final_4c_safety_h45_dfn.json", "cell/final_aging_dfn_h45.json"], "note": "DFN precision verification: all five acceptance metrics pass."}
+]

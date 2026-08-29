@@ -1,0 +1,7 @@
+{
+  "candidates": [
+    {"smiles": "O=C1OC=CO1", "name": "VC", "role": "film-forming SEI additive"},
+    {"smiles": "FC1COC(=O)O1", "name": "FEC", "role": "film-forming SEI additive (LiF-rich)"},
+    {"smiles": "O=S1(=O)OCCO1", "name": "DTD", "role": "sulfur-chemistry SEI additive"}
+  ]
+}

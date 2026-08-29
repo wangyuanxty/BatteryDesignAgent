@@ -1,0 +1,18 @@
+{
+  "candidates": [
+    {
+      "smiles": "C1OC(=O)OC1F",
+      "metrics": {
+        "homo_ev": -12.8198,
+        "lumo_ev": -7.196
+      }
+    },
+    {
+      "smiles": "O=C1OC=CO1",
+      "metrics": {
+        "homo_ev": -11.9981,
+        "lumo_ev": -7.0894
+      }
+    }
+  ]
+}

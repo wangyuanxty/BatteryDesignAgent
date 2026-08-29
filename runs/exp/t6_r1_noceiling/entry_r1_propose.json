@@ -1,0 +1,11 @@
+{
+  "action": "propose",
+  "round": 1,
+  "candidates": [
+    {"name": "Baseline Chen2020", "role": "baseline characterization of the default NMC811/graphite system (5 Ah nominal, architecture defaults)"},
+    {"struct": {"Separator thickness [m]": 9e-06, "Positive current collector thickness [m]": 10e-06, "Negative current collector thickness [m]": 8e-06}, "name": "ED-Compact A", "role": "dead-layer thinning: separator 12->9 um, current collectors 16/12->10/8 um (contract ED volume shrink, no capacity change)"},
+    {"struct": {"Separator thickness [m]": 9e-06, "Positive current collector thickness [m]": 10e-06, "Negative current collector thickness [m]": 8e-06, "Positive electrode active material volume fraction": 0.7, "Positive electrode porosity": 0.3, "Negative electrode active material volume fraction": 0.8, "Negative electrode porosity": 0.2, "Nominal cell capacity [A.h]": 5.6}, "name": "ED-Compact B", "role": "A + electrode compaction: active fraction up / porosity down (volume fractions stay physical), nominal capacity updated to designed loading 5.6 Ah so 1C stays a true 1C"},
+    {"struct": {"Separator thickness [m]": 9e-06, "Positive current collector thickness [m]": 10e-06, "Negative current collector thickness [m]": 8e-06, "Negative electrode thickness [m]": 110e-06, "Nominal cell capacity [A.h]": 6.4}, "name": "ED-Thick C", "role": "A + thicken the capacity-limiting negative electrode 85.2->110 um (dilutes dead layers, raises N/P from 0.82 to ~1.06), nominal updated to 6.4 Ah"}
+  ],
+  "llm_reason": "Contract ED (Wh/L) = discharge energy / stack volume. Levers: (1) dead-layer thinning (separator/CC) shrinks volume at fixed energy; (2) raising the capacity of the capacity-limiting negative electrode (active fraction up with porosity down, or thickness up) raises energy with less-than-proportional volume growth; (3) nominal capacity is kept consistent with designed loading so 1C/4C currents are genuine C-rates. Expected: plateau ~3.6-3.7 V for all (material gap, recorded; ceiling_escalation OFF -> no system switch). 4C safety screened in R2."
+}

@@ -1,0 +1,6 @@
+{
+  "lowT_retention_1C_pct": 99.6332,
+  "capacity_ah_lowT_253K": 5.719178829643704,
+  "capacity_ah_25C": 5.740234144771619,
+  "definition": "100 * capacity_ah(lowT_discharge 1C 253.15K) / capacity_ah(1C_discharge 298.15K), identical params; mechanical derivation from run-pyamm outputs"
+}

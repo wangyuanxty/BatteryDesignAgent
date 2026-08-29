@@ -1,0 +1,12 @@
+[
+  {
+    "candidate": "baselineChen2020",
+    "outputs": ["cell/r1_chen2020_1c_spme.json", "cell/r1_chen2020_energy.json"],
+    "note": "Ceiling-assessment evidence for the material-bottleneck escalation (anchor-table default system, task names no electrode system). 1C discharge SPMe + calc-energy: midpoint_voltage_v = 3.935 V < 4.1 V FAIL; energy_density_wh_l = 843.49 Wh/L < 950 Wh/L FAIL (energy 17.39 Wh, 200.8 um default stack). Architecture tuning cannot raise an NMC811-class cathode OCP plateau - tool-sourced confirmation that the Stage 2 escalation to the LNMO high-voltage system is required. T_max_K 311.62 K is from the 1C discharge protocol (informational; 4C/45C protocol evidence pending round 2)."
+  },
+  {
+    "candidate": "systemLNMO",
+    "outputs": ["cell/r1_lnmo_1c_spme.json", "cell/r1_lnmo_energy.json"],
+    "note": "Round 1 (1C discharge SPMe + calc-energy, default architecture, params = {}): energy_density_wh_l = 1005.32 Wh/L >= 950 PASS (+5.8% margin, energy 20.73 Wh over 200.8 um stack); midpoint_voltage_v = 4.1661 V >= 4.1 PASS. T_max_K 309.49 K is from the 1C discharge protocol - informational only; the stage3 thermal criterion's designated evidence is the 4C_charge_45C protocol (pending round 2). sei_thickness_nm_end (aging 1C x100) and plated (4C charge) not yet evidenced. Honest annotation: delivered capacity 5.110 Ah exceeds the 4.5 Ah nominal because the merged-set discharge terminates by negative-OCP extrapolation collapse at the 2.5 V cut-off (anode sto over-depletion artifact of the planted parameterization) - recorded, not silently exploited; no criterion depends on capacity, and the energy contract is the tool-computed integral."
+  }
+]

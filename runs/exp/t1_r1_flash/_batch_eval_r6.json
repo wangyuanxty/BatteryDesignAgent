@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "ArchA-h150-F4b",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/final_tr.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/final_oc.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/final_1c_dfn.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/final_energy.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h150_f4b_4c.json"
+    ],
+    "note": "FULL-SUITE CONFIRMATION: ED 459.4 >= 392.61; 4C T_max 323.4 <= 333.15; anode min +0.0114 V no plating; overcharge to 4.7 V -> TR not triggered. All 4 stage2/stage3 criteria pass.",
+    "round": 6
+  },
+  {
+    "candidate": "F4b-h120",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/exp/t1_r1_flash/cell/archA_h120_f4b_4c.json"
+    ],
+    "note": "Robustness probe: same electrolyte/architecture at h=120",
+    "round": 6
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "action": "final",
+  "verdict": "achieved",
+  "recommendation": "RECOMMEND E3-porheadroom as the final design for extreme-cold equipment: compressed Chen2020 stack (positive porosity 0.28 / negative porosity 0.28, separator 8 um, collectors 12/8 um, particles 3.5/3 um, cell volume 1.939e-5 m3) + high-transport blended-single-ion electrolyte (conductivity 1.6 S/m, diffusivity 3.2e-10 m2/s, transference 0.6; formulation estimates, temperature-independent like the set's flat functions) + anode porosity headroom + liquid cooling h=80 W/m2/K. Nominal capacity 5.0 Ah (measured 5.0392 Ah, within 3% re-nominalization threshold). All five criteria PASS at DFN verdict grade (stage-4 exam): W1 retention 0.9938 (>=0.95, cold-soak -20C/1C); W2 459.45 Wh/kg (>=327.18); W3 936.82 Wh/L (>=880, contract caliber); W4 T_max 326.96 K (<=333.15, 4C charge at 45C ambient, margin 6.19K); W5 plated false (anode_potential_v min +0.0060 V, 0/337 points negative). Two independent DFN 4C runs identical (deterministic). Margins: +132.3 Wh/kg, +56.8 Wh/L, +4.6 ppt retention, 6.19 K, 6 mV above plating onset.",
+  "design": {"params_file": "cell/params_E3.json", "base": "Chen2020", "nominal_capacity_ah": 5.0, "measured_capacity_ah_1c_dfn": 5.0392},
+  "escalation": {
+    "strikes": 1,
+    "layer1_executed": true,
+    "layer1": "Same failure cause (end-of-charge anode separator-interface saturation -> plating) failed 2 consecutive rounds (R2 SPMe screen, R3 DFN verdict with geometry-only levers: particle radius neutral-to-worse, anode margin monotone but insufficient). Per three-strike rule, switched thinking level BEFORE a 3rd same-class round: lever class changed from electrode geometry to electrolyte transport (sigma/D/t+ formulation) + thermal h. Result: ap_min -0.259 -> +0.006 V, T_max 357.5 -> 326.96 K. Strike ledger closed at 1.",
+    "layer2_executed": false,
+    "layer2": "Not needed: after the layer-1 switch, progress was monotone (R4 closed 90% of the gap, R5 closed the rest) - no 2nd strike condition arose.",
+    "layer3_executed": false,
+    "layer3": "Not triggered. Metric assumption never questioned: all five criteria were met without relaxing any threshold."
+  },
+  "honesty": {
+    "real_compute": false,
+    "endorsement_grade": "simulation-verdict (DFN + lumped thermal + plating); Stage 5 true compute skipped per entry-0",
+    "electrolyte_overrides_are_estimates": true,
+    "electrolyte_estimate_note": "sigma 1.6 S/m, D 3.2e-10 m2/s, t+ 0.6 are blended-single-ion-class formulation estimates (parameter bridge); temperature-independent scalars, consistent with this parameter set's flat sigma/D functions; never presented as measured values",
+    "artifact_notes": "cold-soak procedure for lowT (Initial temperature [K]=253.15); re-nominalization procedure for C-rate honesty; SPMe plating indicator at 4C proven unreliable in R2, all safety verdicts DFN-grade; cell volume mechanically refreshed from stack geometry"
+  }
+}

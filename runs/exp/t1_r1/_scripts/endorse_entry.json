@@ -1,0 +1,5 @@
+{
+  "action": "endorse",
+  "candidates": [],
+  "note": "Stage-5 true-compute endorsement skipped honestly: no molecular candidates were proposed in this case (the round-2/3 escalation used electrolyte formulation parameter-bridge overrides sigma=1.8 S/m and t+=0.55, which are formulation-class estimates, not new molecules). real_compute=false (headless default). No run-orca/run-md outputs exist and no DFT/MD values are fabricated. Molecular-layer criteria (max_energy_ev / max_homo_ev) remain unchecked and are listed as paper limitations in dvpr.md and dfmea.md; the DFMEA flags electrolyte oxidative stability as the highest unverified risk, with Stage-5 DFT endorsement recommended before production."
+}

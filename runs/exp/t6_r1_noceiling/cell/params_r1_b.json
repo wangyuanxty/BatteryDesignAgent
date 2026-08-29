@@ -1,0 +1,10 @@
+{
+  "Separator thickness [m]": 9e-06,
+  "Positive current collector thickness [m]": 10e-06,
+  "Negative current collector thickness [m]": 8e-06,
+  "Positive electrode active material volume fraction": 0.7,
+  "Positive electrode porosity": 0.3,
+  "Negative electrode active material volume fraction": 0.8,
+  "Negative electrode porosity": 0.2,
+  "Nominal cell capacity [A.h]": 5.6
+}

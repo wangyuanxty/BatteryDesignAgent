@@ -1,0 +1,8 @@
+{
+  "capacity_retention_pct": 99.42995275538283,
+  "_formula": "100 x capacity_ah(lowT 253.15K isothermal soak) / capacity_ah(1C 25C dfn)",
+  "_inputs": [
+    "cell/final_lowt_isothermal.json:capacity_ah",
+    "cell/final_1c_dfn.json:capacity_ah"
+  ]
+}

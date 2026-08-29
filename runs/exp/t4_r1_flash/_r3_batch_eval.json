@@ -1,0 +1,5 @@
+[
+  {"candidate": "B1_LowT-E2", "outputs": ["cell/r3_b1_1c.json", "cell/r3_b1_lowt.json", "cell/r3_b1_energy.json", "cell/r3_b1_4c45.json", "cell/r3_b1_retention.json"], "note": "strong electrolyte fixes plating (anode min +0.028V) but T_max 350.6K fails; ED_L 853 still short"},
+  {"candidate": "B2_ThinCell", "outputs": ["cell/r3_b2_1c.json", "cell/r3_b2_lowt.json", "cell/r3_b2_energy.json", "cell/r3_b2_4c45.json", "cell/r3_b2_retention.json"], "note": "thin cell: ED_L/ED_kg/T_max pass, plating persists (min -0.44V) -> thickness alone does not fix plating"},
+  {"candidate": "B3_ThinCellE2", "outputs": ["cell/r3_b3_1c.json", "cell/r3_b3_lowt.json", "cell/r3_b3_energy.json", "cell/r3_b3_4c45.json", "cell/r3_b3_retention.json"], "note": "thin cell + strong electrolyte: plating fixed (+0.035V), ED_L 900 pass, T_max 342.3K fails -> next round h up (thermal DOF)"}
+]

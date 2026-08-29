@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "E5_anode110_cath52",
+    "outputs": [
+      "cell/r8_E5_1c_spme.json",
+      "cell/r8_E5_energy.json",
+      "cell/r8_E5_4c_spme.json",
+      "cell/r8_E5_aging_spme.json"
+    ],
+    "note": "E5: anode 110 um (Q_a 7.13) + cathode 52.5 um (Q_c 6.22). 4C charge 1079.0 s at 18 A (cap metric 1.1989 Ah duration-proxy; true 5.25 mAh/cm2 = the anode room exactly) - plated (min -0.2342). T 319.53 PASS, SEI 112.14 PASS, ED 975.30 PASS, mid 4.2976 PASS, cap 4.66 Ah. diag_e5 resolves the final mechanism (both R8-era assumptions overturned): (1) the DISCHARGE cutoff is the CATHODE KINETIC SATURATION - at the cathode sto 1.0 the positive reaction overpotential explodes to -0.93 V (the j0 -> 0 at the full lithiation), driving the V to 2.5; the anode ends at only 0.264 (the OCP_n there 0.189 V, not the ~2.08 assumed) - the discharge = 0.73 Q_c (the cathode-limited), there is NO anode-depletion clamp-tail. (2) Through the CHARGE the total overpotential is only ~0.05 V (the eta_e 0.0398 constant at the kappa 2.0 + the SEI ~0.01 + the small kinetics), so the clean V ceiling = OCP_c_max 4.696 - OCP_n_min 0.092 + 0.05 = 4.654 < 4.70: the clean 4.7 V trip is UNREACHABLE - the trip comes only at the ANODE KINETIC SATURATION (the n -> 0.9998, the eta_n -> -0.077) -> the anode potential plunges 0.043 -> -0.234 in 2 s -> the V spike -> the trip. (3) The fix: deliberate IR - lower the electrolyte conductivity (the sanctioned formulation lever) so the eta_tot(4C) = 0.0796/kappa + 0.012 clears the needed 4.70 - 4.40(dip) + 0.092 = 0.392 V, i.e., the kappa <= ~0.209, and the V = 4.70 fires in the OCP_c flat dip with the anode at 0.5-0.7 (the huge margin to the saturation). The Q_c/Q_a balance alone cannot fix this: the trip needs the anode near-full regardless of the Q_c."
+  },
+  {
+    "candidate": "E6_anode100_cath48",
+    "outputs": [
+      "cell/r8_E6_1c_spme.json",
+      "cell/r8_E6_energy.json",
+      "cell/r8_E6_4c_spme.json",
+      "cell/r8_E6_aging_spme.json"
+    ],
+    "note": "E6: sensitivity, cathode 48 um (Q_c 5.68) on the anode 100 um. 4C charge 985.5 s (4.79 mAh/cm2 = the anode room (1-0.26)x6.48 exact) - plated (min -0.2361). T 319.09 PASS, SEI 111.93 PASS, ED 962.88 PASS, mid 4.2980 PASS, cap 4.26 Ah. Same mechanism as E5 (the discharge = the cathode-saturation 0.73 Q_c; the charge trips only at the anode kinetic saturation). The thinner cathode shrank the trip-need but the clean trip is still unreachable (the eta_tot ~0.05) - confirms the balance approach is the dead end and the IR lever is the route."
+  }
+]

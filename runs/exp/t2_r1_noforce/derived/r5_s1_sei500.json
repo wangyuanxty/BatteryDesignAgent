@@ -1,0 +1,5 @@
+{
+  "sei_thickness_nm_500cyc": 1067.6498,
+  "formula": "mechanical copy (rename) of sei_thickness_nm_end from aging_1C_100cyc --cycles 500",
+  "source": "r5_s1_aging500_spme.json"
+}

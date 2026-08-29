@@ -1,0 +1,7 @@
+[
+  {"candidate": "Baseline Chen2020", "outputs": ["cell/r1_base_1c.json", "cell/r1_base_energy.json", "cell/r2_base_4c.json", "cell/r2_base_aging.json"], "note": "full-metric check: 4C safety + SEI reference; plateau material gap confirmed"},
+  {"candidate": "ED-Compact A", "outputs": ["cell/r1_a_1c.json", "cell/r1_a_energy.json", "cell/r2_a_4c.json"], "note": "4C safety screening (SEI unchecked)"},
+  {"candidate": "ED-Compact B", "outputs": ["cell/r1_b_1c.json", "cell/r1_b_energy.json", "cell/r2_b_4c.json", "cell/r2_b_aging.json"], "note": "front-runner full-metric check"},
+  {"candidate": "ED-Thick C", "outputs": ["cell/r1_c_1c.json", "cell/r1_c_energy.json", "cell/r2_c_4c.json"], "note": "4C safety screening (SEI unchecked)"},
+  {"candidate": "ED-Compact B-p", "outputs": ["cell/r2_bp_1c.json", "cell/r2_bp_energy.json", "cell/r2_bp_4c.json"], "note": "smaller negative particles: plating-resistance check at same ED"}
+]

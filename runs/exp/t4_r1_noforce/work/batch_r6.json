@@ -1,0 +1,17 @@
+[
+  {
+    "candidate": "V10a_final_h45",
+    "outputs": ["cell/r6_final_energy_dfn.json", "cell/r6_final_1c_dfn.json", "cell/r6_final_lowT_dfn.json", "bridge/derived_r6_final_dfn.json", "cell/r6_final_4C45_safety_dfn.json"],
+    "note": "FINAL design V10a (V8 deep-transport architecture, h=40->45) at DFN grade on Chen2020: retention 0.9944, ED 564.84 Wh/kg, ED_vol 969.50 Wh/L, T_max 329.33 K (3.82 K margin), anode min +28.96 mV no plating"
+  },
+  {
+    "candidate": "V10a_OKane2022_robustness",
+    "outputs": ["cell/r6_final_ok_energy_spme.json", "cell/r6_final_ok_1c_spme.json", "cell/r6_final_ok_lowT_spme.json", "bridge/derived_r6_final_ok_spme.json", "cell/r6_final_ok_4C45_safety_dfn.json"],
+    "note": "robustness re-validation on OKane2022 base at h=45: retention 0.9788 (SPMe), ED 561.26/963.35, DFN safety T_max 331.78 K (1.37 K margin), anode min +24.96 mV no plating — design not an artifact of one parameter set"
+  },
+  {
+    "candidate": "V10a_coldstart",
+    "outputs": ["cell/r6_final_energy_dfn.json", "cell/r6_final_1c_dfn.json", "cell/r6_final_coldstart_lowT_dfn.json", "bridge/derived_r6_final_coldstart.json", "cell/r6_final_4C45_safety_dfn.json"],
+    "note": "honesty check at h=45 with Initial temperature=253.15 K (T_max 257.10 K confirms genuine cold start): retention 0.9944 identical to warm-start — protocol warm-start artifact immaterial for the final design under the model"
+  }
+]

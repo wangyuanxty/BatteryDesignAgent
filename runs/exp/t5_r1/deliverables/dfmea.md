@@ -1,0 +1,16 @@
+# Design FMEA (qualitative version, based on simulation signals) — VBF-T5R1-DFMEA-01
+
+**Case**: t5_r1, design R7B. **Caliber annotation**: qualitative version — severity/occurrence ratings are three-level (high/medium/low) based on the magnitude of simulation values deviating from thresholds; RPN uses a simplified S×O matrix. Complete FMEA (process/supplier failures) is N/A beyond the pure-simulation boundary.
+
+| # | Failure mode | Failure cause | Simulation signal (detectability basis) | Severity | Occurrence | Mitigation in design |
+|---|---|---|---|---|---|---|
+| 1 | Negative electrode lithium plating at 4C fast charge | Anode surface potential driven below 0 V by end-of-charge solid-phase diffusion overpotential + electrolyte transport limits | `anode_potential_v` min: R7B = **+0.0183 V** (Chen) / **+0.0180 V** (OKane) vs threshold 0 V — margin only +18 mV | high | low-medium (margin is thin; eroded by thicker/deeper charge or coarser graphite) | 2.61 µm negative particles (τ = R²/Ds ≈ 210 s « 800 s charge); σ 2.0 S/m, D_e 4.5e-10, t⁺ 0.45, ε_neg 0.45, sep 8 µm; N/P 1.40 |
+| 2 | Thermal runaway risk (temperature exceeds 60 °C red line at 4C/45 °C) | Heat generation exceeds cooling capacity | `T_max_K` = 326.8 K (Chen) / 328.2 K (OKane) vs 333.15 K — margin ~5–6 K | high | low at h = 60 W/(m²·K) (immersion-class); rises sharply if cooling degrades (h=40 failed at 338.8/341.0 K in R4) | **h = 60 W/(m²·K) is a hard thermal-management requirement**; cooling-area 0.00531 m² |
+| 3 | Electrolyte oxidative decomposition (voltage window) | Electrolyte HOMO above cathode potential at high SOC | Not simulated in this case (true DFT endorsement skipped, real_compute=false; no IE/EA numbers claimed) | medium | low-medium (standard EC-based + LiPF6 at 4.2 V; no signal to the contrary, but unverified) | Keep 4.2 V upper cutoff; formulation validation before production |
+| 4 | Insufficient capacity | Cathode/anode usable capacity below requirement | 1C `capacity_ah` = 6.210/6.209 Ah vs 5 Ah nominal — exceeds nominal (anode-unlocked, N/P 1.40) | low-medium | low | Anode-limited 1C discharge confirmed (R4C evidence); N/P 1.40 margin |
+| 5 | Internal short circuit via separator | 8 µm separator (thinned for ionic transport) + particle penetration | N/A — no simulation protocol for short circuits | high | low-medium (thin-separator class; production-validated 6–9 µm separators exist, but QC critical) | Separator integrity/particle-size QC; 8 µm chosen over 6 µm (R7D showed no benefit) |
+| 6 | Plating-margin erosion in manufacturing | Tolerance drift in particle size/porosity/thickness away from R7B values | Sensitivity known from sweep: neg radius 3.5 µm → +6 mV margin; 5.86 µm → −19 mV (plating, R6D) | high | low-medium | Tolerances on negative particle radius (2.61 µm class), ε_neg 0.45, sep 8 µm specified as design-critical |
+
+## Conclusion
+
+Highest-risk items: **#1 plating (margin +18 mV, high severity)** and **#2 thermal (margin ~5–6 K at h=60)** — both are mitigated in the design and both PASS under dual-system DFN simulation, but their margins are thin by engineering standards and are called out as the primary experimental-validation targets. Items #3/#5 rely on no simulation signal and are flagged for physical testing. Complete FMEA (process/supplier failures): N/A (beyond pure simulation boundary).

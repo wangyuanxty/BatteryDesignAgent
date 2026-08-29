@@ -1,0 +1,36 @@
+The design task is complete. Here is the summary.
+
+## Result: ACHIEVED
+
+**Adopted design — "Architecture V3"** (Chen2020 NMC811/graphite base + five overrides):
+
+| Lever | Baseline → Final | Source |
+|---|---|---|
+| Electrolyte conductivity | 0.95 → **2.5 S/m** | formulation estimate |
+| Cation transference number | 0.259 → **0.6** | formulation estimate |
+| Electrolyte diffusivity | 1.77e-10 → **4.0e-10 m²/s** | formulation estimate |
+| Negative particle radius | 5.86 → **3.0 µm** | design |
+| Total heat transfer coefficient | 10 → **60 W/m²/K** (liquid cooling) | design |
+
+**Verified against all four task criteria (mechanically evaluated via `log-evaluate`):**
+
+| Metric | Result | Threshold | Verdict |
+|---|---|---|---|
+| Energy density | **413.02 Wh/kg** | ≥ 392.61 | ✓ |
+| 4C fast charge, plating | anode_potential_v min **+0.0368 V** | no value < 0 V | ✓ (no plating) |
+| Maximum temperature | **328.56 K (55.4 °C)** | ≤ 60 °C | ✓ |
+| Overcharge 4.7 V thermal runaway | **triggered = false** | false | ✓ |
+
+## How it was reached
+- **Round 1 (baseline Chen2020):** ED already 400.75 Wh/kg ✓ and overcharge-no-TR ✓, but 4C failed — plating (anode −0.19 V) and T_max 354.3 K (81 °C).
+- **Fallback routing:** both failures localize to cell scale (Stage 3), so I stayed in architecture/transport space rather than re-screening materials.
+- **Round 2:** isolated that electrolyte transport is the dominant lever (variant B cut anode dip −0.19 → −0.031 V); particle-size + cooling combined passed T_max but residual plating remained.
+- **Round 3:** pushed transport further and tested negative-particle direction — smaller particle (3 µm) eliminated plating (+0.0368 V), larger particle (8 µm) re-introduced it and was rejected. V3 passed all four criteria.
+
+## Audit & deliverables
+- `log.jsonl`: entry 0 (criteria), plan, funnel (start_stage=3, baseline source), 3 propose rounds + same-round evaluates, endorse (honestly skipped, `real_compute=false`), final (achieved).
+- `verify-deliverables`: **ALL PASS** (7 categories source+PDF, xlsx parseable, VBF numbering, audit chain complete, final entry present).
+- `report.html` rendered (239 KB).
+- `deliverables/`: `design_spec`, `bom.xlsx`, `datasheet`, `calc.xlsx`, `dvpr`, `dfmea`, `delivery_index` — each with PDF release.
+
+**One honest limitation:** the three electrolyte transport numbers are formulation estimates (not simulation-derived), flagged as such throughout; no true DFT/MD was run (`real_compute=false`).
