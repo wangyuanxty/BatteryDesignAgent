@@ -6,6 +6,37 @@
 
 \subsection{The Design Space and the Contract}
 
+A battery cell design is, in essence, one indivisible decision spanning
+five interlocking design domains---electrode chemistry, electrolyte
+formulation and transport matching, electrode microstructure construction
+and modification, architecture parameters (thickness, porosity, separator,
+current collectors, particle radius), and cooling topology---each layer
+constraining the next, such that an optimum at any single domain can induce
+system-level performance regression or physical infeasibility. For decades
+the only infrastructure capable of making this decision end-to-end was a
+multidisciplinary human team, together with its coordination costs:
+communication loss, version conflicts, knowledge silos. Automation has
+stopped at the boundary: Bayesian optimization adjusts architecture knobs
+inside a single chemistry \cite{chen2026battery}, autonomous laboratories
+close the synthesis loop \cite{szymanski2023alab}, LLM chemists execute
+molecular tasks \cite{boiko2023coscientist, bran2024chemcrow}. Each covers
+one segment; none has spanned the full chain---electrolyte to thermal
+integration---within a single autonomous closed loop.
+
+The system we describe does. In the virtual battery factory, a single LLM
+agent receives a natural-language requirement and returns a complete
+adjudicated cell design covering materials, formulation, architecture,
+safety validation, and a first-principles endorsement pass. The system's
+core design principle is \emph{governance--carrier decoupling}: the
+protocol exists as a declarative natural-language rule set bound to no
+specific agent framework and portable across orchestration environments
+(demonstrated empirically in Section~5.7). The human engineer's role ends
+at the moment the contract is stated; the agent then plans, screens,
+simulates, diagnoses, falls back, and concludes with no intermediate human
+oversight. The eight scenario contracts were chosen so that each exercises
+different levers of this chain, and the suite collectively spans all five
+design domains.
+
 The design space a battery cell exposes is organized into five lever
 families, each with a complete simulation chain: the \emph{electrode system}
 (switching among validated parameter sets: NMC811/graphite-SiOx
@@ -35,11 +66,13 @@ adjustable, which safety defaults apply when the text is silent) is derived
 by protocol rules from the text alone, and the derivation is written into
 the audit ledger before the first simulation. The task text's numbers are
 the contract verbatim; the agent may not re-anchor, re-calibrate, or
-re-interpret them.
+re-interpret them. Figure~\ref{fig:arch} summarizes the system: the
+contract enters the governed loop, and the adjudication layer writes every
+verdict into the audit ledger outside it.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_arch.png}
+\includegraphics[width=\linewidth]{figs/fig_arch_v6.png}
 \caption{System architecture. The natural-language contract is the sole
 input; the agent executes the five-stage loop over a command-line tool
 library; the adjudication layer sits outside the agent and writes mechanical
@@ -52,7 +85,23 @@ verdicts with per-criterion evidence into the audit ledger.}
 The protocol organizes work as a five-stage funnel---planning, molecular
 screening, cell design, safety assessment, and a closing true-compute
 endorsement---inside which five governance components operate as fixed,
-always-on rules.
+always-on rules. Figure~\ref{fig:protocol} shows the loop with its
+fallback routing and the outside-agent adjudication layer;
+Figure~\ref{fig:funnel} plots the cost ladder of the same loop at a
+glance.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{figs/fig_protocol_v2.png}
+\caption{The protocolized design loop. The contract is the sole input;
+each round proposes, screens (when the bottleneck is molecular), simulates,
+and is adjudicated by code outside the agent; diagnosed failures route back
+to the scale of their cause, and a material ceiling escalates to a system
+switch. The red-dashed adjudication layer delivers the mechanical verdict
+and refuses incomplete audit chains; the exit path ends in endorsement and
+the deliverable package.}
+\label{fig:protocol}
+\end{figure}
 
 \begin{figure}[!htbp]
 \centering
@@ -125,7 +174,8 @@ are prohibited from entering judgment-relevant outputs unlabeled.
 names. Mistyped keys are rejected by the simulator (unknown parameter name),
 so the table is the safety net against manual transcription error.}
 \label{tab:bridge}
-\begin{tabular}{ll}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{3.0cm}p{7.9cm}}
 \toprule
 Microscopic property & Parameter name (exact key) \\
 \midrule
@@ -174,7 +224,7 @@ verdicts.
 
 The protocol, the tool library, the adjudication layer, and the
 cross-harness harnesses are open source
-(\url{https://github.com/wangyuanxty/BatteryDesignAgent}).
+(\href{https://github.com/wangyuanxty/BatteryDesignAgent}{github.com/wangyuanxty/BatteryDesignAgent}).
 
 The fifth pipeline stage is the true-compute endorsement: for the closing
 top candidates only, ab initio DFT (ORCA, r2SCAN-3c \cite{neese2022orca})

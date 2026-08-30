@@ -7,9 +7,10 @@
 \subsection{Main Comparison: Contract Attainment}
 
 Table~\ref{tab:main} reports contract attainment for all eight tasks under
-the four conditions. Three findings stand out. First, the governed agent
-achieves \textbf{8/8} under the two primary models and \textbf{4/8} under
-the third (Section~5.4); every verdict is mechanical, with
+the four conditions, and Figure~\ref{fig:main} shows the same matrix as a
+color-coded attainment map. Three findings stand out. First, the governed
+agent achieves \textbf{8/8} under the two primary models and \textbf{4/8}
+under the third (Section~5.4); every verdict is mechanical, with
 an evidence chain per criterion and a verifier-passed audit chain. Second,
 the Bayesian optimizer achieves \textbf{3/8}---exactly T1, T4, and T8, the
 three tasks whose binding constraint is structural (thickness, porosity,
@@ -24,7 +25,9 @@ with the penalizer aligned to the contract's $50\,^\circ$C red line (the
 main run hardcoded $60\,^\circ$C) leaves the outcome unchanged: 0/50 trials
 attain the contract in either configuration, 30/50 clear the volumetric
 criterion alone in the aligned run, and none is simultaneously
-plating-free and below the red line; nail penetration triggered on T7. Third, the protocol-free agent achieves \textbf{none} within the
+plating-free and below the red line; nail penetration triggered on T7. Figure~\ref{fig:bo} shows the BO trajectories: the three structural
+tasks climb to attainment, the five material-bottleneck tasks plateau
+against penalties no structural parameter can remove. Third, the protocol-free agent achieves \textbf{none} within the
 measurement space: two of its claimed successes (T4, T8) solve the contract
 by switching to a lithium-metal cell outside the validated parameter sets,
 and its remaining claims fail mechanical re-adjudication (Section~5.5). The
@@ -83,6 +86,8 @@ nail) that no structural parameter can remove.}
 
 \begin{table}[!htbp]
 \centering
+\footnotesize
+\setlength{\tabcolsep}{3.2pt}
 \caption{Contract attainment, eight tasks $\times$ four conditions
 (governed agent shown under three models: pro, flash, luna).
 $\checkmark$ = achieved (mechanical verdict); $\times$ = failed contract
@@ -90,13 +95,14 @@ criteria; $\circ$ = outside the measurement space (see text). G = governed
 agent; C1 = protocol-free agent; C2 = Bayesian optimization. Key re-adjudicated
 numbers in parentheses.}
 \label{tab:main}
-\begin{tabular}{lccccc}
+\setlength{\tabcolsep}{2.7pt}
+\begin{tabular}{p{1.3cm}p{1.9cm}p{1.7cm}p{1.9cm}p{2.2cm}p{2.0cm}}
 \toprule
 Task & G (pro) & G (flash) & G (luna) & C1 & C2 \\
 \midrule
 T1 sedan & $\checkmark$ 553.98 & $\checkmark$ 459.4 & $\times$ (plating) & $\times$ ($-6.9$ mV) & $\checkmark$ 514.13 \\
-T2 storage & $\checkmark$ 465.62 & $\checkmark$ & $\checkmark$ & $\times$ (plating, SEI@500cyc) & $\times$ (plating, SEI) \\
-T3 tools & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ (5C 84.8\%) & $\times$ (plating, 5C 3.4\%) \\
+T2 storage & $\checkmark$ 465.62 & $\checkmark$ & $\checkmark$ & $\times$ (plating, SEI) & $\times$ (plating, SEI) \\
+T3 tools & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ (5C 84.8\%) & $\times$ (plating, 5C) \\
 T4 cold & $\checkmark$ 471.55 & $\checkmark$ & $\checkmark$ & $\circ$ (Li-metal) & $\checkmark$ 678.26 \\
 T5 flagship & $\checkmark$ & $\checkmark$ & $\times$ (ceiling) & $\times$ ($-12.6$ mV) & $\times$ (plating) \\
 T6 phone & $\checkmark$ 1135.8 & $\checkmark$ & $\times$ (895.6 Wh/L) & $\times$ (budget) & $\times$ (plateau, $T_{\max}$) \\
@@ -112,7 +118,8 @@ T8 drone & $\checkmark$ & $\checkmark$ & $\times$ (mass) & $\circ$ (Li-metal) & 
 
 Table~\ref{tab:cost} reports the governed agent's resource consumption per
 task under both models---assistant messages (activity measure) and model
-tokens (input/output).
+tokens (input/output)---and Figure~\ref{fig:cost} plots the same data,
+highlighting the material-bottleneck peaks (T6 and, under flash, T5).
 Three observations. Material-bottleneck tasks are the expensive ones: T6
 (the smartphone contract demanding a cathode-system switch) consumes 468
 messages and the largest token counts under pro, and T5/T6 dominate under
@@ -162,9 +169,10 @@ Total & 2723 & 1517/1352 & 2418 & 1123/992 \\
 
 \subsection{Ablation: Which Components Carry the Effect}
 
-Table~\ref{tab:ablation} reports the twelve ablation runs. The three
-mechanisms contribute at very different magnitudes, and the decomposition
-is the paper's answer to RQ2. Ceiling escalation is the load-bearing
+Table~\ref{tab:ablation} reports the twelve ablation runs, and
+Figure~\ref{fig:ablation} summarizes their verdicts as a per-component
+stacked bar. The three mechanisms contribute at very different magnitudes,
+and the decomposition is the paper's answer to RQ2. Ceiling escalation is the load-bearing
 mechanism: disabling it costs two of the three material-bottleneck tasks
 outright---T6 loses its LNMO system switch (the 4.1 V plateau is unreachable
 in NMC811 space) and T2 loses its SEI-kinetics bridge (three of five
@@ -266,6 +274,9 @@ baseline's $3/8$, and on tasks the optimizer cannot touch at all (T2, T3,
 T7). Like every other condition column, the Luna leg is one run per cell:
 its reading is at the level of the failure \emph{pattern} (honest, distinct
 from the baselines') rather than per-task inference.
+Figure~\ref{fig:models} shows the three model legs side by side: the same
+governed loop attains the same contracts through different designs
+(and, on T6, the same LNMO bottleneck diagnosis).
 
 \begin{figure}[!htbp]
 \centering
@@ -305,6 +316,8 @@ legal reading of the task text, but outside the protocol's verification
 chain, and therefore not counted. The comparison is not ``the bare agent is
 incompetent'': it is that an ungoverned agent's yardstick is a movable
 object, and only the adjudication layer pins it.
+Figure~\ref{fig:yardstick} walks through the four mechanisms by which the
+yardstick was moved, against the contract values.
 
 \begin{figure}[!htbp]
 \centering
@@ -329,7 +342,8 @@ trigger criterion.}
 re-adjudication. All re-adjudications mechanical (definitions in
 supplementary materials).}
 \label{tab:c1}
-\begin{tabular}{p{1.0cm}p{4.3cm}p{2.6cm}p{5.4cm}}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{0.9cm}p{3.5cm}p{2.2cm}p{4.4cm}}
 \toprule
 Task & Self-reported & Re-adjudicated & Yardstick failure \\
 \midrule
@@ -361,10 +375,10 @@ every rule-derived decision and its basis recorded (Table~\ref{tab:casestudy}
 shows the operative rows). The starting-stage decision is explicit: the task
 names no system, so the anchor table maps to the Chen2020 default; the
 plateau clause is flagged from the outset as the suspected material
-bottleneck. The whole run then renders into a self-contained HTML report---seven
-sheets (overview, trajectory, funnel, stage results, endorsement, final
-recommendation, notes)---which is a rendering of the ledger, not a
-narrative written after the fact.
+bottleneck. The run's full documentation is a deterministic seven-section
+rendering of the ledger (overview, trajectory, funnel, stage results,
+endorsement, final recommendation, notes)---a rendering of the audit chain,
+not a narrative written after the fact.
 
 \begin{table}[!htbp]
 \centering
@@ -372,7 +386,8 @@ narrative written after the fact.
 the full entry also records the five-category freedom parsing, the
 real-compute setting, and the start-stage basis).}
 \label{tab:casestudy}
-\begin{tabular}{lll}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{1.6cm}p{2.6cm}p{7.0cm}}
 \toprule
 Layer & Metric & Threshold (as parsed) \\
 \midrule
@@ -421,7 +436,8 @@ Every pivot is a recorded decision with its hypothesis attached.
 \caption{The T6 candidate sheet (condensed from the report's full list of
 twenty; each proposal is logged with its rationale in the ledger).}
 \label{tab:candidates}
-\begin{tabular}{lll}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{1.1cm}p{3.0cm}p{7.4cm}}
 \toprule
 Round & Candidate & Purpose (logged rationale) \\
 \midrule
@@ -440,19 +456,41 @@ R08 & r8\_final / r8\_d6\_margin & final candidate and margin-widening probe \\
 \end{tabular}
 \end{table}
 
-\begin{table}[!htbp]
-\centering
-\caption{T6 round trail (mechanical verdicts; volumetric ED shown).}
-\label{tab:trail}
-\begin{tabular}{lcccccccc}
+\footnotesize
+\addtolength{\tabcolsep}{-2pt}
+\begin{longtable}{p{2.0cm}p{3.8cm}p{2.4cm}p{2.3cm}p{1.2cm}}
+\caption{T6 round trail: one row per design round, reconstructed
+mechanically from the run ledger. ``Agent reasoning'' gives a verbatim
+thinking excerpt from the run log where one exists (shown in italics),
+followed by the decision rationale the agent itself recorded at that round;
+``Simulation artifacts'' lists the evidence files the mechanical evaluator
+read; ``Key values'' are the decisive contract-caliber numbers.}
+\label{tab:trail}\\
 \toprule
-Round & R01 & R02 & R03 & R04 & R05 & R06 & R07 & R08 \\
+Round & Agent reasoning (recorded rationale) & Simulation artifacts & Key values & Verdict \\
 \midrule
-Wh/L & 843.5 & 1005.3 & 1117.6 & 1140.0 & 1135.2 & 1127.1 & 1135.8 & 1135.8 \\
-Verdict & $\times$ & $\times$ & $\times$ & $\times$ & $\checkmark$ & $\times$ & $\checkmark$ & $\checkmark$ \\
+\endfirsthead
+\toprule
+Round & Agent reasoning (recorded rationale) & Simulation artifacts & Key values & Verdict \\
+\midrule
+\endhead
 \bottomrule
-\end{tabular}
-\end{table}
+\endlastfoot
+Entry-0 & Task text names a smartphone use case; the plateau $\geq 4.1$ V clause is flagged from the outset as the suspected material bottleneck (NMC811-class midpoint $\approx 3.6$ V). & parameter-set anchor check & criteria pre-registered, five freedom classes & contract locked \\
+R01 & Baseline vs.\ system switch: the Chen2020 baseline cannot reach the plateau; LNMO at defaults meets ED and midpoint. & r1\_chen2020\_1c, r1\_lnmo\_1c, calc-energy $\times2$ & ED\_l 843.5 / 1005.3; Vmid 4.166 & $\times$ base / $\checkmark$ LNMO \\
+Funnel & Molecular funnel over the screening set; candidates benchmarked by three-model vote. & run-mlp (MACE, CHGNet), run-xtb & four molecules below the HOMO line & funnel passed \\
+R02 & Gap quantification on the LNMO design: plating and SEI $>$500 nm; SEI growth is temperature-insensitive, so cooling is not the lever. & r2\_lnmo\_aging; r2\_lnmo\_4c (h=200/500) & plated; SEI 753.1 & $\times\times\times$ \\
+R03 & \emph{``Round 3 results: np120 (N/P 1.2) 321.20 K,\ $\mathrm{-0.0049}$ V---STILL plated (borderline!)''} (thinking): N/P dominates plating (end-of-charge kinetics); particle radius weak; electrolyte transport direction dropped. & r3\_np120\_4c, r3\_nr35\_4c, r3\_elyte\_4c & SEI 736.0 nm (aging probe) & $\times\times\times\times$ \\
+R04 & SEI probes from the rate law: $c_0$ and $D_{\mathrm{EC}}$ cuts ($0.5\times$) bring SEI below 500 nm. & r4\_np125, r4\_np120nr35, r4\_sei1/2\_aging & SEI 395.2 nm & $\times$/$\checkmark\checkmark\checkmark$ \\
+R05 & Combine the measured levers into one shipping candidate; run the complete SPMe evidence battery. & r5\_final\_\_spme (1c/aging/4c) & 1135.2 Wh/L; 4.188 V; 321.09 K; SEI 435.4 & $\checkmark$ (SPMe) \\
+R06 & \emph{``DFN confirmation FLIPPED two criteria: T\_max 323.80 K; plated TRUE''} (thinking): proxy layering rule---conclusion-grade numbers must come from DFN; the SPMe win is re-checked at high fidelity. & r6\_final\_\_dfn (energy/aging/4c) & 1127.1 Wh/L; Vmid 4.097; plated & $\times$ \\
+R07 & DFN flipped three criteria; probe the three fixes in isolation and in combination (h=400, r=3.5, D$_e$=5e-10). & r7\_d5, r7\_nr30, r7\_combo (DFN) & tip 1138.6 Wh/L; 321.62 K & $\checkmark$/$\times$/$\times$ \\
+R08 & \emph{``Round 8 evaluated: both candidates pass with all 5 criteria checked''} (thinking): final combined candidate through the full DFN chain; deliverable package verified. & r8\_d6\_\_dfn (energy/aging/4c) & 1135.8 Wh/L; 4.1145 V; 321.42 K; SEI 385.3 & $\checkmark\checkmark$ \\
+Endorsement & ORCA (r2SCAN-3c) plus CP2K cross-validation of the funnel finalists; all four below the $-6.0$ eV line in both codes. & run-orca, run-cp2k (Fig.~\ref{fig:endorse}) & endorses screening & signed \\
+Final & Ledger closed: recommendation recorded, deliverables and index generated, verifier pass. & \texttt{verify-}\allowbreak\texttt{deliverables} & VBF-T6R1-* package & achieved \\
+\bottomrule
+\end{longtable}
+
 
 \textbf{Mechanical adjudication.} The closing evaluation's evidence chain is
 computed by the adjudication layer, criterion by criterion, each pointing at
@@ -499,7 +537,8 @@ $D_e$ in this range''---the deliverable labels its own estimates.
 \caption{Final design parameters (excerpt of the design specification,
 VBF-T6R1-DS-01).}
 \label{tab:designparams}
-\begin{tabular}{ll}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{2.4cm}p{8.7cm}}
 \toprule
 Item & Value \\
 \midrule
@@ -519,7 +558,8 @@ Cooling & $h = 400$ W/m$^2$K \\
 \caption{Technical datasheet, condensed (VBF-T6R1-DSH-01); the Source
 column of the original points each value at its tool-output file.}
 \label{tab:datasheet}
-\begin{tabular}{ll}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{2.9cm}p{8.2cm}}
 \toprule
 Field & Value \\
 \midrule
@@ -576,7 +616,8 @@ retained.
 completeness across three orchestration substrates (identical protocol,
 model, task texts, and nominal budget).}
 \label{tab:portability}
-\begin{tabular}{lccc}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{1.2cm}p{3.0cm}p{3.3cm}p{3.5cm}}
 \toprule
 Task & Primary harness & OpenAI Agents SDK & LangChain \\
 \midrule
@@ -636,9 +677,10 @@ flagship run at the r2SCAN-3c level (ORCA), with independent HOMO
 cross-validation at PBE-D3/GTH (CP2K, fourth column). The funnel's
 oxidation-stability elimination line is HOMO $\leq -6.0$ eV.}
 \label{tab:endorse}
-\begin{tabular}{lcccccc}
+\setlength{\tabcolsep}{2.2pt}
+\begin{tabular}{p{2.9cm}p{1.5cm}p{1.2cm}p{1.4cm}p{1.2cm}p{0.95cm}p{0.95cm}}
 \toprule
-Molecule & $E$ (Hartree) & HOMO (eV) & HOMO (eV, CP2K) & LUMO (eV) & IE (eV) & EA (eV) \\
+Molecule & $E$ (Hartree) & HOMO (eV) & HOMO (CP2K) & LUMO (eV) & IE (eV) & EA (eV) \\
 \midrule
 FEC (fluoroethylene carbonate) & $-441.61$ & $-7.46$ & $-7.46$ & $-0.67$ & $10.77$ & $-0.61$ \\
 VC (vinylene carbonate) & $-341.13$ & $-6.47$ & $-6.32$ & $-0.86$ & $9.40$ & $-0.87$ \\

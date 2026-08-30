@@ -3,10 +3,15 @@
 %% When Design Decisions Go to the Agent
 %% ============================================================
 
-\documentclass[review]{elsarticle}
+\documentclass[review,11pt]{elsarticle}
 
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
+\usepackage{longtable}
+\setlength{\tabcolsep}{3.4pt}
+\let\origtable\table
+\renewcommand*{\table}{\footnotesize\origtable}
+% ---- global table shrinking ----
 \usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
 
@@ -55,13 +60,16 @@ separately and excluded from the same-space attainment counts.
 \section{C1 Re-Adjudication Detail}
 
 Table~\ref{tab:c1supp} restates the main-text table with the exact values
-and the failing criterion per task.
+and the failing criterion per task, and Figure~\ref{fig:splating} shows
+the mechanical plating criterion applied to the T2 design;
+Figure~\ref{fig:ssei} quantifies the SEI-kinetics bridge on the same
+task.
 
 \begin{table}[!htbp]
 \centering
 \caption{Protocol-free agent claims vs.\ contract-caliber re-adjudication.}
 \label{tab:c1supp}
-\begin{tabular}{p{1.0cm}p{4.2cm}p{3.2cm}p{5.4cm}}
+\begin{tabular}{p{0.9cm}p{3.7cm}p{2.6cm}p{4.0cm}}
 \toprule
 Task & Self-reported & Re-adjudicated value & Failing criterion \\
 \midrule
@@ -100,13 +108,14 @@ contract line.}
 The thresholds in the task texts are calibrated from the underlying
 parameter sets at the DFN contract caliber (mechanically derived via
 \texttt{calc-energy}); the anchoring is a Methods-section record and never
-appears in the task text seen by any agent.
+appears in the task text seen by any agent. Table~\ref{tab:anchor} lists
+the anchoring source per task.
 
 \begin{table}[!htbp]
 \centering
 \caption{Scenario anchoring and threshold calibration sources.}
 \label{tab:anchor}
-\begin{tabular}{p{1.0cm}p{5.6cm}p{6.6cm}}
+\begin{tabular}{p{0.9cm}p{4.9cm}p{5.4cm}}
 \toprule
 Task & Anchored scenario & Calibration source \\
 \midrule
@@ -128,7 +137,8 @@ Margins are computed mechanically from the evidence chains of the final
 passing evaluations: $\text{margin} = (v - t)/|t|$ for minimum thresholds
 and $(t - v)/|t|$ for maximum ones, with $v$ the evidence value and $t$ the
 pre-registered threshold. Boolean criteria (plating, thermal-runaway
-trigger) pass exactly and carry no margin.
+trigger) pass exactly and carry no margin. Table~\ref{tab:margins}
+gives the complete per-criterion spreadsheet.
 
 \begin{table}[!htbp]
 \centering
@@ -136,7 +146,7 @@ trigger) pass exactly and carry no margin.
 The left column lists the criterion each task cleared last (binding
 margin); the right column lists the wide-margin criteria.}
 \label{tab:margins}
-\begin{tabular}{p{1.0cm}p{5.4cm}p{3.4cm}p{4.2cm}}
+\begin{tabular}{p{1.0cm}p{4.9cm}p{1.5cm}p{3.8cm}}
 \toprule
 Task & Binding criterion (value vs threshold) & Margin & Wide margins \\
 \midrule
@@ -154,7 +164,8 @@ T8 & mass 39.8 vs 40 g & $+0.5\%$ & ED 634.32 vs 446.18 ($+42.2\%$); 5C retentio
 
 BO seed robustness. The Bayesian baseline is deterministic in its seed, and
 a three-seed replication (1234, 5678, 9012) leaves the attained-task set
-unchanged. Attaining-trial counts per task and seed (out of 50 evaluations):
+unchanged. Attaining-trial counts per task and seed (out of 50
+evaluations) are tabulated in Table~\ref{tab:boseeds}:
 
 \begin{table}[!htbp]
 \centering
@@ -196,21 +207,23 @@ itself.
 \section{Real-Data Alignment: Source and License}
 
 The real-data anchor uses the LG M50 battery degradation dataset
-(Imperial College London), Zenodo record 10.5281/zenodo.10637534, licensed
-under CC BY 4.0, accompanying the paper by Kirkaldy et al.\
-(10.1016/j.jpowsour.2024.234185). The comparison is against Experiment 5
+(Imperial College London)\@, Zenodo record
+\texttt{10.5281/zenodo.10637534}, licensed under CC BY 4.0,
+accompanying the paper by Kirkaldy et al.\
+(10.1016/\allowbreak jpowsour/2024.234185). The comparison is against
+Experiment 5
 (standard cycle aging), Cell A, RPT0 (beginning of life), $0.1$C discharge.
 
 \section{Replication Runs (N=3, All Eight Tasks)}
 
 Three seeds of every task under the governed protocol, deepseek-v4-pro,
-same budget as the main matrix.
+same budget as the main matrix (Table~\ref{tab:replication}).
 
 \begin{table}[!htbp]
 \centering
 \caption{Threefold replication of all eight tasks.}
 \label{tab:replication}
-\begin{tabular}{llll}
+\begin{tabular}{p{1.9cm}p{3.5cm}p{3.5cm}p{1.9cm}}
 \toprule
 Task & r1 & r2 & r3 \\
 \midrule
@@ -242,7 +255,7 @@ Table~\ref{tab:bsa} positions the two papers side by side.
 \centering
 \caption{Positioning against Battery-Sim-Agent (KDD 2026).}
 \label{tab:bsa}
-\begin{tabular}{lll}
+\begin{tabular}{p{2.6cm}p{4.4cm}p{4.2cm}}
 \toprule
  & Battery-Sim-Agent & This paper \\
 \midrule
@@ -266,5 +279,8 @@ harnesses (including the cross-harness legs)---is open source at
 the primary data source of the paper; every table value can be re-derived
 mechanically from the ledgers and the tool outputs they reference. LLM runs
 are not seed-reproducible; the protocol's verdicts are.
+
+\bibliographystyle{elsarticle-num}
+\bibliography{paper}
 
 \end{document}

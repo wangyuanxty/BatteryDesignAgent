@@ -4,12 +4,18 @@
 %% Class: elsarticle (Elsevier; swap document class per target venue)
 %% ============================================================
 
-\documentclass[review]{elsarticle}
+\documentclass[review,11pt]{elsarticle}
 
 %% ---- Packages ----
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
+\usepackage{longtable}
+\setlength{\tabcolsep}{3.4pt}
+\let\origtable\table
+\renewcommand*{\table}{\footnotesize\origtable}
+% ---- global table shrinking ----
 \usepackage{graphicx}
+\usepackage{subfig}
 \usepackage[hidelinks]{hyperref}
 
 %% ---- Journal ----

@@ -75,7 +75,8 @@ any agent.
 \caption{The eight scenario tasks. Every criterion is an absolute number,
 AND-judged; nothing else is declared in the task text.}
 \label{tab:tasks}
-\begin{tabular}{p{1.2cm}p{11.5cm}}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{1.0cm}p{10.5cm}}
 \toprule
 ID & Contract (abridged; all values absolute) \\
 \midrule
@@ -245,7 +246,8 @@ versus simulated 4857.0 mAh ($+0.45\%$), and voltage-curve RMSE 20.6 mV
 over 2--82\% depth of discharge. The alignment is the Methods-section
 calibration record; it establishes that the numbers agents are judged
 against are anchored to a production cell---a validation of the simulator,
-not of the final designs (Section~6).
+not of the final designs (Section~6). Figure~\ref{fig:alignment} overlays
+the measured and simulated curves.
 
 \begin{figure}[!htbp]
 \centering

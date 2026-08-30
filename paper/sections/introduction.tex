@@ -4,50 +4,168 @@
 \section{Introduction}
 \label{sec:introduction}
 
-A battery cell is designed five times over, and the five designs must be one
-decision. The electrochemist selects the electrode system; the formulation
-chemist the electrolyte---its transport properties, its additive package; the
-materials engineer the electrode microstructure and any coating or doping; the
-mechanical designer the cell architecture---thickness, porosity, separator,
-current collectors, particle size; the thermal engineer the cooling. Each
-choice constrains the next, and the aggregate is judged not by any single
-specialist but by a contract of system-level metrics: energy density against
-temperature ceilings, fast charge against lifetime. For decades the only
-infrastructure capable of making this one decision end-to-end was a human team
-of specialists, with all the costs of coordination that implies. Automated
-methods have never crossed this boundary. Bayesian optimization moves
-architecture knobs inside one chemistry \cite{chen2026battery}; autonomous
-laboratories synthesize materials \cite{szymanski2023alab}; LLM chemists
-execute molecular tasks \cite{boiko2023coscientist, bran2024chemcrow}. Each
-covers a slice. No published system, to our knowledge, spans the full chain of
-cell-design levers---electrolyte, separator, electrode, architecture,
-thermal---within a single autonomous loop.
+Battery development is a key link in transport electrification and grid
+energy storage, yet the field itself is constrained by a core dilemma:
+\emph{design space versus evaluation cost}. Performance goals---energy
+density, rate capability, cycle life, safety, cost---are mutually coupled;
+design variables span material systems (active materials, electrolyte
+formulations), electrode microstructure (particle radius, porosity,
+tortuosity), and operating conditions, together forming a high-dimensional
+nonlinear search space. Meanwhile, evaluating any candidate design is
+expensive: cycle-life assessment commonly requires thousands of hours of
+continuous charge--discharge testing \cite{chen2020jes}, and key microscopic
+parameters---solid/liquid transport coefficients, reaction-rate constants,
+porosity, initial lithium concentration---are difficult or impossible to
+measure directly \cite{chen2020jes} and must be inferred from macroscopic
+voltage/capacity trajectories, the well-known \emph{inverse problem}
+\cite{chen2020jes}. Under this constraint the classical
+trial-and-error paradigm iterates slowly: battery design is, in essence, an
+\emph{evaluation-constrained} problem.
 
-This paper reports the first system that does. In a virtual battery factory, a
-single LLM agent receives a natural-language requirement---nothing else: no
-configuration file, no parameter set, no candidate list---and returns a
-complete, adjudicated cell design: the material choices, the formulation, the
-architecture, the safety validation, and the deliverable package---with a closing first-principles endorsement pass (executed for the flagship molecular finalists, §5.8)
-(ab initio DFT and molecular dynamics, reserved for the top candidates rather
-than used for screening). The protocol
-itself is a self-contained declarative artifact---natural-language rules, a
-command-line tool library, and an audit ledger---bound to no specific agent
-framework: the governance travels with the contract, not with the harness,
-a property we verify empirically by running the identical protocol under
-three orchestration substrates (§5.7).
-The human
-engineer's *in-loop* role ends at the moment the contract is stated; from that point
-forward the agent plans, screens, simulates, diagnoses, falls back, and
-concludes with no intermediate human oversight. The eight scenario contracts
-we evaluate were chosen so that different tasks must exercise different levers
-of this full chain---a transport upgrade for a fast-charge guarantee, an
+\begin{figure*}[!htbp]
+\centering
+\subfloat[Deployment scenes: fast-charge
+transport (left), grid storage (center), and drone powertrains
+(right)---the application settings of the eight scenario contracts.]{%
+\includegraphics[width=0.91\linewidth]{figs/fig_overview_a.png}}
+\\[2pt]
+\subfloat[The governance idea: the design loop over all five lever
+families ends at the contract, and every verdict is issued by a
+judging layer outside the agent.]{%
+\includegraphics[width=0.47\linewidth]{figs/fig_overview_b.png}}\hfill
+\subfloat[Architecture at a glance: five fidelity rungs, each
+gate kept by one entry---computational cost rises left to right.]{%
+\includegraphics[width=0.47\linewidth]{figs/fig_overview_c.png}}
+\caption{Overview of the study. (a) The application settings that
+motivate the eight scenario contracts. (b) The central diagnostic: a
+design loop that ends at the contract and an adjudication layer that
+stands outside it. (c) The multi-precision architecture---cheap
+proxies first, true first principles last.}
+\label{fig:overview}
+\end{figure*}
+
+Figure~\ref{fig:overview} previews the study: the application settings
+that motivate the suite (\ref{fig:overview}a), the governance diagnostic
+that defines our contribution (\ref{fig:overview}b), and the architecture
+(\ref{fig:overview}c).
+
+Early data-driven methods formalized the problem as
+\emph{black-box optimization} (BBO): numerical algorithms such as Bayesian
+optimization \cite{jiang2022fastcharging} or genetic algorithms
+\cite{zhang2014multiobjective} iteratively query a physics simulator---the
+battery digital twin, e.g.\ the Doyle-Fuller-Newman model in the open-source
+platform PyBaMM \cite{sulzer2021pybamm}---to minimize the misfit between
+simulated and observed trajectories. Such methods are general and carry
+theoretical convergence guarantees, but they are inherently blind: the
+simulator is treated as an opaque black box, physical intuition and
+literature knowledge cannot be exploited, sample efficiency is low, and
+they frequently converge to physically implausible optima (the multiple
+parameter sets that reproduce near-identical macroscopic outputs, the
+\emph{equifinality} phenomenon) \cite{chen2026battery}.
+
+The rise of large language models (LLMs) has driven a new
+\emph{agentic science} paradigm---LLM as the reasoning engine, external
+tools and knowledge bases as its hands---which has unfolded in battery
+research across three layers. At the \emph{knowledge layer}, RAG research
+assistants automate literature synthesis: Words-to-Watts proposed the
+BatteryGPT concept \cite{words2watts2024}; ChatSSB integrates a literature
+corpus with an expert knowledge base for solid-state battery research
+(GPT-o1 judged 8.77/10) \cite{chatssb2025}; and the top-level review
+provides the three-layer ``database--model--task'' roadmap
+\cite{batteryLLMreview2025}. At the \emph{computation layer}, LiPM injects
+physical laws (charge conservation) into the pre-training objective of a
+temporal foundation model, reducing mean squared error by 28.3--49.3\%
+across eight heterogeneous datasets \cite{lipm2025}; Battery-Sim-Agent
+deployed an LLM agent in the simulator-in-the-loop on a high-fidelity
+PyBaMM twin, reducing curve-matching error by 67--95\% (up to 58--97\%
+MAPE in routine mode) against black-box optimization through a three-step
+reasoning loop of multimodal feedback, explicit physical hypotheses, and
+structured parameter updates, validated on long-horizon degradation fits
+and real CALCE/NASA data \cite{chen2026battery}. At the \emph{experiment
+layer}, a chained human-in-the-loop framework for four-electron Zn-I2
+electrolyte design, driven by GPT-4 literature mining and mechanism
+summarization, recommended [EMIM]Cl---verified wet-lab to cycle above 1000
+times at high rate with Coulombic efficiency above 99.3\%
+\cite{zni22026}; ChatBattery further runs an end-to-end pipeline
+(hypothesis generation $\to$ database retrieval $\to$ MACE-MP
+machine-learning-potential thermodynamic verification $\to$ sol-gel
+synthesis $\to$ XRD/charge--discharge characterization), recommending
+NMC-Si(Mg/Ca/B) cathodes 18.5--28.8\% above NMC811
+\cite{chatbattery2025}.
+
+Materials-science agents provide a transferable
+\emph{propose--verify--feedback} closed-loop architecture for battery
+design: the LLM generates and justifies candidate designs; deterministic
+tools (DFT, machine-learning potentials, databases) verify them; and
+self-reflection or critiquer agents feed the results back into the next
+prompt. LLMatDesign's modify--self-reflect loop converged on band-gap
+targets in 10.8 steps on average \cite{jia2024llmadesign}; MASTER's
+three-layer design--simulate--review multi-agent reached 97.2\% geometry
+success while saving up to 90\% of atomistic simulations against
+single-agent baselines \cite{rothfarb2025hierarchical}; ChatMat's
+manager--subagent division succeeded on 91--96\% of four tasks, cutting
+average DFT calls from 1.15 to 0.35 \cite{chatmat2026}; MatClaw's
+code-first pipeline \cite{matclaw2026} and MatSciAgent's multi-task routing
+\cite{matsciagent2025} belong to the same family. These systems also expose
+two recurring bottlenecks: implicit domain knowledge (simulation time
+scales, equilibration protocols, convergence criteria) still requires
+expert constraints or literature injection; and spatial/structural
+reasoning plus verification realism remain weak---AtomWorld reports success
+rates below 12\% on rotation-type structural operations, positioning LLMs
+as co-pilots rather than full autonomous modelers \cite{atomworld2025},
+and AlchemyBench shows LLM-as-judge can mask semantic detail
+\cite{alchemybench2025}. Most critically, a fully closed
+synthesis--characterization wet-loop exists only in ChatBattery, and its
+wet-lab data are not yet fed back into the model automatically (the
+follow-up Li-rich variants were proposed by the researchers)
+\cite{chatbattery2025}.
+
+Battery design is thus transitioning from data-driven search toward an
+intelligent-agent paradigm of knowledge-driven, mechanism-constrained,
+simulation--experiment closed loops, but existing work leaves three clear
+gaps: the simulation loop and the wet-lab loop remain severed, experiment
+data not feeding back into model re-iteration; explicit physics
+constraints and interpretability in agent hypotheses are insufficient; and
+there is no standardized evaluation benchmark spanning the whole battery
+design process (inverse estimation, multi-objective trade-offs,
+long-duration reliability). The present work targets a dimension all three
+gaps share and none of the surveyed lines addresses: \emph{who judges the
+design?} Both existing baselines fix the yardstick by construction (a
+black-box optimizer on a fixed objective) or leave it free (an ungoverned
+LLM agent on a natural-language contract that it also reports against).
+Our study occupies the empty quadrant: a governed agent executing the full
+chain of cell-design levers---electrolyte, separator, electrode,
+architecture, thermal---in a single autonomous loop, with every verdict
+computed by an adjudication layer outside the agent. To our knowledge, no
+published system spans that chain within a single autonomous loop, and none
+places the yardstick outside the agent.
+
+Four properties of the system follow from that design. First, the contract
+is the only input: a natural-language requirement with nothing else---no
+configuration file, no parameter set, no candidate list---and the agent
+returns the complete, adjudicated design: material choices, formulation,
+architecture, safety validation, and the deliverable package, with a
+closing first-principles endorsement pass (ab initio DFT and molecular
+dynamics, reserved for the top candidates rather than used for screening,
+executed for the flagship molecular finalists, §5.8). Second,
+governance--carrier decoupling: the protocol is a self-contained
+declarative artifact---natural-language rules, a command-line tool library,
+and an audit ledger---bound to no specific agent framework; the governance
+travels with the contract, not with the harness, a property we verify
+empirically by running the identical protocol under three orchestration
+substrates (§5.7). Third, the human engineer's *in-loop* role ends at the
+moment the contract is stated; from that point forward the agent plans,
+screens, simulates, diagnoses, falls back, and concludes with no
+intermediate human oversight. Fourth, the eight scenario contracts
+were chosen so that different tasks must exercise different levers of this
+full chain---a transport upgrade for a fast-charge guarantee, an
 SEI-kinetics bridge for a lifetime bound, a cathode-system switch for a
 voltage plateau---and the governed agent exercises each in turn, in the same
-loop, under the same protocol---the full-chain claim is thus a suite-level
-statement: individual runs exercise the levers their bottleneck demands, the
-suite collectively spans all five. This is the delegation setting management
-science has not yet been able to study: a complete design chain handed to a
-machine, with the principal present only as a written contract.
+loop, under the same protocol: the full-chain claim is suite-level, the
+suite collectively spanning all five design domains. This is the delegation
+setting management science has not yet been able to study: a complete design
+chain handed to a machine, with the principal present only as a written
+contract.
 
 What makes such delegation safe---or dangerous---is the question this paper
 answers. We deliberately construct the two failure modes a design organization
@@ -66,10 +184,10 @@ kinetics), alter the measurement caliber (a rate-retention ratio computed
 against $C/3$ instead of the contractual $1C$ reference), or omit the
 criterion variable entirely (a nail-penetration test evaluated by its own
 steady-state temperature, with no trigger criterion anywhere in the
-artifacts). In our data the bare agent and
-the Bayesian optimizer tie---three of eight tasks ``achieved'' each---yet
-their failures are orthogonal: one loses to an unreachable space, the other to
-a malleable yardstick.
+artifacts). In our data both baselines fall short for orthogonal,
+specifiable reasons---the optimizer threefold, bounded by its space; the
+bare agent zero within the space despite claiming seven---one loses to an
+unreachable space, the other to a malleable yardstick.
 
 We introduce \emph{protocolized governance} as the intervention: a fixed,
 always-on set of process rules the agent executes inside the design loop, plus
