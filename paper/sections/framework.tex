@@ -189,8 +189,8 @@ Doping, cracking suppression & \texttt{Positive/Negative electrode cracking rate
 \end{tabular}
 \end{table}
 
-\textbf{Component 5: mechanized adjudication and the audit chain.} This is
-the load-bearing component. Before the first simulation, the
+\textbf{Component 5: mechanized adjudication and the audit chain.} Unlike
+the other components, this one pins the outcome itself. Before the first simulation, the
 agent writes entry~0 of the audit ledger: the contract criteria,
 pre-registered in machine-readable form and layered by decision stage, with
 case-level metadata recording every rule-derived decision and its basis.
@@ -218,9 +218,9 @@ layer. A closing verifier (\texttt{verify-deliverables}) checks the
 deliverable set and, crucially, the audit chain itself: every proposal round
 must have a same-round mechanical evaluation, and a final judgment entry
 must exist---a run whose ledger lacks either is refused as incomplete.
-Judgment is thus an infrastructure layer outside the agent, exactly as the
-separation of duties in auditing: the auditee may not write its own
-verdicts.
+Judgment is thus an infrastructure layer outside the agent, following the
+separation of duties in auditing: the entity under audit does not write
+its own verdicts.
 
 The protocol, the tool library, the adjudication layer, and the
 cross-harness harnesses are open source

@@ -74,8 +74,9 @@ corpus with an expert knowledge base for solid-state battery research
 provides the three-layer ``database--model--task'' roadmap
 \cite{batteryLLMreview2025}. At the \emph{computation layer}, LiPM injects
 physical laws (charge conservation) into the pre-training objective of a
-temporal foundation model, reducing mean squared error by 28.3--49.3\%
-across eight heterogeneous datasets \cite{lipm2025}; Battery-Sim-Agent
+temporal foundation model, reducing mean squared error by an average
+$39.2\%$ over state-of-the-art baselines across 62 downstream tasks
+\cite{lipm2025}; Battery-Sim-Agent
 deployed an LLM agent in the simulator-in-the-loop on a high-fidelity
 PyBaMM twin, reducing curve-matching error by 67--95\% (up to 58--97\%
 MAPE in routine mode) against black-box optimization through a three-step
@@ -113,8 +114,9 @@ expert constraints or literature injection; and spatial/structural
 reasoning plus verification realism remain weak---AtomWorld reports success
 rates below 12\% on rotation-type structural operations, positioning LLMs
 as co-pilots rather than full autonomous modelers \cite{atomworld2025},
-and AlchemyBench shows LLM-as-judge can mask semantic detail
-\cite{alchemybench2025}. Most critically, a fully closed
+and AlchemyBench's evaluation of synthesis-recipe extraction still leans
+on externally curated expert labels with automated extraction sensitive
+to source-document errors \cite{alchemybench2025}. Most critically, a fully closed
 synthesis--characterization wet-loop exists only in ChatBattery, and its
 wet-lab data are not yet fed back into the model automatically (the
 follow-up Li-rich variants were proposed by the researchers)
@@ -198,7 +200,7 @@ cell-scale judgment); evaluation-and-fallback routing (diagnose the scale of a
 failure before retrying); heterogeneous model voting (two machine-learning
 potentials plus a semi-empirical quantum method); a parameter bridge
 (microscopic properties mapped to macroscopic model parameters under mandatory
-source annotation); and---the load-bearing component---\emph{mechanized adjudication}. Under mechanized
+source annotation); and---the component the results hinge on---\emph{mechanized adjudication}. Under mechanized
 adjudication the contract is pre-registered as machine-readable criteria in an
 audit ledger before the first simulation runs; every verdict is computed by
 code from tool-output files, not asserted by the agent in prose; and each
@@ -225,7 +227,8 @@ four of eight under a third (Section~5.4). The BO baseline achieves
 three---precisely the three tasks whose bottlenecks are structural rather than
 material. The protocol-free agent achieves none within the same measurement
 space: of its seven self-reported successes, two rest on a lithium-metal
-cell outside the validated parameter sets, five dissolve under
+cell outside the validated parameter sets and are excluded from the
+in-space count, five dissolve under
 contract-caliber re-adjudication, and the one session that made no claim
 exhausted its budget.
 
