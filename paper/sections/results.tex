@@ -93,10 +93,12 @@ nail) that no structural parameter can remove.}
 $\checkmark$ = achieved (mechanical verdict); $\times$ = failed contract
 criteria; $\circ$ = outside the measurement space (see text). G = governed
 agent; C1 = protocol-free agent; C2 = Bayesian optimization. Key re-adjudicated
-numbers in parentheses.}
+numbers in parentheses. Per-task numbers are r1 values; the condition
+totals are seed-robust as detailed in the table note and supplementary
+materials.}
 \label{tab:main}
 \setlength{\tabcolsep}{2.7pt}
-\begin{tabular}{p{1.3cm}p{1.9cm}p{1.7cm}p{1.9cm}p{2.2cm}p{2.0cm}}
+\begin{tabular}{l l l l l l}
 \toprule
 Task & G (pro) & G (flash) & G (luna) & C1 & C2 \\
 \midrule
@@ -112,6 +114,12 @@ T8 drone & $\checkmark$ & $\checkmark$ & $\times$ (mass) & $\circ$ (Li-metal) & 
 \textbf{Total} & \textbf{8/8} & \textbf{8/8} & \textbf{4/8} & \textbf{0/8 in-space} & \textbf{3/8} \\
 \bottomrule
 \end{tabular}
+\par\vspace{3pt}
+\footnotesize
+G (pro): three-seed replication (r1--r3); every attained task achieved
+in all three seeds ($24/24$, supplementary materials). G (flash), G (luna),
+and C1: one run per cell, as stated in the respective sections. C2:
+three seeds (1234/5678/9012); attained set $\{T1,T4,T8\}$ in all three.
 \end{table}
 
 \subsection{Resource Cost}
@@ -239,7 +247,10 @@ T8 & -- & $\checkmark$ & -- & $\checkmark$ \\
 \subsection{Model Robustness}
 
 The governance is model-robust: 8/8 under the two DeepSeek models, with the same
-contracts attained through different designs. On T5 the pro run settled on a
+contracts attained through different designs---and under the pro model the
+8/8 is not an artifact of a single run: all eight tasks were repeated under
+three seeds, and every attained task achieved in all three
+($24/24$, supplementary materials). On T5 the pro run settled on a
 dual-validated architecture design while the flash run took the
 material-funnel route (LNMO, with FEC/VC/PES/DTD passing the funnel); on T1
 the designs differ by 94 Wh/kg in opposite-margin strategies yet both meet
