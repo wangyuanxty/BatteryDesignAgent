@@ -31,7 +31,7 @@ against penalties no structural parameter can remove. Third, the protocol-free a
 measurement space: two of its claimed successes (T4, T8) solve the contract
 by switching to a lithium-metal cell outside the validated parameter sets,
 and its remaining claims fail mechanical re-adjudication (Section~5.5). The
-tie between the two baselines---three achieved tasks each---with orthogonal
+tie between the two baselines (three achieved tasks each) with orthogonal
 failure modes is the paper's central observation: the bare agent and the
 black-box optimizer fail for different, specifiable reasons, and only the
 governed agent passes on all eight contracts.
@@ -48,15 +48,15 @@ $+0.5\%$; T8's mass at $+0.5\%$; T3's and T5's thermal lines at
 $+1.0$--$1.5\%$); the two exceptions are T2's low-temperature retention
 ($+10.6\%$) and T7's SEI limit ($+15.4\%$). The wide margins concentrate
 on the energy-density clauses of the structural tasks ($+41$--$48\%$),
-where an unconstrained thin-electrode search overshoots cheaply---the same
+where an unconstrained thin-electrode search overshoots cheaply; the same
 mechanism behind the BO's 678 versus 472 Wh/kg on T4, and precisely the
 margin the governed designs partially spend on the safety and durability
 criteria. Per-criterion margins for all achieved runs are tabulated in the
 supplementary materials. The SEI criteria deserve one further disclosure,
 because they are the single criterion class whose bridge lever (the
 electrode-modification coating scaling the SEI kinetic rate constant) can
-move a verdict: T2 shipped a $10^{-4}\times$ rate constant---declared in
-the audit as an estimate beyond the bare-ALD literature magnitude---yet the
+move a verdict: T2 shipped a $10^{-4}\times$ rate constant (declared in
+the audit as an estimate beyond the bare-ALD literature magnitude), yet the
 identical design passes the contract at $10^{-2}\times$ (500.4 nm against
 the 550 nm limit, a $9\%$ margin); T6's SEI work is not verdict-bearing;
 T7 used no kinetic override (supplementary materials).
@@ -133,7 +133,7 @@ Three observations. Material-bottleneck tasks are the expensive ones: T6
 messages and the largest token counts under pro, and T5/T6 dominate under
 flash. The economy model completes the suite at roughly three-quarters of
 the flagship model's input tokens (1.12M versus 1.52M) and 2,418 versus
-2,723 assistant messages, with zero attainment difference---the protocol, not the model,
+2,723 assistant messages, with zero attainment difference: the protocol, not the model,
 absorbs the difficulty. The C1 runs run under the same harness budget
 setting per task (one, T6, hit it); the BO baseline consumes fifty simulator evaluations per task (400 in
 total).
@@ -277,8 +277,8 @@ the ceiling-escalation mechanism: T1, T5, and T6 each stall at the baseline
 chemistry's ceiling (the LNMO switch on T1/T6 and the high-energy anode
 route on T5 elude Luna), and T8 stalls at the mass boundary. The protocol
 supplied the machinery; the model's search did not reach the material
-lever, so the honest result is a lower score rather than a moved
-yardstick---the same failure the ablation already pointed to, observed now
+lever, so the honest result is a lower score rather than a shifted
+criterion---the same failure the ablation already pointed to, observed now
 from the model side. Governance transfers across model families; capability
 does not. With $4/8$, the governed Luna still clears the classical
 baseline's $3/8$, and on tasks the optimizer cannot touch at all (T2, T3,
@@ -325,10 +325,10 @@ remaining claims (T4, T8) achieve the contract by leaving the measurement
 space---a lithium-metal chemistry outside the validated parameter sets---a
 legal reading of the task text, but outside the protocol's verification
 chain, and therefore not counted. The comparison is not ``the bare agent is
-incompetent'': it is that an ungoverned agent's yardstick is a movable
-object, and only the adjudication layer pins it.
+incompetent'': it is that an ungoverned agent's measurement standard is
+movable, and only the adjudication layer pins it.
 Figure~\ref{fig:yardstick} walks through the four mechanisms by which the
-yardstick was moved, against the contract values.
+standard was moved, against the contract values.
 
 \begin{figure}[!htbp]
 \centering

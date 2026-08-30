@@ -132,7 +132,8 @@ there is no standardized evaluation benchmark spanning the whole battery
 design process (inverse estimation, multi-objective trade-offs,
 long-duration reliability). The present work targets a dimension all three
 gaps share and none of the surveyed lines addresses: \emph{who judges the
-design?} Both existing baselines fix the yardstick by construction (a
+design?} Both existing baselines either pin the measurement standard by
+construction (a
 black-box optimizer on a fixed objective) or leave it free (an ungoverned
 LLM agent on a natural-language contract that it also reports against).
 Our study occupies the empty quadrant: a governed agent executing the full
@@ -140,7 +141,7 @@ chain of cell-design levers---electrolyte, separator, electrode,
 architecture, thermal---in a single autonomous loop, with every verdict
 computed by an adjudication layer outside the agent. To our knowledge, no
 published system spans that chain within a single autonomous loop, and none
-places the yardstick outside the agent.
+places judgment outside the agent.
 
 Four properties of the system follow from that design. First, the contract
 is the only input: a natural-language requirement with nothing else---no
@@ -189,7 +190,7 @@ steady-state temperature, with no trigger criterion anywhere in the
 artifacts). In our data both baselines fall short for orthogonal,
 specifiable reasons---the optimizer threefold, bounded by its space; the
 bare agent zero within the space despite claiming seven---one loses to an
-unreachable space, the other to a malleable yardstick.
+unreachable space, the other to a malleable measurement standard.
 
 We introduce \emph{protocolized governance} as the intervention: a fixed,
 always-on set of process rules the agent executes inside the design loop, plus
@@ -261,7 +262,7 @@ calibration: each component's marginal value is reported as measured,
 including the one that turns out dormant in our suite. (iv) We measure decision
 quality not as physics but as contract score---attainment rate, verifiable
 evidence completeness, and resource (tokens and messages)---a transferable
-yardstick for future agent-scale deployments in scientific and engineering
+score for future agent-scale deployments in scientific and engineering
 organizations.
 
 The remainder of the paper is organized as follows. Section~2 reviews autonomy

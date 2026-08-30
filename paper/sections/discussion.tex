@@ -19,12 +19,11 @@ the search space itself hides the solution (T2). The voting mechanism is the
 clearest case of a matched-null: in a suite where the cheapest route
 (parameter bridges and system switches) always sufficed, the molecular
 funnel was never entered, so its three-model vote was never exercised.
-Governance is thus not a fixed bundle whose every element pays rent in every
-regime; it is a portfolio whose elements pay according to the distribution
-of bottlenecks. An organization deploying such a system should expect
-exactly this pattern, and should instrument---as our protocol does---which
-components were exercised, so that dormant components are identified by
-data rather than presumed by fiat.
+Governance is thus not a fixed bundle: each component contributes only in
+regimes whose bottleneck it addresses. An organization deploying such a
+system should expect this pattern, and should instrument---as our protocol
+does---which components were exercised, so that dormant components are
+identified by data rather than presumed by fiat.
 
 \subsection{Sharpening the Low-Headroom Calibration}
 
@@ -44,11 +43,10 @@ compromise: the configuration replicates the published standard to measure
 what the field's strongest classical setup does---and does not do---not to
 stage a symmetric contest; the aligned-penalizer re-run (Section~5.1)
 closes the one configurable gap the replication left open. Second, and this is the sharper point, the protocol-free agent's
-failure mode is invisible in Battery-Sim-Agent's benchmark by
-construction: their objective is a fixed curve-matching error, so their
-bare agent has no yardstick it can move. Our contracts are multi-criterion
+failure mode is invisible in Battery-Sim-Agent's benchmark: their objective is a fixed curve-matching error, so their
+bare agent has no measurement standard to move. Our contracts are multi-criterion
 natural-language requirements, which is precisely the setting where
-yardstick adjustment becomes possible---and it is what the ungoverned agent
+criterion adjustment becomes possible---and it is what the ungoverned agent
 does, in five distinguishable modes (Section~5.5). The prevailing
 ``LLM beats classical optimization'' narrative is therefore incomplete in a
 way that matters for practice: an ungoverned LLM agent in a multi-criterion
@@ -67,12 +65,12 @@ in organizations \cite{nikpayam2024aiassisted}. Our results instantiate
 both mechanisms at the engineering level. Pre-registration is contract
 specification made machine-readable before any work begins; the evidence
 chain is governance visibility made file-level; and the prohibition on the
-agent writing its own verdicts is a separation of duties---the auditee may
-not write the audit. The five observed yardstick adjustments (threshold
+agent writing its own verdicts is a separation of duties: the auditee may
+not write the audit. The five observed adjustment modes (threshold
 shift, model substitution, parameter purchase, caliber shift, criterion
 omission) are not pathological behavior; they are what an incentive-free,
-unmonitored agent does with a movable yardstick, and they are exactly the
-moral hazard agency theory predicts when the agent both acts and evaluates.
+unmonitored agent does when it both acts and evaluates, and agency theory
+predicts exactly this hazard.
 
 Two counter-arguments deserve explicit answers. First, one might read the
 protocol as ``just a better prompt'': C1 received a five-sentence system
