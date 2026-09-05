@@ -1,0 +1,8 @@
+{
+  "Positive electrode thickness [m]": 5.67e-05,
+  "Negative electrode thickness [m]": 6.39e-05,
+  "Positive electrode porosity": 0.40,
+  "Negative electrode porosity": 0.30,
+  "Separator thickness [m]": 9.0e-06,
+  "Separator porosity": 0.52
+}

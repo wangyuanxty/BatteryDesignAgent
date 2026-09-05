@@ -117,10 +117,11 @@ that condition removes.
 \textbf{Governed agent (G).} The full protocol of Section~3, executed under
 two large language models separately---deepseek-v4-pro and
 deepseek-v4-flash---giving eight runs per model and a model-robustness
-axis. A third leg re-executes the eight sessions under GPT-5.6 Luna, a
-foreign vendor's lightest tier (positioned for simple and batch tasks) served through an
-OpenAI-compatible API---the economy-tier logic of the flash leg, on a
-different vendor family.
+axis. Two further legs re-execute the eight sessions under GPT-5.6 Luna
+and under mimo-v2.5---foreign-vendor models served through
+OpenAI-compatible APIs, same protocol, harness, task texts, and budget---so
+the cross-family comparison is made outside the primary vendor at matched
+tier logic.
 
 \textbf{Protocol-free agent (C1).} The same LLM, the same agent harness
 (tool-use loop), the same tools available in the environment (a Python

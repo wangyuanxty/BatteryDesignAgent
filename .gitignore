@@ -18,3 +18,4 @@ docs/backups/
 /superpower/
 texput.log
 param_dump.txt
+runs/.env_local

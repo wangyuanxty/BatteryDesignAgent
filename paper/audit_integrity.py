@@ -197,6 +197,26 @@ for _t, _expected in _luna_expected.items():
     _v = _fin.get("verdict") if _fin else None
     check(f"luna {_t} verdict", is_achieved(_v) if _v is not None else _v, is_achieved(_expected))
 
+# ---- 3c. mimo fourth-model leg (Table tab:main G-mimo column) ----
+_mimo_expected = {"t1": False, "t2": True, "t3": True, "t4": False,
+                  "t5": True, "t6": False, "t7": True, "t8": False}
+for _t, _expected in _mimo_expected.items():
+    _p = EXP / f"{_t}_r1_mimo"
+    if not (_p / "log.jsonl").exists():
+        _p = ROOT / "runs" / f"{_t}_r1_mimo"  # T5 session used the skill-default workspace location
+    _, _fin = final_of(_p)
+    _v = _fin.get("verdict") if _fin else None
+    if _v is None and _t == "t1":
+        report.append("[FAIL] mimo t1 verdict: actual=None expected='not achieved' (KNOWN DEFECT — mimo T1 omitted the final ledger entry; counted as not attained per the audit-chain rule; documented in paper §5.4)")
+        fails += 1; checks += 1
+        continue
+    if _t == "t4":
+        _pl = last_metric(_p, "plated")
+        report.append(f"[OBS] mimo t4 log self-verdict={_v!r}; mechanical contract check: plated={_pl} (overdeclaration documented in paper §5.4)")
+        check("mimo t4 mechanical not-achieved (plating)", _pl, True)
+        continue
+    check(f"mimo {_t} verdict", is_achieved(_v) if _v is not None else _v, _expected)
+
 # ---- 4. C1 re-adjudication numbers (Table 6; contract model, full declared design) ----
 _repro = ROOT / "runs" / "c1_repro"
 for _f, _label, _key, _expected, _tol in [

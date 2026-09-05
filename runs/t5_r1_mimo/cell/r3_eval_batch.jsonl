@@ -1,0 +1,2 @@
+{"outputs":["cell/r3_r3_energy.json","cell/r3_r3_4c.json"],"candidate":"Candidate E","note":"Round 3 high-energy candidate with tighter transport geometry; thermal target breached at 334.5K"}
+{"outputs":["cell/r3_r3h_energy.json","cell/r3_r3h_4c.json"],"candidate":"Candidate E2","note":"Round 3 thermal-mitigation probe with stronger cooling; achieves pass on ED/plating/thermal targets"}

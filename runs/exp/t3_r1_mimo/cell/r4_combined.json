@@ -1,0 +1,20 @@
+{
+  "capacity_ah": 2.3077451705979546,
+  "energy_wh": 8.338956257493512,
+  "mass_kg": 0.027037237448,
+  "energy_density_wh_kg": 308.4248630627151,
+  "volume_m3": 1.1707800000000002e-05,
+  "energy_density_wh_l": 712.2564664149978,
+  "thickness_m": 0.000114,
+  "midpoint_voltage_v": 3.8446913491032992,
+  "dcr_ohm": 0.0023490267331915506,
+  "power_density_w_kg": 65279.54628962653,
+  "area_m2": 0.10270000000000001,
+  "five_c_retention": 0.9683,
+  "five_c_capacity_ah": 2.2345423161152405,
+  "one_c_capacity_ah": 2.3077451705979546,
+  "T_max_K": 327.61528439161583,
+  "plated": false,
+  "anode_potential_v_min": 0.0052,
+  "electrolyte_included": false
+}

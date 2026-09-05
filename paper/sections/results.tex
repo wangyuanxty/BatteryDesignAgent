@@ -7,11 +7,12 @@
 \subsection{Main Comparison: Contract Attainment}
 
 Table~\ref{tab:main} reports contract attainment for all eight tasks under
-the four conditions, and Figure~\ref{fig:main} shows the same matrix as a
+the six columns, and Figure~\ref{fig:main} shows the same matrix as a
 color-coded attainment map. Three findings stand out. First, the governed
 agent achieves \textbf{8/8} under the two primary models and \textbf{4/8}
-under the third (Section~5.4); every verdict is mechanical, with
-an evidence chain per criterion and a verifier-passed audit chain. Second,
+under each of the two foreign-vendor models (Section~5.4); every verdict is
+mechanical, with an evidence chain per criterion and a verifier-passed
+audit chain. Second,
 the Bayesian optimizer achieves \textbf{3/8}---exactly T1, T4, and T8, the
 three tasks whose binding constraint is structural (thickness, porosity,
 mass). Its best designs reach energy densities above the governed agent's on
@@ -88,8 +89,8 @@ nail) that no structural parameter can remove.}
 \centering
 \footnotesize
 \setlength{\tabcolsep}{3.2pt}
-\caption{Contract attainment, eight tasks $\times$ four conditions
-(governed agent shown under three models: pro, flash, luna).
+\caption{Contract attainment, eight tasks $\times$ six columns
+(governed agent shown under four models: pro, flash, luna, mimo).
 $\checkmark$ = achieved (mechanical verdict); $\times$ = failed contract
 criteria; $\circ$ = outside the measurement space (see text). G = governed
 agent; C1 = protocol-free agent; C2 = Bayesian optimization. Key re-adjudicated
@@ -97,29 +98,31 @@ numbers in parentheses. Per-task numbers are r1 values; the condition
 totals are seed-robust as detailed in the table note and supplementary
 materials.}
 \label{tab:main}
-\setlength{\tabcolsep}{2.7pt}
-\begin{tabular}{l l l l l l}
+\setlength{\tabcolsep}{1.6pt}
+\begin{tabular}{p{0.1\linewidth} p{0.13\linewidth} p{0.13\linewidth} p{0.13\linewidth} p{0.125\linewidth} p{0.13\linewidth} p{0.13\linewidth}}
 \toprule
-Task & G (pro) & G (flash) & G (luna) & C1 & C2 \\
+Task & G (pro) & G (flash) & G (luna) & G (mimo) & C1 & C2 \\
 \midrule
-T1 sedan & $\checkmark$ 553.98 & $\checkmark$ 459.4 & $\times$ (plating) & $\times$ ($-6.9$ mV) & $\checkmark$ 514.13 \\
-T2 storage & $\checkmark$ 465.62 & $\checkmark$ & $\checkmark$ & $\times$ (plating, SEI) & $\times$ (plating, SEI) \\
-T3 tools & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ (5C 84.8\%) & $\times$ (plating, 5C) \\
-T4 cold & $\checkmark$ 471.55 & $\checkmark$ & $\checkmark$ & $\circ$ (Li-metal) & $\checkmark$ 678.26 \\
-T5 flagship & $\checkmark$ & $\checkmark$ & $\times$ (ceiling) & $\times$ ($-12.6$ mV) & $\times$ (plating) \\
-T6 phone & $\checkmark$ 1135.8 & $\checkmark$ & $\times$ (895.6 Wh/L) & $\times$ (budget) & $\times$ (plateau, $T_{\max}$) \\
-T7 hybrid & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ (nail unproven) & $\times$ (plating, nail) \\
-T8 drone & $\checkmark$ & $\checkmark$ & $\times$ (mass) & $\circ$ (Li-metal) & $\checkmark$ 643.75 \\
+T1 sedan & $\checkmark$ 553.98 & $\checkmark$ 459.4 & $\times$ (plating) & $\times$ (plating) & $\times$ ($-6.9$ mV) & $\checkmark$ 514.13 \\
+T2 storage & $\checkmark$ 465.62 & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ (plating, SEI) & $\times$ (plating, SEI) \\
+T3 tools & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ (5C 84.8\%) & $\times$ (plating, 5C) \\
+T4 cold & $\checkmark$ 471.55 & $\checkmark$ & $\checkmark$ & $\times$ (plating) & $\circ$ (Li-metal) & $\checkmark$ 678.26 \\
+T5 flagship & $\checkmark$ & $\checkmark$ & $\times$ (ceiling) & $\checkmark$ 517.8 & $\times$ ($-12.6$ mV) & $\times$ (plating) \\
+T6 phone & $\checkmark$ 1135.8 & $\checkmark$ & $\times$ (895.6 Wh/L) & $\times$ (852.8 Wh/L) & $\times$ (budget) & $\times$ (plateau, $T_{\max}$) \\
+T7 hybrid & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ (nail unproven) & $\times$ (plating, nail) \\
+T8 drone & $\checkmark$ & $\checkmark$ & $\times$ (mass) & $\times$ (mass, $T_{\max}$) & $\circ$ (Li-metal) & $\checkmark$ 643.75 \\
 \midrule
-\textbf{Total} & \textbf{8/8} & \textbf{8/8} & \textbf{4/8} & \textbf{0/8 in-space} & \textbf{3/8} \\
+\textbf{Total} & \textbf{8/8} & \textbf{8/8} & \textbf{4/8} & \textbf{4/8} & \textbf{0/8 in-space} & \textbf{3/8} \\
 \bottomrule
 \end{tabular}
 \par\vspace{3pt}
 \footnotesize
 G (pro): three-seed replication (r1--r3); every attained task achieved
 in all three seeds ($24/24$, supplementary materials). G (flash), G (luna),
-and C1: one run per cell, as stated in the respective sections. C2:
-three seeds (1234/5678/9012); attained set $\{T1,T4,T8\}$ in all three.
+G (mimo), and C1: one run per cell, as stated in the respective sections.
+C2: three seeds (1234/5678/9012); attained set $\{T1,T4,T8\}$ in all three.
+The mimo T1 run omitted the final ledger entry; under the audit-chain rule it
+is counted as not attained (Section~5.4).
 \end{table}
 
 \subsection{Resource Cost}
@@ -255,46 +258,60 @@ dual-validated architecture design while the flash run took the
 material-funnel route (LNMO, with FEC/VC/PES/DTD passing the funnel); on T1
 the designs differ by 94 Wh/kg in opposite-margin strategies yet both meet
 every criterion. Contract attainment is reproducible across models; the
-solution space remains broad. One execution defect surfaced and was
-absorbed by the audit layer: the flash T6 run delivered a verifier-passed
-deliverable set but omitted the final judgment entry from its ledger. The
-verifier now refuses such incomplete audit chains---the defect became a
-regression test, which is precisely the purpose of the audit
-infrastructure.
+solution space remains broad. One execution defect surfaced and was absorbed by the audit layer: the
+flash T6 run delivered a verifier-passed deliverable set but omitted the
+final judgment entry from its ledger; the mimo T1 run repeated the same
+omission. The verifier now refuses such incomplete audit chains and counts
+the run as not attained---the defect became a regression test, which is
+precisely the purpose of the audit infrastructure.
 
-A third leg extends the robustness question across vendor families: the
-same eight sessions re-executed under GPT-5.6 Luna---a foreign vendor's
-lightest tier, positioned for simple and batch tasks---served through an
-OpenAI-compatible API, same protocol, harness, task texts, and budget. The
-leg thereby mirrors the flash leg's tier logic (economy model) on the other
-vendor, so the cross-family comparison is made at matched tiers. Luna
-attains $4/8$---T2, T3, T4, T7---and its four
-non-attainments are conspicuous in two ways. First, they are honest: every
-one is a mechanical \emph{not-achieved} verdict with a complete evidence
-chain, and no yardstick adjustment of any kind appears anywhere in the leg.
-Second, they concentrate exactly where the governed DeepSeek runs needed
-the ceiling-escalation mechanism: T1, T5, and T6 each stall at the baseline
-chemistry's ceiling (the LNMO switch on T1/T6 and the high-energy anode
-route on T5 elude Luna), and T8 stalls at the mass boundary. The protocol
-supplied the machinery; the model's search did not reach the material
-lever, so the honest result is a lower score rather than a shifted
-criterion---the same failure the ablation already pointed to, observed now
-from the model side. Governance transfers across model families; capability
-does not. With $4/8$, the governed Luna still clears the classical
-baseline's $3/8$, and on tasks the optimizer cannot touch at all (T2, T3,
-T7). Like every other condition column, the Luna leg is one run per cell:
-its reading is at the level of the failure \emph{pattern} (honest, distinct
-from the baselines') rather than per-task inference.
-Figure~\ref{fig:models} shows the three model legs side by side: the same
-governed loop attains the same contracts through different designs
-(and, on T6, the same LNMO bottleneck diagnosis).
+Two further legs extend the robustness question across vendor families:
+the same eight sessions re-executed under GPT-5.6 Luna and under
+mimo-v2.5---foreign-vendor models served through OpenAI-compatible
+APIs---with the same protocol, harness, task texts, and budget. Both legs
+attain $4/8$---Luna on T2, T3, T4, T7 and mimo on T2, T3, T5, T7---and
+their non-attainments differ revealingly from the baselines'. First, both
+are honest: Luna's four are mechanical \emph{not-achieved} verdicts with
+complete evidence chains, and mimo reports its failing criteria in the
+recommendation itself (T8 is self-labeled ``achieved with documented
+limitations'' because mass and thermal fall outside the contract; T6 is a
+mechanical not-achieved). Second, the intersection $\{T2, T3, T7\}$ is
+attained under every one of the four models---the stability point of the
+governance claim---while the disagreements are model-specific and
+informative: T4's plating line survived Luna's design but not mimo's, whose
+final design report concedes the plating clause even as its ledger carries
+``achieved'' (an overdeclaration the audit records as such); on T5, mimo
+found the thin-electrode plus high-transport-electrolyte route that eluded
+Luna. Third, the joint non-attainments concentrate exactly where the
+governed DeepSeek runs needed the ceiling-escalation mechanism: T1 falls to
+plating under both foreign-vendor legs, T6 stalls at the NMC811 plateau
+(mimo: 852.8 Wh/L and 3.97 V), and T8 stalls at the mass boundary (41.5 g)
+plus its thermal line (361.8 K against the protocol's $333.15$ K safety
+default). The protocol supplied the machinery; the models' searches did not
+reach the material lever, so the honest result is a lower score rather than
+a shifted criterion---the same failure the ablation already pointed to,
+observed now from the model side. One yardstick observation deserves
+recording: mimo's T8 run pre-registered the thermal threshold at $358.15$ K
+against the protocol's $333.15$ K safety default---a standard shift on the
+agent's own side---yet its $361.8$ K exceeds even the shifted standard, so
+the verdict is unchanged; the audit chain keeps both registered standards
+visible. Governance transfers across model families; capability does not.
+With $4/8$, each foreign-vendor leg still clears the classical baseline's
+$3/8$, and on tasks the optimizer cannot touch at all (T2, T3, T7). Like
+every other condition column, both legs are one run per cell: their reading
+is at the level of the failure \emph{pattern} (honest, distinct from the
+baselines') rather than per-task inference.
+Figure~\ref{fig:models} shows the four model legs side by side: the same
+governed loop attains the same contracts through different designs (and, on
+T6, identifies the same LNMO bottleneck).
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth]{figs/fig_model_robustness.pdf}
 \caption{Model robustness with design diversity: the same contracts
-attained under both models with different designs (T1: 553.98 vs 459.4
-Wh/kg; T5: 524.2 vs 603.6; T6: 1135.8 vs 1172.1 Wh/L). Contract attainment
+attained under the four models with different designs (T1: 553.98 vs 459.4
+Wh/kg and a plating failure on both foreign-vendor legs; T5: 524.2 vs 603.6
+vs 517.8). Contract attainment
 is reproducible; the solution space stays broad.}
 \label{fig:models}
 \end{figure}

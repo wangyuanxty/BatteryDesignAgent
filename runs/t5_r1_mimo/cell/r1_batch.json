@@ -1,0 +1,29 @@
+[
+  {
+    "candidate": "Chen2020 baseline",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r1_baseline_1c.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r1_baseline_energy.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r1_baseline_4c.json"
+    ],
+    "note": "Baseline 1C characterization and initial 4C thermal/plating screening"
+  },
+  {
+    "candidate": "Architecture A",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r1_arch_a_1c.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r1_arch_a_energy.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r1_arch_a_4c.json"
+    ],
+    "note": "Thinner electrodes/higher porosity candidate for rate/thermal margins"
+  },
+  {
+    "candidate": "Architecture B",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r1_arch_b_1c.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r1_arch_b_energy.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r1_arch_b_4c.json"
+    ],
+    "note": "Thinner current collectors candidate for higher energy density"
+  }
+]

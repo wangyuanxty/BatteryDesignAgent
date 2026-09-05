@@ -1,0 +1,20 @@
+[
+  {
+    "candidate": "Candidate C",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r2_r2_1c.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r2_r2_energy.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r2_r2_4c.json"
+    ],
+    "note": "High-energy candidate achieving ED target with no plating, but exceeding 60C thermal target"
+  },
+  {
+    "candidate": "Candidate D",
+    "outputs": [
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r2_r2d_1c.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r2_r2d_energy.json",
+      "D:/research/degradation_prognostics/Battery_Design_Agent/runs/t5_r1_mimo/cell/r2_r2d_4c.json"
+    ],
+    "note": "Thermal probe achieving ED target with no plating, but still exceeding 60C thermal target"
+  }
+]

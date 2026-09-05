@@ -1,5 +1,5 @@
 === Pipeline Stage 3: Integrity Audit ===
-checks=127 fails=1
+checks=135 fails=2
 
 [PASS] t1pro verdict achieved: actual='achieved' expected='achieved'
 [PASS] t1flash verdict achieved: actual='achieved' expected='achieved'
@@ -104,6 +104,15 @@ checks=127 fails=1
 [PASS] luna t6 verdict: actual=False expected=False
 [PASS] luna t7 verdict: actual=True expected=True
 [PASS] luna t8 verdict: actual=False expected=False
+[FAIL] mimo t1 verdict: actual=None expected='not achieved' (KNOWN DEFECT — mimo T1 omitted the final ledger entry; counted as not attained per the audit-chain rule; documented in paper §5.4)
+[PASS] mimo t2 verdict: actual=True expected=True
+[PASS] mimo t3 verdict: actual=True expected=True
+[OBS] mimo t4 log self-verdict='achieved'; mechanical contract check: plated=True (overdeclaration documented in paper §5.4)
+[PASS] mimo t4 mechanical not-achieved (plating): actual=True expected=True
+[PASS] mimo t5 verdict: actual=True expected=True
+[PASS] mimo t6 verdict: actual=False expected=False
+[PASS] mimo t7 verdict: actual=True expected=True
+[PASS] mimo t8 verdict: actual=False expected=False
 [PASS] C1-T2 SEI@100 full design 487.9: actual=487.9 expected=487.9
 [PASS] C1-T2 SEI@500 full design 818.9: actual=818.9 expected=818.9
 [PASS] C1-T2 4C min potential -360.9 mV: actual=-360.9 expected=-360.9

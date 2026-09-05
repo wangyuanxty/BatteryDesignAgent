@@ -1,0 +1,10 @@
+{
+  "capacity_ah": 2.307936520785547,
+  "five_c_retention": 0.9633655118192108,
+  "five_c_capacity_ah": 2.223386447592817,
+  "one_c_capacity_ah": 2.307936520785547,
+  "model_used_1c": "DFN",
+  "model_used_5c": "DFN",
+  "T_max_K_1c": 306.01254174322025,
+  "T_max_K_5c": 342.5065470008985
+}

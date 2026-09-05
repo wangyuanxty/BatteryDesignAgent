@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "baseline_Chen2020",
+    "outputs": [
+      "cell/baseline_energy.json",
+      "cell/aging_45c.json",
+      "cell/4c_charge_45c.json",
+      "cell/nail_tr.json"
+    ],
+    "note": "Baseline Chen2020: ED=400 Wh/kg (PASS), SEI=476nm (PASS), 4C plating (FAIL anode_min=-0.438V), nail TR triggered=true (numerical instability, not genuine TR)"
+  },
+  {
+    "candidate": "V_K_extreme_transport",
+    "outputs": [
+      "cell/V_K_extreme_transport_energy.json",
+      "cell/V_K_aging_45c.json",
+      "cell/V_K_extreme_transport_4c_dfn.json",
+      "cell/V_K_nail_hA05.json"
+    ],
+    "note": "V_K: ED=419 Wh/kg (PASS), SEI=536nm (PASS, tight margin), 4C no plating anode_min=+0.005V (PASS), nail hA=0.5 no TR (PASS)"
+  }
+]

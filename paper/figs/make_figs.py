@@ -27,7 +27,7 @@ plt.rcParams.update({
     "font.family": "DejaVu Sans",
 })
 GREEN = "#1a9850"; RED = "#d73027"; GRAY = "#b0b0b0"; BLUE = "#2166ac"; ORANGE = "#e08214"
-PRO = "#2166ac"; FLASH = "#e08214"
+PRO = "#2166ac"; FLASH = "#e08214"; LUNA = "#6a3d9a"; MIMO = "#00868b"
 
 TASKS = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"]
 
@@ -66,41 +66,42 @@ def fig_alignment():
 # Fig 5 (fig_main_matrix.pdf): 8x5 attainment heatmap
 # ============================================================
 def fig_main_matrix():
-    # rows=task, cols=[G-pro, G-flash, G-luna, C1, C2]; values: 1=pass, 0=fail, 0.5=out-of-space
+    # rows=task, cols=[G-pro, G-flash, G-luna, G-mimo, C1, C2]; values: 1=pass, 0=fail, 0.5=out-of-space
     verdicts = np.array([
-        [1, 1, 0, 0, 1],
-        [1, 1, 1, 0, 0],
-        [1, 1, 1, 0, 0],
-        [1, 1, 1, 0.5, 1],
-        [1, 1, 0, 0, 0],
-        [1, 1, 0, 0, 0],
-        [1, 1, 1, 0, 0],
-        [1, 1, 0, 0.5, 1],
+        [1, 1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 0, 0.5, 1],
+        [1, 1, 0, 1, 0, 0],
+        [1, 1, 0, 0, 0, 0],
+        [1, 1, 1, 1, 0, 0],
+        [1, 1, 0, 0, 0.5, 1],
     ])
     ann = [
-        ["553.98", "459.4", "plating", "−6.9 mV", "514.13"],
-        ["465.62", "✓", "✓", "plating/SEI@500", "plated/SEI"],
-        ["✓", "✓", "✓", "94.1%", "plated/5C 3.4%"],
-        ["471.55", "✓", "✓", "Li-metal", "678.26"],
-        ["✓", "✓", "ceiling", "−12.6 mV", "plated"],
-        ["1135.8", "✓", "895.6", "budget", "plateau/Tmax"],
-        ["✓", "✓", "✓", "nail ∘", "plated/nail"],
-        ["✓", "✓", "mass", "Li-metal", "643.75"],
+        ["553.98", "459.4", "plating", "plating", "−6.9 mV", "514.13"],
+        ["465.62", "✓", "✓", "✓", "plating/SEI@500", "plated/SEI"],
+        ["✓", "✓", "✓", "✓", "94.1%", "plated/5C 3.4%"],
+        ["471.55", "✓", "✓", "plating", "Li-metal", "678.26"],
+        ["✓", "✓", "ceiling", "517.8", "−12.6 mV", "plated"],
+        ["1135.8", "✓", "895.6", "852.8", "budget", "plateau/Tmax"],
+        ["✓", "✓", "✓", "✓", "nail ∘", "plated/nail"],
+        ["✓", "✓", "mass", "41.5 g", "Li-metal", "643.75"],
     ]
     cmap = matplotlib.colors.ListedColormap([RED, GRAY, GREEN])
-    fig, ax = plt.subplots(figsize=(5.8, 3.6))
+    fig, ax = plt.subplots(figsize=(6.6, 3.6))
     ax.imshow(verdicts, cmap=cmap, vmin=0, vmax=1, aspect="auto")
-    ax.set_xticks(range(5)); ax.set_xticklabels(
-        ["Governed\n(pro)", "Governed\n(flash)", "Governed\n(luna)", "Protocol-free\n(C1)", "BO\n(C2)"])
+    ax.set_xticks(range(6)); ax.set_xticklabels(
+        ["Governed\n(pro)", "Governed\n(flash)", "Governed\n(luna)", "Governed\n(mimo)",
+         "Protocol-free\n(C1)", "BO\n(C2)"])
     ax.set_yticks(range(8)); ax.set_yticklabels([f"{t}\n{_lab}" for t, _lab in zip(
         TASKS, ["sedan", "storage", "tools", "cold", "flagship", "phone", "hybrid", "drone"])], fontsize=7.5)
     for i in range(8):
-        for j in range(5):
-            ax.text(j, i, ann[i][j], ha="center", va="center", fontsize=7.5,
+        for j in range(6):
+            ax.text(j, i, ann[i][j], ha="center", va="center", fontsize=7,
                     color="white" if verdicts[i, j] != 0.5 else "k")
-    ax.set_xticks(np.arange(-0.5, 5, 1), minor=True); ax.set_yticks(np.arange(-0.5, 8, 1), minor=True)
+    ax.set_xticks(np.arange(-0.5, 6, 1), minor=True); ax.set_yticks(np.arange(-0.5, 8, 1), minor=True)
     ax.grid(which="minor", color="white", lw=1.2); ax.tick_params(which="minor", length=0)
-    ax.set_title("Contract attainment: 8/8 | 8/8 | 4/8 | 0/8 (in-space) | 3/8")
+    ax.set_title("Contract attainment: 8/8 | 8/8 | 4/8 | 4/8 | 0/8 (in-space) | 3/8")
     fig.tight_layout(); fig.savefig(OUT / "fig_main_matrix.pdf"); plt.close(fig)
     print("fig_main_matrix.pdf")
 
@@ -265,33 +266,48 @@ def fig_cost():
 
 
 # ============================================================
-# Fig 11 (fig_model_robustness.pdf): dual-model design diversity
+# Fig 11 (fig_model_robustness.pdf): four-model design diversity
 # ============================================================
 def fig_model_robustness():
     def last_metric(run, key):
-        p = ROOT / "runs" / "exp" / run / "log.jsonl"
-        es = [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines() if l.strip()]
+        for p in (ROOT / "runs" / "exp" / run / "log.jsonl", ROOT / "runs" / run / "log.jsonl"):
+            if p.exists():
+                es = [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines() if l.strip()]
+                break
         for e in reversed(es):
             m = e.get("metrics", {}) if e.get("action") == "evaluate" else {}
             if isinstance(m.get(key), (int, float)):
                 return m[key]
         return None
-    t1 = {"pro": 553.98, "flash": 459.4}                       # ED Wh/kg
+    t1 = {"pro": 553.98, "flash": 459.4,
+          "luna": last_metric("t1_r1_luna", "energy_density_wh_kg"),
+          "mimo": last_metric("t1_r1_mimo", "energy_density_wh_kg")}        # ED Wh/kg
     t5 = {"pro": last_metric("t5_r1", "energy_density_wh_kg"),
-          "flash": last_metric("t5_r1_flash", "energy_density_wh_kg")}
-    t6 = {"pro": 1135.8, "flash": last_metric("t6_r1_flash", "energy_density_wh_l")}
-    fig, axes = plt.subplots(1, 3, figsize=(6.4, 2.6), sharey=False)
-    specs = [("T1 sedan\nED (Wh/kg)", t1, 392.61, "pro design: 553.98\nflash design: 459.4"),
-             ("T5 flagship\nED (Wh/kg)", t5, 500.94, "dual-validated vs LNMO-funnel routes"),
-             ("T6 phone\nWh/L", t6, 950, "both LNMO; different tuning")]
+          "flash": last_metric("t5_r1_flash", "energy_density_wh_kg"),
+          "luna": last_metric("t5_r1_luna", "energy_density_wh_kg"),
+          "mimo": last_metric("t5_r1_mimo", "energy_density_wh_kg")}
+    t6 = {"pro": 1135.8, "flash": last_metric("t6_r1_flash", "energy_density_wh_l"),
+          "luna": last_metric("t6_r1_luna", "energy_density_wh_l"),
+          "mimo": last_metric("t6_r1_mimo", "energy_density_wh_l")}
+    fails = {"T1": {"luna", "mimo"}, "T5": {"luna"}, "T6": {"luna", "mimo"}}
+    fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.6), sharey=False)
+    specs = [("T1 sedan\nED (Wh/kg)", t1, 392.61, "luna & mimo: ED clears,\nplating line fails"),
+             ("T5 flagship\nED (Wh/kg)", t5, 500.94, "luna stalls below contract\n(ceiling); mimo clears"),
+             ("T6 phone\nWh/L", t6, 950, "both foreign-vendor legs\nbelow contract (plateau)")]
     for ax, (title, vals, thresh, note) in zip(axes, specs):
-        keys = list(vals.keys()); vv = [vals[k] if vals[k] else 0 for k in keys]
-        ax.bar(keys, vv, color=[PRO, FLASH], width=0.5)
+        keys = list(vals.keys())
+        vv = [vals[k] if vals[k] else 0 for k in keys]
+        cols = [PRO, FLASH, LUNA, MIMO]
+        bar = ax.bar(keys, vv, color=cols, width=0.55)
+        for b, k in zip(bar, keys):
+            if k in fails[title[:2]]:
+                b.set_edgecolor(RED); b.set_linewidth(1.6)
         ax.axhline(thresh, color=RED, ls="--", lw=1)
         ax.text(0.5, thresh * 1.002, f"contract {thresh}", fontsize=6, color=RED, ha="center")
         ax.set_title(title, fontsize=8.5); ax.set_ylim(0, max(vv) * 1.15)
         ax.text(0.5, max(vv) * 1.05, note, fontsize=6, ha="center", va="top")
-    fig.suptitle("Same contract, different designs — both models 8/8", y=1.02, fontsize=9.5)
+    fig.suptitle("Same contracts, different designs — 8/8 under primary models, 4/8 under each foreign-vendor leg",
+                 y=1.04, fontsize=8.5)
     fig.tight_layout(); fig.savefig(OUT / "fig_model_robustness.pdf"); plt.close(fig)
     print("fig_model_robustness.pdf (check None values:", {k: v for k, v in t5.items()}, {k: v for k, v in t6.items()}, ")")
 

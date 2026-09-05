@@ -1,0 +1,12 @@
+{
+  "Positive electrode thickness [m]": 5.0e-05,
+  "Negative electrode thickness [m]": 5.6e-05,
+  "Positive electrode porosity": 0.42,
+  "Negative electrode porosity": 0.32,
+  "Positive particle radius [m]": 2.5e-06,
+  "Negative particle radius [m]": 2.5e-06,
+  "Separator thickness [m]": 1.0e-05,
+  "Separator porosity": 0.50,
+  "Positive current collector thickness [m]": 1.0e-05,
+  "Negative current collector thickness [m]": 8.0e-06
+}
