@@ -7,8 +7,7 @@
 \subsection{Main Comparison: Contract Attainment}
 
 Table~\ref{tab:main} reports contract attainment for all eight tasks under
-the six columns, and Figure~\ref{fig:main} shows the same matrix as a
-color-coded attainment map. Three findings stand out. First, the governed
+the six columns. Three findings stand out. First, the governed
 agent achieves \textbf{8/8} under the two primary models and \textbf{4/8}
 under each of the two foreign-vendor models (Section~5.4); every verdict is
 mechanical, with an evidence chain per criterion and a verifier-passed
@@ -62,19 +61,7 @@ identical design passes the contract at $10^{-2}\times$ (500.4 nm against
 the 550 nm limit, a $9\%$ margin); T6's SEI work is not verdict-bearing;
 T7 used no kinetic override (supplementary materials).
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\linewidth]{figs/fig_main_matrix.pdf}
-\caption{Contract attainment across the eight tasks and four conditions.
-Green: achieved under mechanical verdict; red: contract criteria failed;
-gray: outside the measurement space (C1 on T4/T8 switched to a lithium-metal
-cell outside the validated parameter sets). Numbers are key
-re-adjudicated values (energy density in Wh/kg on T1/T4/T6, Wh/L basis for
-T6 shown as 1135.8; margins in mV; SEI in nm; 5C retention in \%).}
-\label{fig:main}
-\end{figure}
-
-\begin{figure}[!htbp]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.8\linewidth]{figs/fig_bo_trajectories.pdf}
 \caption{Bayesian optimization best-objective trajectories per task (Ax,
@@ -85,7 +72,7 @@ nail) that no structural parameter can remove.}
 \label{fig:bo}
 \end{figure}
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \footnotesize
 \setlength{\tabcolsep}{3.2pt}
@@ -141,7 +128,7 @@ absorbs the difficulty. The C1 runs run under the same harness budget
 setting per task (one, T6, hit it); the BO baseline consumes fifty simulator evaluations per task (400 in
 total).
 
-\begin{figure}[!htbp]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=\linewidth]{figs/fig_cost.pdf}
 \caption{Governed-agent resource cost per task under both models: (a)
@@ -152,7 +139,7 @@ model's input tokens.}
 \label{fig:cost}
 \end{figure}
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{Governed-agent activity per task (assistant messages; tokens in/out in
 thousands). Assistant messages are a log-derived activity measure; the
@@ -201,7 +188,7 @@ consistent with the mechanism's role as defensive infrastructure that the
 baseline never exercised, and with Battery-Sim-Agent's
 reported low-headroom calibration \cite{chen2026battery}.
 
-\begin{figure}[!htbp]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=\linewidth]{figs/fig_ablation.pdf}
 \caption{What each governance component actually carries: red segments count
@@ -212,18 +199,7 @@ funnel voting for none---no verdict change observed in this suite.}
 \label{fig:ablation}
 \end{figure}
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.8\linewidth]{figs/fig_trace_t6.pdf}
-\caption{Governed decision trace on T6 (smartphone contract): volumetric
-energy density by round, with the contract line (950 Wh/L) and the baseline
-ceiling (854 Wh/L). The jump across the dashed line is the ceiling
-escalation---the LNMO system switch---followed by rounds of refinement to
-1135.8 Wh/L.}
-\label{fig:trace}
-\end{figure}
-
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{Ablation results: verdict with the component disabled versus the
 full-protocol verdict (F). $\checkmark$ = achieved; $\times$ = not
@@ -290,7 +266,7 @@ plus its thermal line (361.8 K against the protocol's $333.15$ K safety
 default). The protocol supplied the machinery; the models' searches did not
 reach the material lever, so the honest result is a lower score rather than
 a shifted criterion---the same failure the ablation already pointed to,
-observed now from the model side. One yardstick observation deserves
+observed now from the model side. One standard-setting observation deserves
 recording: mimo's T8 run pre-registered the thermal threshold at $358.15$ K
 against the protocol's $333.15$ K safety default---a standard shift on the
 agent's own side---yet its $361.8$ K exceeds even the shifted standard, so
@@ -305,9 +281,9 @@ Figure~\ref{fig:models} shows the four model legs side by side: the same
 governed loop attains the same contracts through different designs (and, on
 T6, identifies the same LNMO bottleneck).
 
-\begin{figure}[!htbp]
+\begin{figure}[!ht]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_model_robustness.pdf}
+\includegraphics[width=0.88\linewidth]{figs/fig_model_robustness.pdf}
 \caption{Model robustness with design diversity: the same contracts
 attained under the four models with different designs (T1: 553.98 vs 459.4
 Wh/kg and a plating failure on both foreign-vendor legs; T5: 524.2 vs 603.6
@@ -344,12 +320,15 @@ legal reading of the task text, but outside the protocol's verification
 chain, and therefore not counted. The comparison is not ``the bare agent is
 incompetent'': it is that an ungoverned agent's measurement standard is
 movable, and only the adjudication layer pins it.
-Figure~\ref{fig:yardstick} walks through the four mechanisms by which the
-standard was moved, against the contract values.
+Figure~\ref{fig:yardstick} walks through the three mechanisms with
+measurable values by which the standard was moved, against the contract
+values; the remaining two modes---omitted criterion variables (T5's absent
+anode-potential series, T7's nail test without a trigger criterion)---are
+text-only by nature and documented in the table below.
 
-\begin{figure}[!htbp]
+\begin{figure}[!ht]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_c1_yardstick.pdf}
+\includegraphics[width=0.92\linewidth]{figs/fig_c1_yardstick.pdf}
 \caption{The yardstick failure modes of the protocol-free agent,
 re-adjudicated at the contract caliber: (a) threshold shift---T1's
 $-6.9$ mV declared safe against a self-set $-10$ mV onset where the contract
@@ -358,13 +337,11 @@ is zero tolerance; (b) model substitution---T2's SEI claimed at 15.1 nm
 $818.9$ nm under the contract's ec-reaction-limited model with the full
 declared design; (c) purchased parameter plus caliber shift---T3's 96.7\%
 retention against C/3 versus $94.1\%$ at the contractual 5C/1C with its
-declared diffusivities ($84.8\%$ with standard ones); (d) missing criterion
-variables---T5's absent anode-potential series and T7's nail test without a
-trigger criterion.}
+declared diffusivities ($84.8\%$ with standard ones).}
 \label{fig:yardstick}
 \end{figure}
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{C1 (protocol-free agent) claims versus contract-caliber
 re-adjudication. All re-adjudications mechanical (definitions in
@@ -397,102 +374,42 @@ contract, the task on which \emph{both} baselines failed (BO against the
 from its artifacts: the audit ledger, the auto-generated report, and the
 deliverable package.
 
-\textbf{Pre-registration.} The agent's first act is entry~0 of the ledger:
-the contract parsed from the task text into machine-readable criteria, with
-every rule-derived decision and its basis recorded (Table~\ref{tab:casestudy}
-shows the operative rows). The starting-stage decision is explicit: the task
-names no system, so the anchor table maps to the Chen2020 default; the
-plateau clause is flagged from the outset as the suspected material
-bottleneck. The run's full documentation is a deterministic seven-section
-rendering of the ledger (overview, trajectory, funnel, stage results,
-endorsement, final recommendation, notes)---a rendering of the audit chain,
-not a narrative written after the fact.
-
-\begin{table}[!htbp]
-\centering
-\caption{Entry-0 criteria as the agent pre-registered them for T6 (excerpt;
-the full entry also records the five-category freedom parsing, the
-real-compute setting, and the start-stage basis).}
-\label{tab:casestudy}
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{p{1.6cm}p{2.6cm}p{7.0cm}}
-\toprule
-Layer & Metric & Threshold (as parsed) \\
-\midrule
-stage2 (cell) & volumetric ED & $\geq 950$ Wh/L \\
-stage2 (cell) & voltage plateau & $\geq 4.1$ V (midpoint) \\
-stage2 (cell) & SEI @ 100 cyc & $\leq 500$ nm \\
-stage3 (safety) & 4C max temperature & $\leq 323.15$ K (50$\,^\circ$C, mechanical conversion) \\
-stage3 (safety) & plating & false \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\textbf{Ceiling assessment and escalation.} The Stage-1 plan opens with a
-baseline characterization whose recorded conclusion is the ceiling
-assessment in action: ``R1 --- baseline characterization (ceiling
-assessment): Chen2020 default 1C discharge (evidence: plateau infeasibility
-$\rightarrow$ material bottleneck)''. The agent then proposes the system
-candidate \texttt{systemLNMO} (a 4.7 V-class spinel parameter set), which
-per the candidate-type rules bypasses the molecular funnel---system switches
-are screened at the cell scale, not by ML potentials---and the funnel entry
-records this routing explicitly. (The LNMO parameter set is an
-author-provided 4.7 V-class spinel set derived from the literature; its
-provenance is recorded in the run's entry-0 metadata.) The escalation is a logged, reasoned
-decision, not a silent pivot.
-
-\textbf{Iteration.} Table~\ref{tab:trail} shows the round trail from the
-mechanical evaluations (the full trajectory is plotted in
-Figure~\ref{fig:trace}). The first
-LNMO architecture (R02, 1005.3 Wh/L) already clears the volumetric
-criterion but \emph{fails} other criteria; rounds R03--R06 refine thickness
-and formulation until R07 passes all criteria, with R08 confirming. The
-trail is a genuine fail--fail--$\cdots$--pass sequence---the ledger records
-the failures, which is what makes the final pass evidence rather than
-assertion.
-
-Table~\ref{tab:candidates} condenses the run's full candidate sheet---twenty
-proposals, each logged with its name, type, and one-line rationale. The
-sequence reads like a design engineer's notebook: thermal probes first, then
-plating fixes on three distinct levers (anode capacity headroom, anode
-kinetics, electrolyte transport), then SEI levers, a combined candidate,
-DFN confirmation, and finally DFN-gap fixes with a margin-widening probe.
-Every pivot is a recorded decision with its hypothesis attached.
-
-\begin{table}[!htbp]
-\centering
-\caption{The T6 candidate sheet (condensed from the report's full list of
-twenty; each proposal is logged with its rationale in the ledger).}
-\label{tab:candidates}
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{p{1.1cm}p{3.0cm}p{7.4cm}}
-\toprule
-Round & Candidate & Purpose (logged rationale) \\
-\midrule
-R01 & systemLNMO & system switch: 4.7 V-class LNMO spinel \\
-R01 & baselineChen2020 & anchor-table default baseline \\
-R02 & lnmo\_h200 / h500 & thermal probes at 4C ($h=200/500$) \\
-R03 & np120 / nr35 / elyte & plating fixes: N/P headroom; anode kinetics; electrolyte transport \\
-R03 & sei6e13 & SEI-suppression probe (electrode modification) \\
-R04 & np125 / np120\_nr35 & plating closure: N/P 1.25 and a leaner alternative \\
-R04 & sei\_c2270\_d12 / d10 & SEI levers: EC concentration and $D_{\mathrm{EC}}$ cuts \\
-R05 & lnmo\_final & combined final candidate \\
-R06 & lnmo\_final & DFN confirmation of the combined candidate \\
-R07 & r7\_h400\_d5 / nr30 / combo & DFN-gap fixes: thermal; plating; combined \\
-R08 & r8\_final / r8\_d6\_margin & final candidate and margin-widening probe \\
-\bottomrule
-\end{tabular}
-\end{table}
+\textbf{Pre-registration, ceiling assessment, iteration.} The agent's
+first act is entry~0 of the ledger: the contract parsed from the task text
+into machine-readable criteria (volumetric ED $\geq 950$ Wh/L, midpoint
+plateau $\geq 4.1$ V, SEI $\leq 500$ nm, $T_{\max}\leq 323.15$ K, no
+plating; Section~4.4), with every rule-derived decision and its basis
+recorded. The starting-stage decision is explicit: the task names no
+system, so the anchor table maps to the Chen2020 default; the plateau
+clause is flagged from the outset as the suspected material bottleneck.
+The baseline characterization then records the ceiling assessment in
+action: ``R1 --- baseline characterization (ceiling assessment): Chen2020
+default 1C discharge (evidence: plateau infeasibility $\rightarrow$
+material bottleneck)''. The agent proposes the system candidate
+\texttt{systemLNMO}---a 4.7 V-class spinel parameter set, author-provided
+and derived from the literature, its provenance recorded in the entry-0
+metadata---which per the candidate-type rules bypasses the molecular
+funnel: system switches are screened at the cell scale, not by ML
+potentials, and the funnel entry records this routing explicitly. The
+escalation is a logged, reasoned decision, not a silent pivot.
+Table~\ref{tab:trail} shows the resulting round trail. The first LNMO
+architecture (R02) already clears the volumetric criterion but fails
+others, and the trail is a genuine fail--fail--$\cdots$--pass sequence---the
+ledger records the failures, which is what makes the final pass evidence
+rather than assertion. The trail also shows the multi-precision discipline
+working at the cell scale: the SPMe-verified candidate (R05) passes at the
+proxy level, and the DFN confirmation flips two criteria (R06), which
+forces the fixes at high fidelity. The full candidate sheet---twenty
+proposals, each logged with its name, type, and one-line rationale---is
+reproduced in the supplementary materials.
 
 \footnotesize
 \addtolength{\tabcolsep}{-2pt}
 \begin{longtable}{p{2.0cm}p{3.8cm}p{2.4cm}p{2.3cm}p{1.2cm}}
-\caption{T6 round trail: one row per design round, reconstructed
-mechanically from the run ledger. ``Agent reasoning'' gives a verbatim
-thinking excerpt from the run log where one exists (shown in italics),
-followed by the decision rationale the agent itself recorded at that round;
-``Simulation artifacts'' lists the evidence files the mechanical evaluator
-read; ``Key values'' are the decisive contract-caliber numbers.}
+\caption{T6 round trail, reconstructed mechanically from the run ledger:
+one row per design round, with the recorded decision rationale, the
+evidence files the evaluator read, and the decisive contract-caliber
+values.}
 \label{tab:trail}\\
 \toprule
 Round & Agent reasoning (recorded rationale) & Simulation artifacts & Key values & Verdict \\
@@ -527,81 +444,10 @@ the exact file and key that supports it: \texttt{cell/r8\_d6\_energy\_dfn.json:e
 \texttt{cell/r8\_d6\_aging\_dfn.json:sei\_thickness\_nm\_end} $= 385.29$ vs.\
 $\leq 500$ (pass); T$_{\max}$ $321.42$ K vs.\ $\leq 323.15$ K (pass); plating
 false (pass). Every ``achieved'' in this paper is backed by such a chain.
-Figure~\ref{fig:t6curves} shows the two decisive physics behind the case:
-the plateau gap that forced the system switch, and the plating margin the
-criterion judges.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\linewidth]{figs/fig_case_t6_curves.pdf}
-\caption{The T6 case at curve level. (a) 1C discharge: the Chen2020
-baseline's midpoint voltage sits below the 4.1 V contract plateau, which is
-what the ceiling assessment diagnosed; the final LNMO design clears it
-(4.1145 V). (b) The final design's anode potential during 4C charge stays
-above the 0 V plating criterion throughout (min $+11.0$ mV).}
-\label{fig:t6curves}
-\end{figure}
-
-\textbf{Deliverable package.} The run closes with the seven-file
-industry-standard package---design specification, bill of materials,
-datasheet, design calculation book, verification report, DFMEA, and
-delivery index---each entry numbered under the case's VBF identifier
-(VBF-T6R1-*), each emitted as editable source plus PDF release, and the
-package verifier returns all checks passed. Two tables from the package
-illustrate what the design itself looks like on paper. Table~\ref
-{tab:designparams} is the design specification's parameter table: the
-system, the layer stack, the electrolyte, and the cooling. Table~\ref
-{tab:datasheet} condenses the technical datasheet---every row carries a
-Source column pointing at the tool-output file that supports the value, so
-the spec sheet is itself an evidence chain. The datasheet closes with a
-formulation note that a production engineer would demand and an ungoverned
-agent would omit: the electrolyte transport numbers are design targets at
-the upper bound of reported fast-charge formulations, and ``materializing
-the design requires a real low-viscosity electrolyte with measured
-$D_e$ in this range''---the deliverable labels its own estimates.
-
-\begin{table}[!htbp]
-\centering
-\caption{Final design parameters (excerpt of the design specification,
-VBF-T6R1-DS-01).}
-\label{tab:designparams}
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{p{2.4cm}p{8.7cm}}
-\toprule
-Item & Value \\
-\midrule
-System & LNMO high-voltage spinel / graphite (4.7 V-class) \\
-Positive electrode & 75.6 µm, porosity 0.335, particle 5.22 µm \\
-Negative electrode & 102.2 µm, porosity 0.25, particle 3.5 µm \\
-Separator & 12 µm, porosity 0.47 \\
-Current collectors & Al 16 µm / Cu 12 µm \\
-Electrolyte & EC/EMC + LiPF$_6$; EC 2270.5 mol/m³, $D_{\mathrm{EC}}=1\times10^{-18}$ m$^2$/s (SEI lever) \\
-Cooling & $h = 400$ W/m$^2$K \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[!htbp]
-\centering
-\caption{Technical datasheet, condensed (VBF-T6R1-DSH-01); the Source
-column of the original points each value at its tool-output file.}
-\label{tab:datasheet}
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{p{2.9cm}p{8.2cm}}
-\toprule
-Field & Value \\
-\midrule
-Rated capacity (1C, DFN) & 6.20 Ah \\
-Plateau (discharge midpoint) & 4.1145 V (window 2.5--4.7 V) \\
-Volumetric ED & 1135.8 Wh/L \\
-Gravimetric ED & 493.3 Wh/kg (electrolyte excluded) \\
-4C fast charge, 45$\,^\circ$C & T$_{\max}$ 321.42 K (48.27$\,^\circ$C), no plating (min $+10.96$ mV) \\
-DC resistance / power & 6.38 m$\Omega$ / 13.52 kW/kg \\
-Cycle life & 100 $\times$ 1C: SEI 385.3 nm ($\leq$ 500 nm) \\
-Mass & 51.50 g (electrolyte excluded; $\approx$57.8 g with estimate) \\
-\bottomrule
-\end{tabular}
-\end{table}
+The two decisive physics behind the case---the plateau gap that forced the
+system switch, and the plating margin the criterion judges---are shown at
+curve level in the supplementary materials, and the design specification
+and technical datasheet of the final cell are reproduced there as well.
 
 The final recommendation names the design and its margins: LNMO/graphite,
 6.203 Ah, 1135.8 Wh/L (criterion 950), 4.1145 V (criterion 4.1),
@@ -638,7 +484,7 @@ portability datum about the governance rather than the plumbing. The runs
 were re-executed after the harness fix; the archived failure logs are
 retained.
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{Cross-harness portability: contract attainment and audit-chain
 completeness across three orchestration substrates (identical protocol,
@@ -687,7 +533,7 @@ D_{\mathrm{Li}} = \frac{\langle |r(t) - r(0)|^2 \rangle}{6t}.
 \end{equation} As designed, the endorsement signs rather than
 screens: no contract verdict in Table~\ref{tab:main} depends on it.
 
-\begin{figure}[!htbp]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.75\linewidth]{figs/fig_endorse_levels.pdf}
 \caption{HOMO/LUMO levels of the four funnel-passed molecules at the
@@ -698,7 +544,7 @@ gap.}
 \label{fig:endorse}
 \end{figure}
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{True-compute endorsement: funnel-passed molecules of the T5
 flagship run at the r2SCAN-3c level (ORCA), with independent HOMO

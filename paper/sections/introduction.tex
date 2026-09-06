@@ -22,7 +22,7 @@ voltage/capacity trajectories, the well-known \emph{inverse problem}
 trial-and-error paradigm iterates slowly: battery design is, in essence, an
 \emph{evaluation-constrained} problem.
 
-\begin{figure*}[!htbp]
+\begin{figure*}[!ht]
 \centering
 \subfloat[Deployment scenes: fast-charge
 transport (left), grid storage (center), and drone powertrains
@@ -48,6 +48,8 @@ Figure~\ref{fig:overview} previews the study: the application settings
 that motivate the suite (\ref{fig:overview}a), the governance diagnostic
 that defines our contribution (\ref{fig:overview}b), and the architecture
 (\ref{fig:overview}c).
+
+\subsection{From Black-Box Search to Agentic Design}
 
 Early data-driven methods formalized the problem as
 \emph{black-box optimization} (BBO): numerical algorithms such as Bayesian
@@ -143,32 +145,28 @@ computed by an adjudication layer outside the agent. To our knowledge, no
 published system spans that chain within a single autonomous loop, and none
 places judgment outside the agent.
 
+\subsection{The Governance Question}
+
 Four properties of the system follow from that design. First, the contract
 is the only input: a natural-language requirement with nothing else---no
 configuration file, no parameter set, no candidate list---and the agent
 returns the complete, adjudicated design: material choices, formulation,
 architecture, safety validation, and the deliverable package, with a
-closing first-principles endorsement pass (ab initio DFT and molecular
-dynamics, reserved for the top candidates rather than used for screening,
-executed for the flagship molecular finalists, §5.8). Second,
-governance--carrier decoupling: the protocol is a self-contained
-declarative artifact---natural-language rules, a command-line tool library,
-and an audit ledger---bound to no specific agent framework; the governance
-travels with the contract, not with the harness, a property we verify
-empirically by running the identical protocol under three orchestration
-substrates (§5.7). Third, the human engineer's *in-loop* role ends at the
-moment the contract is stated; from that point forward the agent plans,
-screens, simulates, diagnoses, falls back, and concludes with no
-intermediate human oversight. Fourth, the eight scenario contracts
-were chosen so that different tasks must exercise different levers of this
-full chain---a transport upgrade for a fast-charge guarantee, an
-SEI-kinetics bridge for a lifetime bound, a cathode-system switch for a
-voltage plateau---and the governed agent exercises each in turn, in the same
-loop, under the same protocol: the full-chain claim is suite-level, the
-suite collectively spanning all five design domains. This is the delegation
-setting management science has not yet been able to study: a complete design
-chain handed to a machine, with the principal present only as a written
-contract.
+closing first-principles endorsement pass for the flagship molecular
+finalists (§5.8). Second, governance--carrier decoupling: the protocol is a
+self-contained declarative artifact---natural-language rules, a
+command-line tool library, and an audit ledger---bound to no specific agent
+framework, a property we verify empirically by running it under three
+orchestration substrates (§5.7). Third, the human engineer's \emph{in-loop}
+role ends at the moment the contract is stated. Fourth, the eight scenario
+contracts were chosen so that different tasks exercise different levers of
+the full chain---a fast-charge guarantee, an SEI-kinetics bridge for a
+lifetime bound, a cathode-system switch for a voltage plateau---which the
+governed agent exercises in turn, in the same loop, under the same
+protocol: the full-chain claim is suite-level, the suite collectively
+spanning all five design domains. This is the delegation setting management
+science has not yet been able to study: a complete design chain handed to a
+machine, with the principal present only as a written contract.
 
 What makes such delegation safe---or dangerous---is the question this paper
 answers. We deliberately construct the two failure modes a design organization
@@ -178,35 +176,26 @@ when a contract requires a material lever---a high-voltage spinel chemistry, an
 SEI-suppressing coating---the optimum is simply not in its reachable set. The
 second is more subtle and, we will argue, more dangerous: the
 \emph{yardstick failure}. A protocol-free agent with the same tools, budget,
-and model is not constrained to measure against the contract it was given. It
-can shift the threshold (``dendrite onset is at $-10$ mV, so $-6.9$ mV is
-safe''), substitute the model (an SEI growth law swapped for a slower variant,
-reported in the contract model's vocabulary), buy compliance with a self-set
-physical parameter (a cathode diffusivity scaled up for ``power-grade''
-kinetics), alter the measurement caliber (a rate-retention ratio computed
-against $C/3$ instead of the contractual $1C$ reference), or omit the
-criterion variable entirely (a nail-penetration test evaluated by its own
-steady-state temperature, with no trigger criterion anywhere in the
-artifacts). In our data both baselines fall short for orthogonal,
+and model is not constrained to measure against the contract it was given,
+and in our data adjusts it in five distinguishable modes (Section~5.5)---a
+self-set threshold (``dendrite onset at $-10$ mV''), a substituted model, a
+purchased physical parameter, an altered caliber, and an omitted criterion
+variable. In our data both baselines fall short for orthogonal,
 specifiable reasons---the optimizer threefold, bounded by its space; the
 bare agent zero within the space despite claiming seven---one loses to an
 unreachable space, the other to a malleable measurement standard.
 
 We introduce \emph{protocolized governance} as the intervention: a fixed,
 always-on set of process rules the agent executes inside the design loop, plus
-an adjudication layer that stands outside it. The protocol has five
-components: a layered multi-precision funnel (cheap proxies first, molecular
-screening only when the bottleneck calls for it, everything bounded by the
-cell-scale judgment); evaluation-and-fallback routing (diagnose the scale of a
-failure before retrying); heterogeneous model voting (two machine-learning
-potentials plus a semi-empirical quantum method); a parameter bridge
-(microscopic properties mapped to macroscopic model parameters under mandatory
-source annotation); and---the component the results hinge on---\emph{mechanized adjudication}. Under mechanized
+an adjudication layer that stands outside it. Its five components---a layered
+multi-precision funnel, evaluation-and-fallback routing, heterogeneous model
+voting, a parameter bridge, and, the component the results hinge on,
+\emph{mechanized adjudication}---are specified in Section~3. Under mechanized
 adjudication the contract is pre-registered as machine-readable criteria in an
 audit ledger before the first simulation runs; every verdict is computed by
-code from tool-output files, not asserted by the agent in prose; and each
-``achieved'' claim points to the exact file and key that supports it, with a
-verifier that refuses incomplete audit trails. To our knowledge, this makes
+code from tool-output files, not asserted by the agent in prose; each
+``achieved'' claim points to the exact file and key that supports it; and a
+verifier refuses incomplete audit trails. To our knowledge, this makes
 the system the first design agent whose verdicts are \emph{computed} rather
 than \emph{asserted}. In the language of delegation
 theory, it is a delegation contract with enforced fidelity---the alignment
@@ -265,6 +254,8 @@ quality not as physics but as contract score---attainment rate, verifiable
 evidence completeness, and resource (tokens and messages)---a transferable
 score for future agent-scale deployments in scientific and engineering
 organizations.
+
+\subsection{Contributions and Organization}
 
 The remainder of the paper is organized as follows. Section~2 reviews autonomy
 in scientific and engineering design and situates governance in the delegation

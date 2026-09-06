@@ -65,7 +65,7 @@ the mechanical plating criterion applied to the T2 design;
 Figure~\ref{fig:ssei} quantifies the SEI-kinetics bridge on the same
 task.
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{Protocol-free agent claims vs.\ contract-caliber re-adjudication.}
 \label{tab:c1supp}
@@ -85,7 +85,7 @@ T8 & achieved (Li-metal cell) & --- & out-of-space \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[!htbp]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.8\linewidth]{figs/fig_supp_plating.pdf}
 \caption{The mechanical plating criterion as applied: anode potential time
@@ -94,7 +94,7 @@ A design plates if and only if the minimum crosses this line.}
 \label{fig:splating}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.8\linewidth]{figs/fig_supp_sei.pdf}
 \caption{SEI-kinetics bridge effect on T2: Chen2020 baseline SEI after 100
@@ -111,7 +111,7 @@ parameter sets at the DFN contract caliber (mechanically derived via
 appears in the task text seen by any agent. Table~\ref{tab:anchor} lists
 the anchoring source per task.
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{Scenario anchoring and threshold calibration sources.}
 \label{tab:anchor}
@@ -140,7 +140,7 @@ pre-registered threshold. Boolean criteria (plating, thermal-runaway
 trigger) pass exactly and carry no margin. Table~\ref{tab:margins}
 gives the complete per-criterion spreadsheet.
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{Per-criterion margins of the eight governed runs (pro model).
 The left column lists the criterion each task cleared last (binding
@@ -167,7 +167,7 @@ a three-seed replication (1234, 5678, 9012) leaves the attained-task set
 unchanged. Attaining-trial counts per task and seed (out of 50
 evaluations) are tabulated in Table~\ref{tab:boseeds}:
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{BO contract-attaining trials per task across three seeds
 (mechanical criteria as in the main text; the attained-task set is
@@ -219,7 +219,7 @@ Experiment 5
 Three seeds of every task under the governed protocol, deepseek-v4-pro,
 same budget as the main matrix (Table~\ref{tab:replication}).
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{Threefold replication of all eight tasks.}
 \label{tab:replication}
@@ -251,7 +251,7 @@ are reproducible across seeds; the designs themselves differ.
 Battery-Sim-Agent \cite{chen2026battery} is the closest published system;
 Table~\ref{tab:bsa} positions the two papers side by side.
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{Positioning against Battery-Sim-Agent (KDD 2026).}
 \label{tab:bsa}
@@ -279,6 +279,121 @@ harnesses (including the cross-harness legs)---is open source at
 the primary data source of the paper; every table value can be re-derived
 mechanically from the ledgers and the tool outputs they reference. LLM runs
 are not seed-reproducible; the protocol's verdicts are.
+
+\section{The T6 Case: Candidate Sheet, Datasheet, and Curves}
+
+The T6 walk-through in the main paper (Section~5.6) compresses the run's
+materials to their decision structure. This section carries the detail.
+Table~\ref{supp:tab:candidates} reproduces the run's full candidate
+sheet---twenty proposals, each logged with its name, type, and one-line
+rationale; the sequence reads like a design engineer's notebook: thermal
+probes first, then plating fixes on three distinct levers (anode capacity
+headroom, anode kinetics, electrolyte transport), then SEI levers, a
+combined candidate, DFN confirmation, and finally DFN-gap fixes with a
+margin-widening probe. Table~\ref{supp:tab:datasheet} condenses the
+technical datasheet of the final design (VBF-T6R1-DSH-01), whose Source
+column points each value at its tool-output file.
+Figure~\ref{supp:fig:trace} plots the decision trajectory with the contract
+line and the baseline ceiling; Figure~\ref{supp:fig:t6curves} shows the two
+decisive curves---the plateau gap that forced the system switch and the
+plating margin the criterion judges.
+
+\begin{table}[!ht]
+\centering
+\caption{The T6 candidate sheet (condensed from the report's full list of
+twenty; each proposal is logged with its rationale in the ledger).}
+\label{supp:tab:candidates}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{1.1cm}p{3.0cm}p{7.4cm}}
+\toprule
+Round & Candidate & Purpose (logged rationale) \\
+\midrule
+R01 & systemLNMO & system switch: 4.7 V-class LNMO spinel \\
+R01 & baselineChen2020 & anchor-table default baseline \\
+R02 & lnmo\_h200 / h500 & thermal probes at 4C ($h=200/500$) \\
+R03 & np120 / nr35 / elyte & plating fixes: N/P headroom; anode kinetics; electrolyte transport \\
+R03 & sei6e13 & SEI-suppression probe (electrode modification) \\
+R04 & np125 / np120\_nr35 & plating closure: N/P 1.25 and a leaner alternative \\
+R04 & sei\_c2270\_d12 / d10 & SEI levers: EC concentration and $D_{\mathrm{EC}}$ cuts \\
+R05 & lnmo\_final & combined final candidate \\
+R06 & lnmo\_final & DFN confirmation of the combined candidate \\
+R07 & r7\_h400\_d5 / nr30 / combo & DFN-gap fixes: thermal; plating; combined \\
+R08 & r8\_final / r8\_d6\_margin & final candidate and margin-widening probe \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\caption{Technical datasheet, condensed (VBF-T6R1-DSH-01); the Source
+column of the original points each value at its tool-output file.}
+\label{supp:tab:datasheet}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{2.9cm}p{8.2cm}}
+\toprule
+Field & Value \\
+\midrule
+Rated capacity (1C, DFN) & 6.20 Ah \\
+Plateau (discharge midpoint) & 4.1145 V (window 2.5--4.7 V) \\
+Volumetric ED & 1135.8 Wh/L \\
+Gravimetric ED & 493.3 Wh/kg (electrolyte excluded) \\
+4C fast charge, 45$\,^\circ$C & T$_{\max}$ 321.42 K (48.27$\,^\circ$C), no plating (min $+10.96$ mV) \\
+DC resistance / power & 6.38 m$\Omega$ / 13.52 kW/kg \\
+Cycle life & 100 $\times$ 1C: SEI 385.3 nm ($\leq$ 500 nm) \\
+Mass & 51.50 g (electrolyte excluded; $\approx$57.8 g with estimate) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\caption{Final design parameters (excerpt of the design specification,
+VBF-T6R1-DS-01).}
+\label{supp:tab:designparams}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{2.4cm}p{8.7cm}}
+\toprule
+Item & Value \\
+\midrule
+System & LNMO high-voltage spinel / graphite (4.7 V-class) \\
+Positive electrode & 75.6 µm, porosity 0.335, particle 5.22 µm \\
+Negative electrode & 102.2 µm, porosity 0.25, particle 3.5 µm \\
+Separator & 12 µm, porosity 0.47 \\
+Current collectors & Al 16 µm / Cu 12 µm \\
+Electrolyte & EC/EMC + LiPF$_6$; EC 2270.5 mol/m³, $D_{\mathrm{EC}}=1\times10^{-18}$ m$^2$/s (SEI lever) \\
+Cooling & $h = 400$ W/m$^2$K \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The datasheet closes with a formulation note that a production engineer
+would demand and an ungoverned agent would omit: the electrolyte transport
+numbers are design targets at the upper bound of reported fast-charge
+formulations, and ``materializing the design requires a real
+low-viscosity electrolyte with measured $D_e$ in this range''---the
+deliverable labels its own estimates.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/fig_trace_t6.pdf}
+\caption{Governed decision trace on T6 (smartphone contract): volumetric
+energy density by round, with the contract line (950 Wh/L) and the baseline
+ceiling (854 Wh/L). The jump across the dashed line is the ceiling
+escalation---the LNMO system switch---followed by rounds of refinement to
+1135.8 Wh/L.}
+\label{supp:fig:trace}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{figs/fig_case_t6_curves.pdf}
+\caption{The T6 case at curve level. (a) 1C discharge: the Chen2020
+baseline's midpoint voltage sits below the 4.1 V contract plateau, which is
+what the ceiling assessment diagnosed; the final LNMO design clears it
+(4.1145 V). (b) The final design's anode potential during 4C charge stays
+above the 0 V plating criterion throughout (min $+11.0$ mV).}
+\label{supp:fig:t6curves}
+\end{figure}
 
 \bibliographystyle{elsarticle-num}
 \bibliography{paper}

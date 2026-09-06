@@ -70,9 +70,9 @@ re-interpret them. Figure~\ref{fig:arch} summarizes the system: the
 contract enters the governed loop, and the adjudication layer writes every
 verdict into the audit ledger outside it.
 
-\begin{figure}[!htbp]
+\begin{figure}[!ht]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_arch_v6.png}
+\includegraphics[width=0.85\linewidth]{figs/fig_arch_v6.png}
 \caption{System architecture. The natural-language contract is the sole
 input; the agent executes the five-stage loop over a command-line tool
 library; the adjudication layer sits outside the agent and writes mechanical
@@ -86,13 +86,11 @@ The protocol organizes work as a five-stage funnel---planning, molecular
 screening, cell design, safety assessment, and a closing true-compute
 endorsement---inside which five governance components operate as fixed,
 always-on rules. Figure~\ref{fig:protocol} shows the loop with its
-fallback routing and the outside-agent adjudication layer;
-Figure~\ref{fig:funnel} plots the cost ladder of the same loop at a
-glance.
+fallback routing and the outside-agent adjudication layer.
 
-\begin{figure}[!htbp]
+\begin{figure}[!ht]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_protocol_v2.png}
+\includegraphics[width=0.88\linewidth]{figs/fig_protocol_v2.png}
 \caption{The protocolized design loop. The contract is the sole input;
 each round proposes, screens (when the bottleneck is molecular), simulates,
 and is adjudicated by code outside the agent; diagnosed failures route back
@@ -101,17 +99,6 @@ switch. The red-dashed adjudication layer delivers the mechanical verdict
 and refuses incomplete audit chains; the exit path ends in endorsement and
 the deliverable package.}
 \label{fig:protocol}
-\end{figure}
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\linewidth]{figs/fig_funnel.png}
-\caption{The multi-precision funnel: cost rises from planning (zero
-compute) to true DFT/MD endorsement (hours), which signs conclusions and
-never screens. Fallback routes a failure to the scale of its cause; ceiling
-escalation opens the material lever when the cell-scale ceiling cannot close
-the gap.}
-\label{fig:funnel}
 \end{figure}
 
 \textbf{Component 1: the layered multi-precision funnel with ceiling
@@ -168,7 +155,7 @@ validation rather than silently ignored. Every bridge value must carry a
 source annotation---literature citation or explicit estimate---and estimates
 are prohibited from entering judgment-relevant outputs unlabeled.
 
-\begin{table}[!htbp]
+\begin{table}[!ht]
 \centering
 \caption{The parameter bridge: microscopic property to PyBaMM parameter
 names. Mistyped keys are rejected by the simulator (unknown parameter name),

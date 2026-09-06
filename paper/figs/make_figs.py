@@ -63,89 +63,43 @@ def fig_alignment():
 
 
 # ============================================================
-# Fig 5 (fig_main_matrix.pdf): 8x5 attainment heatmap
-# ============================================================
-def fig_main_matrix():
-    # rows=task, cols=[G-pro, G-flash, G-luna, G-mimo, C1, C2]; values: 1=pass, 0=fail, 0.5=out-of-space
-    verdicts = np.array([
-        [1, 1, 0, 0, 0, 1],
-        [1, 1, 1, 1, 0, 0],
-        [1, 1, 1, 1, 0, 0],
-        [1, 1, 1, 0, 0.5, 1],
-        [1, 1, 0, 1, 0, 0],
-        [1, 1, 0, 0, 0, 0],
-        [1, 1, 1, 1, 0, 0],
-        [1, 1, 0, 0, 0.5, 1],
-    ])
-    ann = [
-        ["553.98", "459.4", "plating", "plating", "−6.9 mV", "514.13"],
-        ["465.62", "✓", "✓", "✓", "plating/SEI@500", "plated/SEI"],
-        ["✓", "✓", "✓", "✓", "94.1%", "plated/5C 3.4%"],
-        ["471.55", "✓", "✓", "plating", "Li-metal", "678.26"],
-        ["✓", "✓", "ceiling", "517.8", "−12.6 mV", "plated"],
-        ["1135.8", "✓", "895.6", "852.8", "budget", "plateau/Tmax"],
-        ["✓", "✓", "✓", "✓", "nail ∘", "plated/nail"],
-        ["✓", "✓", "mass", "41.5 g", "Li-metal", "643.75"],
-    ]
-    cmap = matplotlib.colors.ListedColormap([RED, GRAY, GREEN])
-    fig, ax = plt.subplots(figsize=(6.6, 3.6))
-    ax.imshow(verdicts, cmap=cmap, vmin=0, vmax=1, aspect="auto")
-    ax.set_xticks(range(6)); ax.set_xticklabels(
-        ["Governed\n(pro)", "Governed\n(flash)", "Governed\n(luna)", "Governed\n(mimo)",
-         "Protocol-free\n(C1)", "BO\n(C2)"])
-    ax.set_yticks(range(8)); ax.set_yticklabels([f"{t}\n{_lab}" for t, _lab in zip(
-        TASKS, ["sedan", "storage", "tools", "cold", "flagship", "phone", "hybrid", "drone"])], fontsize=7.5)
-    for i in range(8):
-        for j in range(6):
-            ax.text(j, i, ann[i][j], ha="center", va="center", fontsize=7,
-                    color="white" if verdicts[i, j] != 0.5 else "k")
-    ax.set_xticks(np.arange(-0.5, 6, 1), minor=True); ax.set_yticks(np.arange(-0.5, 8, 1), minor=True)
-    ax.grid(which="minor", color="white", lw=1.2); ax.tick_params(which="minor", length=0)
-    ax.set_title("Contract attainment: 8/8 | 8/8 | 4/8 | 4/8 | 0/8 (in-space) | 3/8")
-    fig.tight_layout(); fig.savefig(OUT / "fig_main_matrix.pdf"); plt.close(fig)
-    print("fig_main_matrix.pdf")
-
-
-# ============================================================
-# Fig 6 (fig_c1_yardstick.pdf): four yardstick-failure panels
+# Fig 6 (fig_c1_yardstick.pdf): yardstick-failure panels
 # ============================================================
 def fig_c1_yardstick():
-    fig, axes = plt.subplots(2, 2, figsize=(6.4, 4.6))
+    fig, axes = plt.subplots(1, 3, figsize=(7.6, 2.5))
     # (a) threshold shift
-    ax = axes[0, 0]
-    ax.axhline(0, color="k", lw=1)
-    ax.axvspan(-10, 0, color="#f7dddd", alpha=0.6)
-    ax.barh([0], [-6.9], color=RED, height=0.4)
-    ax.text(-5, 0.95, "self-set\nthreshold\n(−10 mV)", ha="center", fontsize=6.5, color=RED)
-    ax.set_yticks([0, 1]); ax.set_yticklabels(["C1 claim", "contract"], fontsize=7)
-    ax.set_xlim(-16, 2); ax.set_xlabel("η (mV)"); ax.set_title("(a) threshold shift — T1", fontsize=8.5)
-    ax.annotate("contract: <0 V ⇒ plated", xy=(0, 1.22), xytext=(-16, 1.28), fontsize=7, color="k")
+    ax = axes[0]
+    ax.axvspan(-10, 0, color="#f7dddd", alpha=0.85)          # self-set safety window
+    ax.barh([0], [6.9], left=[-6.9], color=RED, height=0.42)  # C1 claim at -6.9 mV
+    ax.plot([0, 0], [-0.4, 1.1], color="k", lw=1.2)           # contract line
+    ax.plot([-10, -10], [-0.2, 1.1], color=RED, lw=0.8, ls=":")
+    ax.text(-3.45, -0.42, "C1 claim: $-6.9$ mV", ha="center", fontsize=6.5, color=RED)
+    ax.text(-10, 1.22, "self-set onset −10 mV", ha="center", fontsize=6, color=RED)
+    ax.text(0.25, 1.22, "contract:", ha="left", fontsize=6)
+    ax.text(0.25, 1.02, "$\eta\\geq 0$", ha="left", fontsize=6)
+    ax.set_yticks([0]); ax.set_yticklabels(["C1 claim"], fontsize=7)
+    ax.set_xlim(-16, 2); ax.set_ylim(-0.75, 1.5)
+    ax.set_xlabel("$\eta$ (mV)", fontsize=8); ax.set_title("(a) threshold shift — T1", fontsize=8, pad=6)
     # (b) model substitution
-    ax = axes[0, 1]
-    ax.bar(["claimed (500 cyc,\nswitched SEI model)", "contract model\n(500 cyc, full design)"], [15.1, 818.9],
+    ax = axes[1]
+    ax.bar(["claimed", "contract model"], [15.1, 818.9],
            color=[GREEN, RED], width=0.55)
-    ax.axhline(550, color="k", lw=1, ls="--"); ax.text(1.42, 555, "limit 550 nm", fontsize=7)
-    ax.set_ylabel("SEI @500 cyc (nm)"); ax.set_title("(b) model substitution — T2", fontsize=8.5)
+    for x, v in zip([0, 1], [15.1, 818.9]):
+        ax.text(x, v + 18, f"{v:.1f}", ha="center", fontsize=6.5)
+    ax.axhline(550, color="k", lw=1, ls="--"); ax.text(1.42, 565, "limit 550 nm", fontsize=6.5)
+    ax.set_ylabel("SEI @500 cyc (nm)", fontsize=8); ax.set_title("(b) model substitution — T2", fontsize=8, pad=6)
     # (c) purchased parameter + caliber shift
-    ax = axes[1, 0]
-    ax.bar(["claimed\n(96.7% \"of C/3\")", "contract caliber\n(5C/1C, full design)"], [96.7, 94.1],
+    ax = axes[2]
+    ax.bar(["claimed", "contract caliber"], [96.7, 94.1],
            color=[GREEN, RED], width=0.55)
-    ax.axhline(95, color="k", lw=1, ls="--"); ax.text(1.42, 95.3, "limit 95%", fontsize=7)
-    ax.set_ylabel("5C retention (%)"); ax.set_ylim(60, 100)
-    ax.set_title("(c) purchased $D_s$ + caliber — T3", fontsize=8.5)
-    # (d) missing criterion
-    ax = axes[1, 1]
-    ax.axis("off")
-    msg = ("(d) missing criterion — T5/T7\n\n"
-           "T5: reports |η| window; no anode-potential\n"
-           "time series exists in any artifact.\n\n"
-           "T7: nail test reported as steady-state\n"
-           "hotspot 118.5 °C; no trigger criterion\n"
-           "(contract requires triggered = False).\n\n"
-           "Criterion variable absent ⇒ not adjudicable.")
-    ax.text(0, 0.55, msg, fontsize=7.5, va="top", linespacing=1.5)
-    fig.suptitle("Yardstick failure modes of the protocol-free agent (mechanical re-adjudication)", y=1.0, fontsize=9.5)
-    fig.tight_layout(); fig.savefig(OUT / "fig_c1_yardstick.pdf"); plt.close(fig)
+    for x, v in zip([0, 1], [96.7, 94.1]):
+        ax.text(x, v + 0.6, f"{v:.1f}", ha="center", fontsize=6.5)
+    ax.axhline(95, color="k", lw=1, ls="--"); ax.text(1.42, 95.5, "limit 95%", fontsize=6.5)
+    ax.set_ylabel("5C retention (%)", fontsize=8); ax.set_ylim(60, 100.5)
+    ax.set_title("(c) purchased $D_s$ + caliber — T3", fontsize=8, pad=6)
+    fig.suptitle("Yardstick failure modes of the protocol-free agent (mechanical re-adjudication)",
+                 y=1.0, fontsize=9.5)
+    fig.tight_layout(rect=(0, 0, 1, 0.95)); fig.savefig(OUT / "fig_c1_yardstick.pdf"); plt.close(fig)
     print("fig_c1_yardstick.pdf")
 
 
@@ -429,7 +383,6 @@ def supp_sei():
 
 if __name__ == "__main__":
     fig_alignment()
-    fig_main_matrix()
     fig_c1_yardstick()
     fig_ablation()
     fig_trace_t6()
