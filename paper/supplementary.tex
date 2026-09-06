@@ -197,7 +197,7 @@ The governed runs used this lever as follows. T2 shipped $k_{\mathrm{SEI}} =
 beyond the bare-ALD literature magnitude under a dual-mechanism coating
 claim (ALD plus fluorinated-additive inner SEI); the same design at
 $10^{-14}$ m/s ($10^{-2}\times$) meets the identical contract, with the
-500-cycle SEI at 500.4 nm against the 550 nm limit---a $9\%$ margin---so
+500-cycle SEI at 500.4 nm against the 550 nm limit (a $9\%$ margin) so
 the T2 SEI criteria do not hinge on the extreme setting. T6's SEI work uses
 a $0.5\times$ solvent-diffusivity and concentration cut, derived from the
 model's own diffusion-limited rate law, and no T6 verdict depends on SEI.
@@ -242,7 +242,7 @@ T8 (drone) & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
 All twenty-four runs achieve their contracts under the mechanical
 adjudicator, with complete evidence coverage of every pre-registered
 criterion in every run. On T6, all three seeds independently reach the same
-material-bottleneck diagnosis and solution---the LNMO system switch---through
+material-bottleneck diagnosis and solution (the LNMO system switch) through
 three different designs. Contract attainment and the bottleneck diagnosis
 are reproducible across seeds; the designs themselves differ.
 
@@ -273,8 +273,8 @@ Honesty calibration & low-headroom: BO can tie or win & same low-headroom patter
 
 All simulation protocols, the adjudication layer, and the audit-chain
 verifier are distributed with the tool library and pinned by an automated
-regression suite. The full code base---protocol, tool library, experiment
-harnesses (including the cross-harness legs)---is open source at
+regression suite. The full code base (protocol, tool library, experiment
+harnesses (including the cross-harness legs)) is open source at
 \url{https://github.com/wangyuanxty/BatteryDesignAgent}. The audit ledgers (\texttt{log.jsonl}) of every run are
 the primary data source of the paper; every table value can be re-derived
 mechanically from the ledgers and the tool outputs they reference. LLM runs
@@ -285,7 +285,7 @@ are not seed-reproducible; the protocol's verdicts are.
 The T6 walk-through in the main paper (Section~5.6) compresses the run's
 materials to their decision structure. This section carries the detail.
 Table~\ref{supp:tab:candidates} reproduces the run's full candidate
-sheet---twenty proposals, each logged with its name, type, and one-line
+sheet: twenty proposals, each logged with its name, type, and one-line
 rationale; the sequence reads like a design engineer's notebook: thermal
 probes first, then plating fixes on three distinct levers (anode capacity
 headroom, anode kinetics, electrolyte transport), then SEI levers, a
@@ -370,7 +370,7 @@ The datasheet closes with a formulation note that a production engineer
 would demand and an ungoverned agent would omit: the electrolyte transport
 numbers are design targets at the upper bound of reported fast-charge
 formulations, and ``materializing the design requires a real
-low-viscosity electrolyte with measured $D_e$ in this range''---the
+low-viscosity electrolyte with measured $D_e$ in this range'': the
 deliverable labels its own estimates.
 
 \begin{figure}[!ht]
@@ -379,7 +379,7 @@ deliverable labels its own estimates.
 \caption{Governed decision trace on T6 (smartphone contract): volumetric
 energy density by round, with the contract line (950 Wh/L) and the baseline
 ceiling (854 Wh/L). The jump across the dashed line is the ceiling
-escalation---the LNMO system switch---followed by rounds of refinement to
+escalation (the LNMO system switch) followed by rounds of refinement to
 1135.8 Wh/L.}
 \label{supp:fig:trace}
 \end{figure}
@@ -394,6 +394,56 @@ what the ceiling assessment diagnosed; the final LNMO design clears it
 above the 0 V plating criterion throughout (min $+11.0$ mV).}
 \label{supp:fig:t6curves}
 \end{figure}
+
+\section{Threshold Sensitivity of the Baseline Attainment}
+
+The contract thresholds are author-anchored (fixed increments over the
+anchoring parameter sets' baselines), so the reader's natural question is
+how far the comparison depends on where exactly the thresholds sit.
+Table~\ref{supp:tab:bosens} recomputes the Bayesian-optimizer attainment
+count under a uniform $\pm 5\%$ perturbation of every numeric criterion,
+directly from the stored 50-trial trajectories (no new runs).
+
+\begin{table}[!ht]
+\centering
+\caption{BO attained trials under uniform $\pm 5\%$ threshold
+perturbation (seed 1234, 50 trials per task; $\times$ = each numeric
+criterion tightened/loosened by 5\%, boolean criteria unchanged).}
+\label{supp:tab:bosens}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{1.0cm}p{1.5cm}p{1.5cm}p{1.5cm}p{7.3cm}}
+\toprule
+Task & Baseline & $+5\%$ & $-5\%$ & Why the count moves (or not) \\
+\midrule
+T1 & 25/50 & 0/50 & 27/50 & thermal line of the safety exam binds \\
+T2 & 0/50 & 0/50 & 0/50 & plating; SEI bridge is material \\
+T3 & 0/50 & 0/50 & 0/50 & plating; 5C retention is material \\
+T4 & 34/50 & 22/50 & 38/50 & low-temperature retention binds \\
+T5 & 0/50 & 0/50 & 0/50 & plating; chemistry ceiling \\
+T6 & 0/50 & 0/50 & 0/50 & plateau ceiling: max 4.0090 V $<$ 4.1 V \\
+T7 & 0/50 & 0/50 & 0/50 & SEI; plating \\
+T8 & 10/50 & 1/50 & 11/50 & mass ceiling 40 g binds \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two structural properties follow. \emph{First}, the five
+material-bottleneck tasks are threshold-invariant at $\pm 5\%$: the
+optimizer's failure there is ceiling-bound, not threshold-bound. Across all
+400 trials, the highest midpoint voltage any design reaches is $4.0115$ V
+against the $4.1$ V contract line; plating and SEI violations are
+lever-bound, so loosening the numeric thresholds cannot admit a design that
+is physically outside the parameter space's reachable set. \emph{Second},
+on the three structural tasks the same criteria bind both conditions in
+parallel: the governed agent's binding margins on T1/T4/T8 are
+$+2.2\%$/$+4.5\%$/$+0.5\%$ (Table~\ref{tab:margins}), so a uniform $+5\%$
+tightening fails the governed runs on the very categories it fails the
+optimizer. The direction of the comparison therefore never inverts under a
+$\pm 5\%$ perturbation; the only possible inversion zone is
+energy-density thresholds set above the governed designs' own margins
+($>+40\%$ on the structural tasks), which is exactly the region where the
+main text already reports the optimizer's structural-task energy-density
+superiority (Section~5.1).
 
 \bibliographystyle{elsarticle-num}
 \bibliography{paper}

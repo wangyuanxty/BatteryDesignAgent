@@ -13,7 +13,7 @@ review each in turn and then state the gap.
 
 The past three years have seen LLM agents deployed across the design chain,
 one slice at a time. Coscientist automated end-to-end chemistry workflows
----planning, coding, instrument control---in a single agent
+ (planning, coding, instrument control) in a single agent
 \cite{boiko2023coscientist}; ChemCrow augmented an LLM with chemistry tools
 for molecule design and synthesis planning \cite{bran2024chemcrow}; the A-Lab
 closed the loop from synthesis recipe to robotic execution to X-ray
@@ -40,7 +40,7 @@ Two structural observations hold across this entire body of work. First,
 every system covers a slice of a design chain, not a chain: material
 discovery stops at the material, circuit automation stops at the circuit,
 inverse estimation stops at parameters. None spans a full set of coupled
-design levers---from chemistry through formulation through architecture---and
+design levers (from chemistry through formulation through architecture) and
 none therefore faces the cross-scale diagnosis problem that a full chain
 poses. Second, the judgment in each system is asserted by the agent itself.
 Whether a synthesis ``worked'' or a parameter fit ``converged'' is reported in
@@ -50,8 +50,8 @@ reflect the same design: DiscoveryBench, ScienceAgentBench, MLAgentBench, and
 RE-Bench measure task success and capability \cite{discoverybench2024,
 scienceagentbench2024, mlagentbench2023, rebench2024}; FIRE-Bench adds an
 honesty layer for scientific rediscovery claims \cite{firebench2026}. None
-treats the \emph{integrity of the yardstick}---whether the metric an agent
-reports against is the metric it was given---as a first-order experimental
+treats the \emph{integrity of the yardstick} (whether the metric an agent
+reports against is the metric it was given) as a first-order experimental
 variable.
 
 \subsection{Classical Optimization Baselines and Their Known Boundaries}
@@ -65,7 +65,7 @@ calibrated boundary: in ``low-headroom'' regimes where literature default parame
 already sit close to the target, BO remains competitive and can even
 outperform the agent, and CMA-ES fails to converge on their parameter
 estimation tasks altogether \cite{chen2026battery}. We adopt the identical BO
-configuration---same platform, same strategy family, same seed---so that our
+configuration (same platform, same strategy family, same seed) so that our
 baseline inherits this published calibration.
 
 The deeper boundary, which no agent study has isolated experimentally, is
@@ -74,7 +74,7 @@ classical optimizer can move thickness and porosity, but it cannot invent an
 electrolyte formulation, propose a coating, or switch a cathode system. When
 the binding constraint on a design contract is a material property---a
 voltage plateau beyond the chemistry's polarization limit, an SEI growth
-rate that only a coating suppresses---the optimum is not in the reachable
+rate that only a coating suppresses: the optimum is not in the reachable
 set, and no acquisition function can find it. The battery modeling
 literature supplies the physics that makes this boundary concrete: plating
 onset is governed by the local overpotential balance
@@ -110,8 +110,8 @@ machine-readable, the agent's every verdict is mechanically judged against
 it, and the fidelity of that judgment is itself an experimental variable.
 
 Finally, we note the disciplinary bridge this paper crosses. The battery
-prognostics community rooted in grey system theory---originating in the
-management science tradition \cite{deng1989grey}---has long modeled battery
+prognostics community rooted in grey system theory (originating in the
+management science tradition \cite{deng1989grey}) has long modeled battery
 degradation and state-of-charge as forecasting problems
 \cite{li2025greyiterative, li2024hybridgrey, sapnken2025soh,
 sapnken2024pemfc, sapnken2026greyneural, xu2025greykalman}. That lineage
@@ -122,12 +122,12 @@ management-science lens from prognostics to design governance.
 \subsection{The Gap and Research Questions}
 
 Three gaps follow. (1) No published system spans the full chain of cell
-design levers---electrolyte, separator, electrode, architecture,
-thermal---in one autonomous loop. (2) No experimental comparison isolates
+design levers (electrolyte, separator, electrode, architecture,
+thermal) in one autonomous loop. (2) No experimental comparison isolates
 the two failure modes of ungoverned delegation: the solution-space failure of
 classical optimizers and the yardstick failure of protocol-free agents. (3)
-No study treats the adjudication layer---pre-registered contracts,
-code-mechanical verdicts, evidence-chain audits---as an experimental
+No study treats the adjudication layer (pre-registered contracts,
+code-mechanical verdicts, evidence-chain audits) as an experimental
 variable whose removal can be measured. The paper is designed to isolate
 both failure modes: the solution-space failure and the yardstick failure.
 
@@ -145,7 +145,7 @@ and in which task regimes? We ablate each component separately and report
 its marginal contribution, including null results.
 \item[\textbf{RQ3}]
 \emph{Yardstick trustworthiness.} Does mechanized adjudication close the
-judgment-integrity gap---measured as evidence completeness, criterion
-fidelity, and the absence of self-set thresholds---that the protocol-free
+judgment-integrity gap (measured as evidence completeness, criterion
+fidelity, and the absence of self-set thresholds) that the protocol-free
 agent exhibits?
 \end{itemize}

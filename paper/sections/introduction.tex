@@ -6,20 +6,20 @@
 
 Battery development is a key link in transport electrification and grid
 energy storage, yet the field itself is constrained by a core dilemma:
-\emph{design space versus evaluation cost}. Performance goals---energy
-density, rate capability, cycle life, safety, cost---are mutually coupled;
+\emph{design space versus evaluation cost}. Performance goals (energy
+density, rate capability, cycle life, safety, cost) are mutually coupled;
 design variables span material systems (active materials, electrolyte
 formulations), electrode microstructure (particle radius, porosity,
 tortuosity), and operating conditions, together forming a high-dimensional
 nonlinear search space. Meanwhile, evaluating any candidate design is
 expensive: cycle-life assessment commonly requires thousands of hours of
 continuous charge--discharge testing \cite{chen2020jes}, and key microscopic
-parameters---solid/liquid transport coefficients, reaction-rate constants,
-porosity, initial lithium concentration---are difficult or impossible to
+parameters (solid/liquid transport coefficients, reaction-rate constants,
+porosity, initial lithium concentration) are difficult or impossible to
 measure directly \cite{chen2020jes} and must be inferred from macroscopic
 voltage/capacity trajectories, the well-known \emph{inverse problem}
 \cite{chen2020jes}. Under this constraint the classical
-trial-and-error paradigm iterates slowly: battery design is, in essence, an
+trial-and-error paradigm iterates slowly: battery design is therefore an
 \emph{evaluation-constrained} problem.
 
 \begin{figure*}[!ht]
@@ -34,12 +34,12 @@ families ends at the contract, and every verdict is issued by a
 judging layer outside the agent.]{%
 \includegraphics[width=0.47\linewidth]{figs/fig_overview_b.png}}\hfill
 \subfloat[Architecture at a glance: five fidelity rungs, each
-gate kept by one entry---computational cost rises left to right.]{%
+gate kept by one entry: computational cost rises left to right.]{%
 \includegraphics[width=0.47\linewidth]{figs/fig_overview_c.png}}
 \caption{Overview of the study. (a) The application settings that
 motivate the eight scenario contracts. (b) The central diagnostic: a
 design loop that ends at the contract and an adjudication layer that
-stands outside it. (c) The multi-precision architecture---cheap
+stands outside it. (c) The multi-precision architecture: cheap
 proxies first, true first principles last.}
 \label{fig:overview}
 \end{figure*}
@@ -54,9 +54,9 @@ that defines our contribution (\ref{fig:overview}b), and the architecture
 Early data-driven methods formalized the problem as
 \emph{black-box optimization} (BBO): numerical algorithms such as Bayesian
 optimization \cite{jiang2022fastcharging} or genetic algorithms
-\cite{zhang2014multiobjective} iteratively query a physics simulator---the
+\cite{zhang2014multiobjective} iteratively query a physics simulator (the
 battery digital twin, e.g.\ the Doyle-Fuller-Newman model in the open-source
-platform PyBaMM \cite{sulzer2021pybamm}---to minimize the misfit between
+platform PyBaMM \cite{sulzer2021pybamm}) to minimize the misfit between
 simulated and observed trajectories. Such methods are general and carry
 theoretical convergence guarantees, but they are inherently blind: the
 simulator is treated as an opaque black box, physical intuition and
@@ -66,8 +66,8 @@ parameter sets that reproduce near-identical macroscopic outputs, the
 \emph{equifinality} phenomenon) \cite{chen2026battery}.
 
 The rise of large language models (LLMs) has driven a new
-\emph{agentic science} paradigm---LLM as the reasoning engine, external
-tools and knowledge bases as its hands---which has unfolded in battery
+\emph{agentic science} paradigm (LLM as the reasoning engine, external
+tools and knowledge bases as its hands) which has unfolded in battery
 research across three layers. At the \emph{knowledge layer}, RAG research
 assistants automate literature synthesis: Words-to-Watts proposed the
 BatteryGPT concept \cite{words2watts2024}; ChatSSB integrates a literature
@@ -139,8 +139,8 @@ construction (a
 black-box optimizer on a fixed objective) or leave it free (an ungoverned
 LLM agent on a natural-language contract that it also reports against).
 Our study occupies the empty quadrant: a governed agent executing the full
-chain of cell-design levers---electrolyte, separator, electrode,
-architecture, thermal---in a single autonomous loop, with every verdict
+chain of cell-design levers (electrolyte, separator, electrode,
+architecture, thermal) in a single autonomous loop, with every verdict
 computed by an adjudication layer outside the agent. To our knowledge, no
 published system spans that chain within a single autonomous loop, and none
 places judgment outside the agent.
@@ -148,32 +148,32 @@ places judgment outside the agent.
 \subsection{The Governance Question}
 
 Four properties of the system follow from that design. First, the contract
-is the only input: a natural-language requirement with nothing else---no
-configuration file, no parameter set, no candidate list---and the agent
+is the only input: a natural-language requirement with nothing else (no
+configuration file, no parameter set, no candidate list) and the agent
 returns the complete, adjudicated design: material choices, formulation,
 architecture, safety validation, and the deliverable package, with a
 closing first-principles endorsement pass for the flagship molecular
 finalists (§5.8). Second, governance--carrier decoupling: the protocol is a
-self-contained declarative artifact---natural-language rules, a
-command-line tool library, and an audit ledger---bound to no specific agent
+self-contained declarative artifact (natural-language rules, a
+command-line tool library, and an audit ledger) bound to no specific agent
 framework, a property we verify empirically by running it under three
 orchestration substrates (§5.7). Third, the human engineer's \emph{in-loop}
 role ends at the moment the contract is stated. Fourth, the eight scenario
 contracts were chosen so that different tasks exercise different levers of
-the full chain---a fast-charge guarantee, an SEI-kinetics bridge for a
-lifetime bound, a cathode-system switch for a voltage plateau---which the
+the full chain (a fast-charge guarantee, an SEI-kinetics bridge for a
+lifetime bound, a cathode-system switch for a voltage plateau), which the
 governed agent exercises in turn, in the same loop, under the same
 protocol: the full-chain claim is suite-level, the suite collectively
 spanning all five design domains. This is the delegation setting management
 science has not yet been able to study: a complete design chain handed to a
 machine, with the principal present only as a written contract.
 
-What makes such delegation safe---or dangerous---is the question this paper
+What makes such delegation safe (or dangerous) is the question this paper
 answers. We deliberately construct the two failure modes a design organization
 would most fear. The first is the \emph{solution-space failure}: the strongest
 classical baseline, Bayesian optimization, moves only architecture parameters;
-when a contract requires a material lever---a high-voltage spinel chemistry, an
-SEI-suppressing coating---the optimum is simply not in its reachable set. The
+when a contract requires a material lever (a high-voltage spinel chemistry, an
+SEI-suppressing coating) the optimum is not in its reachable set. The
 second is more subtle and, we will argue, more dangerous: the
 \emph{yardstick failure}. A protocol-free agent with the same tools, budget,
 and model is not constrained to measure against the contract it was given,
@@ -181,16 +181,16 @@ and in our data adjusts it in five distinguishable modes (Section~5.5)---a
 self-set threshold (``dendrite onset at $-10$ mV''), a substituted model, a
 purchased physical parameter, an altered caliber, and an omitted criterion
 variable. In our data both baselines fall short for orthogonal,
-specifiable reasons---the optimizer threefold, bounded by its space; the
-bare agent zero within the space despite claiming seven---one loses to an
+specifiable reasons (the optimizer threefold, bounded by its space; the
+bare agent zero within the space despite claiming seven) one loses to an
 unreachable space, the other to a malleable measurement standard.
 
 We introduce \emph{protocolized governance} as the intervention: a fixed,
 always-on set of process rules the agent executes inside the design loop, plus
-an adjudication layer that stands outside it. Its five components---a layered
+an adjudication layer that stands outside it. Its five components: a layered
 multi-precision funnel, evaluation-and-fallback routing, heterogeneous model
 voting, a parameter bridge, and, the component the results hinge on,
-\emph{mechanized adjudication}---are specified in Section~3. Under mechanized
+\emph{mechanized adjudication}: are specified in Section~3. Under mechanized
 adjudication the contract is pre-registered as machine-readable criteria in an
 audit ledger before the first simulation runs; every verdict is computed by
 code from tool-output files, not asserted by the agent in prose; each
@@ -203,7 +203,7 @@ between the contract the principal believes it set and the behavior the agent
 actually executes \cite{delegatedagency2026, nikpayam2024aiassisted}.
 
 We evaluate the governance in a thirty-two-run matrix plus twelve ablation
-runs. Eight scenario tasks---a sedan's energy-and-fast-charge contract, a
+runs. Eight scenario tasks: a sedan's energy-and-fast-charge contract, a
 drone's weight-and-rate envelope, a smartphone's volumetric ceiling, and five
 others---are written as natural-language requirements with absolute numeric
 criteria and no other declarations. Each task is given, under identical
@@ -227,7 +227,7 @@ Three further results speak to \emph{why} governance works. First, ablation
 shows the mechanisms are not interchangeable: turning off the ceiling
 assessment that triggers material escalation costs two of three
 material-bottleneck tasks outright; turning off forced architecture exploration
-costs one of six; turning off the three-model vote changes nothing---an
+costs one of six; turning off the three-model vote changes nothing: an
 ``unrealized premium'', since in this suite the governed agent never exercised
 the molecular path, preferring cheaper bridges. Second, the governance is
 model-robust: eight of eight under both a flagship and an economy LLM, the same
@@ -250,8 +250,8 @@ baselines fail for different, specifiable reasons, and only protocol governance
 fixes both. (iii) We contribute a mechanism decomposition of governance with
 calibration: each component's marginal value is reported as measured,
 including the one that turns out dormant in our suite. (iv) We measure decision
-quality not as physics but as contract score---attainment rate, verifiable
-evidence completeness, and resource (tokens and messages)---a transferable
+quality not as physics but as contract score (attainment rate, verifiable
+evidence completeness, and resource (tokens and messages)) a transferable
 score for future agent-scale deployments in scientific and engineering
 organizations.
 

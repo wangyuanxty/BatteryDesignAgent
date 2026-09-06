@@ -56,8 +56,8 @@ nail-penetration criteria is the three-side-reaction energy balance
 m c_p \frac{dT}{dt} = \sum_k \Delta H_k r_k(T) - hA\,(T - T_{\mathrm{amb}}),
 \end{equation}
 with $\text{triggered}$ iff the trajectory crosses the runaway onset; the
-cooling coefficient $h$ is the thermal-management lever. Criterion values are model-relative---an SEI limit reads the state variable
-of a specific degradation model, a plateau reads a specific OCP set---so
+cooling coefficient $h$ is the thermal-management lever. Criterion values are model-relative (an SEI limit reads the state variable
+of a specific degradation model, a plateau reads a specific OCP set) so
 cross-system comparisons are made only within the same model. The scenario
 anchoring (which production
 specification each task draws from, and how each threshold was calibrated
@@ -115,11 +115,11 @@ budget, so each observed difference is attributable to the single variable
 that condition removes.
 
 \textbf{Governed agent (G).} The full protocol of Section~3, executed under
-two large language models separately---deepseek-v4-pro and
-deepseek-v4-flash---giving eight runs per model and a model-robustness
+two large language models separately (deepseek-v4-pro and
+deepseek-v4-flash) giving eight runs per model and a model-robustness
 axis. Two further legs re-execute the eight sessions under GPT-5.6 Luna
-and under mimo-v2.5---foreign-vendor models served through
-OpenAI-compatible APIs, same protocol, harness, task texts, and budget---so
+and under mimo-v2.5 (foreign-vendor models served through
+OpenAI-compatible APIs, same protocol, harness, task texts, and budget) so
 the cross-family comparison is made outside the primary vendor at matched
 tier logic.
 
@@ -131,7 +131,7 @@ statement, the tool descriptions, a ban on true-compute calls, the budget,
 and the deliverable request. There are no stage rules, no funnel, no
 pre-registered criteria, no mechanical evaluator, and no audit-chain
 verifier. C1 is the \emph{protocol-removal control}: it isolates the
-governance layer by holding every other resource constant---model, harness,
+governance layer by holding every other resource constant: model, harness,
 toolset, budget, task texts. One run per task, deepseek-v4-pro.
 
 \textbf{Bayesian optimization (C2).} A classical BO baseline in the
@@ -159,14 +159,14 @@ the comparison is on identical physics. The search is deterministic in its
 seed; a three-seed replication (1234, 5678, 9012) reproduces the attained-task
 set $\{T1,T4,T8\}$ identically, with per-task best objectives within $9\%$
 across seeds (supplementary materials). C2 is the \emph{classical-baseline
-control}: it isolates the solution-space boundary of ungoverned search---a
+control}: it isolates the solution-space boundary of ungoverned search: a
 strong, published-standard optimizer that cannot leave its parameter space.
 One run (fifty evaluations) per task.
 
 \textbf{Resources held constant.} All three conditions receive the same
 task texts, the same simulation stack, and the same session budget: the
-agents run under the same harness turn budget---the agent SDK's
-\texttt{max\_turns}=300 setting---and the protocol carries no round cap of
+agents run under the same harness turn budget (the agent SDK's
+\texttt{max\_turns}=300 setting) and the protocol carries no round cap of
 its own. Table~4 reports a log-derived activity metric, \emph{assistant
 messages}, which is finer-grained than the harness's internal turn counter;
 the budget \emph{setting}, not the message count, is the controlled
@@ -175,7 +175,7 @@ the budget (the protocol-free agent on T6) did so at 443 assistant messages.
 Every other session concluded before the cap. The BO baseline's fifty evaluations define its
 budget. A second, simulator-native currency is likewise anchored: the
 governed sessions average 25 run-pyamm calls per task (range 0--55; 31
-including calc-energy), against BO's fixed fifty---the agents hold no
+including calc-energy), against BO's fixed fifty: the agents hold no
 evaluation-count advantage, and both conditions sit in the same order of
 magnitude on every resource axis. Neither currency is equalized per
 operation; each condition receives its method family's standard budget, and
@@ -189,8 +189,8 @@ separately in Section~5.8.
 The governance components are fixed properties of the protocol; ablation is
 an experimental intervention that relaxes exactly one component per run.
 An ablation variant is declared in the task text itself (``ceiling
-escalation disabled'')---keeping the natural-language requirement the sole
-entry point---and the declaration is recorded in the run's entry-0 metadata.
+escalation disabled'') (keeping the natural-language requirement the sole
+entry point) and the declaration is recorded in the run's entry-0 metadata.
 Three ablations are executed: \emph{ceiling escalation off} (no proactive
 material-design escalation; the agent tunes within the current system unless
 the text names materials), on T2/T5/T6; \emph{architecture forcing off} (no
@@ -246,7 +246,7 @@ against the beginning-of-life $0.1$C discharge of a production LG M50T
 versus simulated 4857.0 mAh ($+0.45\%$), and voltage-curve RMSE 20.6 mV
 over 2--82\% depth of discharge. The alignment is the Methods-section
 calibration record; it establishes that the numbers agents are judged
-against are anchored to a production cell---a validation of the simulator,
+against are anchored to a production cell: a validation of the simulator,
 not of the final designs (Section~6). Figure~\ref{fig:alignment} overlays
 the measured and simulated curves.
 
@@ -267,8 +267,8 @@ The protocol's independence from any specific agent framework
 (Section~3.4) is a design property of the artifact itself; its empirical
 demonstration is reported here and executed in Section~5.7, so that its
 results slot into Section~5 without methodological ambiguity. The design:
-the identical protocol---the same declarative rule set, the same
-command-line tool library, and therefore the same adjudication layer---runs
+the identical protocol (the same declarative rule set, the same
+command-line tool library, and therefore the same adjudication layer) runs
 the same task texts (T1, a structural-bottleneck contract, and T6, a
 material-bottleneck contract) under the same LLM and the same nominal budget setting
 (300, in each harness's own turn unit) across three harnesses: the harness used throughout this paper, the

@@ -6,11 +6,11 @@
 
 \subsection{The Design Space and the Contract}
 
-A battery cell design is, in essence, one indivisible decision spanning
-five interlocking design domains---electrode chemistry, electrolyte
+A battery cell design is one indivisible decision spanning
+five interlocking design domains: electrode chemistry, electrolyte
 formulation and transport matching, electrode microstructure construction
 and modification, architecture parameters (thickness, porosity, separator,
-current collectors, particle radius), and cooling topology---each layer
+current collectors, particle radius), and cooling topology, each layer
 constraining the next, such that an optimum at any single domain can induce
 system-level performance regression or physical infeasibility. For decades
 the only infrastructure capable of making this decision end-to-end was a
@@ -20,8 +20,8 @@ stopped at the boundary: Bayesian optimization adjusts architecture knobs
 inside a single chemistry \cite{chen2026battery}, autonomous laboratories
 close the synthesis loop \cite{szymanski2023alab}, LLM chemists execute
 molecular tasks \cite{boiko2023coscientist, bran2024chemcrow}. Each covers
-one segment; none has spanned the full chain---electrolyte to thermal
-integration---within a single autonomous closed loop.
+one segment; none has spanned the full chain (electrolyte to thermal
+integration) within a single autonomous closed loop.
 
 The system we describe does. In the virtual battery factory, a single LLM
 agent receives a natural-language requirement and returns a complete
@@ -48,18 +48,22 @@ formulation, additive packages); the \emph{electrode modification} (coatings
 and dopants acting on SEI kinetics \cite{peled1979sei} or cracking rates);
 the \emph{cell architecture} (electrode thickness, porosity, N/P ratio,
 separator, current collectors, particle radii); and \emph{thermal
-management} (the cooling coefficient). A sixth family---solid-phase
-conductivity and diffusivity---is deliberately excluded as a design lever
+management} (the cooling coefficient). A sixth family (solid-phase
+conductivity and diffusivity) is deliberately excluded as a design lever
 because no formulation model maps them, so any adjustment would be an
 unverifiable estimate: the protocol treats ``what can be simulated'' as the
 boundary of ``what may be designed'', and estimates may not masquerade as
-simulation output.
+simulation output. A direct consequence is the material-innovation frontier
+of this experiment: a novel additive or composition has no parameter-bridge
+entry without kinetic-level data, so material design in the operational
+sense runs through system switches, electrode-modification bridges,
+formulation matching, and screening of literature candidates.
 
 The contract is the only input. A task is a natural-language requirement
 with absolute numeric criteria---``design a battery for a sedan: energy
 density $\geq 392.61$ Wh/kg, 4C fast charge without lithium plating, maximum
 temperature $\leq 60\,^\circ$C, overcharge to 4.7 V without thermal
-runaway''---and nothing else. There is no configuration file, no parameter
+runaway'', and nothing else. There is no configuration file, no parameter
 set assignment, no candidate list, no round budget: every case-level
 decision (which parameter set, which starting stage, which levers are
 adjustable, which safety defaults apply when the text is silent) is derived
@@ -82,7 +86,7 @@ verdicts with per-criterion evidence into the audit ledger.}
 
 \subsection{The Pipeline and the Five Governance Components}
 
-The protocol organizes work as a five-stage funnel---planning, molecular
+The protocol organizes work as a five-stage funnel: planning, molecular
 screening, cell design, safety assessment, and a closing true-compute
 endorsement---inside which five governance components operate as fixed,
 always-on rules. Figure~\ref{fig:protocol} shows the loop with its
@@ -110,7 +114,7 @@ minutes-scale DFN at the cell scale. The opening of cell design triggers a
 \emph{ceiling assessment}: the agent estimates the best architecture-plus-
 formulation achievable within the current system and compares it to the
 contract. If the objective exceeds the ceiling, the agent is required to
-escalate into material design---inventing additives or switching systems---
+escalate into material design (inventing additives or switching systems) 
 rather than tuning parameters inside a space that provably cannot close the
 gap:
 \begin{equation}
@@ -123,8 +127,8 @@ levers were assessed, the limit values, the gap).
 
 \textbf{Component 2: evaluation and fallback routing.} Every stage output is
 evaluated against the contract immediately; on failure, the agent must
-diagnose the scale at which the cause lives and fall back there---material
-problems to the molecular stage, architecture problems to cell design---not
+diagnose the scale at which the cause lives and fall back there (material
+problems to the molecular stage, architecture problems to cell design) not
 blindly rerun the pipeline. A three-strike discipline is attached to the
 fallback: three consecutive failures with the same cause trigger a
 mandatory re-examination of the assumptions (``is this objective physically
@@ -134,8 +138,8 @@ are molecular properties; capacity and temperature rise are architecture
 properties.
 
 \textbf{Component 3: heterogeneous model voting.} Every molecular candidate
-is screened by three methodologically distinct models---two ML potentials
-from different families plus a semi-empirical quantum method---whose
+is screened by three methodologically distinct models (two ML potentials
+from different families plus a semi-empirical quantum method) whose
 agreement or disagreement is itself signal. Hard elimination lines (energy
 above the stability ceiling, non-convergence, HOMO above the oxidation
 line) are mechanical; disagreement among the three ranks marks a candidate
@@ -152,7 +156,7 @@ acceptance or rejection on a single model's word.
 mapped to macroscopic model parameters through a fixed table (Table~\ref
 {tab:bridge}); a mistyped parameter name is rejected by the simulator's
 validation rather than silently ignored. Every bridge value must carry a
-source annotation---literature citation or explicit estimate---and estimates
+source annotation (literature citation or explicit estimate) and estimates
 are prohibited from entering judgment-relevant outputs unlabeled.
 
 \begin{table}[!ht]
@@ -184,7 +188,7 @@ case-level metadata recording every rule-derived decision and its basis.
 Thereafter the agent is \emph{forbidden from judging}: every evaluation must
 be issued by the \texttt{log-evaluate} command, which reads the criteria and
 the tool-output files, compares each metric against its threshold in code,
-and emits a verdict with an evidence chain---for each checked criterion, the
+and emits a verdict with an evidence chain: for each checked criterion, the
 file, the key, the value, and the threshold it was compared against.
 A design is ``achieved'' exactly when
 \begin{equation}
@@ -240,7 +244,7 @@ The tool library is implemented as a Python package over PyBaMM
 \cite{sulzer2021pybamm} for electrochemistry---including the
 thermal-electrochemical parameters \cite{oregan2022electrochim} and
 degradation physics \cite{okane2022pccp, peled1979sei,
-arora1999plating, ren2018plating, wang2012thermalrunaway}---plus surrogate
+arora1999plating, ren2018plating, wang2012thermalrunaway}: plus surrogate
 and true-compute runners. Twenty-plus commands cover simulation protocols
 (discharge at 1C/0.1C/5C, 4C charge at 45\,$^\circ$C, low-temperature
 discharge, overcharge, 100-cycle aging, nail penetration with a

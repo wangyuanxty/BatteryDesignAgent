@@ -18,11 +18,11 @@ matters not at all (T5), and forced architectural breadth matters only when
 the search space itself hides the solution (T2). The voting mechanism is the
 clearest case of a matched-null: in a suite where the cheapest route
 (parameter bridges and system switches) always sufficed, the molecular
-funnel was never entered, so its three-model vote was never exercised.
+funnel's three-model vote was exercised but never dispositive.
 Governance is thus not a fixed bundle: each component contributes only in
 regimes whose bottleneck it addresses. An organization deploying such a
-system should expect this pattern, and should instrument---as our protocol
-does---which components were exercised, so that dormant components are
+system should expect this pattern, and should instrument (as our protocol
+does) which components were exercised, so that dormant components are
 identified by data rather than presumed by fiat.
 
 \subsection{Sharpening the Low-Headroom Calibration}
@@ -40,18 +40,18 @@ those whose bottleneck is outside its parameter space, which is a
 verifiable property of the space rather than a statistical property of the
 search. The boundary is thus the research target rather than a fairness
 compromise: the configuration replicates the published standard to measure
-what the field's strongest classical setup does---and does not do---not to
+what the field's strongest classical setup does (and does not do) not to
 stage a symmetric contest; the aligned-penalizer re-run (Section~5.1)
 closes the one configurable gap the replication left open. Second, and this is the sharper point, the protocol-free agent's
 failure mode is invisible in Battery-Sim-Agent's benchmark: their objective is a fixed curve-matching error, so their
 bare agent has no measurement standard to move. Our contracts are multi-criterion
 natural-language requirements, which is precisely the setting where
-criterion adjustment becomes possible---and it is what the ungoverned agent
+criterion adjustment becomes possible, and it is what the ungoverned agent
 does, in five distinguishable modes (Section~5.5). The prevailing
 ``LLM beats classical optimization'' narrative is therefore incomplete in a
 way that matters for practice: an ungoverned LLM agent in a multi-criterion
 design setting can lose to a black-box optimizer \emph{and} fail its own
-reported claims simultaneously---the former on reachable space, the latter
+reported claims simultaneously: the former on reachable space, the latter
 on movable criteria. Only the adjudication layer addresses both.
 
 \subsection{Yardstick Malleability and the Case for Mechanized Adjudication}
@@ -93,8 +93,8 @@ should therefore be read as the protocol's total contribution, not as
 predictions for any particular stripped-down agent.
 
 The theory bridge can be made quantitative with the paper's own machinery.
-Delegation fidelity---the fraction of adjudicable criteria measured against
-their pre-registered thresholds---is computed, not asserted, in our setup:
+Delegation fidelity (the fraction of adjudicable criteria measured against
+their pre-registered thresholds) is computed, not asserted, in our setup:
 the governed agent scores one by construction (the verifier refuses
 otherwise), while the C1 re-adjudication is exactly a fidelity audit. The
 design implication transfers beyond battery design: any deployment in which
@@ -105,39 +105,23 @@ the broader the class of tasks for which delegation becomes safe.
 
 \subsection{Limitations}
 
-Six limitations bound the present study. (i) \emph{Replication.} The
-governed-agent baseline (pro) is the only column with full
-three-seed replication: all eight tasks under three seeds each,
-$24/24$ achieved under the
-mechanical adjudicator with complete evidence coverage---design-level, not
-trajectory-level, reproduction---and every attained task achieved in all
-three seeds, so the pro column's per-task numbers are r1 values while the
-8/8 total is seed-robust. The flash, luna, mimo, and C1 columns are
-single-run per cell; their readings are at the level of the failure
-\emph{pattern} rather than per-task inference. The C2 (Bayesian optimizer)
-column carries three seeds (1234/5678/9012) with an unchanged attained set.
-Cross-model corroboration spans 24 further sessions over three further
-models (flash, luna, mimo). The four-model matrix (8/8 under pro
-and flash, $4/8$ with honest signatures
-under each of two foreign-vendor models, Section~5.4) provides stability evidence across
-models, and all three T6 seeds independently reach the same
-material-bottleneck diagnosis and solution (the LNMO system switch) through
-three different designs (supplementary materials). (ii)
-\emph{Domain.} The evidence is confined to one domain (battery cells) and
-one simulator family (PyBaMM-based electrochemistry); the governance
-components are domain-agnostic in design, but their marginal values in
-other engineering domains are open. (iii) \emph{Reproducibility of the
-LLM.} LLM runs cannot be seeded; the protocol's verdicts are reproducible,
-the agent's trajectories are not. (iv) \emph{Simulation-only.} The
-real-data anchor validates the \emph{simulator}, not the final designs;
-no physical cell has been built from any agent design. (v) \emph{No human
-baseline.} We do not benchmark human experts, because the research
-question is the comparison among delegation mechanisms under identical
-resources, not the (already well-attested) economics of replacing
-engineers; a human-expert control would also confound the resource-constant
-design. (vi) \emph{Harness and endorsement.} All runs execute under one
-agent harness. The cross-harness demonstration under two further
-frameworks is executed and reported (Section~5.7); the endorsement stage is
-executed for the molecular finalists in two independent codes (ORCA and
-CP2K, Section~5.8), with the molecular-dynamics diffusion endorsement in
-progress at the time of this draft.
+Four limitations bound the present study. (i) \emph{Replication and
+reproducibility.} The governed-agent baseline (pro) is the only column with
+full three-seed replication (24/24 with complete evidence coverage,
+design-level reproduction); the flash, luna, mimo, and C1 columns are
+single-run per cell, so their readings are at the level of the failure
+\emph{pattern} rather than per-task inference; all primary runs execute
+under one agent harness (the two-task cross-harness demonstration,
+Section~5.7, shows the protocol's carrier independence rather than
+replicating the claims under other harnesses); and LLM trajectories are not
+seed-reproducible: the protocol's verdicts are, the agent's paths are not.
+Two governed runs carry disclosed audit-chain defects (flash T6, mimo T1),
+documented in Section~5.4. (ii) \emph{Domain.} The evidence is confined to
+one domain (battery cells) and one simulator family (PyBaMM-based
+electrochemistry); the governance components are domain-agnostic in design,
+but their marginal values in other engineering domains are open. (iii)
+\emph{Simulation-only.} The real-data anchor validates the
+\emph{simulator}, not the final designs; no physical cell has been built
+from any agent design. (iv) \emph{No human baseline.} The research question
+is the comparison among delegation mechanisms under identical resources,
+which a human-expert control would confound.
