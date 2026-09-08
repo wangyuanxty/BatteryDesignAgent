@@ -85,29 +85,38 @@ scales a structural optimizer cannot touch. Our experimental design makes
 this boundary an observable: three of our eight contracts are solvable
 within the structural space, and five are not.
 
-\subsection{Governance of Delegated Decision-Making}
+\subsection{Agent Reliability and the Case for External Verification}
 
-The management literature supplies the vocabulary this paper formalizes.
-Classic agency theory studies delegation contracts and the moral hazard
-between principal and agent; its AI-era reformulation, delegated agency
-theory, centers on \emph{delegation fidelity}---the alignment between the
-contract the principal believes it set and the behavior the agent actually
-executes---and identifies contract specification quality and governance
-visibility as the two design dimensions that reduce adverse selection before
-handoff and moral hazard during execution \cite{delegatedagency2026}.
-Empirical work on AI-assisted decisions shows that algorithmic
-recommendations function as auditable reference points that reshape human
-override behavior in organizations \cite{nikpayam2024aiassisted}; Bayesian
-delegation policies allocate decision authority sequentially under
-uncertainty \cite{dixon2026bayesiandelegation}; GAIA articulates
-information-gated progression and authorization boundaries for LLM agents in
-high-stakes interaction \cite{zhao2025gaia}; and qualitative work on
-AI-assisted managerial decisions warns that autonomy must be designed into
-systems rather than assumed \cite{dancingalgorithm2025}. What none of this
-literature yet contains is an \emph{engineering-level} instantiation: a
-concrete design-task environment in which the delegation contract is
-machine-readable, the agent's every verdict is mechanically judged against
-it, and the fidelity of that judgment is itself an experimental variable.
+The central obstacle to trusting an agentic design system is not model
+capability but measurement: an agent that both executes and evaluates can
+move the yardstick it is measured against. The AI community has begun to
+quantify this. Honesty benchmarks establish that LLMs systematically
+overstate what they know \cite{behonest2024, honesty2023alignment};
+FIRE-Bench shows that even frontier scientific agents fail most reported
+reconstructions, and that their self-reported completion is not a reliable
+signal of actual convergence \cite{firebench2026}. Evaluation practice has
+responded with two remedies. The first is \emph{soft judging}: LLM-as-judge
+and reward-model reviewers applied to agent outputs. The second is
+\emph{hard judging}: deterministic, code-based evaluation of claims against
+ground truth (as in unit-test-style benchmark harnesses). Hard judging is
+the technically reliable option, but in existing systems it evaluates
+\textbf{the benchmark}, not the agent's own workflow; the design loop
+itself is never forced under a deterministic evaluator. The management literature arrives at the same
+conclusion from the opposite direction: delegated agency theory
+\cite{delegatedagency2026} identifies contract specification quality and
+governance visibility as the design dimensions that discipline delegated
+action; empirical work on AI-assisted decisions shows algorithmic
+recommendations reshape human override behavior
+\cite{nikpayam2024aiassisted}; Bayesian delegation policies allocate
+decision authority sequentially \cite{dixon2026bayesiandelegation}; GAIA
+articulates information-gated progression for high-stakes LLM agents
+\cite{zhao2025gaia}; and qualitative work warns that autonomy must be
+designed into systems rather than assumed
+\cite{dancingalgorithm2025}. What none of this literature contains is an
+\emph{engineering-level} instantiation: a concrete design environment in
+which the evaluator is code, the evaluation contract is pre-registered
+before work begins, and the fidelity of that evaluation is itself an
+experimental variable.
 
 Finally, we note the disciplinary bridge this paper crosses. The battery
 prognostics community rooted in grey system theory (originating in the

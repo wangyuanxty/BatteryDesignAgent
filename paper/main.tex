@@ -1,6 +1,6 @@
 %% ============================================================
-%% main.tex — When Design Decisions Go to the Agent
-%% A Governance Experiment in a Virtual Battery Factory
+%% main.tex — An Autonomous End-to-End Agent for Battery Cell Design
+%% with Verifiable Outcomes
 %% Class: elsarticle (Elsevier; swap document class per target venue)
 %% ============================================================
 
@@ -26,7 +26,7 @@
 
 \begin{frontmatter}
 
-\title{When Design Decisions Go to the Agent: A Governance Experiment in a Virtual Battery Factory}
+\title{An Autonomous End-to-End Agent for Battery Cell Design with Verifiable Outcomes}
 
 \author[inst1]{Naiming Xie}
 \author[inst1]{Yuan Wang}
@@ -35,43 +35,47 @@
 \affiliation[inst1]{organization={College of Economics and Management, Nanjing University of Aeronautics and Astronautics}, city={Nanjing}, country={China}}
 
 \begin{abstract}
-We report a controlled governance experiment in a virtual battery factory.
-Battery cell design couples material, formulation, structural, and thermal
-choices; recent agentic systems can traverse this chain automatically, but
-none of them fixes the standard against which the resulting design is
-judged. Our intervention is protocolized governance: a declarative rule
-set the agent executes inside the design loop, plus an adjudication layer
-outside it that pre-registers the contract criteria before simulation,
-computes every verdict from tool-output files, and rejects incomplete
-audit chains. Eight scenario contracts with absolute numeric criteria are
-given, under matched resources (same model, same tools, same task texts,
-each condition's standard budget), to three decision-makers: the governed
+We report the first end-to-end battery design agent for full-chain cell
+design: given nothing but a natural-language contract, a single autonomous
+loop traverses the whole chain of cell-design levers---material system,
+formulation, electrode architecture, thermal management, safety, and
+aging---and returns a complete adjudicated design together with a
+multi-level true-compute endorsement (ML potentials, two independent DFT
+codes, and a classical-force-field diffusion simulation). Its steering
+logic is a transferable mechanism: cross-scale bottleneck routing
+(failures diagnosed and routed to the scale of their cause), a ceiling
+assessment that triggers material-level search only when the current
+system provably cannot close the gap, and code-computed verdicts for
+every criterion with audit-chain rejection. Eight scenario tasks with
+absolute numeric criteria are given, under
+matched resources (same model, same tools, same task texts, each
+condition's standard budget), to three decision-makers: the governed
 agent, a protocol-free agent on the same harness, and a Bayesian optimizer
 configured to the standard of the strongest comparable published agent
 framework. The governed agent attains all eight contracts under two
 DeepSeek-generation models, and four of eight under each of two
 foreign-vendor models; the eight under the primary model are replicated
-under three seeds (24/24 attained). The optimizer attains three, exactly the
-three whose bottleneck is structural. The protocol-free agent attains none within the
-same measurement space: of its seven self-reported successes, two sit on a
-lithium-metal cell outside the validated parameter sets and five dissolve
-under contract-caliber re-adjudication. Ablation measures each governance
-component in turn: ceiling assessment with material escalation is causal
-for two of three material-bottleneck tasks, forced architecture exploration
-for one of six, and the molecular funnel's three-model vote was exercised
-but never verdict-changing in this suite. The simulator is anchored to a
-production cell: the
+under three seeds (24/24 attained). The optimizer attains three, exactly
+the three whose bottleneck is structural. The protocol-free agent attains
+none within the same measurement space: of its seven self-reported
+successes, two sit on a lithium-metal cell outside the validated parameter
+sets and five dissolve under contract-caliber re-adjudication. Ablation
+measures each governance component in turn: ceiling assessment with
+material escalation is causal for two of three material-bottleneck tasks,
+forced architecture exploration for one of six, and the molecular funnel's
+three-model vote was exercised but never verdict-changing in this suite.
+The simulator is anchored to a production cell: the
 beginning-of-life $0.1$C discharge of a commercial LG M50T matches the
 calibrated parameter set to $0.45\%$ capacity and $20.6$ mV RMSE. The
 true-compute endorsement of the flagship finalists confirms the screening
-verdicts in two independent codes, and the protocol ran unchanged under
-three agent frameworks with identical contract outcomes. Protocol,
-simulation library, adjudication layer, and experiment harnesses are open
-source at \url{https://github.com/wangyuanxty/BatteryDesignAgent}.
+verdicts in two independent codes, and a 1 ns classical-force-field
+diffusion simulation reports $D_{\mathrm{Li}} = 5.4\times10^{-11}$
+m$^2$/s. Protocol, simulation library, adjudication layer, and experiment
+harnesses are open source at \url{https://github.com/wangyuanxty/BatteryDesignAgent}.
 \end{abstract}
 
 \begin{keyword}
-LLM agents \sep protocol governance \sep engineering design \sep contract attainment \sep mechanized adjudication \sep Bayesian optimization
+LLM agents \sep battery cell design \sep cross-scale bottleneck routing \sep multi-fidelity endorsement \sep mechanized adjudication \sep Bayesian optimization
 \end{keyword}
 
 \end{frontmatter}

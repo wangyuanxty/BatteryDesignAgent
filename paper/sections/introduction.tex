@@ -164,9 +164,10 @@ the full chain (a fast-charge guarantee, an SEI-kinetics bridge for a
 lifetime bound, a cathode-system switch for a voltage plateau), which the
 governed agent exercises in turn, in the same loop, under the same
 protocol: the full-chain claim is suite-level, the suite collectively
-spanning all five design domains. This is the delegation setting management
-science has not yet been able to study: a complete design chain handed to a
-machine, with the principal present only as a written contract.
+spanning all five design domains. This is a delegation setting no
+agent-based design system has yet been able to study: a complete design
+chain handed to a machine, with the standard-setter present only as a
+written contract.
 
 What makes such delegation safe (or dangerous) is the question this paper
 answers. We deliberately construct the two failure modes a design organization
@@ -239,21 +240,31 @@ kirkaldy2024lgm50}) matches our calibrated parameter set
 validation of the simulator's calibration against a production cell, as
 distinct from any validation of the designs themselves.
 
-The paper makes four contributions. (i) We formulate agent-mediated design as
-a governance problem: contract pre-registration, mechanized judgment, and
-evidence-chain auditing are decision-process infrastructure rather than
-simulation plumbing, and we measure the magnitudes they carry in controlled
-data. (ii) We provide a three-condition benchmark under constant resources in
-which the three-way comparison reveals that the prevailing ``LLM beats classic
-optimization'' story \cite{chen2026battery} is incomplete: the two standard
-baselines fail for different, specifiable reasons, and only protocol governance
-fixes both. (iii) We contribute a mechanism decomposition of governance with
-calibration: each component's marginal value is reported as measured,
-including the one that turns out dormant in our suite. (iv) We measure decision
-quality not as physics but as contract score (attainment rate, verifiable
-evidence completeness, and resource (tokens and messages)) a transferable
-score for future agent-scale deployments in scientific and engineering
-organizations.
+The paper makes two contributions. (i) We present the first end-to-end
+agent for full-chain battery cell design: given nothing but a
+natural-language scenario contract, a single autonomous loop traverses
+the whole chain of battery design levers---material system, formulation,
+cell architecture, thermal management, safety, and aging---and returns a
+complete adjudicated design whose conclusion-level numbers pass a
+multi-level true-compute endorsement (ML-potential screening, two
+independent DFT codes, and a classical-force-field diffusion simulation).
+The system is delivered as open infrastructure: the protocol rule set,
+the simulation tool library, the adjudication and audit layer
+(pre-registered criteria, code-computed verdicts, evidence chains,
+audit-chain rejection), and every experiment artifact are released in a
+single open-source repository, demonstrated portable across three agent
+harnesses (Section~5.7), and every conclusion-grade number can be
+mechanically replayed from the audit ledgers. (ii) We distill the
+system's steering logic into a transferable mechanism pattern for
+engineering agents: multi-resolution cost scheduling (cheap proxies
+first, true first principles last), symptom-to-scale fallback routing
+(failures diagnosed to the scale of their cause before retrying), a
+ceiling assessment that triggers material-level search only when the
+current system provably cannot close the gap, a three-consecutive-failure
+stop rule that questions the assumptions rather than retrying blindly, and
+heterogeneous-model disagreement detection (reported as not exercised in
+this suite, with the null documented). The pattern is agent-agnostic: it
+migrates to any multi-scale, multi-fidelity design workflow.
 
 \subsection{Contributions and Organization}
 

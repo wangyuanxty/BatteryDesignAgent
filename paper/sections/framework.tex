@@ -129,7 +129,7 @@ levers were assessed, the limit values, the gap).
 evaluated against the contract immediately; on failure, the agent must
 diagnose the scale at which the cause lives and fall back there (material
 problems to the molecular stage, architecture problems to cell design) not
-blindly rerun the pipeline. A three-strike discipline is attached to the
+blindly rerun the pipeline. A three-consecutive-failure discipline is attached to the
 fallback: three consecutive failures with the same cause trigger a
 mandatory re-examination of the assumptions (``is this objective physically
 reachable in this system?'') rather than a fourth blind attempt. The
@@ -202,7 +202,11 @@ turning it on or off does not change any contract verdict, by design.
 
 The protocol is packaged as a self-contained declarative artifact: a
 natural-language rule set, a command-line tool library (twenty-plus
-simulation, evaluation, and audit commands), and the audit ledger format.
+simulation, evaluation, and audit commands), and the audit ledger format;
+in the open-source release it is distributed as the project's skill
+package (SKILL.md together with the reference documentation and the tool
+library), so the rule set and the tools an agent executes against are
+versioned and installed as one unit.
 It binds to no agent framework---any harness that can loop a model over a
 shell and files can execute it. The governance travels with the contract,
 not with the harness. In the present study every run executes under one
