@@ -54,10 +54,10 @@ because no formulation model maps them, so any adjustment would be an
 unverifiable estimate: the protocol treats ``what can be simulated'' as the
 boundary of ``what may be designed'', and estimates may not masquerade as
 simulation output. A direct consequence is the material-innovation frontier
-of this experiment: a novel additive or composition has no parameter-bridge
-entry without kinetic-level data, so material design in the operational
-sense runs through system switches, electrode-modification bridges,
-formulation matching, and screening of literature candidates.
+of this experiment: a novel additive or composition has no simulator
+parameter counterpart without kinetic-level data, so material design in the
+operational sense runs through system switches, electrode-modification
+bridges, formulation matching, and screening of literature candidates.
 
 The contract is the only input. A task is a natural-language requirement
 with absolute numeric criteria---``design a battery for a sedan: energy
@@ -88,7 +88,7 @@ verdicts with per-criterion evidence into the audit ledger.}
 
 The protocol organizes work as a five-stage funnel: planning, molecular
 screening, cell design, safety assessment, and a closing true-compute
-endorsement---inside which five governance components operate as fixed,
+endorsement---inside which four governance mechanisms operate as fixed,
 always-on rules. Figure~\ref{fig:protocol} shows the loop with its
 fallback routing and the outside-agent adjudication layer.
 
@@ -152,35 +152,7 @@ where $r_1, r_2, r_3$ are the candidate's ranks under the three models
 among $N$ candidates---forcing reasoning-based refinement rather than
 acceptance or rejection on a single model's word.
 
-\textbf{Component 4: the parameter bridge.} Microscopic properties are
-mapped to macroscopic model parameters through a fixed table (Table~\ref
-{tab:bridge}); a mistyped parameter name is rejected by the simulator's
-validation rather than silently ignored. Every bridge value must carry a
-source annotation (literature citation or explicit estimate) and estimates
-are prohibited from entering judgment-relevant outputs unlabeled.
-
-\begin{table}[!ht]
-\centering
-\caption{The parameter bridge: microscopic property to PyBaMM parameter
-names. Mistyped keys are rejected by the simulator (unknown parameter name),
-so the table is the safety net against manual transcription error.}
-\label{tab:bridge}
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{p{3.0cm}p{7.9cm}}
-\toprule
-Microscopic property & Parameter name (exact key) \\
-\midrule
-Electrolyte diffusivity & \texttt{Electrolyte diffusivity [m2.s-1]} \\
-Electrolyte conductivity & \texttt{Electrolyte conductivity [S.m-1]} \\
-Cation transference number & \texttt{Cation transference number} \\
-Coating, SEI reaction-limited & \texttt{SEI kinetic rate constant [m.s-1]} \\
-Coating, SEI migration-limited & \texttt{SEI reaction exchange current density [A.m-2]} \\
-Doping, cracking suppression & \texttt{Positive/Negative electrode cracking rate} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\textbf{Component 5: mechanized adjudication and the audit chain.} Unlike
+\textbf{Component 4: mechanized adjudication and the audit chain.} Unlike
 the other components, this one pins the outcome itself. Before the first simulation, the
 agent writes entry~0 of the audit ledger: the contract criteria,
 pre-registered in machine-readable form and layered by decision stage, with

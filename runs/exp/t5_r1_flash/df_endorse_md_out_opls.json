@@ -1,0 +1,6 @@
+{
+  "D_Li_m2_s": 5.350156716233878e-11,
+  "trajectory_ok": true,
+  "drift_check": "max_disp_A=22.0",
+  "engine": "openmm-opls"
+}

@@ -51,6 +51,67 @@ from pathlib import Path
 
 import numpy as np
 
+
+def _patch_mace_neighborhood():
+    """Swap matscipy's neighbour_list for a pure scipy cKDTree implementation.
+
+    matscipy 1.2.0's ``neighbour_list`` (C extension) stalls indefinitely on
+    this Windows image: the 0.1 ns endorsement run froze > 20 min per MACE
+    force evaluation at matscipy/neighbours.py:720. The substitution below is
+    equivalent for the small electrolyte boxes this runner produces (cutoff
+    well below half the box side, so no duplicate-edge images), and keeps the
+    force evaluations on the GPU.
+    """
+    try:
+        import mace.data.atomic_data as _ad
+        import mace.data.neighborhood as _nh
+    except ImportError:
+        return
+    import itertools
+
+    from scipy.spatial import cKDTree
+
+    def get_neighborhood(positions, cutoff, pbc=None, cell=None, true_self_interaction=False):
+        positions = np.asarray(positions, dtype=float)
+        pbc = (False, False, False) if pbc is None else tuple(bool(p) for p in pbc)
+        if cell is None or not np.asarray(cell).any():
+            cell = np.identity(3, dtype=float)
+        cell = np.asarray(cell, dtype=float)
+        n = positions.shape[0]
+        images = np.array(
+            list(itertools.product(*[(-1, 0, 1) if p else (0,) for p in pbc])), dtype=int
+        )
+        all_pts = np.concatenate([positions + img @ cell for img in images])
+        owner = np.concatenate([np.full(n, i) for i in range(len(images))])
+        tree = cKDTree(all_pts)
+        edges = tree.query_pairs(r=cutoff, output_type="ndarray")
+        s_i = edges[:, 0] % n
+        s_j = edges[:, 1] % n
+        shift_ij = images[owner[edges[:, 1]]] - images[owner[edges[:, 0]]]
+        # matscipy's "ijS" output is directed (each pair appears as i->j and
+        # j->i with opposite shifts); the graph message passing needs both
+        # directions, so mirror the undirected cKDTree pairs. The 3^n image
+        # grid revisits each physical pair from several image combinations,
+        # so the directed rows are deduplicated before returning.
+        sender = np.concatenate((s_i, s_j))
+        receiver = np.concatenate((s_j, s_i))
+        unit_shifts = np.concatenate((shift_ij, -shift_ij))
+        rows = np.unique(
+            np.concatenate((sender[:, None], receiver[:, None], unit_shifts), axis=1),
+            axis=0,
+        )
+        sender, receiver = rows[:, 0], rows[:, 1]
+        unit_shifts = rows[:, 2:].astype(int)
+        keep = ~((sender == receiver) & np.all(unit_shifts == 0, axis=1))
+        if not true_self_interaction:
+            sender, receiver, unit_shifts = sender[keep], receiver[keep], unit_shifts[keep]
+        edges_index = np.stack((sender, receiver))
+        return edges_index, unit_shifts @ cell, unit_shifts, cell
+
+    _nh.get_neighborhood = get_neighborhood
+    _ad.get_neighborhood = get_neighborhood
+
+
 # ---------------------------------------------------------------------------
 # Box-builder constants (fixed seed => deterministic output for identical input)
 # ---------------------------------------------------------------------------
@@ -110,7 +171,11 @@ def _molecule_template(name: str) -> tuple[list[str], np.ndarray]:
     AllChem.MMFFOptimizeMolecule(mol)
     conf = mol.GetConformer()
     symbols = [atom.GetSymbol() for atom in mol.GetAtoms()]
-    return symbols, np.array(conf.GetPositions(), dtype=float)
+    pos = np.array(conf.GetPositions(), dtype=float)
+    # RDKit embeddings carry an arbitrary global drift; without recentering,
+    # the same drift is added to every grid-placed molecule, interpenetrating
+    # neighbours (interatomic distances ~0.4 A on the as-built box).
+    return symbols, pos - pos.mean(axis=0)
 
 
 def _random_rotation(rng: np.random.Generator) -> np.ndarray:
@@ -154,7 +219,7 @@ def _place_molecules(
     total_mass = sum(molecules[name] * _MASSES_G_MOL[name] for name in _SPECIES)
     target_volume_aa3 = total_mass / (_DENSITY_G_CM3 * _AVOGADRO) * 1e24
     density_spacing = (target_volume_aa3 / float(grid_n**3)) ** (1.0 / 3.0)
-    cell = max(_MIN_SPACING_AA, density_spacing)
+    cell = max(_MIN_SPACING_AA, density_spacing, max_diameter + 1.0)
     jitter_amp = _JITTER_FRAC * cell
     radius = max_diameter / 2.0
     length = grid_n * cell * (1.0 + _PADDING_FRAC)
@@ -486,6 +551,7 @@ def _run_mace_md(box: dict, t_ns: float) -> dict:
         raise RuntimeError(
             "mace engine requires mace-torch; install via `pip install mace-torch`"
         ) from e
+    _patch_mace_neighborhood()
     if t_ns <= 0.0:
         raise ValueError("t_ns must be positive")
     steps = int(t_ns * 1e6)  # 1 fs/step
@@ -493,15 +559,22 @@ def _run_mace_md(box: dict, t_ns: float) -> dict:
         workdir = Path(td)
         frames: list[Atoms] = []
         energies: list[float] = []
+        # Grid-placed initial configurations can carry template overlaps
+        # (max force on the as-built box ~2e3 eV/A); relax before dynamics so
+        # the trajectory samples a physical configuration.
+        from ase.optimize import BFGS
+
+        _opt = BFGS(atoms, logfile=None)
+        _opt.run(fmax=0.5)
         dyn = Langevin(atoms, timestep=1.0 * units.fs, temperature_K=298.15, friction=0.01, fixcm=False)
         dyn.attach(lambda: frames.append(atoms.copy()), interval=_NSTXOUT)
         dyn.attach(lambda: energies.append(atoms.get_potential_energy()), interval=_NSTXOUT)
-        # chunked run with progress reporting (10-step granularity, ETA) —
-        # visibility on slow hardware: every ~a few seconds a line lands
+        # chunked run with progress reporting (100-step granularity, ETA) —
+        # visibility on slow hardware: one line per ~a minute
         import time as _time
 
         _t0 = _time.time()
-        chunk = 10
+        chunk = 100
         done = 0
         while done < steps:
             n = min(chunk, steps - done)

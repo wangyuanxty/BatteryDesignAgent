@@ -1,0 +1,38 @@
+<ForceField>
+ <AtomTypes>
+  <Type name="ion_P" class="P4" element="P" mass="30.974000"/>
+  <Type name="ion_F" class="FP" element="F" mass="18.998000"/>
+  <Type name="ion_Li" class="LI" element="Li" mass="6.941000"/>
+ </AtomTypes>
+ <NonbondedForce coulomb14scale="0.5" lj14scale="0.5">
+  <Atom type="ion_P" charge="1.34" sigma="0.374000" epsilon="3.501492"/>
+  <Atom type="ion_F" charge="-0.39" sigma="0.312000" epsilon="1.067757"/>
+  <Atom type="ion_Li" charge="1.00" sigma="0.212600" epsilon="0.319992"/>
+ </NonbondedForce>
+ <BondForce>
+  <Bond class1="P4" class2="FP" length="0.160600" k="1046000.0" />
+ </BondForce>
+ <AngleForce>
+  <Angle class1="FP" class2="P4" class3="FP" angle="1.570796" k="480.0"/>
+ </AngleForce>
+ <Residues>
+  <Residue name="PF6">
+   <Atom name="P1" type="ion_P"/>
+   <Atom name="F2" type="ion_F"/>
+   <Atom name="F3" type="ion_F"/>
+   <Atom name="F4" type="ion_F"/>
+   <Atom name="F5" type="ion_F"/>
+   <Atom name="F6" type="ion_F"/>
+   <Atom name="F7" type="ion_F"/>
+   <Bond atomName1="P1" atomName2="F2"/>
+   <Bond atomName1="P1" atomName2="F3"/>
+   <Bond atomName1="P1" atomName2="F4"/>
+   <Bond atomName1="P1" atomName2="F5"/>
+   <Bond atomName1="P1" atomName2="F6"/>
+   <Bond atomName1="P1" atomName2="F7"/>
+  </Residue>
+  <Residue name="LI">
+   <Atom name="LI1" type="ion_Li"/>
+  </Residue>
+ </Residues>
+</ForceField>
