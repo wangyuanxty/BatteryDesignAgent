@@ -156,6 +156,24 @@ class BOSearch:
                 penalties["5c"] = PLATED_PENALTY
             if mass_g > 40.0:
                 penalties["mass"] = (mass_g - 40.0) * 5.0
+        if self.task in ("t9", "t10"):
+            # 添加剂契约：SEI 判据是分子层判据——BO 空间只有结构旋钮，SEI 随结构不变
+            # （固定参数集动力学），恒定罚项 = 能力边界展示；分子候选判据另行裁决。
+            try:
+                sim_ag = run_simulation(override, protocol="aging_1C_100cyc", base=self.base, mode="spme")
+                sei = float(sim_ag.get("sei_thickness_nm_end", 1e9))
+            except Exception:
+                sei = 1e9
+            limit = 550.0 if self.task == "t9" else 370.0
+            if sei > limit:
+                penalties["sei"] = (sei - limit) * 0.5
+            try:
+                tr_out = run_thermal_runaway(t_init_k=t_max, q_nail_w=10.0, mass_kg=mass_g / 1000.0,
+                                             hA_w_k=float(params["h_heat"]) * 0.00531)
+                if tr_out["triggered"]:
+                    penalties["tr"] = PLATED_PENALTY
+            except Exception:
+                penalties["tr"] = PLATED_PENALTY
 
         penalty = sum(penalties.values())
         objective = ed - penalty
@@ -214,7 +232,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--workspace", required=True, help="工作区（轨迹输出目录）")
     parser.add_argument("--seed", type=int, default=1234, help="随机种子（Battery-Sim-Agent 同款 1234）")
     parser.add_argument("--smoke", action="store_true", help="冒烟：budget=5 快速验证链路")
-    parser.add_argument("--task", default="t1", choices=["t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8"],
+    parser.add_argument("--task", default="t1", choices=["t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10"],
                         help="任务选择：T1/T5 ED+4C安全 / T2/T6/T7 含SEI / T3/T8 含5C / T4 低温+Wh/L / T6 平台 4.1V / T7 针刺")
     parser.add_argument("--tmax-limit", type=float, default=333.15,
                         help="T_max 惩罚上限 K（对齐版：T6 用 323.15 = 50 °C 红线）")

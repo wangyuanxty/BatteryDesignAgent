@@ -142,8 +142,8 @@ Our study occupies the empty quadrant: a governed agent executing the full
 chain of cell-design levers (electrolyte, separator, electrode,
 architecture, thermal) in a single autonomous loop, with every verdict
 computed by an adjudication layer outside the agent. To our knowledge, no
-published system spans that chain within a single autonomous loop, and none
-places judgment outside the agent.
+published system spans that chain within a single autonomous loop; in this
+system, judgment is computed by an adjudication layer outside the agent.
 
 \subsection{The Governance Question}
 
@@ -188,7 +188,7 @@ unreachable space, the other to a malleable measurement standard.
 
 We introduce \emph{protocolized governance} as the intervention: a fixed,
 always-on set of process rules the agent executes inside the design loop, plus
-an adjudication layer that stands outside it. Its four mechanisms: a layered
+an adjudication layer that stands outside it. Its four components: a layered
 multi-precision funnel, evaluation-and-fallback routing, heterogeneous model
 voting, and, the one the results hinge on,
 \emph{mechanized adjudication}: are specified in Section~3. Under mechanized
@@ -196,9 +196,8 @@ adjudication the contract is pre-registered as machine-readable criteria in an
 audit ledger before the first simulation runs; every verdict is computed by
 code from tool-output files, not asserted by the agent in prose; each
 ``achieved'' claim points to the exact file and key that supports it; and a
-verifier refuses incomplete audit trails. To our knowledge, this makes
-the system the first design agent whose verdicts are \emph{computed} rather
-than \emph{asserted}. In the language of delegation
+verifier refuses incomplete audit trails. In this system the verdicts are
+\emph{computed} rather than \emph{asserted}. In the language of delegation
 theory, it is a delegation contract with enforced fidelity---the alignment
 between the contract the principal believes it set and the behavior the agent
 actually executes \cite{delegatedagency2026, nikpayam2024aiassisted}.
@@ -240,7 +239,7 @@ kirkaldy2024lgm50}) matches our calibrated parameter set
 validation of the simulator's calibration against a production cell, as
 distinct from any validation of the designs themselves.
 
-The paper makes two contributions. (i) We present the first end-to-end
+The paper makes three contributions. (i) We present the first end-to-end
 agent for full-chain battery cell design: given nothing but a
 natural-language scenario contract, a single autonomous loop traverses
 the whole chain of battery design levers---material system, formulation,
@@ -264,7 +263,20 @@ current system provably cannot close the gap, a three-consecutive-failure
 stop rule that questions the assumptions rather than retrying blindly, and
 heterogeneous-model disagreement detection (reported as not exercised in
 this suite, with the null documented). The pattern is agent-agnostic: it
-migrates to any multi-scale, multi-fidelity design workflow.
+migrates to any multi-scale, multi-fidelity design workflow. (iii) We decompose the novelty modes reachable by a governed design
+agent: retrieval, cross-domain selection, and structural invention.
+Under a prose prohibition the agent retrieves documented additive
+compounds---reliable (all real, cross-checked) but novel in neither mode
+(T9). Under criteria-bound forcing it leaves the pre-registered
+82-compound additive set and selects a cataloged compound,
+bis(trifluoromethyl)sulfone (CAS 72971-96-1), whose battery-additive use
+is unattested in the searched scope---reliable (full mechanical chain),
+use-novel (searched scope), structure-cataloged (T10). Structural
+invention is the one mode not attained, and not attestable by model or
+simulator. Together the two conditions answer the menu-selection
+critique: retrieval is verified and reliable within the menu, and the
+innovation contract design can deliver is not new-structure discovery
+but verified cross-domain selection.
 
 \subsection{Contributions and Organization}
 

@@ -71,7 +71,8 @@ plating and SEI violations are lever-bound (supplementary materials). On the
 three structural tasks the same criteria bind both conditions in parallel:
 under a uniform $+5\%$ tightening the optimizer's attained counts fall from
 25/34/10 to 0/22/1, while the governed runs' own binding margins
-($+2.2\%$/$+4.5\%$/$+0.5\%$ on T1/T4/T8, Table~\ref{tab:margins}) fail
+($+2.2\%$/$+4.5\%$/$+0.5\%$ on T1/T4/T8, Appendix~B of the
+supplementary materials) fail
 under the same tightening on the same tolerance. No $\pm 5\%$ perturbation
 inverts the direction of the comparison; the only conceivable inversion
 zone---energy-density thresholds above the governed designs' own margins,
@@ -525,6 +526,155 @@ Audit chain & complete & complete & complete \\
 \end{tabular}
 \end{table}
 
+\subsection{Beyond the Known List: Prohibition vs.\ Pre-Registered Criteria}
+\label{sec:forcing}
+
+The eight contracts never required molecular novelty (Section~5.3), so
+the material-innovation axis of the suite stayed dormant. Whether a
+governed design agent can depart from documented chemistry depends on
+two distinguishable forcing dimensions: what the contract \emph{says}
+(prose prohibition) and what the contract's numbers \emph{admit}
+(metric forcing). We ran one extension contract for each; together they
+map the boundary.
+
+\paragraph{Prohibition condition (T9).} A grid-storage cell with
+SEI $\leq 550$ nm after 100 cycles, energy density $\geq 327.18$ Wh/kg,
+and no thermal-runaway trigger at 4C, on the Chen2020 profile, in which
+every non-molecular lever is prohibited (electrode geometry, transport,
+SEI-kinetics overrides, system switches are all disallowed) and the
+candidate must be a molecule not present in the known candidate set
+(FEC, VC, PS, DTD, or any candidate from the main suite). The initial
+formulation of the contract was unreachable (the added ``no lithium
+plating at 4C'' criterion fails for every Chen2020 configuration with
+non-molecular levers disabled---the calibrated baseline plates in the
+4C exam), and was re-specified to the reachable criterion set above; the
+calibration is recorded here as a case study in contract design rather
+than a silent adjustment.
+
+Two features of this condition must be stated before the result. First,
+the cell-level criteria are also met by the no-additive baseline (SEI
+449.12 nm against the 550 nm limit), so the force in this condition
+comes from the path constraint and the prohibition, not from the
+thresholds. Second, the estimates remain what they are: the candidate's
+SEI parameter is an estimate chain (molecule mapped to a
+SEI-growth-kinetics value, explicitly labeled screening-grade), not a
+measurement.
+
+The governed agent (pro) met the contract. Its first round proposed four
+candidates--DFEC (\texttt{O=C1OC(F)C(F)O1}),
+FVC (\texttt{O=C1OC=C(F)O1}), FES, and VEC, chosen on SEI-forming
+chemistry grounds; two passed the three-model funnel (DFEC and one
+other; two were flagged disputed on ranking spread), DFEC was the
+recommended candidate, and the cell-level evaluation reached SEI
+$430.4$ nm $\leq 550$ nm with $400.3$ Wh/kg $\geq 327.18$ and no
+thermal-runaway trigger; the novelty criterion was mechanically
+satisfied (SMILES outside the excluded set). Two properties of this run
+are worth recording. First, the candidates are real, traceable SEI
+additives rather than fabrications: each is a documented compound
+(DFEC, CAS 171730-81-7, reported as a film-forming additive in the
+lithium-ion literature; VEC, CAS 4427-96-7; FVC, a dioxolone additive
+of \cite{park2021dioxolone}; FES, of the ethylene-sulfite family). The
+agent's chemistry knowledge, not invention, produced the list; the
+condition therefore demonstrates reliable candidate \emph{retrieval}
+from domain knowledge under a prohibition, not molecular
+discovery---the closest thing to a hallucination test in the suite,
+passed by construction of the literature cross-check. Second, the DFEC
+HOMO computed here at the r2SCAN-3c level is $-7.86$ eV, $0.11$ eV
+below the literature value of $-7.75$ eV reported for the same
+molecule, within the $0.0$--$0.46$ eV per-molecule functional spread of
+the flagship endorsements (Table~\ref{tab:endorse})---an independent
+cross-check on the screening surrogate's molecule-level judgment.
+
+\paragraph{Criteria-bounded condition (T10).} To exceed the thresholds
+rather than the wording, we placed the forcing in the pre-registered
+criterion layer.
+The contract (a grid-storage cell on the Chen2020 profile) is
+pre-registered with four mechanically adjudicated layers:
+
+\begin{enumerate}
+\item \emph{Envelope.} A pre-registered set of 82 documented SEI
+additives (covering the main documented families; not an exhaustive
+catalog) was pre-computed through the same three-model funnel; their
+per-atom MACE and CHGNet energies and xTB HOMO values define a convex
+hull in a 3-D property space. A candidate whose computed point falls
+inside that hull is rejected as a known-set analogue; the adjudication
+is a pre-registered script (Delaunay outside test) that a reviewer can
+replay. Every one of the 82 compounds lies inside its own hull, and the
+deepest documented compound (triflyl fluoride, $-14.14$ eV) is inside
+the hull and rejected mechanically.
+\item \emph{Property window.} xTB HOMO $\leq -13.74$ eV---the value that
+is equivalent, under the $k$-rule below, to SEI $\leq 370$ nm.
+\item \emph{Cell window.} SEI $\leq 370$ nm after 100 cycles at 1C,
+energy density $\geq 327.18$ Wh/kg, no thermal-runaway trigger at 4C.
+SEI $\leq 370$ is below every measured reference point of the documented
+band under this protocol (baseline 449.12 nm; best documented-kinetics
+case $0.1\times$, 385.1 nm; model asymptote 5.07 nm)---reachable in the
+model only by kinetics beyond the documented band.
+\item \emph{Parameter mapping.} The additive-to-SEI-kinetics mapping is
+fixed by the contract: $k(M) = k_0\,10^{(\text{HOMO}_{\rm xTB}(M)+12.5)/1.0}$
+with $k_0$ the Chen2020 baseline rate constant. The rule is executed by
+code from the funnel outputs; the agent has no freedom to choose a
+mapping, so the estimate-chain loophole is closed by construction. The
+rule is a declared screening rule, not a measurement: it is calibrated
+over the $0.1\times$--$1\times$ range (two simulated points,
+449.12~nm and 385.1~nm) and the extrapolation to
+$0.02\times$ is an assumption, stated as such.
+\end{enumerate}
+
+All non-molecular levers are prohibited as before. The agent's first
+round proposed ten candidates with a direction no longer analogical but
+property-driven---``maximize per-atom electron withdrawal to deepen the
+HOMO below the $-13.74$ eV window and beyond the deepest documented
+vertex''---and every one was adjudicated outside the envelope. Five
+passed the funnel hard lines and the property window; the metalayer
+verdicts are mechanically replayed (envelope consistency checked by the
+agent itself: all 82 hull members test inside their own Delaunay). The
+cell window was then evaluated under the contract's $k$-rule
+(parameters generated by the rule, verified to $k_0\,10^{-1.7961}$ for
+the leader, $1.599 \times 10^{-14}$ m/s): e.g. bis(trifluoromethyl)
+sulfone $302.7$ nm, pentafluoroethylsulfonyl fluoride $306.9$ nm,
+sulfuryl fluoride $353.3$ nm, all $\leq 370$ nm. The leader
+(bis(trifluoromethyl)sulfone, xTB HOMO $-14.2961$ eV---deeper than the
+deepest documented compound in the known set) additionally passes
+energy density $400.29$ Wh/kg and no thermal-runaway trigger, and the
+run closes with an \texttt{achieved} verdict.
+
+The forced departure worked, and the boundary it hit is the more
+interesting result. The leader is a cataloged compound:
+bis(trifluoromethyl)sulfone, CAS 72971-96-1 (PubChem CID 11446996,
+\href{https://pubchem.ncbi.nlm.nih.gov/compound/11446996}{C$_2$F$_6$O$_2$S}).
+The agent's own cross-check (a targeted search over battery-additive
+use) did not find it, and was scoped honestly (``not found in the
+searched scope as an SEI additive; no absolute claim''). Widened checks
+(compound-specific queries, PubChem records, patent-family surveys over
+fluorinated sulfonyl prior art: TFSI/BETI salts, dithionate additives,
+alkyl sulfonates) likewise found no use of the compound as an
+electrolyte additive; the compound itself, however, is cataloged
+(CAS 72971-96-1), and the searches are not exhaustive---the claim is
+bounded accordingly. Under a bounded
+contract, then, the agent left the documented-additive envelope (a
+verified property departure, not an assertion) and landed on documented
+chemistry: the property window demanded by the contract's thresholds
+selects deep-fluorine chemistry, and that region of property space is
+already occupied by cataloged molecules. The residual novelty
+criterion---catalog uniqueness---was not attained.
+
+\paragraph{The boundary.} The two conditions order the novelty modes
+and stop at the same limit: retrieval (T9) stays on the menu;
+cross-domain selection (T10) leaves the additive set but lands on
+cataloged chemistry; structural invention is not attained, and no model
+or simulator can attest it---in the searched scope, the departure is
+bounded by documented chemistry rather than by the model's inference.
+The two conditions form an illustrative comparison, not a controlled
+ablation (their criteria differ beyond the forcing dimension); an exact
+same-contract-without-criteria-bound control remains future work. The
+mechanical layers behaved exactly as pre-registered: envelope verdicts
+replayed identically, the $k$-rule executed to the digit, the cell
+window passed. One caveat belongs on the record: the session referenced
+a prior run's log-entry schema while assembling its audit entries
+(cross-task mode reference; recorded during re-adjudication,
+evidence-neutral).
+
 \subsection{True-Compute Endorsement}
 \label{sec:endorse}
 
@@ -584,27 +734,6 @@ screening verdicts by first principles; gray arrows mark the HOMO--LUMO
 gap.}
 \label{fig:endorse}
 \end{figure}
-
-\begin{table}[!ht]
-\centering
-\caption{HOMO/LUMO levels (eV) of the four funnel-passed molecules at the
-r2SCAN-3c level (ORCA) with CP2K (PBE-D3/GTH) cross-validation; drift =
-per-molecule functional spread. All HOMO levels sit below the funnel's
-$-6.0$ eV oxidation-stability elimination line in both codes.}
-\label{tab:endorse}
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{p{3.2cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}}
-\toprule
-Molecule & ORCA HOMO & ORCA LUMO & CP2K HOMO & drift \\
-\midrule
-FEC & $-7.458$ & $-0.670$ & $-7.461$ & 0.003 \\
-VC  & $-6.470$ & $-0.861$ & $-6.319$ & 0.152 \\
-PS  & $-7.151$ & $+0.048$ & $-6.689$ & 0.462 \\
-DTD & $-7.601$ & $-0.502$ & $-7.230$ & 0.371 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 \begin{table}[!ht]
 \centering
 \caption{True-compute endorsement: funnel-passed molecules of the T5
