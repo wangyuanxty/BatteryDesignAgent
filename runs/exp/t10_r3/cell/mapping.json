@@ -1,0 +1,51 @@
+{
+  "rule": "k = k0 * 10**((HOMO_xTB + 12.5)/1.0)",
+  "k0_m_s": 1e-12,
+  "candidates": [
+    {
+      "candidate": "pfta",
+      "homo_ev_xtb": -14.9642,
+      "exponent": -2.4642,
+      "k_m_s": 3.43399770042585e-15,
+      "k_over_k0": 0.00343399770042585,
+      "log10_k_over_k0": -2.4642,
+      "note": "below the 0.1x calibration floor -> extrapolation, flagged in report"
+    },
+    {
+      "candidate": "pfhex",
+      "homo_ev_xtb": -14.9147,
+      "exponent": -2.4147,
+      "k_m_s": 3.84857540415743e-15,
+      "k_over_k0": 0.0038485754041574305,
+      "log10_k_over_k0": -2.4147,
+      "note": "below the 0.1x calibration floor -> extrapolation, flagged in report"
+    },
+    {
+      "candidate": "pftea",
+      "homo_ev_xtb": -14.8818,
+      "exponent": -2.3818,
+      "k_m_s": 4.151451800405686e-15,
+      "k_over_k0": 0.004151451800405686,
+      "log10_k_over_k0": -2.3818,
+      "note": "below the 0.1x calibration floor -> extrapolation, flagged in report"
+    },
+    {
+      "candidate": "pfpent",
+      "homo_ev_xtb": -15.0496,
+      "exponent": -2.5496,
+      "k_m_s": 2.8209799536634298e-15,
+      "k_over_k0": 0.00282097995366343,
+      "log10_k_over_k0": -2.5496,
+      "note": "below the 0.1x calibration floor -> extrapolation, flagged in report"
+    },
+    {
+      "candidate": "ncf3",
+      "homo_ev_xtb": -15.7893,
+      "exponent": -3.2893,
+      "k_m_s": 5.1368868542272365e-16,
+      "k_over_k0": 0.0005136886854227237,
+      "log10_k_over_k0": -3.2893,
+      "note": "below the 0.1x calibration floor -> extrapolation, flagged in report"
+    }
+  ]
+}

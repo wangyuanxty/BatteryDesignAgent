@@ -1,0 +1,11 @@
+{"candidates": [
+  {"formula": "LiNi0.875Co0.125PO4F", "name": "tav-F-Ni7Co1"},
+  {"formula": "LiNi0.875Mn0.125PO4F", "name": "tav-F-Ni7Mn1"},
+  {"formula": "LiNi0.75Co0.125Mn0.125PO4F", "name": "tav-F-Ni6Co1Mn1"},
+  {"formula": "LiNi0.875Al0.125PO4F", "name": "tav-F-Ni7Al1"},
+  {"formula": "LiNi0.875Mg0.125PO4F", "name": "tav-F-Ni7Mg1"},
+  {"formula": "Li3Ni2(PO4)3", "name": "nasicon-Ni"},
+  {"formula": "Li3Ni1.5Co0.5(PO4)3", "name": "nasicon-Ni6Co2"},
+  {"formula": "LiNi0.75Mn0.25PO4", "name": "oliv-Ni3Mn1"},
+  {"formula": "LiMnPO4F", "name": "tav-F-Mn"}
+]}

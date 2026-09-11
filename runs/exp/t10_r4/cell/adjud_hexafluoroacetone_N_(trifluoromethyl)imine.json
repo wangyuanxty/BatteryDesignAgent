@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "hexafluoroacetone N-(trifluoromethyl)imine",
+  "smiles": "FC(F)(F)C(=NC(F)(F)F)C(F)(F)F",
+  "n_atoms": 14,
+  "homo_ev": -14.3478,
+  "lumo_ev": -11.8078,
+  "mace_energy_ev": -80.77279663085938,
+  "mace_converged": true,
+  "chgnet_energy_ev": -84.70561981201172,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

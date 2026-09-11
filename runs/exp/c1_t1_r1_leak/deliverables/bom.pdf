@@ -1,0 +1,51 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+4 0 obj
+<< /Length 1557 >>
+stream
+BT /F1 8 Tf 11 TL 50 742 Td
+(VBF-C1T1R1 bom - Virtual Battery Factory deliverable) Tj T* T*
+(BOM - VBF-C1T1R1-BOM-001) Tj T*
+() Tj T*
+([Sheet: BOM]) Tj T*
+(Item I Component I Parameter I Champion value I Unit I Source) Tj T*
+(1 I Current collector \(+\) I Positive current collector thickness [m] I 8e-06 I m I override work/par) Tj T*
+(2 I Current collector \(-\) I Negative current collector thickness [m] I 6e-06 I m I override \(base 12) Tj T*
+(3 I Separator I Separator thickness [m] I 8e-06 I m I override \(base 12e-6\)) Tj T*
+(4 I Separator I Separator porosity I 0.55 I - I override \(base 0.47\)) Tj T*
+(5 I Electrolyte I Cation transference number I 0.7 I - I override \(base 0.2594\)) Tj T*
+(6 I Electrolyte I Electrolyte diffusivity [m2.s-1] I 2e-09 I m2/s I override \(base Nyman2008 fn\)) Tj T*
+(7 I Electrolyte I Electrolyte conductivity [S.m-1] I 3 I S/m I override \(base Nyman2008 fn\)) Tj T*
+(8 I Negative electrode I Negative particle radius [m] I 3e-06 I m I override \(base 5.86e-6\)) Tj T*
+(9 I Thermal management I Total heat transfer coefficient [W.m-2.K-1] I 100 I W/m2/K I override \(base) Tj T*
+(10 I Positive electrode I Positive electrode thickness [m] I 7.56e-05 I m I Chen2020 base \(unchanged) Tj T*
+(11 I Negative electrode I Negative electrode thickness [m] I 8.52e-05 I m I Chen2020 base \(unchanged) Tj T*
+(12 I Positive electrode I Positive particle radius [m] I 5.22e-06 I m I Chen2020 base \(unchanged\)) Tj T*
+(13 I Cell geometry I Electrode area [m2] I 0.1027 I m2 I calc-energy output \(0.065 x 1.58 m\)) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000000136 00000 n 
+0000000185 00000 n 
+0000001794 00000 n 
+trailer
+<< /Size 6 /Root 3 0 R >>
+startxref
+1920
+%%EOF

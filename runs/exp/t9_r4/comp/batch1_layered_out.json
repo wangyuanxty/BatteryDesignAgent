@@ -1,0 +1,204 @@
+{
+  "baseline": {
+    "formula": "Li(Ni0.8Mn0.1Co0.1)O2",
+    "e_full_ev": -290.971923828125,
+    "e_li_metal_ev": -1.878482460975647,
+    "converged": false
+  },
+  "candidates": [
+    {
+      "formula": "LiCuO2",
+      "realized_tm_counts": {
+        "Cu": 12
+      },
+      "avg_voltage_v": 3.706884741783142,
+      "capacity_mah_g": 183.05986487884172,
+      "e_full_ev": -255.8546905517578,
+      "e_delith_ev": -211.1717529296875,
+      "converged": false,
+      "rel_stability_ev_atom": -0.334452184041341,
+      "name": "LiCuO2"
+    },
+    {
+      "formula": "LiFeO2",
+      "realized_tm_counts": {
+        "Fe": 12
+      },
+      "avg_voltage_v": 3.942989706993103,
+      "capacity_mah_g": 197.9329671002101,
+      "e_full_ev": -334.0151672363281,
+      "e_delith_ev": -287.4433898925781,
+      "converged": false,
+      "rel_stability_ev_atom": -2.288464101155598,
+      "name": "LiFeO2"
+    },
+    {
+      "formula": "LiCu0.5Ni0.5O2",
+      "realized_tm_counts": {
+        "Cu": 6,
+        "Ni": 6
+      },
+      "avg_voltage_v": 3.7496875524520874,
+      "capacity_mah_g": 187.4988052108995,
+      "e_full_ev": -269.22296142578125,
+      "e_delith_ev": -224.19760131835938,
+      "converged": false,
+      "rel_stability_ev_atom": -0.6686589558919271,
+      "name": "CuNi55"
+    },
+    {
+      "formula": "LiCu0.5Mn0.5O2",
+      "realized_tm_counts": {
+        "Cu": 6,
+        "Mn": 6
+      },
+      "avg_voltage_v": 3.5115550756454468,
+      "capacity_mah_g": 191.08462465137066,
+      "e_full_ev": -306.14874267578125,
+      "e_delith_ev": -263.0284423828125,
+      "converged": false,
+      "rel_stability_ev_atom": -1.5918034871419264,
+      "name": "CuMn55"
+    },
+    {
+      "formula": "LiCu0.5Fe0.5O2",
+      "realized_tm_counts": {
+        "Cu": 6,
+        "Fe": 6
+      },
+      "avg_voltage_v": 3.8072513341903687,
+      "capacity_mah_g": 190.20610978016995,
+      "e_full_ev": -295.0216979980469,
+      "e_delith_ev": -249.53582763671875,
+      "converged": false,
+      "rel_stability_ev_atom": -1.3136273701985672,
+      "name": "CuFe55"
+    },
+    {
+      "formula": "LiCu0.5Co0.5O2",
+      "realized_tm_counts": {
+        "Cu": 6,
+        "Co": 6
+      },
+      "avg_voltage_v": 3.4916709661483765,
+      "capacity_mah_g": 187.2744014057381,
+      "e_full_ev": -280.9876403808594,
+      "e_delith_ev": -238.0264129638672,
+      "converged": false,
+      "rel_stability_ev_atom": -0.9627759297688803,
+      "name": "CuCo55"
+    },
+    {
+      "formula": "LiNi0.5Fe0.5O2",
+      "realized_tm_counts": {
+        "Ni": 6,
+        "Fe": 6
+      },
+      "avg_voltage_v": 3.9903262853622437,
+      "capacity_mah_g": 195.00292800049888,
+      "e_full_ev": -308.39764404296875,
+      "e_delith_ev": -261.4471740722656,
+      "converged": false,
+      "rel_stability_ev_atom": -1.6480260213216145,
+      "name": "NiFe55"
+    },
+    {
+      "formula": "LiCo0.5Fe0.5O2",
+      "realized_tm_counts": {
+        "Co": 6,
+        "Fe": 6
+      },
+      "avg_voltage_v": 3.68195378780365,
+      "capacity_mah_g": 194.76021408840475,
+      "e_full_ev": -319.440185546875,
+      "e_delith_ev": -274.9566955566406,
+      "converged": false,
+      "rel_stability_ev_atom": -1.9240895589192704,
+      "name": "CoFe55"
+    },
+    {
+      "formula": "LiFe0.5Mn0.5O2",
+      "realized_tm_counts": {
+        "Fe": 6,
+        "Mn": 6
+      },
+      "avg_voltage_v": 3.341591238975525,
+      "capacity_mah_g": 198.8844871755084,
+      "e_full_ev": -343.8375244140625,
+      "e_delith_ev": -302.0769348144531,
+      "converged": false,
+      "rel_stability_ev_atom": -2.5340230305989584,
+      "name": "FeMn55"
+    },
+    {
+      "formula": "LiVO2",
+      "realized_tm_counts": {
+        "V": 12
+      },
+      "avg_voltage_v": 2.563595175743103,
+      "capacity_mah_g": 208.73125666851723,
+      "e_full_ev": -368.0277404785156,
+      "e_delith_ev": -332.4911193847656,
+      "converged": false,
+      "rel_stability_ev_atom": -3.1387784322102865,
+      "name": "LiVO2"
+    },
+    {
+      "formula": "LiCu0.9Al0.1O2",
+      "realized_tm_counts": {
+        "Cu": 11,
+        "Al": 1
+      },
+      "avg_voltage_v": 3.6934932470321655,
+      "capacity_mah_g": 189.83263541899265,
+      "e_full_ev": -262.2079162597656,
+      "e_delith_ev": -217.63211059570312,
+      "converged": false,
+      "rel_stability_ev_atom": -0.49328282674153634,
+      "name": "CuAl91"
+    },
+    {
+      "formula": "LiCu0.9Zr0.1O2",
+      "realized_tm_counts": {
+        "Cu": 11,
+        "Zr": 1
+      },
+      "avg_voltage_v": 3.7218097448349,
+      "capacity_mah_g": 178.24603338983175,
+      "e_full_ev": -268.7860107421875,
+      "e_delith_ev": -223.98367309570312,
+      "converged": false,
+      "rel_stability_ev_atom": -0.657735188802083,
+      "name": "CuZr91"
+    },
+    {
+      "formula": "LiCu0.75Mn0.25O2",
+      "realized_tm_counts": {
+        "Cu": 9,
+        "Mn": 3
+      },
+      "avg_voltage_v": 3.615057349205017,
+      "capacity_mah_g": 186.9861860749359,
+      "e_full_ev": -281.7373046875,
+      "e_delith_ev": -237.7889862060547,
+      "converged": false,
+      "rel_stability_ev_atom": -0.9815175374348959,
+      "name": "CuMn73"
+    },
+    {
+      "formula": "LiCu0.8Ni0.2O2",
+      "realized_tm_counts": {
+        "Cu": 10,
+        "Ni": 2
+      },
+      "avg_voltage_v": 3.669500708580017,
+      "capacity_mah_g": 184.80997835990794,
+      "e_full_ev": -260.38909912109375,
+      "e_delith_ev": -216.00523376464844,
+      "converged": false,
+      "rel_stability_ev_atom": -0.4478123982747393,
+      "name": "CuNi82"
+    }
+  ],
+  "calibration_note": "NMC811 baseline self-calibration: literature average voltage ≈3.8 V, theoretical capacity ≈194 mAh/g (x∈[0.3,1] window) — if the baseline deviates markedly, this batch's results are not trustworthy (declared honestly)."
+}

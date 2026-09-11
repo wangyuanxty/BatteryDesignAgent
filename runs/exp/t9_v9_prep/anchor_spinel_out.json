@@ -1,0 +1,51 @@
+{
+  "baseline": {
+    "formula": "Li(Ni0.8Mn0.1Co0.1)O2",
+    "e_full_ev": -290.9718933105469,
+    "e_li_metal_ev": -1.8784822225570679,
+    "converged": false
+  },
+  "candidates": [
+    {
+      "formula": "LiMn2O4",
+      "realized_tm_counts": {
+        "Mn": 16
+      },
+      "avg_voltage_v": 3.7697569131851196,
+      "capacity_mah_g": 103.7583655398795,
+      "e_full_ev": -433.3301086425781,
+      "e_delith_ev": -399.440673828125,
+      "converged": false,
+      "rel_stability_ev_atom": -2.604687728881835,
+      "name": "spinel 锚点 文献~4.0V"
+    },
+    {
+      "formula": "LiNi0.5Mn1.5O4",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "Mn": 12
+      },
+      "avg_voltage_v": 4.334464351336162,
+      "capacity_mah_g": 102.69195673979098,
+      "e_full_ev": -412.07098388671875,
+      "e_delith_ev": -374.7933044433594,
+      "converged": false,
+      "rel_stability_ev_atom": -2.179505233764649,
+      "name": "LNMO 锚点 文献~4.7V"
+    },
+    {
+      "formula": "LiCo2O4",
+      "realized_tm_counts": {
+        "Co": 16
+      },
+      "avg_voltage_v": 3.889985998471578,
+      "capacity_mah_g": 99.36727149001727,
+      "e_full_ev": -367.9060974121094,
+      "e_delith_ev": -333.2952880859375,
+      "converged": false,
+      "rel_stability_ev_atom": -1.296207504272461,
+      "name": "v8 sanity 候选 修复前8.010V"
+    }
+  ],
+  "calibration_note": "NMC811 baseline self-calibration: literature average voltage ≈3.8 V, theoretical capacity ≈194 mAh/g (x∈[0.3,1] window) — if the baseline deviates markedly, this batch's results are not trustworthy (declared honestly)."
+}

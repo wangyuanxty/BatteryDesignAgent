@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "bis(trifluoromethyl)maleic anhydride",
+  "smiles": "O=C1OC(=O)C(C(F)(F)F)=C1C(F)(F)F",
+  "n_atoms": 15,
+  "homo_ev": -14.1482,
+  "lumo_ev": -12.0432,
+  "mace_energy_ev": -98.3883056640625,
+  "mace_converged": true,
+  "chgnet_energy_ev": -102.1685562133789,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

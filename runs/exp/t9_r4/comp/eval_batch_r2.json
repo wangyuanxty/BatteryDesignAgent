@@ -1,0 +1,100 @@
+[
+  {
+    "candidate": "LiScO2",
+    "outputs": [
+      "comp/eval/r2_LiScO2.json"
+    ],
+    "note": "computed avg voltage 4.298 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "LiAlO2",
+    "outputs": [
+      "comp/eval/r2_LiAlO2.json"
+    ],
+    "note": "computed avg voltage 4.598 V, within 0.11 V of the window - near-miss recorded"
+  },
+  {
+    "candidate": "LiGaO2",
+    "outputs": [
+      "comp/eval/r2_LiGaO2.json"
+    ],
+    "note": "computed avg voltage 4.479 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "LiZnO2",
+    "outputs": [
+      "comp/eval/r2_LiZnO2.json"
+    ],
+    "note": "computed avg voltage 4.492 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "FeNi73",
+    "outputs": [
+      "comp/eval/r2_FeNi73.json"
+    ],
+    "note": "computed avg voltage 3.964 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "FeNi37",
+    "outputs": [
+      "comp/eval/r2_FeNi37.json"
+    ],
+    "note": "computed avg voltage 3.925 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CrFe55",
+    "outputs": [
+      "comp/eval/r2_CrFe55.json"
+    ],
+    "note": "computed avg voltage 3.747 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CrNi55",
+    "outputs": [
+      "comp/eval/r2_CrNi55.json"
+    ],
+    "note": "computed avg voltage 3.786 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CrCo55",
+    "outputs": [
+      "comp/eval/r2_CrCo55.json"
+    ],
+    "note": "computed avg voltage 3.554 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "FeCo91",
+    "outputs": [
+      "comp/eval/r2_FeCo91.json"
+    ],
+    "note": "computed avg voltage 3.841 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "NiFe91",
+    "outputs": [
+      "comp/eval/r2_NiFe91.json"
+    ],
+    "note": "computed avg voltage 3.959 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "FeNi91",
+    "outputs": [
+      "comp/eval/r2_FeNi91.json"
+    ],
+    "note": "computed avg voltage 3.958 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "ZnNi55",
+    "outputs": [
+      "comp/eval/r2_ZnNi55.json"
+    ],
+    "note": "computed avg voltage 4.247 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "ScFe55",
+    "outputs": [
+      "comp/eval/r2_ScFe55.json"
+    ],
+    "note": "computed avg voltage 3.999 V < 4.6 - rejected at the stage-1 window"
+  }
+]

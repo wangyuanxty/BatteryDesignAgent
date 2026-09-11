@@ -1,0 +1,136 @@
+{
+  "baseline": {
+    "formula": "Li(Ni0.8Mn0.1Co0.1)O2",
+    "e_full_ev": -290.971923828125,
+    "e_li_metal_ev": -1.8784823417663574,
+    "converged": false
+  },
+  "candidates": [
+    {
+      "formula": "LiNi0.875Co0.125PO4F",
+      "realized_tm_counts": {
+        "Ni": 7,
+        "Co": 1
+      },
+      "avg_voltage_v": 5.455288410186768,
+      "capacity_mah_g": 104.44026254912963,
+      "e_full_ev": -424.4838562011719,
+      "e_delith_ev": -380.4812316894531,
+      "converged": false,
+      "rel_stability_ev_atom": -1.2567720961296693,
+      "name": "tav-F-Ni7Co1"
+    },
+    {
+      "formula": "LiNi0.875Mn0.125PO4F",
+      "realized_tm_counts": {
+        "Ni": 7,
+        "Mn": 1
+      },
+      "avg_voltage_v": 5.413759072621663,
+      "capacity_mah_g": 104.73142222407259,
+      "e_full_ev": -429.2901916503906,
+      "e_delith_ev": -385.5367431640625,
+      "converged": false,
+      "rel_stability_ev_atom": -1.3396399487024064,
+      "name": "tav-F-Ni7Mn1"
+    },
+    {
+      "formula": "LiNi0.75Co0.125Mn0.125PO4F",
+      "realized_tm_counts": {
+        "Ni": 6,
+        "Co": 1,
+        "Mn": 1
+      },
+      "avg_voltage_v": 5.36533784866333,
+      "capacity_mah_g": 104.71390058856014,
+      "e_full_ev": -431.4356384277344,
+      "e_delith_ev": -387.97271728515625,
+      "converged": false,
+      "rel_stability_ev_atom": -1.3766304103807467,
+      "name": "tav-F-Ni6Co1Mn1"
+    },
+    {
+      "formula": "LiNi0.875Al0.125PO4F",
+      "realized_tm_counts": {
+        "Ni": 7,
+        "Al": 1
+      },
+      "avg_voltage_v": 5.467434406280518,
+      "capacity_mah_g": 106.81517424026599,
+      "e_full_ev": -427.5292663574219,
+      "e_delith_ev": -383.4537658691406,
+      "converged": false,
+      "rel_stability_ev_atom": -1.3092791677891524,
+      "name": "tav-F-Ni7Al1"
+    },
+    {
+      "formula": "LiNi0.875Mg0.125PO4F",
+      "realized_tm_counts": {
+        "Ni": 7,
+        "Mg": 1
+      },
+      "avg_voltage_v": 5.508195718129476,
+      "capacity_mah_g": 107.01902890330234,
+      "e_full_ev": -422.56146240234375,
+      "e_delith_ev": -378.24139404296875,
+      "converged": false,
+      "rel_stability_ev_atom": -1.223627375460219,
+      "name": "tav-F-Ni7Mg1"
+    },
+    {
+      "formula": "Li3Ni2(PO4)3",
+      "realized_tm_counts": {
+        "Ni": 8
+      },
+      "avg_voltage_v": 5.113083362579346,
+      "capacity_mah_g": 44.3393467510364,
+      "e_full_ev": -553.295166015625,
+      "e_delith_ev": -497.3626403808594,
+      "converged": false,
+      "rel_stability_ev_atom": -1.6227400037977429,
+      "name": "nasicon-Ni"
+    },
+    {
+      "formula": "Li3Ni1.5Co0.5(PO4)3",
+      "realized_tm_counts": {
+        "Ni": 6,
+        "Co": 2
+      },
+      "avg_voltage_v": 5.011692523956299,
+      "capacity_mah_g": 44.32678619602217,
+      "e_full_ev": -557.3033447265625,
+      "e_delith_ev": -502.18194580078125,
+      "converged": false,
+      "rel_stability_ev_atom": -1.6784091525607634,
+      "name": "nasicon-Ni6Co2"
+    },
+    {
+      "formula": "LiNi0.75Mn0.25PO4",
+      "realized_tm_counts": {
+        "Ni": 3,
+        "Mn": 1
+      },
+      "avg_voltage_v": 5.522544066111247,
+      "capacity_mah_g": 117.50108487169084,
+      "e_full_ev": -202.2581329345703,
+      "e_delith_ev": -180.0550537109375,
+      "converged": false,
+      "rel_stability_ev_atom": -2.028410237630209,
+      "name": "oliv-Ni3Mn1"
+    },
+    {
+      "formula": "LiMnPO4F",
+      "realized_tm_counts": {
+        "Mn": 8
+      },
+      "avg_voltage_v": 4.638887246449788,
+      "capacity_mah_g": 106.68844832479849,
+      "e_full_ev": -473.1944885253906,
+      "e_delith_ev": -434.09027099609375,
+      "converged": false,
+      "rel_stability_ev_atom": -2.0966105844782676,
+      "name": "tav-F-Mn"
+    }
+  ],
+  "calibration_note": "NMC811 baseline self-calibration: literature average voltage ≈3.8 V, theoretical capacity ≈194 mAh/g (x∈[0.3,1] window) — if the baseline deviates markedly, this batch's results are not trustworthy (declared honestly)."
+}

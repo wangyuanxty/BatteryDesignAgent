@@ -1,0 +1,124 @@
+{
+  "verdicts": [
+    {
+      "name": "candidate",
+      "smiles": "O=S(=O)(F)F",
+      "n_atoms": 5,
+      "point_per_atom": [
+        -5.104496765136719,
+        -5.456849098205566,
+        -13.8919
+      ],
+      "in_envelope": false,
+      "hull_ref": "envelope_stats.json"
+    },
+    {
+      "name": "candidate",
+      "smiles": "FC(F)(F)S(F)(F)(F)(F)F",
+      "n_atoms": 10,
+      "point_per_atom": [
+        -4.23804931640625,
+        -4.49338436126709,
+        -10.4106
+      ],
+      "in_envelope": false,
+      "hull_ref": "envelope_stats.json"
+    },
+    {
+      "name": "candidate",
+      "smiles": "FC(F)(F)C(F)(F)S(=O)(=O)F",
+      "n_atoms": 11,
+      "point_per_atom": [
+        -5.368914517489347,
+        -5.731390953063965,
+        -14.2697
+      ],
+      "in_envelope": false,
+      "hull_ref": "envelope_stats.json"
+    },
+    {
+      "name": "candidate",
+      "smiles": "N#CS(=O)(=O)F",
+      "n_atoms": 6,
+      "point_per_atom": [
+        -6.129961013793945,
+        -6.418710231781006,
+        -13.0634
+      ],
+      "in_envelope": false,
+      "hull_ref": "envelope_stats.json"
+    },
+    {
+      "name": "candidate",
+      "smiles": "FC(F)(F)S(=O)(=O)C(F)(F)F",
+      "n_atoms": 11,
+      "point_per_atom": [
+        -5.3459108526056465,
+        -5.703486442565918,
+        -14.2961
+      ],
+      "in_envelope": false,
+      "hull_ref": "envelope_stats.json"
+    },
+    {
+      "name": "candidate",
+      "smiles": "FC(F)(F)C#N",
+      "n_atoms": 6,
+      "point_per_atom": [
+        -6.231452941894531,
+        -6.4654974937438965,
+        -13.8447
+      ],
+      "in_envelope": false,
+      "hull_ref": "envelope_stats.json"
+    },
+    {
+      "name": "candidate",
+      "smiles": "FC(F)(F)[N+](=O)[O-]",
+      "n_atoms": 7,
+      "point_per_atom": [
+        -5.741117204938616,
+        -6.090280532836914,
+        -14.1208
+      ],
+      "in_envelope": false,
+      "hull_ref": "envelope_stats.json"
+    },
+    {
+      "name": "candidate",
+      "smiles": "O=S(=O)(F)Cl",
+      "n_atoms": 5,
+      "point_per_atom": [
+        -4.688300323486328,
+        -5.112374305725098,
+        -13.3912
+      ],
+      "in_envelope": false,
+      "hull_ref": "envelope_stats.json"
+    },
+    {
+      "name": "candidate",
+      "smiles": "O=C=NS(=O)(=O)F",
+      "n_atoms": 7,
+      "point_per_atom": [
+        -6.334027971540179,
+        -6.741339683532715,
+        -13.6846
+      ],
+      "in_envelope": false,
+      "hull_ref": "envelope_stats.json"
+    },
+    {
+      "name": "candidate",
+      "smiles": "O=S(F)(F)(F)F",
+      "n_atoms": 6,
+      "point_per_atom": [
+        -4.299358367919922,
+        -4.657834529876709,
+        -11.9764
+      ],
+      "in_envelope": false,
+      "hull_ref": "envelope_stats.json"
+    }
+  ]
+}

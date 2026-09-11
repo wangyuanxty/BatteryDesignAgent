@@ -1,0 +1,31 @@
+We are developing a grid-storage cell on the Chen2020 NMC811/graphite profile. The cathode is the free variable: everything else is fixed, including the electrolyte (EC/EMC with LiPF6) and the cell architecture. We need a cathode composition that gives us a *cell we can actually operate*, not a number: the design has to be compatible with the components we have, and it has to pass the cell-level criteria below.
+
+Two things define the target.
+
+(1) A high-voltage cathode. We want a cathode whose computed average voltage reaches 4.6 V or more through our CHGNet screening machinery. That is above the band of common layered and olivine cathodes and inside the regime where real 4.6-4.8 V cathodes operate (LiNi0.5Mn1.5O4-type spinels, LiCoPO4-class olivines), so this part of the window is chosen to be reachable by chemistry that exists.
+
+(2) Compatibility with the fixed cell. The electrolyte we have is not a high-voltage electrolyte: carbonate solvents with LiPF6 are anodically limited in the 4.8 V range. A cathode that charges above that limit cannot be operated in this cell, whatever its computed voltage - so the design must also satisfy: charging potential <= 4.8 V (the declared anodic limit of the fixed electrolyte). A candidate that reaches 4.6 V but requires charging above 4.8 V is not a design we can use.
+
+The composition must come from outside our documented catalogue. We have compiled 115 documented cathode materials and computed 102 screening points (average voltage, capacity, relative stability) with the same machinery; the candidate must not be one of those materials and its computed point must lie outside the convex hull of those 102 points. Adjudicate with:
+  D:/anaconda/envs/py312/python.exe comp_envelope_check.py --known-set runs/exp/known_set_comp/known_set_v3.json --formula "<formula>"
+  (and the --point path for the computed point).
+
+What we can compute, and what we cannot. Our machinery builds six structure families: layered LiMO2, olivine LiMPO4, spinel LiM2O4, tavorite LiM(PO4)F, tavorite LiM(SO4)F, and NASICON Li3M2(PO4)3. Compositions in any other family cannot be screened - the tool reports them as unsupported rather than approximating them; treat that as a hard boundary of this task.
+
+Calibration, measured against literature before this run: olivine LiFePO4 computes 3.443 V vs 3.4 V (control); tavorite sulfate LiFeSO4F 3.436 vs 3.6; tavorite phosphate LiVPO4F 3.580 vs ~4.2; NASICON Li3V2(PO4)3 3.347 vs 3.8; spinel LiMn2O4 3.77 vs ~4.0 and LiNi0.5Mn1.5O4 4.334 vs ~4.7. V-bearing and spinel families compute systematically low by roughly 0.2-0.5 V - plan for that margin. Ni-rich olivines compute inflated voltages (two such materials are excluded from the hull for that reason, and the former band top, 5.114 V, is one of them); Fe substitution in the tavorite-phosphate and NASICON families is not validated (LiFePO4F computes 4.919 V against a literature 2.75 V, Li3Fe2(PO4)3 4.699 against 2.8).
+
+How your result will be judged (fixed scripts, replayable by the reviewer):
+  (1) Catalogue and hull, as above: outside the 115 documented materials, outside the 102-point hull.
+  (2) Window: computed average voltage >= 4.6 V from run-comp.
+  (3) Compatibility: the charging potential must be <= 4.8 V (the declared anodic limit of the fixed electrolyte). Report the potential you use and where it comes from; a cathode that only reaches the window by charging beyond what the electrolyte can take does not pass.
+  (4) True-voltage guard: the 4.6 V must hold beyond the screening proxy - an experimental value, our own QE computation, or literature-consistent evidence. For context: the highest sustained average discharge voltage reported for a cycling cathode is ~4.8 V (LiCoMnO4, LiCoPO4); LiNi0.5Mn1.5O4 cycles at ~4.6-4.7 V; so a claim in the 4.6-4.8 V range is consistent with known chemistry, while a computed-only value from an overestimate-prone family is not evidence.
+  (5) Cell-level criteria (this is what makes it a battery, not a number). Map the candidate to a cell with the fixed rule: constant OCP = computed average voltage; capacity = 0.9 x computed capacity; SEI kinetics = the Chen2020 baseline k0 (a cathode composition does not change SEI chemistry); report ED_active = V x C x 0.9. Then the cell must satisfy: energy density >= 327.18 Wh/kg on the 1C discharge (calc-energy, contract convention); no lithium plating during 4C charge (anode potential stays above 0 V); no thermal-runaway trigger under 4C charge at 45 C; SEI after 100 cycles at 1C <= 500 nm. Report every one of these from tool output.
+  (6) Close the loop: re-compute the finalist independently (run-comp replay plus the envelope script), check the composition against a public catalogue (record "not found in the searched scope", not an absolute claim), and attempt run-qe with the Li-metal reference if time allows.
+
+Workspace: runs/exp/t9_r4 (create it and keep every artifact there). WORKSPACE DISCIPLINE: use only your own workspace and the data named above (runs/exp/known_set_comp/known_set_v3.json, comp_envelope_check.py); do not read or reference other runs' workspaces (t1_r* .. t8_r*, c1_*, t9_r1..t9_r3, t10_r*) - they are other experiments and out of scope.
+
+If no candidate satisfies all of the above within the budget, report the negative result honestly - a negative result is a valid outcome of this contract. Do not report a candidate that passes the voltage window but breaks compatibility (3) or any cell-level criterion (5).
+
+PRE-RUN NOTES (2026-09-10, recorded before this run):
+  (a) This arm differs from the previous run of this contract in exactly two ways, both recorded before the run and both motivated by compatibility rather than by any previous result: the window moves from 5.3 V to 4.6 V because the fixed electrolyte (carbonate + LiPF6, anodic limit ~4.8 V) cannot host a 5.3 V cathode at all - the previous window was not jointly realizable with the frozen cell context - and criterion (3), the compatibility limit, is new for the same reason.
+  (b) The catalogue is unchanged from the previous run: known_set_v3.json (115 materials, 102 computed points).

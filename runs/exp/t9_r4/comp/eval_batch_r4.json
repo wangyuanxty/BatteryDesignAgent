@@ -1,0 +1,12 @@
+[
+  {
+    "candidate": "AlB55",
+    "outputs": ["comp/gate_out.json"],
+    "note": "charging-potential gate: avg_voltage_v 4.641 V (window pass) but charging_potential_v 7.410 V > 4.8 V - the window pass was bought with a pathological top-of-charge state (last Li removal costs 7.4 V); incompatible with the fixed electrolyte"
+  },
+  {
+    "candidate": "LiAlO2",
+    "outputs": ["comp/eval/r2_LiAlO2.json"],
+    "note": "anchor: avg 4.598 V < 4.6 (fails the window regardless); charging-gate profile not run - AlB55's decisive gate failure (7.41 V) identifies the d0-line mechanism as fatal for the family"
+  }
+]

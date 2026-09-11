@@ -1,0 +1,12 @@
+{
+  "candidates": [
+    {
+      "smiles": "FC(F)(F)N(C(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "energy_ev": -73.03131866455078,
+        "converged": true
+      },
+      "model": "mace"
+    }
+  ]
+}

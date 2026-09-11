@@ -1,0 +1,10 @@
+[
+  {
+    "candidate": "LCMO",
+    "round": 2,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/LCMO_final.json"
+    ],
+    "note": "finalist closed-loop: run-comp replay + envelope PASS; true_voltage_v 5.0 from literature (Kawai et al. 1998); QE endorsement pending (qe_lcmo_out.json)"
+  }
+]

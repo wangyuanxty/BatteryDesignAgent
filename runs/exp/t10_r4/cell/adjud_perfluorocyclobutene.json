@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "perfluorocyclobutene",
+  "smiles": "FC1=C(F)C(F)(F)C1(F)F",
+  "n_atoms": 10,
+  "homo_ev": -13.9162,
+  "lumo_ev": -9.3214,
+  "mace_energy_ev": -58.278682708740234,
+  "mace_converged": true,
+  "chgnet_energy_ev": -60.13793182373047,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

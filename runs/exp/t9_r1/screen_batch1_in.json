@@ -1,0 +1,26 @@
+{
+  "candidates": [
+    {"formula": "LiNi0.9Co0.1PO4", "name": "NiCo91-olivine"},
+    {"formula": "LiNi0.8Mn0.2PO4", "name": "NiMn82-olivine"},
+    {"formula": "LiNi0.7Fe0.3PO4", "name": "NiFe73-olivine"},
+    {"formula": "LiNi0.5Mn0.5PO4", "name": "NiMn55-olivine"},
+    {"formula": "LiNiPO4F", "name": "NiPO4F-tavorite"},
+    {"formula": "LiNi0.9Mg0.1PO4", "name": "NiMg91-olivine"},
+    {"formula": "LiCuPO4", "name": "CuPO4-olivine"},
+    {"formula": "LiCo0.9Mn0.1PO4", "name": "CoMn91-olivine"},
+    {"formula": "LiNi2O4", "name": "LiNi2O4-spinel"},
+    {"formula": "LiCoNiO4", "name": "LiCoNiO4-spinel"},
+    {"formula": "LiNiFeO4", "name": "LiNiFeO4-spinel"},
+    {"formula": "LiMn1.5Fe0.5O4", "name": "Mn15Fe05O4-spinel"},
+    {"formula": "LiMn1.5Al0.5O4", "name": "Mn15Al05O4-spinel"},
+    {"formula": "LiNi0.9Mg0.1O2", "name": "NiMg91-layered"},
+    {"formula": "LiNi0.85Co0.15O2", "name": "NiCo85-layered"},
+    {"formula": "LiNi0.8Ti0.2O2", "name": "NiTi82-layered"},
+    {"formula": "LiNi0.8W0.2O2", "name": "NiW82-layered"},
+    {"formula": "LiNi0.8Mo0.2O2", "name": "NiMo82-layered"},
+    {"formula": "LiNi0.8Sb0.2O2", "name": "NiSb82-layered"},
+    {"formula": "LiNi0.5Sb0.5O2", "name": "NiSb55-layered"},
+    {"formula": "LiNi0.8Ge0.2O2", "name": "NiGe82-layered"},
+    {"formula": "Li2NiO3", "name": "Li2NiO3-layered"}
+  ]
+}

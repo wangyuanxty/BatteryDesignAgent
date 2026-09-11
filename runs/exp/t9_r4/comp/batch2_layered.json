@@ -1,0 +1,18 @@
+{
+  "candidates": [
+    {"formula": "LiScO2", "name": "LiScO2"},
+    {"formula": "LiAlO2", "name": "LiAlO2"},
+    {"formula": "LiGaO2", "name": "LiGaO2"},
+    {"formula": "LiZnO2", "name": "LiZnO2"},
+    {"formula": "LiFe0.75Ni0.25O2", "name": "FeNi73"},
+    {"formula": "LiFe0.25Ni0.75O2", "name": "FeNi37"},
+    {"formula": "LiCr0.5Fe0.5O2", "name": "CrFe55"},
+    {"formula": "LiCr0.5Ni0.5O2", "name": "CrNi55"},
+    {"formula": "LiCr0.5Co0.5O2", "name": "CrCo55"},
+    {"formula": "LiFe0.9Co0.1O2", "name": "FeCo91"},
+    {"formula": "LiNi0.9Fe0.1O2", "name": "NiFe91"},
+    {"formula": "LiFe0.9Ni0.1O2", "name": "FeNi91"},
+    {"formula": "LiZn0.5Ni0.5O2", "name": "ZnNi55"},
+    {"formula": "LiSc0.5Fe0.5O2", "name": "ScFe55"}
+  ]
+}

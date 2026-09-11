@@ -1,0 +1,1294 @@
+{
+  "name": "known_set_comp_v3",
+  "description": "Pre-registered T9 v9 known set (single file): membership list of documented cathode materials (exact-formula rejection, layer A0) + computed convex-hull points of the documented members (Delaunay outside test, layer A1).",
+  "revision": "2026-09-10 (PRE-RUN, T9 v9 had not started). Changes vs v1: (a) six spinel points recomputed after fixing a Li/M site-mix-up in the spinel builder (pymatgen Fd-3m origin-choice-1 vs the literature's choice-2 convention); their v1 values (8.195-8.911 V) were artefacts. (b) Li2MnO3 moved out of the hull (unsupported framework; no valid prototype) and kept in the membership layer. (c) documented members of the newly computable families (tavorite phosphate/sulfate, NASICON) added to membership and, where a template exists, as computed points. All v1 values not listed in (a) are unchanged. | 2026-09-10 (PRE-RUN, v10): the known set grows by the previous run of this contract: the six candidates that run found (LiNiPO4F, LiNi0.75Co0.25PO4, LiNi0.8Co0.2PO4, LiNi0.4Co0.6PO4, LiNi0.75Co0.25PO4F, LiNi0.5Co0.5PO4F) are folded into both layers. The v2 file is unchanged.",
+  "membership": [
+    {
+      "name": "LCO",
+      "formula": "LiCoO2"
+    },
+    {
+      "name": "NMC532",
+      "formula": "LiNi0.5Mn0.3Co0.2O2"
+    },
+    {
+      "name": "NMC622",
+      "formula": "LiNi0.6Mn0.2Co0.2O2"
+    },
+    {
+      "name": "NMC811",
+      "formula": "LiNi0.8Mn0.1Co0.1O2"
+    },
+    {
+      "name": "NCA",
+      "formula": "LiNi0.8Co0.15Al0.05O2"
+    },
+    {
+      "name": "LNO",
+      "formula": "LiNiO2"
+    },
+    {
+      "name": "Li-rich-Li2MnO3",
+      "formula": "Li2MnO3"
+    },
+    {
+      "name": "LNM-single",
+      "formula": "LiNi0.5Mn0.5O2"
+    },
+    {
+      "name": "LCO-Ni50",
+      "formula": "LiCo0.5Ni0.5O2"
+    },
+    {
+      "name": "LCO-Mg5",
+      "formula": "LiCo0.95Mg0.05O2"
+    },
+    {
+      "name": "LCO-Ti5",
+      "formula": "LiCo0.95Ti0.05O2"
+    },
+    {
+      "name": "NCM-boron",
+      "formula": "LiNi0.8Mn0.1Co0.08B0.02O2"
+    },
+    {
+      "name": "LiCrO2",
+      "formula": "LiCrO2"
+    },
+    {
+      "name": "LiNi0.9Co0.05Mn0.05O2",
+      "formula": "LiNi0.9Co0.05Mn0.05O2"
+    },
+    {
+      "name": "LiNi0.95Al0.05O2",
+      "formula": "LiNi0.95Al0.05O2"
+    },
+    {
+      "name": "NiMn60",
+      "formula": "LiNi0.6Mn0.4O2"
+    },
+    {
+      "name": "NiMn70",
+      "formula": "LiNi0.7Mn0.3O2"
+    },
+    {
+      "name": "CoAl90",
+      "formula": "LiCo0.9Al0.1O2"
+    },
+    {
+      "name": "CoAl80",
+      "formula": "LiCo0.8Al0.2O2"
+    },
+    {
+      "name": "NMC442",
+      "formula": "LiNi0.4Mn0.4Co0.2O2"
+    },
+    {
+      "name": "NMC331",
+      "formula": "LiNi0.3Co0.5Mn0.2O2"
+    },
+    {
+      "name": "NMC85105",
+      "formula": "LiNi0.85Co0.1Mn0.05O2"
+    },
+    {
+      "name": "ZMChB",
+      "formula": "LiNi0.8Mn0.1Co0.08Zr0.02O2"
+    },
+    {
+      "name": "TiChB",
+      "formula": "LiNi0.8Mn0.1Co0.08Ti0.02O2"
+    },
+    {
+      "name": "MgChB",
+      "formula": "LiNi0.8Mn0.1Co0.08Mg0.02O2"
+    },
+    {
+      "name": "Layered-LiMnO2",
+      "formula": "LiMnO2"
+    },
+    {
+      "name": "NiCo70",
+      "formula": "LiNi0.7Co0.3O2"
+    },
+    {
+      "name": "NiCo40",
+      "formula": "LiNi0.4Co0.6O2"
+    },
+    {
+      "name": "NiMnCo60",
+      "formula": "LiNi0.6Co0.3Mn0.1O2"
+    },
+    {
+      "name": "AChB",
+      "formula": "LiNi0.8Co0.1Al0.1O2"
+    },
+    {
+      "name": "LiFePO4",
+      "formula": "LiFePO4"
+    },
+    {
+      "name": "LiCoPO4",
+      "formula": "LiCoPO4"
+    },
+    {
+      "name": "LiNiPO4",
+      "formula": "LiNiPO4"
+    },
+    {
+      "name": "LiMnPO4",
+      "formula": "LiMnPO4"
+    },
+    {
+      "name": "LiFeMn46",
+      "formula": "LiFe0.6Mn0.4PO4"
+    },
+    {
+      "name": "LiFeMn55",
+      "formula": "LiFe0.5Mn0.5PO4"
+    },
+    {
+      "name": "LiCoFe55",
+      "formula": "LiCo0.5Fe0.5PO4"
+    },
+    {
+      "name": "LiCoMn37",
+      "formula": "LiCo0.7Mn0.3PO4"
+    },
+    {
+      "name": "LiNiCo55",
+      "formula": "LiNi0.5Co0.5PO4"
+    },
+    {
+      "name": "LiMnFe37",
+      "formula": "LiMn0.7Fe0.3PO4"
+    },
+    {
+      "name": "LiCoMn82",
+      "formula": "LiCo0.8Mn0.2PO4"
+    },
+    {
+      "name": "LiFeMn82",
+      "formula": "LiFe0.8Mn0.2PO4"
+    },
+    {
+      "name": "LiNiMn46",
+      "formula": "LiNi0.4Mn0.6PO4"
+    },
+    {
+      "name": "LiFeCoMn532",
+      "formula": "LiFe0.5Co0.3Mn0.2PO4"
+    },
+    {
+      "name": "LiMnCo55",
+      "formula": "LiMn0.5Co0.5PO4"
+    },
+    {
+      "name": "LiFeMn73",
+      "formula": "LiFe0.7Mn0.3PO4"
+    },
+    {
+      "name": "LiCoNi91",
+      "formula": "LiCo0.9Ni0.1PO4"
+    },
+    {
+      "name": "LiMnFe55",
+      "formula": "LiMn0.55Fe0.45PO4"
+    },
+    {
+      "name": "LiCoMn64",
+      "formula": "LiCo0.6Mn0.4PO4"
+    },
+    {
+      "name": "LiFeMn46",
+      "formula": "LiFe0.4Mn0.6PO4"
+    },
+    {
+      "name": "NMC55-30-15",
+      "formula": "LiNi0.55Mn0.3Co0.15O2"
+    },
+    {
+      "name": "NMC65-20-15",
+      "formula": "LiNi0.65Mn0.2Co0.15O2"
+    },
+    {
+      "name": "NMC76-10-14",
+      "formula": "LiNi0.76Mn0.1Co0.14O2"
+    },
+    {
+      "name": "NMC11-25-15",
+      "formula": "LiCo0.6Mn0.25Ni0.15O2"
+    },
+    {
+      "name": "NiMnA55",
+      "formula": "LiNi0.55Mn0.35Al0.1O2"
+    },
+    {
+      "name": "NiMnA70",
+      "formula": "LiNi0.7Mn0.25Al0.05O2"
+    },
+    {
+      "name": "NiCoA75",
+      "formula": "LiNi0.75Co0.2Al0.05O2"
+    },
+    {
+      "name": "NiCoA85",
+      "formula": "LiNi0.85Co0.1Al0.05O2"
+    },
+    {
+      "name": "LNO-Mg3",
+      "formula": "LiNi0.97Mg0.03O2"
+    },
+    {
+      "name": "LNO-Ti3",
+      "formula": "LiNi0.97Ti0.03O2"
+    },
+    {
+      "name": "LNO-B3",
+      "formula": "LiNi0.97B0.03O2"
+    },
+    {
+      "name": "LCO-Al8",
+      "formula": "LiCo0.92Al0.08O2"
+    },
+    {
+      "name": "LCO-Zr2",
+      "formula": "LiCo0.98Zr0.02O2"
+    },
+    {
+      "name": "LCO-B2",
+      "formula": "LiCo0.98B0.02O2"
+    },
+    {
+      "name": "NMC92-5-3",
+      "formula": "LiNi0.92Mn0.05Co0.03O2"
+    },
+    {
+      "name": "NiMnCoA8",
+      "formula": "LiNi0.8Mn0.1Al0.08Co0.02O2"
+    },
+    {
+      "name": "NiMnA85",
+      "formula": "LiNi0.85Mn0.1Al0.05O2"
+    },
+    {
+      "name": "NiMnMA",
+      "formula": "LiNi0.8Mn0.12Al0.06Mg0.02O2"
+    },
+    {
+      "name": "NiCoM70",
+      "formula": "LiNi0.7Co0.27Mg0.03O2"
+    },
+    {
+      "name": "NM80",
+      "formula": "LiNi0.8Mn0.2O2"
+    },
+    {
+      "name": "NC80",
+      "formula": "LiNi0.8Co0.2O2"
+    },
+    {
+      "name": "NMA75",
+      "formula": "LiNi0.75Mn0.2Al0.05O2"
+    },
+    {
+      "name": "LMO2c",
+      "formula": "LiNi0.6Co0.2Mn0.2O2"
+    },
+    {
+      "name": "LiNiCoMg2",
+      "formula": "LiNi0.7Co0.28Mg0.02O2"
+    },
+    {
+      "name": "OliFeMn28",
+      "formula": "LiFe0.2Mn0.8PO4"
+    },
+    {
+      "name": "OliCoFe28",
+      "formula": "LiCo0.2Fe0.8PO4"
+    },
+    {
+      "name": "OliCoFe64",
+      "formula": "LiCo0.6Fe0.4PO4"
+    },
+    {
+      "name": "OliCoMn19",
+      "formula": "LiCo0.1Mn0.9PO4"
+    },
+    {
+      "name": "OliNiFe46",
+      "formula": "LiNi0.4Fe0.6PO4"
+    },
+    {
+      "name": "OliNiCo28",
+      "formula": "LiNi0.2Co0.8PO4"
+    },
+    {
+      "name": "OliNiMn28",
+      "formula": "LiNi0.2Mn0.8PO4"
+    },
+    {
+      "name": "OliCoMnNi",
+      "formula": "LiCo0.5Mn0.3Ni0.2PO4"
+    },
+    {
+      "name": "OliFeMnNi",
+      "formula": "LiFe0.5Mn0.3Ni0.2PO4"
+    },
+    {
+      "name": "OliFeCoMn3",
+      "formula": "LiFe0.3Co0.4Mn0.3PO4"
+    },
+    {
+      "name": "OliNiCoFe",
+      "formula": "LiNi0.4Co0.3Fe0.3PO4"
+    },
+    {
+      "name": "OliMnCoNi",
+      "formula": "LiMn0.5Co0.3Ni0.2PO4"
+    },
+    {
+      "name": "LMO",
+      "formula": "LiMn2O4"
+    },
+    {
+      "name": "LNMO",
+      "formula": "LiNi0.5Mn1.5O4"
+    },
+    {
+      "name": "LCMO",
+      "formula": "LiCoMnO4"
+    },
+    {
+      "name": "LiCrMnO4",
+      "formula": "LiCrMnO4"
+    },
+    {
+      "name": "LiNiVO4",
+      "formula": "LiNiVO4"
+    },
+    {
+      "name": "LiCuMn",
+      "formula": "LiCu0.5Mn1.5O4"
+    },
+    {
+      "name": "LiVPO4F",
+      "formula": "LiVPO4F"
+    },
+    {
+      "name": "Li2CoPO4F",
+      "formula": "Li2CoPO4F"
+    },
+    {
+      "name": "Li2NiPO4F",
+      "formula": "Li2NiPO4F"
+    },
+    {
+      "name": "NVP",
+      "formula": "Li3V2(PO4)3"
+    },
+    {
+      "name": "Li2MnO2F",
+      "formula": "Li2MnO2F"
+    },
+    {
+      "name": "Li2NiO2F",
+      "formula": "Li2NiO2F"
+    },
+    {
+      "name": "Na3V2",
+      "formula": "Na3V2(PO4)3"
+    },
+    {
+      "formula": "LiFePO4F",
+      "name": "tavorite fluorophosphate",
+      "note": "experimental ~2.75 V"
+    },
+    {
+      "formula": "LiFeSO4F",
+      "name": "tavorite fluorosulfate",
+      "note": "experimental 3.6 V; triplite polymorph 3.90 V"
+    },
+    {
+      "formula": "LiMnSO4F",
+      "name": "fluorosulfate",
+      "note": "synthesized but electrochemically inactive"
+    },
+    {
+      "formula": "LiCoSO4F",
+      "name": "fluorosulfate",
+      "note": "synthesized but electrochemically inactive"
+    },
+    {
+      "formula": "LiNiSO4F",
+      "name": "fluorosulfate",
+      "note": "synthesized but electrochemically inactive"
+    },
+    {
+      "formula": "Li2Fe(SO4)2",
+      "name": "marinite-type sulfate",
+      "note": "experimental 3.83 V; no template"
+    },
+    {
+      "formula": "LiFeSO4OH",
+      "name": "hydroxy-sulfate",
+      "note": "experimental 3.6 V; no template"
+    },
+    {
+      "formula": "Li3Fe2(PO4)3",
+      "name": "NASICON",
+      "note": "experimental 2.8 V"
+    },
+    {
+      "formula": "Li3Cr2(PO4)3",
+      "name": "NASICON",
+      "note": "experimental ~4.8 V (Cr4+/Cr3+)"
+    },
+    {
+      "formula": "Li3Ti2(PO4)3",
+      "name": "NASICON",
+      "note": "anode-side phase, ~2.5 V"
+    },
+    {
+      "formula": "LiNiPO4F",
+      "name": "found by the previous run of this contract",
+      "note": "folded into the known set before the v10 run"
+    },
+    {
+      "formula": "LiNi0.75Co0.25PO4",
+      "name": "found by the previous run of this contract",
+      "note": "folded into the known set before the v10 run"
+    },
+    {
+      "formula": "LiNi0.8Co0.2PO4",
+      "name": "found by the previous run of this contract",
+      "note": "folded into the known set before the v10 run"
+    },
+    {
+      "formula": "LiNi0.4Co0.6PO4",
+      "name": "found by the previous run of this contract",
+      "note": "folded into the known set before the v10 run"
+    },
+    {
+      "formula": "LiNi0.75Co0.25PO4F",
+      "name": "found by the previous run of this contract",
+      "note": "folded into the known set before the v10 run"
+    },
+    {
+      "formula": "LiNi0.5Co0.5PO4F",
+      "name": "found by the previous run of this contract",
+      "note": "folded into the known set before the v10 run"
+    }
+  ],
+  "n_membership": 115,
+  "points": [
+    {
+      "name": "LCO",
+      "formula": "LiCoO2",
+      "V": 3.3607373237609863,
+      "C": 191.6875712243198,
+      "stab": -1.580861409505208
+    },
+    {
+      "name": "NMC532",
+      "formula": "LiNi0.5Mn0.3Co0.2O2",
+      "V": 3.6167874336242676,
+      "C": 194.3050453265784,
+      "stab": -1.7242719014485672
+    },
+    {
+      "name": "NMC622",
+      "formula": "LiNi0.6Mn0.2Co0.2O2",
+      "V": 3.7888684272766113,
+      "C": 193.5522507727425,
+      "stab": -1.5924252827962233
+    },
+    {
+      "name": "NMC811",
+      "formula": "LiNi0.8Mn0.1Co0.1O2",
+      "V": 3.802799701690674,
+      "C": 192.8527924548643,
+      "stab": -1.2085324605305985
+    },
+    {
+      "name": "NCA",
+      "formula": "LiNi0.8Co0.15Al0.05O2",
+      "V": 3.7645153999328613,
+      "C": 195.2574773533996,
+      "stab": -1.0926442464192707
+    },
+    {
+      "name": "LNO",
+      "formula": "LiNiO2",
+      "V": 3.889549732208252,
+      "C": 192.15837133270236,
+      "stab": -0.9853970845540365
+    },
+    {
+      "name": "LNM-single",
+      "formula": "LiNi0.5Mn0.5O2",
+      "V": 3.701145648956299,
+      "C": 195.92641980518667,
+      "stab": -1.961192067464192
+    },
+    {
+      "name": "LCO-Ni50",
+      "formula": "LiCo0.5Ni0.5O2",
+      "V": 3.5820107460021973,
+      "C": 191.92268255233543,
+      "stab": -1.2962590535481766
+    },
+    {
+      "name": "LCO-Mg5",
+      "formula": "LiCo0.95Mg0.05O2",
+      "V": 3.444153308868408,
+      "C": 195.13966460210824,
+      "stab": -1.5153058369954424
+    },
+    {
+      "name": "LCO-Ti5",
+      "formula": "LiCo0.95Ti0.05O2",
+      "V": 3.408207416534424,
+      "C": 192.77740830958962,
+      "stab": -1.768849690755208
+    },
+    {
+      "name": "NCM-boron",
+      "formula": "LiNi0.8Mn0.1Co0.08B0.02O2",
+      "V": 3.8205018043518066,
+      "C": 194.77982251225106,
+      "stab": -1.2142285664876296
+    },
+    {
+      "name": "LiCrO2",
+      "formula": "LiCrO2",
+      "V": 3.557896137237549,
+      "C": 206.31056271505528,
+      "stab": -3.2212498982747393
+    },
+    {
+      "name": "LiNi0.9Co0.05Mn0.05O2",
+      "formula": "LiNi0.9Co0.05Mn0.05O2",
+      "V": 3.881409168243408,
+      "C": 192.50495565129967,
+      "stab": -1.0402959187825518
+    },
+    {
+      "name": "LiNi0.95Al0.05O2",
+      "formula": "LiNi0.95Al0.05O2",
+      "V": 3.9056897163391113,
+      "C": 195.3306001020217,
+      "stab": -1.0938458760579426
+    },
+    {
+      "name": "NiMn60",
+      "formula": "LiNi0.6Mn0.4O2",
+      "V": 3.7862744331359863,
+      "C": 195.16103422059493,
+      "stab": -1.8223630269368485
+    },
+    {
+      "name": "NiMn70",
+      "formula": "LiNi0.7Mn0.3O2",
+      "V": 3.8268628120422363,
+      "C": 194.4016053162212,
+      "stab": -1.6650929768880207
+    },
+    {
+      "name": "CoAl90",
+      "formula": "LiCo0.9Al0.1O2",
+      "V": 3.4643025398254395,
+      "C": 198.15659935193085,
+      "stab": -1.6315533955891928
+    },
+    {
+      "name": "CoAl80",
+      "formula": "LiCo0.8Al0.2O2",
+      "V": 3.4697957038879395,
+      "C": 205.07750799016628,
+      "stab": -1.6885739644368485
+    },
+    {
+      "name": "NMC442",
+      "formula": "LiNi0.4Mn0.4Co0.2O2",
+      "V": 3.615490436553955,
+      "C": 195.06371852396865,
+      "stab": -1.8912953694661452
+    },
+    {
+      "name": "NMC331",
+      "formula": "LiNi0.3Co0.5Mn0.2O2",
+      "V": 3.641727924346924,
+      "C": 193.40870883764472,
+      "stab": -1.6136044820149733
+    },
+    {
+      "name": "NMC85105",
+      "formula": "LiNi0.85Co0.1Mn0.05O2",
+      "V": 3.820631504058838,
+      "C": 192.48127554232414,
+      "stab": -1.2085324605305985
+    },
+    {
+      "name": "ZMChB",
+      "formula": "LiNi0.8Mn0.1Co0.08Zr0.02O2",
+      "V": 3.83378267288208,
+      "C": 191.58095881218506,
+      "stab": -1.2142278035481766
+    },
+    {
+      "name": "TiChB",
+      "formula": "LiNi0.8Mn0.1Co0.08Ti0.02O2",
+      "V": 3.823395252227783,
+      "C": 193.29254921754574,
+      "stab": -1.2142285664876296
+    },
+    {
+      "name": "MgChB",
+      "formula": "LiNi0.8Mn0.1Co0.08Mg0.02O2",
+      "V": 3.8192391395568848,
+      "C": 194.23558730010097,
+      "stab": -1.2142278035481766
+    },
+    {
+      "name": "Layered-LiMnO2",
+      "formula": "LiMnO2",
+      "V": 3.1432156562805176,
+      "C": 199.84519989780333,
+      "stab": -2.7666081746419264
+    },
+    {
+      "name": "NiCo70",
+      "formula": "LiNi0.7Co0.3O2",
+      "V": 3.74570894241333,
+      "C": 192.01688865115318,
+      "stab": -1.192117818196614
+    },
+    {
+      "name": "NiCo40",
+      "formula": "LiNi0.4Co0.6O2",
+      "V": 3.6070446968078613,
+      "C": 191.875614158521,
+      "stab": -1.3445195515950514
+    },
+    {
+      "name": "NiMnCo60",
+      "formula": "LiNi0.6Co0.3Mn0.1O2",
+      "V": 3.665182590484619,
+      "C": 192.75776456213424,
+      "stab": -1.3598561604817707
+    },
+    {
+      "name": "AChB",
+      "formula": "LiNi0.8Co0.1Al0.1O2",
+      "V": 3.8579583168029785,
+      "C": 198.5589189766867,
+      "stab": -1.1474019368489579
+    },
+    {
+      "name": "LiFePO4",
+      "formula": "LiFePO4",
+      "V": 3.464881102244059,
+      "C": 118.92336726573811,
+      "stab": -2.36837666829427
+    },
+    {
+      "name": "LiCoPO4",
+      "formula": "LiCoPO4",
+      "V": 3.71360445022583,
+      "C": 116.64006796283465,
+      "stab": -1.97050557454427
+    },
+    {
+      "name": "LiMnPO4",
+      "formula": "LiMnPO4",
+      "V": 3.611217975616455,
+      "C": 119.61101701189718,
+      "stab": -2.6567769368489573
+    },
+    {
+      "name": "LiFeMn46",
+      "formula": "LiFe0.6Mn0.4PO4",
+      "V": 3.6012234687805176,
+      "C": 119.19747617738803,
+      "stab": -2.514403279622395
+    },
+    {
+      "name": "LiFeMn55",
+      "formula": "LiFe0.5Mn0.5PO4",
+      "V": 3.505652586619059,
+      "C": 119.2662009564042,
+      "stab": -2.5155336507161463
+    },
+    {
+      "name": "LiCoFe55",
+      "formula": "LiCo0.5Fe0.5PO4",
+      "V": 3.7717302640279136,
+      "C": 117.77065168696711,
+      "stab": -2.1517470296223964
+    },
+    {
+      "name": "LiCoMn37",
+      "formula": "LiCo0.7Mn0.3PO4",
+      "V": 3.72001314163208,
+      "C": 117.51573966194869,
+      "stab": -2.123556111653646
+    },
+    {
+      "name": "LiNiCo55",
+      "formula": "LiNi0.5Co0.5PO4",
+      "V": 5.113659381866455,
+      "C": 116.72707866537014,
+      "stab": -1.927514241536458
+    },
+    {
+      "name": "LiMnFe37",
+      "formula": "LiMn0.7Fe0.3PO4",
+      "V": 3.610058307647705,
+      "C": 119.40388853362994,
+      "stab": -2.5884615071614574
+    },
+    {
+      "name": "LiCoMn82",
+      "formula": "LiCo0.8Mn0.2PO4",
+      "V": 3.7106035550435386,
+      "C": 117.22239183609398,
+      "stab": -2.1224416097005205
+    },
+    {
+      "name": "LiFeMn82",
+      "formula": "LiFe0.8Mn0.2PO4",
+      "V": 3.356635252634684,
+      "C": 119.06026395356939,
+      "stab": -2.4418690999348955
+    },
+    {
+      "name": "LiNiMn46",
+      "formula": "LiNi0.4Mn0.6PO4",
+      "V": 4.7958137194315595,
+      "C": 118.47637956241547,
+      "stab": -2.2411031087239577
+    },
+    {
+      "name": "LiFeCoMn532",
+      "formula": "LiFe0.5Co0.3Mn0.2PO4",
+      "V": 3.6141374905904136,
+      "C": 118.36434784742524,
+      "stab": -2.3629671223958324
+    },
+    {
+      "name": "LiMnCo55",
+      "formula": "LiMn0.5Co0.5PO4",
+      "V": 4.49009370803833,
+      "C": 118.10686206891818,
+      "stab": -2.3396608479817713
+    },
+    {
+      "name": "LiFeMn73",
+      "formula": "LiFe0.7Mn0.3PO4",
+      "V": 3.866533120473226,
+      "C": 119.12883055533656,
+      "stab": -2.4422133382161464
+    },
+    {
+      "name": "LiCoNi91",
+      "formula": "LiCo0.9Ni0.1PO4",
+      "V": 4.470140298207601,
+      "C": 116.6574597242711,
+      "stab": -1.98205830891927
+    },
+    {
+      "name": "LiMnFe55",
+      "formula": "LiMn0.55Fe0.45PO4",
+      "V": 4.393124103546143,
+      "C": 119.30059307257287,
+      "stab": -2.5124818929036463
+    },
+    {
+      "name": "LiCoMn64",
+      "formula": "LiCo0.6Mn0.4PO4",
+      "V": 4.403108437856038,
+      "C": 117.81055937098965,
+      "stab": -2.351443684895833
+    },
+    {
+      "name": "LiFeMn46",
+      "formula": "LiFe0.4Mn0.6PO4",
+      "V": 3.3959673245747886,
+      "C": 119.33500502938082,
+      "stab": -2.511969807942708
+    },
+    {
+      "name": "NMC55-30-15",
+      "formula": "LiNi0.55Mn0.3Co0.15O2",
+      "V": 3.721924304962158,
+      "C": 194.32917633005343,
+      "stab": -1.5841946919759113
+    },
+    {
+      "name": "NMC65-20-15",
+      "formula": "LiNi0.65Mn0.2Co0.15O2",
+      "V": 3.858726978302002,
+      "C": 193.5761951457812,
+      "stab": -1.4281545003255207
+    },
+    {
+      "name": "NMC76-10-14",
+      "formula": "LiNi0.76Mn0.1Co0.14O2",
+      "V": 3.7715821266174316,
+      "C": 192.83377938139003,
+      "stab": -1.262777455647786
+    },
+    {
+      "name": "NMC11-25-15",
+      "formula": "LiCo0.6Mn0.25Ni0.15O2",
+      "V": 3.387058734893799,
+      "C": 193.73583244633218,
+      "stab": -1.7985364278157547
+    },
+    {
+      "name": "NiMnA55",
+      "formula": "LiNi0.55Mn0.35Al0.1O2",
+      "V": 3.9220776557922363,
+      "C": 201.41183156707578,
+      "stab": -1.7670956929524735
+    },
+    {
+      "name": "NiMnA70",
+      "formula": "LiNi0.7Mn0.25Al0.05O2",
+      "V": 3.8271565437316895,
+      "C": 197.25874973476076,
+      "stab": -1.588329060872396
+    },
+    {
+      "name": "NiCoA75",
+      "formula": "LiNi0.75Co0.2Al0.05O2",
+      "V": 3.8232312202453613,
+      "C": 195.23311526846425,
+      "stab": -1.198813374837239
+    },
+    {
+      "name": "NiCoA85",
+      "formula": "LiNi0.85Co0.1Al0.05O2",
+      "V": 3.92411470413208,
+      "C": 195.2818455191195,
+      "stab": -1.1468938191731768
+    },
+    {
+      "name": "LNO-Mg3",
+      "formula": "LiNi0.97Mg0.03O2",
+      "V": 3.8635830879211426,
+      "C": 194.21051824138465,
+      "stab": -0.9853970845540365
+    },
+    {
+      "name": "LNO-Ti3",
+      "formula": "LiNi0.97Ti0.03O2",
+      "V": 3.8646721839904785,
+      "C": 192.79974963725638,
+      "stab": -0.9853970845540365
+    },
+    {
+      "name": "LNO-B3",
+      "formula": "LiNi0.97B0.03O2",
+      "V": 3.8646721839904785,
+      "C": 195.0278048958172,
+      "stab": -0.9853970845540365
+    },
+    {
+      "name": "LCO-Al8",
+      "formula": "LiCo0.92Al0.08O2",
+      "V": 3.4686741828918457,
+      "C": 196.82809746661493,
+      "stab": -1.6315533955891928
+    },
+    {
+      "name": "LCO-Zr2",
+      "formula": "LiCo0.98Zr0.02O2",
+      "V": 3.360729694366455,
+      "C": 190.43100998201143,
+      "stab": -1.580860646565755
+    },
+    {
+      "name": "LCO-B2",
+      "formula": "LiCo0.98B0.02O2",
+      "V": 3.3642773628234863,
+      "C": 193.59127037303574,
+      "stab": -1.580860646565755
+    },
+    {
+      "name": "NMC92-5-3",
+      "formula": "LiNi0.92Mn0.05Co0.03O2",
+      "V": 3.8586087226867676,
+      "C": 192.5144293263945,
+      "stab": -1.1601483662923178
+    },
+    {
+      "name": "NiMnCoA8",
+      "formula": "LiNi0.8Mn0.1Al0.08Co0.02O2",
+      "V": 3.9082512855529785,
+      "C": 198.0568529564148,
+      "stab": -1.266337331136067
+    },
+    {
+      "name": "NiMnA85",
+      "formula": "LiNi0.85Mn0.1Al0.05O2",
+      "V": 3.879700183868408,
+      "C": 196.0973188892101,
+      "stab": -1.263427480061849
+    },
+    {
+      "name": "NiMnMA",
+      "formula": "LiNi0.8Mn0.12Al0.06Mg0.02O2",
+      "V": 4.028522968292236,
+      "C": 198.33623653269873,
+      "stab": -1.263499959309896
+    },
+    {
+      "name": "NiCoM70",
+      "formula": "LiNi0.7Co0.27Mg0.03O2",
+      "V": 3.7888455390930176,
+      "C": 194.0804409239956,
+      "stab": -1.147278340657552
+    },
+    {
+      "name": "NM80",
+      "formula": "LiNi0.8Mn0.2O2",
+      "V": 3.904972553253174,
+      "C": 193.6480638240309,
+      "stab": -1.3317029317220053
+    },
+    {
+      "name": "NC80",
+      "formula": "LiNi0.8Co0.2O2",
+      "V": 3.774200916290283,
+      "C": 192.06402639018643,
+      "stab": -1.096445210774739
+    },
+    {
+      "name": "NMA75",
+      "formula": "LiNi0.75Mn0.2Al0.05O2",
+      "V": 3.9471287727355957,
+      "C": 196.87008050094184,
+      "stab": -1.4355000813802077
+    },
+    {
+      "name": "LMO2c",
+      "formula": "LiNi0.6Co0.2Mn0.2O2",
+      "V": 3.696045398712158,
+      "C": 193.55225077274247,
+      "stab": -1.4770383199055983
+    },
+    {
+      "name": "LiNiCoMg2",
+      "formula": "LiNi0.7Co0.28Mg0.02O2",
+      "V": 3.800346851348877,
+      "C": 193.38767966271456,
+      "stab": -1.147022755940755
+    },
+    {
+      "name": "OliFeMn28",
+      "formula": "LiFe0.2Mn0.8PO4",
+      "V": 3.58726167678833,
+      "C": 119.4728516067809,
+      "stab": -2.588464558919271
+    },
+    {
+      "name": "OliCoFe28",
+      "formula": "LiCo0.2Fe0.8PO4",
+      "V": 3.597174803415934,
+      "C": 118.45958378241777,
+      "stab": -2.290812581380208
+    },
+    {
+      "name": "OliCoFe64",
+      "formula": "LiCo0.6Fe0.4PO4",
+      "V": 4.104931354522705,
+      "C": 117.54278494807969,
+      "stab": -2.2098036702473953
+    },
+    {
+      "name": "OliCoMn19",
+      "formula": "LiCo0.1Mn0.9PO4",
+      "V": 3.5831621487935386,
+      "C": 119.30712881371093,
+      "stab": -2.654739583333334
+    },
+    {
+      "name": "OliNiFe46",
+      "formula": "LiNi0.4Fe0.6PO4",
+      "V": 4.582338174184163,
+      "C": 118.0706339555576,
+      "stab": -2.100637410481771
+    },
+    {
+      "name": "OliNiCo28",
+      "formula": "LiNi0.2Co0.8PO4",
+      "V": 4.024375120798747,
+      "C": 116.67485667292117,
+      "stab": -1.898971761067708
+    },
+    {
+      "name": "OliNiMn28",
+      "formula": "LiNi0.2Mn0.8PO4",
+      "V": 4.360612710316976,
+      "C": 119.0409946536161,
+      "stab": -2.450198567708333
+    },
+    {
+      "name": "OliCoMnNi",
+      "formula": "LiCo0.5Mn0.3Ni0.2PO4",
+      "V": 4.892295042673747,
+      "C": 117.55105276219902,
+      "stab": -2.1433601888020837
+    },
+    {
+      "name": "OliFeMnNi",
+      "formula": "LiFe0.5Mn0.3Ni0.2PO4",
+      "V": 4.201794147491455,
+      "C": 118.69945260906417,
+      "stab": -2.30893575032552
+    },
+    {
+      "name": "OliFeCoMn3",
+      "formula": "LiFe0.3Co0.4Mn0.3PO4",
+      "V": 4.250169595082601,
+      "C": 118.20168394259032,
+      "stab": -2.2709273274739585
+    },
+    {
+      "name": "OliMnCoNi",
+      "formula": "LiMn0.5Co0.3Ni0.2PO4",
+      "V": 4.832612832387288,
+      "C": 118.14253137734114,
+      "stab": -2.2967549641927087
+    },
+    {
+      "name": "spinel recompute (was 8.911, bug)",
+      "formula": "LiMn2O4",
+      "V": 3.7697466214497886,
+      "C": 103.7583655398795,
+      "stab": -2.604686482747396
+    },
+    {
+      "name": "spinel recompute (was 8.263, bug)",
+      "formula": "LiNi0.5Mn1.5O4",
+      "V": 4.334474404652913,
+      "C": 102.69195673979098,
+      "stab": -2.1795052083333326
+    },
+    {
+      "name": "spinel recompute (was 8.597, bug)",
+      "formula": "LiCoMnO4",
+      "V": 4.017590045928955,
+      "C": 101.51535600052462,
+      "stab": -1.9754506429036462
+    },
+    {
+      "name": "spinel recompute (was 8.631, bug)",
+      "formula": "LiCrMnO4",
+      "V": 4.248246987660726,
+      "C": 105.47448795485782,
+      "stab": -2.8638258870442703
+    },
+    {
+      "name": "spinel recompute (was 8.195, bug)",
+      "formula": "LiNiVO4",
+      "V": 4.167741616566976,
+      "C": 103.89695442576013,
+      "stab": -2.0189510091145833
+    },
+    {
+      "name": "spinel recompute (was 8.389, bug)",
+      "formula": "LiCu0.5Mn1.5O4",
+      "V": 4.110490640004476,
+      "C": 101.34600120757673,
+      "stab": -1.9822914632161455
+    },
+    {
+      "name": "tavorite phosphate, exp ~4.2V (was membership-only)",
+      "formula": "LiVPO4F",
+      "V": 3.580034097035726,
+      "C": 109.16956304396737,
+      "stab": -2.287896868826329
+    },
+    {
+      "name": "tavorite sulfate, exp 3.6V (new documented member)",
+      "formula": "LiFeSO4F",
+      "V": 3.435925006866455,
+      "C": 105.48975446553938,
+      "stab": -1.3246689719715334
+    },
+    {
+      "name": "tavorite sulfate, synthesized but inactive",
+      "formula": "LiMnSO4F",
+      "V": 3.961107095082601,
+      "C": 106.03047128592338,
+      "stab": -1.579187678194594
+    },
+    {
+      "name": "tavorite sulfate, synthesized but inactive",
+      "formula": "LiCoSO4F",
+      "V": 4.2816535631815595,
+      "C": 103.68925939585367,
+      "stab": -1.0409801965472338
+    },
+    {
+      "name": "tavorite sulfate, synthesized but inactive",
+      "formula": "LiNiSO4F",
+      "V": 4.942125161488851,
+      "C": 103.82686204382647,
+      "stab": -0.8354811394351653
+    },
+    {
+      "name": "NASICON, exp ~4.8V Cr4+/Cr3+ (new documented member)",
+      "formula": "Li3Cr2(PO4)3",
+      "V": 4.404079914093018,
+      "C": 45.788859476351895,
+      "stab": -2.4563318888346357
+    },
+    {
+      "name": "NASICON, exp ~2.5V (anode-side phase)",
+      "formula": "Li3Ti2(PO4)3",
+      "V": 1.86832857131958,
+      "C": 46.73072944535786,
+      "stab": -2.527637057834201
+    },
+    {
+      "name": "LiNiPO4F",
+      "formula": "LiNiPO4F",
+      "V": 5.487805128097534,
+      "C": 104.4576927217053,
+      "stab": -1.2199385412808121
+    },
+    {
+      "name": "LiNi0.75Co0.25PO4",
+      "formula": "LiNi0.75Co0.25PO4",
+      "V": 5.4171,
+      "C": 116.77,
+      "stab": -1.8722
+    },
+    {
+      "name": "LiNi0.8Co0.2PO4",
+      "formula": "LiNi0.8Co0.2PO4",
+      "V": 5.4111,
+      "C": 116.78,
+      "stab": -1.8722
+    },
+    {
+      "name": "LiNi0.4Co0.6PO4",
+      "formula": "LiNi0.4Co0.6PO4",
+      "V": 5.4005,
+      "C": 116.71,
+      "stab": -1.9305
+    },
+    {
+      "name": "LiNi0.75Co0.25PO4F",
+      "formula": "LiNi0.75Co0.25PO4F",
+      "V": 5.3863,
+      "C": 104.42,
+      "stab": -1.2942
+    },
+    {
+      "name": "LiNi0.5Co0.5PO4F",
+      "formula": "LiNi0.5Co0.5PO4F",
+      "V": 5.3052,
+      "C": 104.39,
+      "stab": -1.3632
+    }
+  ],
+  "n_points": 102,
+  "excluded": [
+    {
+      "name": "LiNiPO4",
+      "reason": "calibration outlier 7.016 V (CHGNet Ni-olivine high-voltage overestimate; literature ~5.1 V)"
+    },
+    {
+      "name": "OliNiCoFe",
+      "reason": "calibration outlier 6.067 V (same Ni-olivine overestimate family; Ni>=0.4 phosphate computed high)"
+    },
+    {
+      "formula": "LiMn2O4",
+      "reason": "sealed v1 value invalid (spinel site-mix-up bug); recomputed in v2"
+    },
+    {
+      "formula": "LiNi0.5Mn1.5O4",
+      "reason": "sealed v1 value invalid (spinel site-mix-up bug); recomputed in v2"
+    },
+    {
+      "formula": "LiCoMnO4",
+      "reason": "sealed v1 value invalid (spinel site-mix-up bug); recomputed in v2"
+    },
+    {
+      "formula": "LiCrMnO4",
+      "reason": "sealed v1 value invalid (spinel site-mix-up bug); recomputed in v2"
+    },
+    {
+      "formula": "LiNiVO4",
+      "reason": "sealed v1 value invalid (spinel site-mix-up bug); recomputed in v2"
+    },
+    {
+      "formula": "LiCu0.5Mn1.5O4",
+      "reason": "sealed v1 value invalid (spinel site-mix-up bug); recomputed in v2"
+    },
+    {
+      "formula": "Li2MnO3",
+      "reason": "unsupported framework under strict dispatch (was force-fitted into the NMC811 layered prototype); kept in the membership layer only, no hull point"
+    },
+    {
+      "formula": "LiFePO4F",
+      "reason": "computed 4.919 V vs literature ~2.75 V (+2.2 V): tavorite-phosphate template validated on V, not trustworthy for Fe"
+    },
+    {
+      "formula": "Li3Fe2(PO4)3",
+      "reason": "computed 4.699 V vs literature 2.8 V (+1.9 V): NASICON template validated on V, not trustworthy for Fe"
+    }
+  ],
+  "dims": [
+    "avg_voltage_v",
+    "capacity_mah_g",
+    "rel_stability_ev_atom"
+  ],
+  "sealing": {
+    "v1_n_points": 90,
+    "v1_n_membership": 99,
+    "dropped_points": [
+      "Li2MnO3",
+      "LiMn2O4",
+      "LiNi0.5Mn1.5O4",
+      "LiCoMnO4",
+      "LiCrMnO4",
+      "LiNiVO4",
+      "LiCu0.5Mn1.5O4"
+    ],
+    "recomputed_points": [
+      "LiMn2O4",
+      "LiNi0.5Mn1.5O4",
+      "LiCoMnO4",
+      "LiCrMnO4",
+      "LiNiVO4",
+      "LiCu0.5Mn1.5O4",
+      "LiVPO4F",
+      "LiFePO4F",
+      "LiFeSO4F",
+      "LiMnSO4F",
+      "LiCoSO4F",
+      "LiNiSO4F",
+      "Li3Fe2(PO4)3",
+      "Li3Cr2(PO4)3",
+      "Li3Ti2(PO4)3"
+    ],
+    "membership_added": [
+      "LiFePO4F",
+      "LiFeSO4F",
+      "LiMnSO4F",
+      "LiCoSO4F",
+      "LiNiSO4F",
+      "Li2Fe(SO4)2",
+      "LiFeSO4OH",
+      "Li3Fe2(PO4)3",
+      "Li3Cr2(PO4)3",
+      "Li3Ti2(PO4)3"
+    ]
+  }
+}

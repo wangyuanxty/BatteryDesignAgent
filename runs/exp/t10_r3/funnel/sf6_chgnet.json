@@ -1,0 +1,12 @@
+{
+  "candidates": [
+    {
+      "smiles": "FS(F)(F)(F)(F)F",
+      "metrics": {
+        "energy_ev": -24.63898468017578,
+        "converged": false
+      },
+      "model": "chgnet"
+    }
+  ]
+}

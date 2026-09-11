@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "perfluoro-2-butanone",
+  "smiles": "O=C(C(F)(F)F)C(F)(F)F",
+  "n_atoms": 10,
+  "homo_ev": -14.2769,
+  "lumo_ev": -11.4824,
+  "mace_energy_ev": -58.02769470214844,
+  "mace_converged": true,
+  "chgnet_energy_ev": -60.87437057495117,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

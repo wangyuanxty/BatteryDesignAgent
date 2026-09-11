@@ -1,0 +1,27 @@
+{
+  "name": "candidate",
+  "smiles": "FC(F)(F)C(F)(F)N(C(F)(F)C(F)(F)F)C(F)(F)C(F)(F)F",
+  "n_atoms": 22,
+  "mace": {
+    "energy_ev": -123.38143157958984,
+    "converged": false
+  },
+  "chgnet": {
+    "energy_ev": -129.94345092773438,
+    "converged": false
+  },
+  "xtb": {
+    "homo_ev": -14.8818,
+    "lumo_ev": -5.7187,
+    "total_energy_ev": -2359.1832713615613
+  },
+  "point_per_atom": [
+    -5.6082468899813565,
+    -5.906520496715199,
+    -14.8818
+  ],
+  "in_envelope": false,
+  "hull_ref": "envelope_stats_v2.json",
+  "in_documented_families": false,
+  "families_matched": []
+}

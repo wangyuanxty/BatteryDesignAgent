@@ -1,0 +1,76 @@
+{
+  "baseline": {
+    "formula": "Li(Ni0.8Mn0.1Co0.1)O2",
+    "e_full_ev": -290.971923828125,
+    "e_li_metal_ev": -1.8784823417663574,
+    "converged": false
+  },
+  "candidates": [
+    {
+      "formula": "LiVPO4F",
+      "realized_tm_counts": {
+        "V": 8
+      },
+      "avg_voltage_v": 3.580034097035726,
+      "capacity_mah_g": 109.16956304396737,
+      "e_full_ev": -484.2890930175781,
+      "e_delith_ev": -451.5379943847656,
+      "converged": false,
+      "rel_stability_ev_atom": -2.287896868826329,
+      "name": "tavorite-phosphate 锚点 文献~4.1V"
+    },
+    {
+      "formula": "LiFeSO4F",
+      "realized_tm_counts": {
+        "Fe": 8
+      },
+      "avg_voltage_v": 3.435930093129476,
+      "capacity_mah_g": 105.48975446553938,
+      "e_full_ev": -428.4219055175781,
+      "e_delith_ev": -396.5354309082031,
+      "converged": false,
+      "rel_stability_ev_atom": -1.3246694981366733,
+      "name": "tavorite-sulfate 锚点 文献~3.6V"
+    },
+    {
+      "formula": "Li3V2(PO4)3",
+      "realized_tm_counts": {
+        "V": 8
+      },
+      "avg_voltage_v": 3.34702730178833,
+      "capacity_mah_g": 46.02579054458076,
+      "e_full_ev": -614.0057373046875,
+      "e_delith_ev": -572.20166015625,
+      "converged": false,
+      "rel_stability_ev_atom": -2.465942382812499,
+      "name": "NASICON 锚点 文献~3.8V"
+    },
+    {
+      "formula": "LiFePO4",
+      "realized_tm_counts": {
+        "Fe": 4
+      },
+      "avg_voltage_v": 3.442699909210205,
+      "capacity_mah_g": 118.92336726573811,
+      "e_full_ev": -210.69224548339844,
+      "e_delith_ev": -194.72869873046875,
+      "converged": false,
+      "rel_stability_ev_atom": -2.3657747395833324,
+      "name": "olivine 对照 文献~3.4V"
+    },
+    {
+      "formula": "LiNiSO4F",
+      "realized_tm_counts": {
+        "Ni": 8
+      },
+      "avg_voltage_v": 4.942125161488851,
+      "capacity_mah_g": 103.82686204382647,
+      "e_full_ev": -400.0489807128906,
+      "e_delith_ev": -359.1253356933594,
+      "converged": false,
+      "rel_stability_ev_atom": -0.8354811394351653,
+      "name": "新能力：氟硫酸盐 DFT 文献~5.35V"
+    }
+  ],
+  "calibration_note": "NMC811 基线自校准：文献平均电压 ≈3.8 V、理论容量 ≈194 mAh/g（x∈[0.3,1] 窗口）——若基线预测显著偏离，说明本批结果不可信（如实标注）。"
+}

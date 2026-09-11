@@ -1,0 +1,20 @@
+{
+  "candidates": [
+    {"name": "NiCo55CTRL", "formula": "LiNi0.5Co0.5PO4"},
+    {"name": "NiCo55-45", "formula": "LiNi0.55Co0.45PO4"},
+    {"name": "NiCo64", "formula": "LiNi0.6Co0.4PO4"},
+    {"name": "NiCo73", "formula": "LiNi0.7Co0.3PO4"},
+    {"name": "NiCo75-25", "formula": "LiNi0.75Co0.25PO4"},
+    {"name": "NiCo82", "formula": "LiNi0.8Co0.2PO4"},
+    {"name": "NiCo91", "formula": "LiNi0.9Co0.1PO4"},
+    {"name": "NiMn64", "formula": "LiNi0.6Mn0.4PO4"},
+    {"name": "NiMn73", "formula": "LiNi0.7Mn0.3PO4"},
+    {"name": "NiCoMn622", "formula": "LiNi0.6Co0.2Mn0.2PO4"},
+    {"name": "LNMO", "formula": "LiNi0.5Mn1.5O4"},
+    {"name": "LCMO", "formula": "LiCoMnO4"},
+    {"name": "LNMO-Co3", "formula": "LiNi0.5Mn1.2Co0.3O4"},
+    {"name": "LNMO-Co1", "formula": "LiNi0.4Co0.1Mn1.5O4"},
+    {"name": "LayeredProbe", "formula": "LiNi0.9Mn0.05Mg0.05O2"},
+    {"name": "NiFluoroPO4", "formula": "Li2NiPO4F"}
+  ]
+}

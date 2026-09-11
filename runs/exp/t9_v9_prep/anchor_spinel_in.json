@@ -1,0 +1,16 @@
+{
+ "candidates": [
+  {
+   "name": "spinel 锚点 文献~4.0V",
+   "formula": "LiMn2O4"
+  },
+  {
+   "name": "LNMO 锚点 文献~4.7V",
+   "formula": "LiNi0.5Mn1.5O4"
+  },
+  {
+   "name": "v8 sanity 候选 修复前8.010V",
+   "formula": "LiCo2O4"
+  }
+ ]
+}

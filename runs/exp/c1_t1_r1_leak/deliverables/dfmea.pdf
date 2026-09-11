@@ -1,0 +1,53 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+4 0 obj
+<< /Length 1580 >>
+stream
+BT /F1 8 Tf 11 TL 50 742 Td
+(VBF-C1T1R1 dfmea - Virtual Battery Factory deliverable) Tj T* T*
+(# DFMEA - Champion Cell R4-V3-margin \(c1_t1_r1\)) Tj T*
+(VBF-C1T1R1-DFMEA-001 I Virtual Battery Factory) Tj T*
+() Tj T*
+(S/O/D = severity/occurrence/detection engineering assessments \(1-10 scale\);) Tj T*
+(RPN = S x O x D. Mitigation and verification columns cite measured evidence where) Tj T*
+(available; no assessment below is a simulated value.) Tj T*
+() Tj T*
+(I Failure mode I Cause I Effect I S I O I D I RPN I Mitigation in design I Verification evidence I) Tj T*
+(I---I---I---I---I---I---I---I---I---I) Tj T*
+(I Lithium plating during 4C charge I anode-side concentration/kinetic polarization at 20 A I capacit) Tj T*
+(I Cell overheat > 60 C during 4C I I2R + entropic heating at 20 A I degradation, safety margin loss ) Tj T*
+(I Thermal runaway under overcharge to 4.7 V I excessive overcharge reactions I fire/venting I 10 I 1) Tj T*
+(I Electrolyte salt depletion at high current I low transference / diffusivity I concentration polari) Tj T*
+(I Re-plating from over-cooling I h too high slows kinetics I plating despite cooling I 6 I 2 I 2 I 2) Tj T*
+(I Thin separator \(8 um\) mechanical failure I manufacturing defect, dendrite I internal short I 9 I 2) Tj T*
+(I Thin current collectors \(8/6 um\) fatigue I tab weld stress I contact loss I 4 I 2 I 3 I 24 I stand) Tj T*
+() Tj T*
+(Top residual risks: thin-separator mechanical integrity \(RPN 54\) and salt depletion) Tj T*
+(\(RPN 36\) - both mitigated but recommended for cell-level manufacturing validation.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000000136 00000 n 
+0000000185 00000 n 
+0000001817 00000 n 
+trailer
+<< /Size 6 /Root 3 0 R >>
+startxref
+1943
+%%EOF

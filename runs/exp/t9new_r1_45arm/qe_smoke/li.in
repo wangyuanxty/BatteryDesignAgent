@@ -1,0 +1,40 @@
+&CONTROL
+  calculation = 'vc-relax',
+  etot_conv_thr = 0.0001,
+  forc_conv_thr = 0.001,
+  nstep = 60,
+  outdir = 'runs/exp/t9new_r1/qe_smoke//out',
+  prefix = 'li',
+  pseudo_dir = 'D://anaconda//envs//py312//share//sssp//efficiency',
+  tprnfor = .TRUE.,
+  tstress = .TRUE.,
+  verbosity = 'low',
+/
+&SYSTEM
+  degauss = 0.02,
+  ecutrho = 400.0,
+  ecutwfc = 50.0,
+  occupations = 'smearing',
+  ibrav = 0,
+  nat = 2,
+  ntyp = 1,
+/
+&ELECTRONS
+  conv_thr = 1d-07,
+  mixing_beta = 0.3,
+/
+&IONS
+/
+&CELL
+/
+ATOMIC_SPECIES
+  Li  6.9410 li_pbe_v1.4.uspp.F.UPF
+ATOMIC_POSITIONS crystal
+  Li 0.000000 0.000000 0.000000
+  Li 0.500000 0.500000 0.500000
+K_POINTS automatic
+  1 1 1 0 0 0
+CELL_PARAMETERS angstrom
+  3.510000 0.000000 0.000000
+  0.000000 3.510000 0.000000
+  0.000000 0.000000 3.510000

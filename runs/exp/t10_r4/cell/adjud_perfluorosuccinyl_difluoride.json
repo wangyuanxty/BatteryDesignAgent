@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "perfluorosuccinyl difluoride",
+  "smiles": "O=C(F)C(F)(F)C(F)(F)C(=O)F",
+  "n_atoms": 12,
+  "homo_ev": -14.4545,
+  "lumo_ev": -10.577,
+  "mace_energy_ev": -73.2489013671875,
+  "mace_converged": true,
+  "chgnet_energy_ev": -76.94567108154297,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

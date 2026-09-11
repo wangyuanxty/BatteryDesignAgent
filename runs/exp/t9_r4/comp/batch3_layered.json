@@ -1,0 +1,18 @@
+{
+  "candidates": [
+    {"formula": "LiBO2", "name": "LiBO2"},
+    {"formula": "LiAl0.5B0.5O2", "name": "AlB55"},
+    {"formula": "LiAl0.75B0.25O2", "name": "AlB73"},
+    {"formula": "LiAl0.9B0.1O2", "name": "AlB91"},
+    {"formula": "LiB0.75Al0.25O2", "name": "BAl73"},
+    {"formula": "LiB0.9Al0.1O2", "name": "BAl91"},
+    {"formula": "LiAl0.8B0.2O2", "name": "AlB82"},
+    {"formula": "LiAl0.6B0.4O2", "name": "AlB64"},
+    {"formula": "LiAl0.95B0.05O2", "name": "AlB95"},
+    {"formula": "LiGa0.5Al0.5O2", "name": "GaAl55"},
+    {"formula": "LiAl0.5Sc0.5O2", "name": "AlSc55"},
+    {"formula": "LiB0.5Ga0.5O2", "name": "BGa55"},
+    {"formula": "LiB0.5Sc0.5O2", "name": "BSc55"},
+    {"formula": "LiGa0.9Al0.1O2", "name": "GaAl91"}
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "baseline": {
+    "formula": "Li(Ni0.8Mn0.1Co0.1)O2",
+    "e_full_ev": -290.971923828125,
+    "e_li_metal_ev": -1.8784822225570679,
+    "converged": false
+  },
+  "candidates": [
+    {
+      "formula": "LiNi0.875Mg0.125PO4F",
+      "realized_tm_counts": {
+        "Ni": 7,
+        "Mg": 1
+      },
+      "avg_voltage_v": 5.508195837338765,
+      "capacity_mah_g": 107.01902890330234,
+      "e_full_ev": -422.56146240234375,
+      "e_delith_ev": -378.24139404296875,
+      "converged": false,
+      "rel_stability_ev_atom": -1.223627375460219,
+      "name": "tav-F-Ni7Mg1-rep"
+    },
+    {
+      "formula": "LiNi0.75Mg0.25PO4F",
+      "realized_tm_counts": {
+        "Ni": 6,
+        "Mg": 2
+      },
+      "avg_voltage_v": 5.51902449131012,
+      "capacity_mah_g": 109.70913206456218,
+      "e_full_ev": -422.782470703125,
+      "e_delith_ev": -378.3974304199219,
+      "converged": false,
+      "rel_stability_ev_atom": -1.227437863404723,
+      "name": "tav-F-Ni6Mg2"
+    },
+    {
+      "formula": "LiNi0.875Co0.125PO4F",
+      "realized_tm_counts": {
+        "Ni": 7,
+        "Co": 1
+      },
+      "avg_voltage_v": 5.455293615659078,
+      "capacity_mah_g": 104.44026254912963,
+      "e_full_ev": -424.4838562011719,
+      "e_delith_ev": -380.481201171875,
+      "converged": false,
+      "rel_stability_ev_atom": -1.2567720961296693,
+      "name": "tav-F-Ni7Co1-rep"
+    },
+    {
+      "formula": "LiNi0.75Mn0.25PO4F",
+      "realized_tm_counts": {
+        "Ni": 6,
+        "Mn": 2
+      },
+      "avg_voltage_v": 5.333986242612203,
+      "capacity_mah_g": 105.00659010213896,
+      "e_full_ev": -436.0286560058594,
+      "e_delith_ev": -392.75384521484375,
+      "converged": false,
+      "rel_stability_ev_atom": -1.4558203686242814,
+      "name": "tav-F-Ni6Mn2"
+    },
+    {
+      "formula": "LiNi0.875Si0.125PO4F",
+      "realized_tm_counts": {
+        "Ni": 7,
+        "Si": 1
+      },
+      "avg_voltage_v": 5.394675532976787,
+      "capacity_mah_g": 106.73131867380825,
+      "e_full_ev": -429.6231384277344,
+      "e_delith_ev": -385.98419189453125,
+      "converged": false,
+      "rel_stability_ev_atom": -1.3453804103807467,
+      "name": "tav-F-Ni7Si1"
+    }
+  ],
+  "calibration_note": "NMC811 baseline self-calibration: literature average voltage ≈3.8 V, theoretical capacity ≈194 mAh/g (x∈[0.3,1] window) — if the baseline deviates markedly, this batch's results are not trustworthy (declared honestly)."
+}

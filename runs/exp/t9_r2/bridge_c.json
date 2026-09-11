@@ -1,0 +1,9 @@
+{
+  "ocp_v_constant": 5.487805008888245,
+  "capacity_mah_g_bridge": 94.01192344953478,
+  "capacity_mah_g_computed": 104.4576927217053,
+  "utilization_factor": 0.9,
+  "sei_kinetics": "Chen2020 baseline k0 (unchanged)",
+  "ed_active_wh_kg": 515.9191044015752,
+  "domain_limit": "pybamm_runner hardcodes the LNMO OCP function for custom parameter bases (pybamm_runner.py L160-165): a constant-OCP custom function cannot be attached without modifying shared code (out of scope). Bridge rule (C) is therefore applied analytically as the contract defines it; ED_active is reported, not a criterion."
+}

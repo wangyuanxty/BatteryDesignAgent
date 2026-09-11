@@ -1,0 +1,26 @@
+﻿{
+  "name": "candidate",
+  "smiles": "O=C(OC(=O)C(F)(F)F)C(F)(F)F",
+  "homo_ev": -14.1603,
+  "mapping": {
+    "rule": "k(M) = k0 * 10^((HOMO_xTB(M) + 12.5)/1.0)",
+    "k0_m_s": 1e-12,
+    "factor": 0.021862508936067043,
+    "k_m_s": 2.1862508936067043e-14,
+    "param": {
+      "SEI kinetic rate constant [m.s-1]": 2.1862508936067043e-14
+    },
+    "calibration": [
+      {
+        "homo_ev": -12.5,
+        "factor": 1.0,
+        "sei_nm": 449.12
+      },
+      {
+        "homo_ev": -13.5,
+        "factor": 0.1,
+        "sei_nm": 385.1
+      }
+    ]
+  }
+}

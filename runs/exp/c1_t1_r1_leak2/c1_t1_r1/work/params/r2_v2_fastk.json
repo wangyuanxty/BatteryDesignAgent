@@ -1,0 +1,6 @@
+{
+  "Negative particle radius [m]": 2.5e-06,
+  "Positive particle radius [m]": 3.0e-06,
+  "Total heat transfer coefficient [W.m-2.K-1]": 30.0,
+  "Electrolyte conductivity [S.m-1]": 1.5
+}

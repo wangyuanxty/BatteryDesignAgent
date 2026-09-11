@@ -1,0 +1,18 @@
+{
+  "candidates": [
+    {"formula": "LiCuO2", "name": "LiCuO2"},
+    {"formula": "LiFeO2", "name": "LiFeO2"},
+    {"formula": "LiCu0.5Ni0.5O2", "name": "CuNi55"},
+    {"formula": "LiCu0.5Mn0.5O2", "name": "CuMn55"},
+    {"formula": "LiCu0.5Fe0.5O2", "name": "CuFe55"},
+    {"formula": "LiCu0.5Co0.5O2", "name": "CuCo55"},
+    {"formula": "LiNi0.5Fe0.5O2", "name": "NiFe55"},
+    {"formula": "LiCo0.5Fe0.5O2", "name": "CoFe55"},
+    {"formula": "LiFe0.5Mn0.5O2", "name": "FeMn55"},
+    {"formula": "LiVO2", "name": "LiVO2"},
+    {"formula": "LiCu0.9Al0.1O2", "name": "CuAl91"},
+    {"formula": "LiCu0.9Zr0.1O2", "name": "CuZr91"},
+    {"formula": "LiCu0.75Mn0.25O2", "name": "CuMn73"},
+    {"formula": "LiCu0.8Ni0.2O2", "name": "CuNi82"}
+  ]
+}

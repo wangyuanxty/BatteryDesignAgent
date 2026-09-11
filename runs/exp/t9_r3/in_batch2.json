@@ -1,0 +1,7 @@
+{"candidates": [
+  {"formula": "LiNi0.875Mg0.125PO4F", "name": "tav-F-Ni7Mg1-rep"},
+  {"formula": "LiNi0.75Mg0.25PO4F", "name": "tav-F-Ni6Mg2"},
+  {"formula": "LiNi0.875Co0.125PO4F", "name": "tav-F-Ni7Co1-rep"},
+  {"formula": "LiNi0.75Mn0.25PO4F", "name": "tav-F-Ni6Mn2"},
+  {"formula": "LiNi0.875Si0.125PO4F", "name": "tav-F-Ni7Si1"}
+]}

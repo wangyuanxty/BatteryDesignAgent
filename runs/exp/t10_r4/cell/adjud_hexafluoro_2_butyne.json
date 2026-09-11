@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "hexafluoro-2-butyne",
+  "smiles": "FC(F)(F)C#CC(F)(F)F",
+  "n_atoms": 10,
+  "homo_ev": -14.6784,
+  "lumo_ev": -8.2683,
+  "mace_energy_ev": -58.861412048339844,
+  "mace_converged": true,
+  "chgnet_energy_ev": -60.784996032714844,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

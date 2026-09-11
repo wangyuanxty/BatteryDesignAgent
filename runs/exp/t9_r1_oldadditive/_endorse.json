@@ -1,0 +1,7 @@
+{
+  "action": "endorse",
+  "skipped": true,
+  "reason": "real_compute=false — true DFT/MD endorsement (run-orca/run-cp2k/run-md) intentionally skipped; molecular funnel evidence is proxy-only (mace/chgnet ML potentials + xtb semi-empirical) and must be read as screening-grade, not first-principles endorsement.",
+  "candidate": "DFEC",
+  "smiles": "O=C1OC(F)C(F)O1"
+}

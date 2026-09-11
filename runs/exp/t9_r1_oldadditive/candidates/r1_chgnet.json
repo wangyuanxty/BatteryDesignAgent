@@ -1,0 +1,36 @@
+{
+  "candidates": [
+    {
+      "smiles": "O=C1OC=C(F)O1",
+      "metrics": {
+        "energy_ev": -55.77849197387695,
+        "converged": true
+      },
+      "model": "chgnet"
+    },
+    {
+      "smiles": "O=C1OC(F)C(F)O1",
+      "metrics": {
+        "energy_ev": -64.86408233642578,
+        "converged": true
+      },
+      "model": "chgnet"
+    },
+    {
+      "smiles": "O=S1OC(F)CO1",
+      "metrics": {
+        "energy_ev": -58.97323131561279,
+        "converged": true
+      },
+      "model": "chgnet"
+    },
+    {
+      "smiles": "C=CC1COC(=O)O1",
+      "metrics": {
+        "energy_ev": -87.88948822021484,
+        "converged": true
+      },
+      "model": "chgnet"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "candidates": [
+    {"formula": "LiCo2O4", "name": "LiCo2O4-spinel"},
+    {"formula": "LiNi0.7Co0.3PO4", "name": "NiCo73-olivine"}
+  ]
+}

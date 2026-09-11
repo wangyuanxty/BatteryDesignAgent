@@ -1,0 +1,494 @@
+{
+  "candidates": [
+    {
+      "smiles": "O=C(F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.4049,
+        "lumo_ev": -10.3267
+      }
+    },
+    {
+      "smiles": "O=C(F)C(=O)F",
+      "metrics": {
+        "homo_ev": -13.6761,
+        "lumo_ev": -10.945
+      }
+    },
+    {
+      "smiles": "O=C(F)F",
+      "metrics": {
+        "homo_ev": -14.4146,
+        "lumo_ev": -9.1193
+      }
+    },
+    {
+      "smiles": "O=C(C(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.2769,
+        "lumo_ev": -11.4824
+      }
+    },
+    {
+      "smiles": "O=C(C(F)(F)F)C(=O)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.5956,
+        "lumo_ev": -11.5012
+      }
+    },
+    {
+      "smiles": "O=C(F)C(=O)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.7397,
+        "lumo_ev": -11.7133
+      }
+    },
+    {
+      "smiles": "O=C(F)C(F)(F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.453,
+        "lumo_ev": -10.2684
+      }
+    },
+    {
+      "smiles": "O=C(Cl)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.4707,
+        "lumo_ev": -10.0024
+      }
+    },
+    {
+      "smiles": "O=C(F)C(F)(F)C(=O)F",
+      "metrics": {
+        "homo_ev": -14.2546,
+        "lumo_ev": -10.46
+      }
+    },
+    {
+      "smiles": "O=C(F)C(F)(F)C(F)(F)C(=O)F",
+      "metrics": {
+        "homo_ev": -14.4545,
+        "lumo_ev": -10.577
+      }
+    },
+    {
+      "smiles": "O=C(F)Cl",
+      "metrics": {
+        "homo_ev": -13.3627,
+        "lumo_ev": -8.8644
+      }
+    },
+    {
+      "smiles": "O=C(Cl)C(=O)Cl",
+      "metrics": {
+        "homo_ev": -12.3453,
+        "lumo_ev": -9.4115
+      }
+    },
+    {
+      "smiles": "S=C(F)F",
+      "metrics": {
+        "homo_ev": -11.4426,
+        "lumo_ev": -9.7197
+      }
+    },
+    {
+      "smiles": "S=C(C(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -12.1631,
+        "lumo_ev": -11.5098
+      }
+    },
+    {
+      "smiles": "S=C(F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -11.804,
+        "lumo_ev": -10.6347
+      }
+    },
+    {
+      "smiles": "S=C(Cl)Cl",
+      "metrics": {
+        "homo_ev": -10.8286,
+        "lumo_ev": -9.287
+      }
+    },
+    {
+      "smiles": "O=C=S",
+      "metrics": {
+        "homo_ev": -11.5734,
+        "lumo_ev": -8.4511
+      }
+    },
+    {
+      "smiles": "S=C=S",
+      "metrics": {
+        "homo_ev": -11.2659,
+        "lumo_ev": -9.2397
+      }
+    },
+    {
+      "smiles": "FC(F)(F)C(=C=O)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.733,
+        "lumo_ev": -10.0708
+      }
+    },
+    {
+      "smiles": "FC(F)=C=O",
+      "metrics": {
+        "homo_ev": -11.7861,
+        "lumo_ev": -9.513
+      }
+    },
+    {
+      "smiles": "FC(F)=C=C(F)F",
+      "metrics": {
+        "homo_ev": -13.1147,
+        "lumo_ev": -7.9049
+      }
+    },
+    {
+      "smiles": "O=C=NC(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.1748,
+        "lumo_ev": -8.3205
+      }
+    },
+    {
+      "smiles": "O=C=NC(=O)F",
+      "metrics": {
+        "homo_ev": -13.5701,
+        "lumo_ev": -8.9939
+      }
+    },
+    {
+      "smiles": "S=C=NC(F)(F)F",
+      "metrics": {
+        "homo_ev": -11.6446,
+        "lumo_ev": -9.5371
+      }
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)N=C=O",
+      "metrics": {
+        "homo_ev": -12.6447,
+        "lumo_ev": -12.588
+      }
+    },
+    {
+      "smiles": "O=C(OC(=O)C(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.1603,
+        "lumo_ev": -10.9558
+      }
+    },
+    {
+      "smiles": "O=C(F)OC(=O)F",
+      "metrics": {
+        "homo_ev": -14.0896,
+        "lumo_ev": -9.7042
+      }
+    },
+    {
+      "smiles": "O=C1OC(=O)C(F)(F)C1(F)F",
+      "metrics": {
+        "homo_ev": -14.0145,
+        "lumo_ev": -10.6059
+      }
+    },
+    {
+      "smiles": "O=C1OC(=O)C(F)=C1F",
+      "metrics": {
+        "homo_ev": -13.5489,
+        "lumo_ev": -10.973
+      }
+    },
+    {
+      "smiles": "O=C1OC(=O)C(C(F)(F)F)=C1C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.1482,
+        "lumo_ev": -12.0432
+      }
+    },
+    {
+      "smiles": "O=C1OC(=O)C(F)(F)C(F)(F)C1(F)F",
+      "metrics": {
+        "homo_ev": -14.331,
+        "lumo_ev": -11.0619
+      }
+    },
+    {
+      "smiles": "FN(F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.5642,
+        "lumo_ev": -6.9118
+      }
+    },
+    {
+      "smiles": "FN(F)F",
+      "metrics": {
+        "homo_ev": -13.0855,
+        "lumo_ev": -6.8632
+      }
+    },
+    {
+      "smiles": "FN(F)N(F)F",
+      "metrics": {
+        "homo_ev": -13.3946,
+        "lumo_ev": -7.1696
+      }
+    },
+    {
+      "smiles": "F/N=N/F",
+      "metrics": {
+        "homo_ev": -12.3398,
+        "lumo_ev": -10.0781
+      }
+    },
+    {
+      "smiles": "[O-][N+](F)(F)F",
+      "metrics": {
+        "homo_ev": -13.3519,
+        "lumo_ev": -8.576
+      }
+    },
+    {
+      "smiles": "FN=O",
+      "metrics": {
+        "homo_ev": -12.9913,
+        "lumo_ev": -10.9462
+      }
+    },
+    {
+      "smiles": "FN(F)OC(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.5433,
+        "lumo_ev": -7.5847
+      }
+    },
+    {
+      "smiles": "FC(F)=NF",
+      "metrics": {
+        "homo_ev": -13.2424,
+        "lumo_ev": -8.9208
+      }
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -8.9932,
+        "lumo_ev": -7.912
+      }
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)F",
+      "metrics": {
+        "homo_ev": -9.2861,
+        "lumo_ev": -7.5398
+      }
+    },
+    {
+      "smiles": "FS(F)(F)F",
+      "metrics": {
+        "homo_ev": -10.0699,
+        "lumo_ev": -3.4724
+      }
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)S(F)(F)(F)(F)F",
+      "metrics": {
+        "homo_ev": -8.012,
+        "lumo_ev": -7.9573
+      }
+    },
+    {
+      "smiles": "O=C(F)S(F)(F)(F)(F)F",
+      "metrics": {
+        "homo_ev": -10.5842,
+        "lumo_ev": -10.1931
+      }
+    },
+    {
+      "smiles": "O=C(C(F)(F)F)S(F)(F)(F)(F)F",
+      "metrics": {
+        "homo_ev": -11.5419,
+        "lumo_ev": -11.4212
+      }
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)N(F)F",
+      "metrics": {
+        "homo_ev": -12.6106,
+        "lumo_ev": -12.5423
+      }
+    },
+    {
+      "smiles": "FOC(F)(F)F",
+      "metrics": {
+        "homo_ev": -15.0159,
+        "lumo_ev": -9.2367
+      }
+    },
+    {
+      "smiles": "FC(F)(F)SC(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.1925,
+        "lumo_ev": -8.6689
+      }
+    },
+    {
+      "smiles": "FC(F)(F)SSC(F)(F)F",
+      "metrics": {
+        "homo_ev": -12.3928,
+        "lumo_ev": -9.2208
+      }
+    },
+    {
+      "smiles": "O=C(SC(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.1129,
+        "lumo_ev": -10.6912
+      }
+    },
+    {
+      "smiles": "O=C(F)SC(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.2973,
+        "lumo_ev": -9.1072
+      }
+    },
+    {
+      "smiles": "O=C(F)SC(=O)F",
+      "metrics": {
+        "homo_ev": -13.1584,
+        "lumo_ev": -9.7513
+      }
+    },
+    {
+      "smiles": "FC1(F)SC1(F)F",
+      "metrics": {
+        "homo_ev": -12.8557,
+        "lumo_ev": -8.4617
+      }
+    },
+    {
+      "smiles": "O=C1C(F)(F)C(F)(F)C1(F)F",
+      "metrics": {
+        "homo_ev": -13.6435,
+        "lumo_ev": -10.9185
+      }
+    },
+    {
+      "smiles": "O=C1C(F)(F)C1(F)F",
+      "metrics": {
+        "homo_ev": -13.6028,
+        "lumo_ev": -11.0707
+      }
+    },
+    {
+      "smiles": "FC(F)=C(F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.6265,
+        "lumo_ev": -8.9885
+      }
+    },
+    {
+      "smiles": "FC(F)=C(F)C(F)=C(F)F",
+      "metrics": {
+        "homo_ev": -12.6275,
+        "lumo_ev": -9.2025
+      }
+    },
+    {
+      "smiles": "FC1=C(F)C(F)(F)C1(F)F",
+      "metrics": {
+        "homo_ev": -13.9162,
+        "lumo_ev": -9.3214
+      }
+    },
+    {
+      "smiles": "FC1(F)C(F)(F)C1(F)F",
+      "metrics": {
+        "homo_ev": -14.3247,
+        "lumo_ev": -6.2464
+      }
+    },
+    {
+      "smiles": "FC1=C(F)C1(F)F",
+      "metrics": {
+        "homo_ev": -12.5963,
+        "lumo_ev": -10.7665
+      }
+    },
+    {
+      "smiles": "FC(F)(F)C#CC(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.6784,
+        "lumo_ev": -8.2683
+      }
+    },
+    {
+      "smiles": "FC(F)=C(F)C(=O)F",
+      "metrics": {
+        "homo_ev": -13.5333,
+        "lumo_ev": -10.0296
+      }
+    },
+    {
+      "smiles": "O=C(F)C(F)=C(F)C(=O)F",
+      "metrics": {
+        "homo_ev": -13.703,
+        "lumo_ev": -10.9927
+      }
+    },
+    {
+      "smiles": "O=C(C(F)(F)F)C(F)=C(F)F",
+      "metrics": {
+        "homo_ev": -13.5147,
+        "lumo_ev": -10.753
+      }
+    },
+    {
+      "smiles": "FC(F)(F)C(=NC(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.3478,
+        "lumo_ev": -11.8078
+      }
+    },
+    {
+      "smiles": "FC(F)(F)C(=NO)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.5152,
+        "lumo_ev": -10.1578
+      }
+    },
+    {
+      "smiles": "FC(F)(F)C(=NN=C(C(F)(F)F)C(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.3127,
+        "lumo_ev": -12.2959
+      }
+    },
+    {
+      "smiles": "FC(F)(F)N(C(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -15.7893,
+        "lumo_ev": -2.7685
+      }
+    },
+    {
+      "smiles": "FC(F)=C(F)OC(F)(F)F",
+      "metrics": {
+        "homo_ev": -12.8758,
+        "lumo_ev": -8.1412
+      }
+    },
+    {
+      "smiles": "F[P]1(F)=N[P](F)(F)=N[P](F)(F)=N1",
+      "metrics": {
+        "homo_ev": -11.485,
+        "lumo_ev": -5.1787
+      }
+    }
+  ]
+}

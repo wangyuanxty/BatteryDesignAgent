@@ -1,0 +1,50 @@
+[
+  {
+    "candidate": "bis(trifluoromethyl)sulfone",
+    "round": 1,
+    "outputs": [
+      "cell/aging_bistrifluoromethylsulfone.json",
+      "cell/discharge1C_bistrifluoromethylsulfone.json",
+      "cell/energy_bistrifluoromethylsulfone.json",
+      "cell/charge4C_bistrifluoromethylsulfone.json",
+      "cell/tr_bistrifluoromethylsulfone.json"
+    ],
+    "note": "Round-1 leader: xTB HOMO -14.2961 eV -> k=1.599e-14 m/s (k-rule); SEI 302.74 nm, energy density 400.29 Wh/kg, 4C-charge thermal runaway not triggered."
+  },
+  {
+    "candidate": "pentafluoroethylsulfonyl fluoride",
+    "round": 1,
+    "outputs": [
+      "cell/aging_pentafluoroethylsulfonyl_fluoride.json",
+      "cell/discharge1C_pentafluoroethylsulfonyl_fluoride.json"
+    ],
+    "note": "SEI-only cell screen: 306.87 nm <= 370 pass; energy-density and thermal-runaway criteria superseded by round-1 leader (additive-neutral metrics, not re-run for non-leaders)."
+  },
+  {
+    "candidate": "trifluoronitromethane",
+    "round": 1,
+    "outputs": [
+      "cell/aging_trifluoronitromethane.json",
+      "cell/discharge1C_trifluoronitromethane.json"
+    ],
+    "note": "SEI-only cell screen: 327.81 nm <= 370 pass; superseded by round-1 leader."
+  },
+  {
+    "candidate": "sulfuryl fluoride",
+    "round": 1,
+    "outputs": [
+      "cell/aging_sulfuryl_fluoride.json",
+      "cell/discharge1C_sulfuryl_fluoride.json"
+    ],
+    "note": "SEI-only cell screen: 353.30 nm <= 370 pass; superseded by round-1 leader."
+  },
+  {
+    "candidate": "trifluoroacetonitrile",
+    "round": 1,
+    "outputs": [
+      "cell/aging_trifluoroacetonitrile.json",
+      "cell/discharge1C_trifluoroacetonitrile.json"
+    ],
+    "note": "SEI-only cell screen: 357.75 nm <= 370 pass; superseded by round-1 leader."
+  }
+]

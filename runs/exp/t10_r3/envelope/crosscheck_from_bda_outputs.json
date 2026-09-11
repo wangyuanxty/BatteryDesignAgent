@@ -1,0 +1,72 @@
+[
+  {
+    "candidate": "pfta",
+    "smiles": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)N(C(F)(F)C(F)(F)C(F)(F)C(F)(F)F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+    "n_atoms": 40,
+    "point_per_atom": [
+      -5.615810775756836,
+      -5.917929077148438,
+      -14.9642
+    ],
+    "in_envelope": false,
+    "in_documented_families": false,
+    "families_matched": [],
+    "hull_ref": "envelope_stats_v2.json"
+  },
+  {
+    "candidate": "pfhex",
+    "smiles": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+    "n_atoms": 20,
+    "point_per_atom": [
+      -5.528727340698242,
+      -5.831441879272461,
+      -14.9147
+    ],
+    "in_envelope": false,
+    "in_documented_families": false,
+    "families_matched": [],
+    "hull_ref": "envelope_stats_v2.json"
+  },
+  {
+    "candidate": "pftea",
+    "smiles": "FC(F)(F)C(F)(F)N(C(F)(F)C(F)(F)F)C(F)(F)C(F)(F)F",
+    "n_atoms": 22,
+    "point_per_atom": [
+      -5.6082468899813565,
+      -5.906521883877841,
+      -14.8818
+    ],
+    "in_envelope": false,
+    "in_documented_families": false,
+    "families_matched": [],
+    "hull_ref": "envelope_stats_v2.json"
+  },
+  {
+    "candidate": "pfpent",
+    "smiles": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+    "n_atoms": 17,
+    "point_per_atom": [
+      -5.5073376823874085,
+      -5.8086099063648895,
+      -15.0496
+    ],
+    "in_envelope": false,
+    "in_documented_families": false,
+    "families_matched": [],
+    "hull_ref": "envelope_stats_v2.json"
+  },
+  {
+    "candidate": "ncf3",
+    "smiles": "FC(F)(F)N(C(F)(F)F)C(F)(F)F",
+    "n_atoms": 13,
+    "point_per_atom": [
+      -5.617793743426983,
+      -5.903931250939002,
+      -15.7893
+    ],
+    "in_envelope": false,
+    "in_documented_families": false,
+    "families_matched": [],
+    "hull_ref": "envelope_stats_v2.json"
+  }
+]

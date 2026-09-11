@@ -1,0 +1,51 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+4 0 obj
+<< /Length 1270 >>
+stream
+BT /F1 8 Tf 11 TL 50 742 Td
+(VBF-C1T1R1 delivery_index - Virtual Battery Factory deliverable) Tj T* T*
+(# Delivery Index - c1_t1_r1 \(Virtual Battery Factory\)) Tj T*
+(VBF-C1T1R1-IDX-001) Tj T*
+() Tj T*
+(I VBF number I Document I File I Status I) Tj T*
+(I---I---I---I---I) Tj T*
+(I VBF-C1T1R1-DS-001 I Design specification I design_spec.md / .pdf I delivered I) Tj T*
+(I VBF-C1T1R1-BOM-001 I Bill of materials \(parameter BOM\) I bom.xlsx / .pdf I delivered I) Tj T*
+(I VBF-C1T1R1-DSH-001 I Cell datasheet I datasheet.md / .pdf I delivered I) Tj T*
+(I VBF-C1T1R1-CALC-001 I Energy-density calculation record I calc.xlsx / .pdf I delivered I) Tj T*
+(I VBF-C1T1R1-DVPR-001 I Design verification plan and report I dvpr.md / .pdf I delivered I) Tj T*
+(I VBF-C1T1R1-DFMEA-001 I Design FMEA I dfmea.md / .pdf I delivered I) Tj T*
+(I VBF-C1T1R1-IDX-001 I This index I delivery_index.md / .pdf I delivered I) Tj T*
+() Tj T*
+(Supporting artifacts \(workspace\): log.jsonl \(24-entry audit chain, mechanically) Tj T*
+(evaluated\), design_plan.md, work/params/*.json \(all variant parameter files\),) Tj T*
+(cell/*.json \(simulation outputs\), validation/*.json \(thermal-runaway outputs\).) Tj T*
+(Final adjudication: final entry verdict = pass; champion = R4-V3-margin.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000000136 00000 n 
+0000000185 00000 n 
+0000001507 00000 n 
+trailer
+<< /Size 6 /Root 3 0 R >>
+startxref
+1633
+%%EOF

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>t9_r4 · Virtual Battery Factory Design Report</title>
+<style>
+/* ============================================================
+   虚拟电池工厂 · 工程蓝图纸报告模板 (BLUEPRINT)
+   数据位由 bda/report.py 以模板占位符确定性填充，无外部资源。
+   ============================================================ */
+:root{
+  --ink:#14283C;
+  --blue:#1E5A8A;
+  --paper:#F4F7FA;
+  --grid:#D8E2EC;
+  --accent:#C97B3D;
+  --ok:#2E7D4F;
+  --bad:#B3402A;
+  --ok-dark:#7FC79B;   /* 深底上的达标色 */
+  --bad-dark:#E08A73;  /* 深底上的不达标色 */
+  --mono:"Cascadia Mono",ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace;
+  --sans:system-ui,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body{
+  margin:0;
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.65;
+  color:var(--ink);
+  background-color:var(--paper);
+  /* 晒图纸蓝图网格 */
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  min-height:100vh;
+}
+::selection{background:rgba(201,123,61,.28)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--blue)}
+.mono,code,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- 图纸头 ---------- */
+.drawing-head{
+  background:var(--ink);
+  color:#EDF3F9;
+  border-bottom:3px solid var(--accent);
+  padding:40px clamp(16px,4vw,48px) 28px;
+  background-image:
+    linear-gradient(rgba(216,226,236,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(216,226,236,.07) 1px,transparent 1px);
+  background-size:22px 22px;
+}
+.head-row{
+  display:flex;flex-wrap:wrap;gap:28px;
+  justify-content:space-between;align-items:flex-start;
+}
+.head-main{max-width:680px;min-width:0}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--blue);
+  margin:0 0 6px;
+}
+.eyebrow::before{content:"▍";color:var(--accent)}
+.eyebrow.light{color:#9FB7CC}
+.case-name{
+  font-size:clamp(26px,4vw,40px);font-weight:700;letter-spacing:.02em;
+  margin:0 0 10px;color:#fff;overflow-wrap:anywhere;
+}
+.goal{font-size:16px;color:#C9D7E3;margin:0 0 10px;max-width:56ch}
+.head-meta{font-family:var(--mono);font-size:12px;color:#8CA5BC;margin:0}
+.head-meta span{
+  display:inline-block;border:1px solid rgba(159,183,204,.35);
+  padding:1px 8px;margin:2px 6px 2px 0;border-radius:2px;
+}
+.verdict-block{text-align:right;min-width:190px}
+.verdict{
+  font-family:var(--mono);font-weight:700;
+  font-size:clamp(30px,5vw,52px);line-height:1.05;letter-spacing:.02em;
+  text-transform:uppercase;
+}
+.verdict.ok{color:var(--ok-dark)}
+.verdict.bad{color:var(--bad-dark)}
+.verdict.neutral{color:var(--accent)}
+
+/* ---------- 关键结果大数字 ---------- */
+.kpi-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
+  background:rgba(216,226,236,.2);border:1px solid rgba(216,226,236,.28);
+  margin-top:28px;
+}
+.kpi-item{background:rgba(20,40,60,.55);padding:14px 16px 12px;min-width:0}
+.kpi-label{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#9FB7CC;margin-bottom:6px;
+}
+.kpi-num{
+  font-family:var(--mono);font-size:clamp(22px,3vw,30px);font-weight:600;
+  color:#fff;line-height:1.1;overflow-wrap:anywhere;
+}
+.kpi-num.ok{color:var(--ok-dark)}
+.kpi-num.bad{color:var(--bad-dark)}
+.kpi-num.mute{color:#8CA5BC}
+.kpi-sub{font-family:var(--mono);font-size:11px;color:#8CA5BC;margin-top:5px}
+.kpi-unit{font-size:.55em;color:#8CA5BC;margin-left:4px;font-weight:400}
+
+/* ---------- 顶部导航 ---------- */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:var(--ink);border-bottom:1px solid var(--blue);
+  display:flex;align-items:stretch;gap:2px;padding:0 14px;overflow-x:auto;
+}
+.nav-brand{
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#9FB7CC;
+  display:flex;align-items:center;white-space:nowrap;
+  padding-right:12px;margin-right:8px;border-right:1px solid rgba(159,183,204,.3);
+}
+.nav-brand b{color:var(--accent);font-weight:700}
+.nav a{
+  color:#C9D7E3;text-decoration:none;font-family:var(--mono);font-size:12px;
+  letter-spacing:.04em;padding:12px 12px;white-space:nowrap;
+  border-bottom:2px solid transparent;display:flex;align-items:center;
+}
+.nav a .n{color:#7C96AC;margin-right:6px}
+.nav a:hover{color:#fff;background:rgba(216,226,236,.08)}
+.nav a.active{color:#fff;border-bottom-color:var(--accent)}
+.nav a.active .n{color:var(--accent)}
+
+/* ---------- 布局与图纸区块 ---------- */
+main{max-width:1120px;margin:0 auto;padding:34px clamp(14px,3vw,32px) 8px}
+.sheet{
+  position:relative;
+  background:rgba(255,255,255,.93);
+  border:1px solid var(--blue);
+  border-radius:2px;
+  box-shadow:0 2px 0 rgba(20,40,60,.1);
+  padding:28px clamp(18px,3vw,36px) 32px;
+  margin:0 0 30px;
+  scroll-margin-top:64px;
+}
+.sheet::before,.sheet::after{
+  content:"+";position:absolute;font-family:var(--mono);
+  font-size:13px;color:var(--blue);line-height:1;
+}
+.sheet::before{top:6px;left:8px}
+.sheet::after{bottom:6px;right:8px}
+.sheet h2{font-size:20px;margin:2px 0 16px;letter-spacing:.02em}
+.sheet h2::after{
+  content:"";display:block;width:56px;height:3px;
+  background:var(--accent);margin-top:6px;
+}
+.empty{color:#5E768C;font-style:italic;margin:6px 0}
+.hint{font-style:normal;font-family:var(--mono);font-size:12px;color:#7C96AC}
+
+/* ---------- 表格 ---------- */
+.tbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13px}
+.tbl th{
+  text-align:left;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--blue);border-bottom:2px solid var(--blue);
+  padding:6px 10px;font-weight:600;white-space:nowrap;
+}
+.tbl td{border-bottom:1px solid var(--grid);padding:7px 10px;vertical-align:top;overflow-wrap:anywhere}
+.tbl td.num{text-align:right;white-space:nowrap}
+.tbl tr:hover td{background:rgba(216,226,236,.35)}
+.crit-meta{font-size:11.5px;color:#5E768C;overflow-wrap:anywhere}
+/* 候选表格：定列宽，候选/部件/类型窄列，说明/内容宽列 */
+.tbl.cand{table-layout:fixed}
+.tbl.cand th:nth-child(1),.tbl.cand td:nth-child(1){width:16%}
+.tbl.cand th:nth-child(2),.tbl.cand td:nth-child(2){width:11%}
+.tbl.cand th:nth-child(3),.tbl.cand td:nth-child(3){width:9%}
+.tbl.cand th:nth-child(4),.tbl.cand td:nth-child(4){width:26%}
+.tbl.cand th:nth-child(5),.tbl.cand td:nth-child(5){width:38%}
+
+/* ---------- 徽章与标签 ---------- */
+.badge{
+  font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;border:1px solid currentColor;border-radius:2px;
+  padding:2px 8px;white-space:nowrap;background:rgba(216,226,236,.15);
+}
+.badge.ok{color:var(--ok);background:rgba(46,125,79,.08)}
+.badge.bad{color:var(--bad);background:rgba(179,64,42,.08)}
+.badge.mute{color:#6B8296;background:rgba(107,130,150,.08)}
+.badge.stage{color:var(--blue);background:rgba(30,90,138,.06)}
+.badge.stage.end{color:var(--accent);background:rgba(201,123,61,.08)}
+.chip{
+  font-family:var(--mono);font-size:12px;background:#EEF3F8;
+  border:1px solid var(--grid);border-radius:2px;padding:2px 9px;
+  white-space:nowrap;overflow-wrap:anywhere;max-width:100%;
+}
+.chip b{color:var(--ink)}
+.chip .sm{color:#5E768C}
+.chip.tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6B8296;background:#fff}
+.chip.tag.seed{color:var(--blue);border-color:rgba(30,90,138,.45)}
+.chip.tag.free{color:var(--accent);border-color:rgba(201,123,61,.55)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+
+/* ---------- 概览区流程一览条 ---------- */
+.flow{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 0}
+.flow-item{
+  flex:1 1 180px;min-width:170px;
+  border:1px solid var(--grid);border-top:3px solid var(--blue);
+  background:#fff;border-radius:2px;padding:10px 14px;
+}
+.flow-item.end{border-top-color:var(--accent)}
+.flow-name{font-size:14px;font-weight:600;margin:7px 0 2px}
+.flow-count{font-family:var(--mono);font-size:11.5px;color:#5E768C}
+.flow-goal{
+  font-family:var(--mono);font-size:11px;color:#44586C;
+  margin-top:5px;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap;
+}
+.flow-goal .g-label{
+  color:#7C96AC;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+}
+.flow-goal b.goal-ok{color:var(--ok)}
+.flow-goal b.goal-bad{color:var(--bad)}
+
+/* ---------- 达标标准：按阶段分层 ---------- */
+.stage-goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:10px 0 4px}
+.stage-goal{
+  border:1px solid var(--grid);border-top:3px solid var(--blue);
+  background:#fff;border-radius:2px;padding:12px 14px 14px;min-width:0;
+}
+.stage-goal.meta{border-top-color:#6B8296}
+.stage-goal-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.stage-goal-name{font-size:13.5px;font-weight:600}
+.stage-goal .tbl{font-size:12px}
+.stage-goal .tbl td{padding:5px 8px}
+.stage-goal .tbl td.num{white-space:normal}
+.stage-goal .empty{margin:0}
+
+/* ---------- 迭代轨迹：轮次总览表与趋势图 ---------- */
+.ov-head{font-size:14px;font-weight:600;margin:20px 0 8px;color:var(--ink)}
+.tbl.ov{margin:2px 0 4px}
+.tbl.ov td.num{white-space:nowrap}
+.trends{display:flex;flex-wrap:wrap;gap:18px;margin:6px 0 4px}
+.trend{min-width:280px}
+.trend-caption{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  color:var(--blue);margin-bottom:4px;
+}
+.trend svg.chart{border:1px solid var(--grid);background:#fff;border-radius:2px}
+svg.chart text{font-family:var(--mono);font-size:10px;fill:var(--blue)}
+svg.chart .grid{stroke:var(--grid);stroke-width:1}
+svg.chart .axis{stroke:var(--ink);stroke-width:1;opacity:.55}
+svg.chart .bar{fill:var(--blue);fill-opacity:.85}
+svg.chart .thr{stroke:var(--bad);stroke-width:1.2;stroke-dasharray:4 3}
+svg.chart .t-label{fill:var(--bad)}
+.badge.warn{color:var(--accent);background:rgba(201,123,61,.08)}
+
+/* ---------- 迭代轨迹：轮次可折叠卡片 ---------- */
+details.round{
+  border:1px solid var(--grid);border-left:3px solid var(--blue);
+  margin-bottom:12px;background:#fff;border-radius:2px;
+}
+details.round summary{
+  cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;
+  padding:10px 14px;user-select:none;
+}
+details.round summary::-webkit-details-marker{display:none}
+details.round summary::before{
+  content:"+";font-family:var(--mono);font-weight:700;color:var(--blue);
+  transition:transform .15s ease;display:inline-block;font-size:14px;
+}
+details.round[open] summary::before{transform:rotate(45deg)}
+details.round summary .round-no{
+  font-family:var(--mono);font-weight:700;font-size:13px;
+  letter-spacing:.08em;color:var(--ink);
+}
+details.round summary .round-sub{
+  font-family:var(--mono);font-size:11.5px;color:#5E768C;
+  margin-left:auto;text-align:right;
+}
+details.round summary:hover{background:rgba(216,226,236,.4)}
+details.round summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.round-body{padding:4px 16px 16px;border-top:1px solid var(--grid)}
+.blk{margin:16px 0}
+.blk p{margin:6px 0 0;color:#44586C;font-size:14px}
+.blk-label{
+  font-family:var(--mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;
+}
+.reason{font-size:14px;color:#44586C;margin:8px 0 0;max-width:95ch}
+
+/* ---------- 漏斗统计 ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:10px 0 20px}
+.stat{
+  border:1px solid var(--grid);border-top:3px solid var(--blue);
+  background:#fff;padding:12px 16px;border-radius:2px;
+}
+.stat.rej{border-top-color:var(--bad)}
+.stat.dis{border-top-color:var(--accent)}
+.stat-num{font-family:var(--mono);font-size:30px;font-weight:600;line-height:1.1}
+.stat.pass .stat-num{color:var(--ok)}
+.stat.rej .stat-num{color:var(--bad)}
+.stat.dis .stat-num{color:var(--accent)}
+.stat-label{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#5E768C;margin-top:4px;
+}
+.funnel-detail{border-left:2px solid var(--grid);padding:2px 0 2px 14px;margin:0 0 12px}
+.funnel-detail p{margin:6px 0 0;color:#44586C;font-size:14px}
+
+/* ---------- 阶段结果：内联 SVG 曲线 ---------- */
+figure.plot{margin:0 0 28px}
+figcaption{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}
+figcaption .fname{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink);overflow-wrap:anywhere}
+.plot-wrap{position:relative;border:1px solid var(--grid);background:#fff;border-radius:2px;overflow:hidden}
+svg.plot{display:block;width:100%;height:auto}
+svg.plot text{font-family:var(--mono);font-size:10px;fill:var(--blue)}
+svg.plot .grid{stroke:var(--grid);stroke-width:1}
+svg.plot .axis{stroke:var(--ink);stroke-width:1;opacity:.55}
+svg.plot .s-voltage{stroke:var(--blue);stroke-width:1.8;fill:none}
+svg.plot .s-anode{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+.tooltip{
+  position:absolute;pointer-events:none;z-index:10;
+  background:var(--ink);color:#E8F0F8;border:1px solid var(--accent);
+  font-family:var(--mono);font-size:11px;line-height:1.55;padding:6px 10px;
+  border-radius:2px;box-shadow:0 2px 8px rgba(20,40,60,.35);white-space:nowrap;
+}
+.tooltip .t-t{color:var(--accent)}
+
+/* ---------- 真DFT/MD 验证背书 ---------- */
+pre.term{
+  background:var(--ink);color:#DCE9F5;border-left:3px solid var(--accent);
+  border-radius:2px;padding:14px 16px;overflow-x:auto;
+  font-family:var(--mono);font-size:12.5px;line-height:1.55;margin:8px 0 20px;
+}
+.endorse-cand{margin-bottom:22px}
+.endorse-head{font-family:var(--mono);font-size:13px;margin:2px 0 4px;overflow-wrap:anywhere}
+.endorse-head .sm{color:#5E768C}
+.skipped{
+  border:1px dashed #B9C6D2;background:rgba(216,226,236,.25);
+  color:#5E768C;font-style:italic;padding:12px 16px;margin:10px 0;border-radius:2px;
+}
+.skipped .reason{font-family:var(--mono);font-style:normal;color:#44586C}
+
+/* ---------- 最终推荐 ---------- */
+.final-quote{
+  font-size:14px;line-height:1.7;border-left:4px solid var(--accent);
+  padding:4px 0 4px 20px;margin:10px 0 16px;
+}
+.final-verdict{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* ---------- 设计说明 ---------- */
+.note{border-left:2px solid var(--grid);padding:2px 0 2px 14px;margin:0 0 16px}
+.note p{margin:6px 0 0;color:#44586C;font-size:14px}
+.note .chip{font-size:10.5px}
+
+/* ---------- 底部标尺与页脚 ---------- */
+.ruler{
+  height:34px;margin-top:48px;border-top:2px solid var(--ink);position:relative;
+  background-image:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 10px);
+  background-size:100% 8px;background-repeat:no-repeat;background-position:0 100%;
+}
+.ruler::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:16px;
+  background-image:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 50px);
+  background-size:auto 16px;background-repeat:no-repeat;
+}
+.ruler span{
+  position:absolute;bottom:2px;font-family:var(--mono);font-size:9px;color:#7C96AC;
+  transform:translateX(-50%);
+}
+.page-foot{
+  max-width:1120px;margin:0 auto;padding:12px clamp(14px,3vw,32px) 44px;
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;color:#7C96AC;letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:760px){
+  .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .verdict-block{text-align:left}
+  .stats{grid-template-columns:1fr}
+  .stage-goals{grid-template-columns:1fr}
+  .nav-brand{display:none}
+  .sheet{padding:22px 16px 26px}
+}
+</style>
+</head>
+<body>
+
+<header class="drawing-head">
+<div class="head-row"><div class="head-main"><div class="eyebrow light">Virtual Battery Factory · Case Design Report</div><h1 class="case-name">t9_r4</h1><p class="goal">(Goal not recorded in config.yaml)</p><p class="head-meta"><span>Real compute on</span></p></div><div class="verdict-block"><div class="eyebrow light">Conclusion</div><div class="verdict neutral">negative</div></div></div><div class="kpi-grid"><div class="kpi-item"><div class="kpi-label">Energy density</div><div class="kpi-num mute">N/A<span class="kpi-unit">Wh/kg</span></div><div class="kpi-sub"></div></div><div class="kpi-item"><div class="kpi-label">Capacity</div><div class="kpi-num mute">N/A<span class="kpi-unit">Ah</span></div><div class="kpi-sub"></div></div><div class="kpi-item"><div class="kpi-label">Max temperature</div><div class="kpi-num mute">N/A<span class="kpi-unit">K</span></div><div class="kpi-sub"></div></div><div class="kpi-item"><div class="kpi-label">Plating</div><div class="kpi-num mute">N/A</div><div class="kpi-sub">Not provided</div></div></div>
+</header>
+
+<nav class="nav" aria-label="Section navigation">
+  <span class="nav-brand"><b>▦ VBF</b>&nbsp;Virtual Battery Factory</span>
+  <a href="#overview"><span class="n">01</span>Overview</a>
+  <a href="#trajectory"><span class="n">02</span>Trajectory</a>
+  <a href="#funnel"><span class="n">03</span>Funnel</a>
+  <a href="#stages"><span class="n">04</span>Stage Results</a>
+  <a href="#endorse"><span class="n">05</span>True DFT/MD Endorsement</a>
+  <a href="#final"><span class="n">06</span>Final Recommendation</a>
+  <a href="#notes"><span class="n">07</span>Design Notes</a>
+</nav>
+
+<main>
+
+<section id="overview" class="sheet" aria-labelledby="overview-title">
+  <div class="eyebrow">SHEET 01 · OVERVIEW</div>
+  <h2 id="overview-title">Overview &amp; Criteria</h2>
+  <div class="stage-goals"><div class="stage-goal"><div class="stage-goal-head"><span class="badge stage">STAGE 1 Plan</span><span class="stage-goal-name">Materials design</span><span class="badge bad">Achieved · PASS 0 · DISP 0</span></div><table class="tbl"><tr><th>Metric</th><th>Threshold</th><th>Note</th></tr><tr><th scope='row'>avg_voltage_v</th><td class='num'>≥ 4.6</td><td class='crit-meta'></td></tr><tr><th scope='row'>charging_potential_v</th><td class='num'>≤ 4.8</td><td class='crit-meta'></td></tr></table></div><div class="stage-goal"><div class="stage-goal-head"><span class="badge stage">STAGE 2 Materials</span><span class="stage-goal-name">Cell design</span><span class="badge mute">Not run</span></div><table class="tbl"><tr><th>Metric</th><th>Threshold</th><th>Achieved</th><th>Note</th></tr><tr><th scope='row'>energy_density_wh_kg</th><td class='num'>≥ 327.18</td><td class='num'><span class="badge mute">—</span></td><td class='crit-meta'></td></tr></table></div><div class="stage-goal"><div class="stage-goal-head"><span class="badge stage">STAGE 3 Cell</span><span class="stage-goal-name">Safety assessment</span><span class="badge mute">Not run</span></div><table class="tbl"><tr><th>Metric</th><th>Threshold</th><th>Achieved</th><th>Note</th></tr><tr><th scope='row'>plated</th><td class='num'>No plating</td><td class='num'><span class="badge mute">—</span></td><td class='crit-meta'></td></tr><tr><th scope='row'>triggered</th><td class='num'>No plating</td><td class='num'><span class="badge mute">—</span></td><td class='crit-meta'></td></tr><tr><th scope='row'>sei_thickness_nm_end</th><td class='num'>≤ 500</td><td class='num'><span class="badge mute">—</span></td><td class='crit-meta'></td></tr></table></div><div class="stage-goal meta"><div class="stage-goal-head"><span class="badge mute">META</span><span class="stage-goal-name">Case parameters</span></div><table class="tbl"><tr><th>Parameter</th><th>Value</th></tr><tr><th scope='row'>case</th><td class='num'>t9_r4</td></tr><tr><th scope='row'>task</th><td class='num'>Grid-storage cell cathode on the Chen2020 NMC811/graphite profile; the cathode composition is the only free variable</td></tr><tr><th scope='row'>criteria_key_alignment</th><td class='num'>stage1 key 'avg_voltage_v' matches the run-comp output field name (the task's 'computed average voltage'); threshold value 4.6 unchanged from the task text; 'charging_potential_v' matches the profile-script output field</td></tr><tr><th scope='row'>freedoms</th><td class='num'>cathode composition only; electrolyte (EC/EMC + LiPF6), cell architecture (Chen2020 geometry), thermal management, and SEI kinetics are fixed</td></tr><tr><th scope='row'>mapping_rule</th><td class='num'>constant OCP = computed average voltage; capacity = 0.9 x computed capacity; SEI kinetics = Chen2020 baseline k0</td></tr><tr><th scope='row'>ed_active_report</th><td class='num'>ED_active = V x C x 0.9 (report value)</td></tr><tr><th scope='row'>catalogue_exclusion</th><td class='num'>candidate must not be one of the 115 documented materials in runs/exp/known_set_comp/known_set_v3.json</td></tr><tr><th scope='row'>hull_exclusion</th><td class='num'>computed point (V, C, stab) must lie outside the convex hull of the 102 known points (comp_envelope_check.py adjudication)</td></tr><tr><th scope='row'>family_constraint</th><td class='num'>only six supported structure families (layered LiMO2, olivine LiMPO4, spinel LiM2O4, tavorite LiM(PO4)F, tavorite LiM(SO4)F, NASICON Li3M2(PO4)3); others unsupported (hard boundary)</td></tr><tr><th scope='row'>true_voltage_guard</th><td class='num'>the 4.6 V window must hold beyond the screening proxy: experimental value, own QE computation (run-qe), or literature-consistent evidence; computed-only from an overestimate-prone family is not evidence</td></tr><tr><th scope='row'>charging_potential_source</th><td class='num'>computed incremental potential into the top-of-charge state (x: 0.4 -&gt; 0.3, same CHGNet machinery, profile script) + cell upper voltage cut-off 4.8 V</td></tr><tr><th scope='row'>protocol_note</th><td class='num'>constant-OCP plateau discharge in the fixed cell is anode-limited (~5.1 Ah, LNMO.json precedent behavior); this is the fixed-cell discharge signature, labeled honestly</td></tr><tr><th scope='row'>start_stage</th><td class='num'>2</td></tr><tr><th scope='row'>real_compute</th><td class='num'>true</td></tr></table></div></div>
+  <h3 style="font-size:14px;margin:22px 0 8px">Flow overview</h3>
+  <div class="flow"><div class="flow-item "><span class="badge stage">STAGE 1 Plan</span><div class="flow-name">Stage 1 · Overall planning</div><div class="flow-count">plan 1 · design_plan.md</div></div><div class="flow-item "><span class="badge stage">STAGE 2 Materials</span><div class="flow-name">Stage 2 · Materials design</div><div class="flow-count">mol. propose 44 · funnel 4</div><div class="flow-goal"><span class="g-label">Goal</span><span>avg_voltage_v ≥ 4.6 · charging_potential_v ≤ 4.8</span></div><div class="flow-goal"><span class="g-label">Achieved</span><span>PASS 0 · DISP 0 <b class="goal-bad">✗</b></span></div></div><div class="flow-item "><span class="badge stage">STAGE 3 Cell</span><div class="flow-name">Stage 3 · Cell design</div><div class="flow-count">struct. propose 0 · discharge curves 0</div><div class="flow-goal"><span class="g-label">Goal</span><span>Energy density ≥ 327.18</span></div><div class="flow-goal"><span class="g-label">Achieved</span><span>—</span></div></div><div class="flow-item "><span class="badge stage">STAGE 4 Safety</span><div class="flow-name">Stage 4 · Safety assessment</div><div class="flow-count">4C charge curves 0</div><div class="flow-goal"><span class="g-label">Goal</span><span>No plating · No plating · sei_thickness_nm_end ≤ 500</span></div><div class="flow-goal"><span class="g-label">Achieved</span><span>—</span></div></div><div class="flow-item end"><span class="badge stage end">STAGE 5 True DFT/MD</span><div class="flow-name">Stage 5 · True DFT/MD endorsement</div><div class="flow-count">Endorse 0 · Final 1 · Verdict negative</div></div></div>
+  <h3 style="font-size:14px;margin:22px 0 8px">Candidates</h3>
+  <table class="tbl cand"><tr><th>Candidate</th><th>Component</th><th>Type</th><th>Role</th><th>Content</th></tr><tr><td><b>LiCuO2</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu3+/2+ layered oxide, literature ~4.5-4.8 V class</td><td class='mono'></td></tr><tr><td><b>LiFeO2</b></td><td>Electrolyte</td><td>Molecule</td><td>Fe3+/4+ layered, high-voltage d5 endpoint</td><td class='mono'></td></tr><tr><td><b>CuNi55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu/Ni 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>CuMn55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu/Mn 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>CuFe55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu/Fe 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>CuCo55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu/Co 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>NiFe55</b></td><td>Electrolyte</td><td>Molecule</td><td>Ni/Fe 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>CoFe55</b></td><td>Electrolyte</td><td>Molecule</td><td>Co/Fe 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>FeMn55</b></td><td>Electrolyte</td><td>Molecule</td><td>Fe/Mn 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>LiVO2</b></td><td>Electrolyte</td><td>Molecule</td><td>V3+/4+ layered control</td><td class='mono'></td></tr><tr><td><b>CuAl91</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu-rich with Al stabilizer</td><td class='mono'></td></tr><tr><td><b>CuZr91</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu-rich with Zr dopant</td><td class='mono'></td></tr><tr><td><b>CuMn73</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu-rich Mn mix</td><td class='mono'></td></tr><tr><td><b>CuNi82</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu-rich Ni mix</td><td class='mono'></td></tr><tr><td><b>LiScO2</b></td><td>Electrolyte</td><td>Molecule</td><td>d0 Sc3+ layered (O-redox on delithiation)</td><td class='mono'></td></tr><tr><td><b>LiAlO2</b></td><td>Electrolyte</td><td>Molecule</td><td>d0 Al3+ layered (O-redox), lightest d0 cation</td><td class='mono'></td></tr><tr><td><b>LiGaO2</b></td><td>Electrolyte</td><td>Molecule</td><td>d10 Ga3+ layered (O-redox)</td><td class='mono'></td></tr><tr><td><b>LiZnO2</b></td><td>Electrolyte</td><td>Molecule</td><td>d10 Zn2+ layered (charge-unbalanced reference)</td><td class='mono'></td></tr><tr><td><b>FeNi73</b></td><td>Electrolyte</td><td>Molecule</td><td>Fe-rich Ni mix, band-edge probe</td><td class='mono'></td></tr><tr><td><b>FeNi37</b></td><td>Electrolyte</td><td>Molecule</td><td>Ni-rich Fe mix, band-edge probe</td><td class='mono'></td></tr><tr><td><b>CrFe55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cr/Fe mix (Cr tops known non-layered families)</td><td class='mono'></td></tr><tr><td><b>CrNi55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cr/Ni mix</td><td class='mono'></td></tr><tr><td><b>CrCo55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cr/Co mix</td><td class='mono'></td></tr><tr><td><b>FeCo91</b></td><td>Electrolyte</td><td>Molecule</td><td>Fe-rich Co-doped</td><td class='mono'></td></tr><tr><td><b>NiFe91</b></td><td>Electrolyte</td><td>Molecule</td><td>Ni-rich Fe-doped</td><td class='mono'></td></tr><tr><td><b>FeNi91</b></td><td>Electrolyte</td><td>Molecule</td><td>Fe-rich Ni-doped</td><td class='mono'></td></tr><tr><td><b>ZnNi55</b></td><td>Electrolyte</td><td>Molecule</td><td>Zn/Ni mix (d10 + redox)</td><td class='mono'></td></tr><tr><td><b>ScFe55</b></td><td>Electrolyte</td><td>Molecule</td><td>Sc/Fe mix (d0 + redox)</td><td class='mono'></td></tr><tr><td><b>LiBO2</b></td><td>Electrolyte</td><td>Molecule</td><td>smallest d0 cation B3+, O-redox layered</td><td class='mono'></td></tr><tr><td><b>AlB55</b></td><td>Electrolyte</td><td>Molecule</td><td>Al/B 50:50</td><td class='mono'></td></tr><tr><td><b>AlB73</b></td><td>Electrolyte</td><td>Molecule</td><td>Al-rich B-doped</td><td class='mono'></td></tr><tr><td><b>AlB91</b></td><td>Electrolyte</td><td>Molecule</td><td>Al-rich B-doped (near LiAlO2)</td><td class='mono'></td></tr><tr><td><b>BAl73</b></td><td>Electrolyte</td><td>Molecule</td><td>B-rich Al-doped</td><td class='mono'></td></tr><tr><td><b>BAl91</b></td><td>Electrolyte</td><td>Molecule</td><td>B-rich Al-doped (near LiBO2)</td><td class='mono'></td></tr><tr><td><b>AlB82</b></td><td>Electrolyte</td><td>Molecule</td><td>Al/B 80:20</td><td class='mono'></td></tr><tr><td><b>AlB64</b></td><td>Electrolyte</td><td>Molecule</td><td>Al/B 60:40</td><td class='mono'></td></tr><tr><td><b>AlB95</b></td><td>Electrolyte</td><td>Molecule</td><td>Al-rich B-doped (finest step)</td><td class='mono'></td></tr><tr><td><b>GaAl55</b></td><td>Electrolyte</td><td>Molecule</td><td>Ga/Al control (expect ~4.54)</td><td class='mono'></td></tr><tr><td><b>AlSc55</b></td><td>Electrolyte</td><td>Molecule</td><td>Al/Sc control (expect ~4.45)</td><td class='mono'></td></tr><tr><td><b>BGa55</b></td><td>Electrolyte</td><td>Molecule</td><td>B/Ga mix</td><td class='mono'></td></tr><tr><td><b>BSc55</b></td><td>Electrolyte</td><td>Molecule</td><td>B/Sc mix</td><td class='mono'></td></tr><tr><td><b>GaAl91</b></td><td>Electrolyte</td><td>Molecule</td><td>Ga-rich Al-doped control</td><td class='mono'></td></tr></table>
+</section>
+
+<section id="trajectory" class="sheet" aria-labelledby="trajectory-title">
+  <div class="eyebrow">SHEET 02 · TRAJECTORY</div>
+  <h2 id="trajectory-title">Iteration Trajectory</h2>
+  <div class="ov-head">Round overview</div><table class="tbl ov"><tr><th>Round</th><th>Stage</th><th>Cands</th><th>Energy density Wh/kg</th><th>Capacity Ah</th><th>T_max K</th><th>Plating</th><th>Verdict</th></tr><tr><td class='num'>R01</td><td><span class="badge stage">STAGE 2 Materials</span></td><td class='num'>14</td><td class='num'>—</td><td class='num'>—</td><td class='num'>—</td><td><span class="badge mute">—</span></td><td><span class="badge bad">fail</span></td></tr><tr><td class='num'>R02</td><td><span class="badge stage">STAGE 2 Materials</span></td><td class='num'>14</td><td class='num'>—</td><td class='num'>—</td><td class='num'>—</td><td><span class="badge mute">—</span></td><td><span class="badge bad">fail</span></td></tr><tr><td class='num'>R03</td><td><span class="badge stage">STAGE 2 Materials</span></td><td class='num'>14</td><td class='num'>—</td><td class='num'>—</td><td class='num'>—</td><td><span class="badge mute">—</span></td><td><span class="badge bad">fail</span></td></tr><tr><td class='num'>R04</td><td><span class="badge stage">STAGE 2 Materials</span></td><td class='num'>2</td><td class='num'>—</td><td class='num'>—</td><td class='num'>—</td><td><span class="badge mute">—</span></td><td><span class="badge bad">fail</span></td></tr></table>
+  
+  <details class="round" open><summary><span class="round-no">ROUND 01</span><span class="badge stage">STAGE 2 Materials</span><span class="badge bad">fail</span><span class="round-sub">14 candidates</span></summary><div class="round-body"><div class="blk"><div class="blk-label">Propose · Candidates</div><table class="tbl cand"><tr><th>Candidate</th><th>Component</th><th>Type</th><th>Role</th><th>Content</th></tr><tr><td><b>LiCuO2</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu3+/2+ layered oxide, literature ~4.5-4.8 V class</td><td class='mono'></td></tr><tr><td><b>LiFeO2</b></td><td>Electrolyte</td><td>Molecule</td><td>Fe3+/4+ layered, high-voltage d5 endpoint</td><td class='mono'></td></tr><tr><td><b>CuNi55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu/Ni 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>CuMn55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu/Mn 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>CuFe55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu/Fe 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>CuCo55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu/Co 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>NiFe55</b></td><td>Electrolyte</td><td>Molecule</td><td>Ni/Fe 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>CoFe55</b></td><td>Electrolyte</td><td>Molecule</td><td>Co/Fe 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>FeMn55</b></td><td>Electrolyte</td><td>Molecule</td><td>Fe/Mn 50:50 layered mix</td><td class='mono'></td></tr><tr><td><b>LiVO2</b></td><td>Electrolyte</td><td>Molecule</td><td>V3+/4+ layered control</td><td class='mono'></td></tr><tr><td><b>CuAl91</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu-rich with Al stabilizer</td><td class='mono'></td></tr><tr><td><b>CuZr91</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu-rich with Zr dopant</td><td class='mono'></td></tr><tr><td><b>CuMn73</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu-rich Mn mix</td><td class='mono'></td></tr><tr><td><b>CuNi82</b></td><td>Electrolyte</td><td>Molecule</td><td>Cu-rich Ni mix</td><td class='mono'></td></tr></table><p class="reason">ED feasibility analysis (baseline ED measured 400.29 Wh/kg + family capacity bounds 0.9xCxM_am) shows only the layered family can clear 327.18 Wh/kg; the known layered band tops at 4.029 V (NiMnMA), so the window [4.6, 4.8] is empty in the hull. Round 1 maps the TM-redox layered voltage envelope: Cu (4.5-4.8 V class experimentally) and Fe (highest known layered computed 3.94) as the primary hypotheses, Ni/Co/Mn/V as controls.</p></div><div class="blk"><div class="blk-label">Funnel · Screening</div><span class="chip">PASS <b class="num">0</b></span><span class="chip">REJECT <b class="num">14</b></span><span class="chip">DISP. <b class="num">0</b></span><table class="tbl"><tr><th>Candidate</th><th>Disposition</th><th>Reason</th></tr><tr><td>LiCuO2</td><td><span class="badge bad">rejected</span></td><td>3.707 V &lt; 4.6</td></tr><tr><td>LiFeO2</td><td><span class="badge bad">rejected</span></td><td>3.943 V &lt; 4.6</td></tr><tr><td>CuNi55</td><td><span class="badge bad">rejected</span></td><td>3.750 V &lt; 4.6</td></tr><tr><td>CuMn55</td><td><span class="badge bad">rejected</span></td><td>3.512 V &lt; 4.6</td></tr><tr><td>CuFe55</td><td><span class="badge bad">rejected</span></td><td>3.807 V &lt; 4.6</td></tr><tr><td>CuCo55</td><td><span class="badge bad">rejected</span></td><td>3.492 V &lt; 4.6</td></tr><tr><td>NiFe55</td><td><span class="badge bad">rejected</span></td><td>3.990 V &lt; 4.6 (round max)</td></tr><tr><td>CoFe55</td><td><span class="badge bad">rejected</span></td><td>3.682 V &lt; 4.6</td></tr><tr><td>FeMn55</td><td><span class="badge bad">rejected</span></td><td>3.342 V &lt; 4.6</td></tr><tr><td>LiVO2</td><td><span class="badge bad">rejected</span></td><td>2.564 V &lt; 4.6</td></tr><tr><td>CuAl91</td><td><span class="badge bad">rejected</span></td><td>3.693 V &lt; 4.6</td></tr><tr><td>CuZr91</td><td><span class="badge bad">rejected</span></td><td>3.722 V &lt; 4.6</td></tr><tr><td>CuMn73</td><td><span class="badge bad">rejected</span></td><td>3.615 V &lt; 4.6</td></tr><tr><td>CuNi82</td><td><span class="badge bad">rejected</span></td><td>3.670 V &lt; 4.6</td></tr></table><p>All 14 below the 4.6 V window (band 2.56-3.99 V); best LiNi0.5Fe0.5O2 3.990, LiFeO2 3.943; Cu layered computes 3.5-3.8 (CHGNet prices Cu layered low).</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.707</td></tr><tr><td>capacity_mah_g</td><td class='num'>183.1</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-0.3345</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.707 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.943</td></tr><tr><td>capacity_mah_g</td><td class='num'>197.9</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.288</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.943 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.75</td></tr><tr><td>capacity_mah_g</td><td class='num'>187.5</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-0.6687</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.750 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.512</td></tr><tr><td>capacity_mah_g</td><td class='num'>191.1</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.592</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.512 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.807</td></tr><tr><td>capacity_mah_g</td><td class='num'>190.2</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.314</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.807 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.492</td></tr><tr><td>capacity_mah_g</td><td class='num'>187.3</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-0.9628</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.492 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.99</td></tr><tr><td>capacity_mah_g</td><td class='num'>195</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.648</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.990 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.682</td></tr><tr><td>capacity_mah_g</td><td class='num'>194.8</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.924</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.682 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.342</td></tr><tr><td>capacity_mah_g</td><td class='num'>198.9</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.534</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.342 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>2.564</td></tr><tr><td>capacity_mah_g</td><td class='num'>208.7</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-3.139</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 2.564 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.693</td></tr><tr><td>capacity_mah_g</td><td class='num'>189.8</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-0.4933</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.693 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.722</td></tr><tr><td>capacity_mah_g</td><td class='num'>178.2</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-0.6577</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.722 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.615</td></tr><tr><td>capacity_mah_g</td><td class='num'>187</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-0.9815</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.615 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.67</td></tr><tr><td>capacity_mah_g</td><td class='num'>184.8</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-0.4478</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.670 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div></div></details><details class="round"><summary><span class="round-no">ROUND 02</span><span class="badge stage">STAGE 2 Materials</span><span class="badge bad">fail</span><span class="round-sub">14 candidates</span></summary><div class="round-body"><div class="blk"><div class="blk-label">Propose · Candidates</div><table class="tbl cand"><tr><th>Candidate</th><th>Component</th><th>Type</th><th>Role</th><th>Content</th></tr><tr><td><b>LiScO2</b></td><td>Electrolyte</td><td>Molecule</td><td>d0 Sc3+ layered (O-redox on delithiation)</td><td class='mono'></td></tr><tr><td><b>LiAlO2</b></td><td>Electrolyte</td><td>Molecule</td><td>d0 Al3+ layered (O-redox), lightest d0 cation</td><td class='mono'></td></tr><tr><td><b>LiGaO2</b></td><td>Electrolyte</td><td>Molecule</td><td>d10 Ga3+ layered (O-redox)</td><td class='mono'></td></tr><tr><td><b>LiZnO2</b></td><td>Electrolyte</td><td>Molecule</td><td>d10 Zn2+ layered (charge-unbalanced reference)</td><td class='mono'></td></tr><tr><td><b>FeNi73</b></td><td>Electrolyte</td><td>Molecule</td><td>Fe-rich Ni mix, band-edge probe</td><td class='mono'></td></tr><tr><td><b>FeNi37</b></td><td>Electrolyte</td><td>Molecule</td><td>Ni-rich Fe mix, band-edge probe</td><td class='mono'></td></tr><tr><td><b>CrFe55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cr/Fe mix (Cr tops known non-layered families)</td><td class='mono'></td></tr><tr><td><b>CrNi55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cr/Ni mix</td><td class='mono'></td></tr><tr><td><b>CrCo55</b></td><td>Electrolyte</td><td>Molecule</td><td>Cr/Co mix</td><td class='mono'></td></tr><tr><td><b>FeCo91</b></td><td>Electrolyte</td><td>Molecule</td><td>Fe-rich Co-doped</td><td class='mono'></td></tr><tr><td><b>NiFe91</b></td><td>Electrolyte</td><td>Molecule</td><td>Ni-rich Fe-doped</td><td class='mono'></td></tr><tr><td><b>FeNi91</b></td><td>Electrolyte</td><td>Molecule</td><td>Fe-rich Ni-doped</td><td class='mono'></td></tr><tr><td><b>ZnNi55</b></td><td>Electrolyte</td><td>Molecule</td><td>Zn/Ni mix (d10 + redox)</td><td class='mono'></td></tr><tr><td><b>ScFe55</b></td><td>Electrolyte</td><td>Molecule</td><td>Sc/Fe mix (d0 + redox)</td><td class='mono'></td></tr></table><p class="reason">Round 1: the TM-redox layered band caps at ~4.0 V (NiFe55 3.99; known LiNiO2 3.89) - no 3d redox reaches 4.6. New hypothesis: d0/d10 cations (Sc/Al/Ga/Zn) cannot oxidize, so delithiation forces O oxidation - the Li2MnO3-class O-redox mechanism whose real-world activation plateau sits at 4.4-4.7 V. Also probe the Fe/Ni band edges and Cr mixes (Cr tops the known spinel/NASICON bands) for completeness of the envelope documentation.</p></div><div class="blk"><div class="blk-label">Funnel · Screening</div><span class="chip">PASS <b class="num">0</b></span><span class="chip">REJECT <b class="num">13</b></span><span class="chip">DISP. <b class="num">1</b></span><table class="tbl"><tr><th>Candidate</th><th>Disposition</th><th>Reason</th></tr><tr><td>LiScO2</td><td><span class="badge bad">rejected</span></td><td>4.298 V &lt; 4.6</td></tr><tr><td>LiAlO2</td><td><span class="badge warn">disputed</span></td><td>4.598 V, 2 mV below window - refinement anchor (B doping direction)</td></tr><tr><td>LiGaO2</td><td><span class="badge bad">rejected</span></td><td>4.479 V &lt; 4.6</td></tr><tr><td>LiZnO2</td><td><span class="badge bad">rejected</span></td><td>4.492 V &lt; 4.6 (and Zn2+ charge-unbalanced on the M site)</td></tr><tr><td>FeNi73</td><td><span class="badge bad">rejected</span></td><td>3.964 V &lt; 4.6</td></tr><tr><td>FeNi37</td><td><span class="badge bad">rejected</span></td><td>3.925 V &lt; 4.6</td></tr><tr><td>CrFe55</td><td><span class="badge bad">rejected</span></td><td>3.747 V &lt; 4.6</td></tr><tr><td>CrNi55</td><td><span class="badge bad">rejected</span></td><td>3.786 V &lt; 4.6</td></tr><tr><td>CrCo55</td><td><span class="badge bad">rejected</span></td><td>3.554 V &lt; 4.6</td></tr><tr><td>FeCo91</td><td><span class="badge bad">rejected</span></td><td>3.841 V &lt; 4.6</td></tr><tr><td>NiFe91</td><td><span class="badge bad">rejected</span></td><td>3.959 V &lt; 4.6</td></tr><tr><td>FeNi91</td><td><span class="badge bad">rejected</span></td><td>3.958 V &lt; 4.6</td></tr><tr><td>ZnNi55</td><td><span class="badge bad">rejected</span></td><td>4.247 V &lt; 4.6</td></tr><tr><td>ScFe55</td><td><span class="badge bad">rejected</span></td><td>3.999 V &lt; 4.6</td></tr></table><p>d0/d10 O-redox line lands at the window edge: LiAlO2 4.598 V (2 mV short of 4.6, disputed as refinement anchor), LiZnO2 4.492, LiGaO2 4.479, LiScO2 4.298; all redox mixes 3.55-4.0. Smaller d0 cation -&gt; higher V (Al &gt; Ga &gt; Sc).</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.298</td></tr><tr><td>capacity_mah_g</td><td class='num'>223.6</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-3.327</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.298 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.598</td></tr><tr><td>capacity_mah_g</td><td class='num'>284.6</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.269</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.598 V, within 0.11 V of the window - near-miss recorded | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.479</td></tr><tr><td>capacity_mah_g</td><td class='num'>172.7</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.157</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.479 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.492</td></tr><tr><td>capacity_mah_g</td><td class='num'>179.8</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>0.1578</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.492 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.964</td></tr><tr><td>capacity_mah_g</td><td class='num'>196.5</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.975</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.964 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.925</td></tr><tr><td>capacity_mah_g</td><td class='num'>193.6</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.318</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.925 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.747</td></tr><tr><td>capacity_mah_g</td><td class='num'>202</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.763</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.747 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.786</td></tr><tr><td>capacity_mah_g</td><td class='num'>199</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.14</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.786 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.554</td></tr><tr><td>capacity_mah_g</td><td class='num'>198.7</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.405</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.554 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.841</td></tr><tr><td>capacity_mah_g</td><td class='num'>197.3</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.226</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.841 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.959</td></tr><tr><td>capacity_mah_g</td><td class='num'>192.7</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.098</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.959 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.958</td></tr><tr><td>capacity_mah_g</td><td class='num'>197.3</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.189</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.958 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.247</td></tr><tr><td>capacity_mah_g</td><td class='num'>185.8</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-0.4422</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.247 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>3.999</td></tr><tr><td>capacity_mah_g</td><td class='num'>210</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.808</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 3.999 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div></div></details><details class="round"><summary><span class="round-no">ROUND 03</span><span class="badge stage">STAGE 2 Materials</span><span class="badge bad">fail</span><span class="round-sub">14 candidates</span></summary><div class="round-body"><div class="blk"><div class="blk-label">Propose · Candidates</div><table class="tbl cand"><tr><th>Candidate</th><th>Component</th><th>Type</th><th>Role</th><th>Content</th></tr><tr><td><b>LiBO2</b></td><td>Electrolyte</td><td>Molecule</td><td>smallest d0 cation B3+, O-redox layered</td><td class='mono'></td></tr><tr><td><b>AlB55</b></td><td>Electrolyte</td><td>Molecule</td><td>Al/B 50:50</td><td class='mono'></td></tr><tr><td><b>AlB73</b></td><td>Electrolyte</td><td>Molecule</td><td>Al-rich B-doped</td><td class='mono'></td></tr><tr><td><b>AlB91</b></td><td>Electrolyte</td><td>Molecule</td><td>Al-rich B-doped (near LiAlO2)</td><td class='mono'></td></tr><tr><td><b>BAl73</b></td><td>Electrolyte</td><td>Molecule</td><td>B-rich Al-doped</td><td class='mono'></td></tr><tr><td><b>BAl91</b></td><td>Electrolyte</td><td>Molecule</td><td>B-rich Al-doped (near LiBO2)</td><td class='mono'></td></tr><tr><td><b>AlB82</b></td><td>Electrolyte</td><td>Molecule</td><td>Al/B 80:20</td><td class='mono'></td></tr><tr><td><b>AlB64</b></td><td>Electrolyte</td><td>Molecule</td><td>Al/B 60:40</td><td class='mono'></td></tr><tr><td><b>AlB95</b></td><td>Electrolyte</td><td>Molecule</td><td>Al-rich B-doped (finest step)</td><td class='mono'></td></tr><tr><td><b>GaAl55</b></td><td>Electrolyte</td><td>Molecule</td><td>Ga/Al control (expect ~4.54)</td><td class='mono'></td></tr><tr><td><b>AlSc55</b></td><td>Electrolyte</td><td>Molecule</td><td>Al/Sc control (expect ~4.45)</td><td class='mono'></td></tr><tr><td><b>BGa55</b></td><td>Electrolyte</td><td>Molecule</td><td>B/Ga mix</td><td class='mono'></td></tr><tr><td><b>BSc55</b></td><td>Electrolyte</td><td>Molecule</td><td>B/Sc mix</td><td class='mono'></td></tr><tr><td><b>GaAl91</b></td><td>Electrolyte</td><td>Molecule</td><td>Ga-rich Al-doped control</td><td class='mono'></td></tr></table><p class="reason">Round 2 funnel: LiAlO2 4.598 V is 2 mV under the window; the d0 line ranks by ionic radius (Al 0.535 A &gt; Ga 0.62 &gt; Sc 0.745 in V). B3+ (0.27 A) is the smallest, lightest d0 cation and is unexplored - LiBO2 and the B-Al gradient are the natural refinement; all compositions charge-balanced (M3+). Ga/Sc mixes serve as mixing-rule controls.</p></div><div class="blk"><div class="blk-label">Funnel · Screening</div><span class="chip">PASS <b class="num">1</b></span><span class="chip">REJECT <b class="num">13</b></span><span class="chip">DISP. <b class="num">0</b></span><table class="tbl"><tr><th>Candidate</th><th>Disposition</th><th>Reason</th></tr><tr><td>LiBO2</td><td><span class="badge bad">rejected</span></td><td>4.253 V &lt; 4.6 (pure B below LiAlO2 - radius trend breaks at B)</td></tr><tr><td>AlB55</td><td><span class="badge ok">passed</span></td><td>4.6413 V &gt;= 4.6 - advances to the charging-potential gate</td></tr><tr><td>AlB73</td><td><span class="badge bad">rejected</span></td><td>4.429 V &lt; 4.6</td></tr><tr><td>AlB91</td><td><span class="badge bad">rejected</span></td><td>4.443 V &lt; 4.6</td></tr><tr><td>BAl73</td><td><span class="badge bad">rejected</span></td><td>4.226 V &lt; 4.6</td></tr><tr><td>BAl91</td><td><span class="badge bad">rejected</span></td><td>4.304 V &lt; 4.6</td></tr><tr><td>AlB82</td><td><span class="badge bad">rejected</span></td><td>4.464 V &lt; 4.6</td></tr><tr><td>AlB64</td><td><span class="badge bad">rejected</span></td><td>4.280 V &lt; 4.6</td></tr><tr><td>AlB95</td><td><span class="badge bad">rejected</span></td><td>4.488 V &lt; 4.6</td></tr><tr><td>GaAl55</td><td><span class="badge bad">rejected</span></td><td>4.494 V &lt; 4.6</td></tr><tr><td>AlSc55</td><td><span class="badge bad">rejected</span></td><td>4.298 V &lt; 4.6</td></tr><tr><td>BGa55</td><td><span class="badge bad">rejected</span></td><td>4.504 V &lt; 4.6</td></tr><tr><td>BSc55</td><td><span class="badge bad">rejected</span></td><td>4.115 V &lt; 4.6</td></tr><tr><td>GaAl91</td><td><span class="badge bad">rejected</span></td><td>4.454 V &lt; 4.6</td></tr></table><p>AlB55 (LiAl0.5B0.5O2) 4.6413 V clears the window (margin 41 mV) - the first candidate past 4.6 V in 42 screened. Non-monotonic in B content: sharp 50:50 peak (nearest neighbors AlB82 4.464, BAl73 4.226, AlB95 4.488, BGa55 4.504). The peak comes from the delithiated x=0.3 state being ~1.5 eV off the B-content trend - flagged as a sensitivity risk; the charging-potential profile is the co-gate. Pure LiBO2 4.253 is NOT higher than LiAlO2 4.598 - the ionic-radius trend does not extrapolate to B; the pass is a mixing effect.</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.253</td></tr><tr><td>capacity_mah_g</td><td class='num'>377.1</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.53</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.253 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge ok">pass</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.641</td></tr><tr><td>capacity_mah_g</td><td class='num'>324.4</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.391</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.641 V &gt;= 4.6 - passes the stage-1 window; advances to the charging-potential gate (comp/profile_voltage.py) | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.429</td></tr><tr><td>capacity_mah_g</td><td class='num'>303.2</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.294</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.429 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.443</td></tr><tr><td>capacity_mah_g</td><td class='num'>291.8</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.265</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.443 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.226</td></tr><tr><td>capacity_mah_g</td><td class='num'>348.8</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.441</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.226 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.304</td></tr><tr><td>capacity_mah_g</td><td class='num'>365.2</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.569</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.304 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.464</td></tr><tr><td>capacity_mah_g</td><td class='num'>299.3</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.276</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.464 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.28</td></tr><tr><td>capacity_mah_g</td><td class='num'>315.6</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.327</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.280 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.488</td></tr><tr><td>capacity_mah_g</td><td class='num'>288.1</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.265</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.488 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.494</td></tr><tr><td>capacity_mah_g</td><td class='num'>214.9</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.705</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.494 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.298</td></tr><tr><td>capacity_mah_g</td><td class='num'>250.5</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.76</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.298 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.504</td></tr><tr><td>capacity_mah_g</td><td class='num'>236.9</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.851</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.504 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.115</td></tr><tr><td>capacity_mah_g</td><td class='num'>280.8</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.843</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.115 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.454</td></tr><tr><td>capacity_mah_g</td><td class='num'>179.7</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-1.248</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">computed avg voltage 4.454 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div></div></details><details class="round"><summary><span class="round-no">ROUND 04</span><span class="badge stage">STAGE 2 Materials</span><span class="badge bad">fail</span><span class="round-sub">2 candidates</span></summary><div class="round-body"><div class="blk"><div class="blk-label">Propose · Candidates</div><table class="tbl cand"><tr><th>Candidate</th><th>Component</th><th>Type</th><th>Role</th><th>Content</th></tr><tr><td><b>AlB55</b></td><td>Electrolyte</td><td>Molecule</td><td>round-3 window pass (4.6413 V) - charging-potential gate: incremental voltage profile over the delithiation window</td><td class='mono'></td></tr><tr><td><b>LiAlO2</b></td><td>Electrolyte</td><td>Molecule</td><td>round-2 anchor (4.598 V) - profile documentation of the d0 O-redox line's top-end</td><td class='mono'></td></tr></table><p class="reason">The stage-1 window has two co-gates: avg &gt;= 4.6 V (AlB55 passes at 4.6413, margin 41 mV) and the charging potential &lt;= 4.8 V (anodic limit of the fixed EC/EMC + LiPF6 electrolyte). For d0 O-redox, the top-of-charge incremental potential can exceed the average: comp/profile_voltage.py re-relaxes x = 1.0 and 0.9..0.3 (nested seeded subsets of the same removal order) and reports charging_potential_v = incremental V(0.4 -&gt; 0.3), the last charge step into the top-of-charge state, plus max_incremental_v. LiAlO2 is profiled as the d0-line anchor. The profile also supplies the CHGNet-relaxed cell density required by the mapped-cell parameter set.</p></div><div class="blk"><div class="blk-label">Funnel · Screening</div><span class="chip">PASS <b class="num">0</b></span><span class="chip">REJECT <b class="num">2</b></span><span class="chip">DISP. <b class="num">0</b></span><table class="tbl"><tr><th>Candidate</th><th>Disposition</th><th>Reason</th></tr><tr><td>AlB55</td><td><span class="badge bad">rejected</span></td><td>charging_potential_v 7.410 V &gt; 4.8 V - incompatible with the fixed electrolyte; the window pass was the artifact signature</td></tr><tr><td>LiAlO2</td><td><span class="badge bad">rejected</span></td><td>avg 4.598 V &lt; 4.6 (and the d0-line mechanism is condemned by the AlB55 gate)</td></tr></table><p>Charging-potential gate DECISIVE FAILURE: AlB55 charging_potential_v = 7.410 V (incremental V(0.4 -&gt; 0.3) into the top-of-charge state) - 2.6 V above the 4.8 V anodic limit of the fixed EC/EMC + LiPF6 electrolyte. The round-3 window pass (avg 4.641 V) was bought with a pathological x=0.3 endpoint: E(0.3) sits ~9 eV off its composition neighbors and the final Li removal costs 7.4 V. The sharp 50:50 peak was this artifact's signature, not a designable chemistry. The mechanism is fatal for the whole d0/d10 O-redox layered line (any avg &gt;= 4.6 in that family comes from the same diseased endpoint). LiAlO2 (4.598 V) fails the window regardless. No candidate survives both stage-1 co-gates.</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.641</td></tr><tr><td>avg_voltage_v_from_gate_states</td><td class='num'>4.639</td></tr><tr><td>charging_potential_v</td><td class='num'>7.41</td></tr><tr><td>n_li_removed_04_03</td><td class='num'>1</td></tr><tr><td>e_full_ev</td><td class='num'>-338.1</td></tr><tr><td>e_04_ev</td><td class='num'>-295.3</td></tr><tr><td>e_03_ev</td><td class='num'>-286</td></tr><tr><td>e_li_metal_ev</td><td class='num'>-1.878</td></tr><tr><td>capacity_mah_g</td><td class='num'>324.4</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.391</td></tr><tr><td>density_g_cm3</td><td class='num'>2.836</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">charging-potential gate: avg_voltage_v 4.641 V (window pass) but charging_potential_v 7.410 V &gt; 4.8 V - the window pass was bought with a pathological top-of-charge state (last Li removal costs 7.4 V); incompatible with the fixed electrolyte | unchecked criteria: energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="blk"><div class="blk-label">Evaluate <span class="badge bad">fail</span></div><table class="tbl"><tr><th>Metric</th><th>Value</th></tr><tr><td>avg_voltage_v</td><td class='num'>4.598</td></tr><tr><td>capacity_mah_g</td><td class='num'>284.6</td></tr><tr><td>rel_stability_ev_atom</td><td class='num'>-2.269</td></tr><tr><td>converged</td><td class='num'>false</td></tr></table><p class="reason">anchor: avg 4.598 V &lt; 4.6 (fails the window regardless); charging-gate profile not run - AlB55's decisive gate failure (7.41 V) identifies the d0-line mechanism as fatal for the family | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div></div></details>
+</section>
+
+<section id="funnel" class="sheet" aria-labelledby="funnel-title">
+  <div class="eyebrow">SHEET 03 · FUNNEL</div>
+  <h2 id="funnel-title">Funnel Statistics</h2>
+  <div class="stats"><div class="stat pass"><div class="stat-num">1</div><div class="stat-label">Passed</div></div><div class="stat rej"><div class="stat-num">42</div><div class="stat-label">Rejected</div></div><div class="stat dis"><div class="stat-num">1</div><div class="stat-label">Disputed</div></div></div><div class="funnel-detail"><span class="chip">R01</span><p>All 14 below the 4.6 V window (band 2.56-3.99 V); best LiNi0.5Fe0.5O2 3.990, LiFeO2 3.943; Cu layered computes 3.5-3.8 (CHGNet prices Cu layered low).</p></div><div class="funnel-detail"><span class="chip">R02</span><p>d0/d10 O-redox line lands at the window edge: LiAlO2 4.598 V (2 mV short of 4.6, disputed as refinement anchor), LiZnO2 4.492, LiGaO2 4.479, LiScO2 4.298; all redox mixes 3.55-4.0. Smaller d0 cation -&gt; higher V (Al &gt; Ga &gt; Sc).</p></div><div class="funnel-detail"><span class="chip">R03</span><p>AlB55 (LiAl0.5B0.5O2) 4.6413 V clears the window (margin 41 mV) - the first candidate past 4.6 V in 42 screened. Non-monotonic in B content: sharp 50:50 peak (nearest neighbors AlB82 4.464, BAl73 4.226, AlB95 4.488, BGa55 4.504). The peak comes from the delithiated x=0.3 state being ~1.5 eV off the B-content trend - flagged as a sensitivity risk; the charging-potential profile is the co-gate. Pure LiBO2 4.253 is NOT higher than LiAlO2 4.598 - the ionic-radius trend does not extrapolate to B; the pass is a mixing effect.</p></div><div class="funnel-detail"><span class="chip">R04</span><p>Charging-potential gate DECISIVE FAILURE: AlB55 charging_potential_v = 7.410 V (incremental V(0.4 -&gt; 0.3) into the top-of-charge state) - 2.6 V above the 4.8 V anodic limit of the fixed EC/EMC + LiPF6 electrolyte. The round-3 window pass (avg 4.641 V) was bought with a pathological x=0.3 endpoint: E(0.3) sits ~9 eV off its composition neighbors and the final Li removal costs 7.4 V. The sharp 50:50 peak was this artifact's signature, not a designable chemistry. The mechanism is fatal for the whole d0/d10 O-redox layered line (any avg &gt;= 4.6 in that family comes from the same diseased endpoint). LiAlO2 (4.598 V) fails the window regardless. No candidate survives both stage-1 co-gates.</p></div>
+</section>
+
+<section id="stages" class="sheet" aria-labelledby="stages-title">
+  <div class="eyebrow">SHEET 04 · STAGE RESULTS</div>
+  <h2 id="stages-title">Stage Results</h2>
+  <figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 01</span><span class="fname">baseline_1c_spme.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 311.6 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="baseline_1c_spme.json curves (model SPMe)" data-series='{&quot;voltage_v&quot;: [[0.0, 4.0363], [0.0, 4.0363], [0.0, 4.0363], [0.01, 4.0362], [0.02, 4.0362], [0.04, 4.0361], [0.07, 4.0359], [0.11, 4.0357], [0.18, 4.0353], [0.33, 4.0346], [0.48, 4.0338], [0.63, 4.033], [0.92, 4.0316], [1.22, 4.0301], [1.81, 4.0273], [2.34, 4.0248], [2.87, 4.0225], [3.4, 4.0202], [3.93, 4.018], [4.99, 4.0139], [6.05, 4.0101], [7.39, 4.0056], [8.72, 4.0015], [10.06, 3.9978], [11.39, 3.9943], [12.73, 3.9911], [15.4, 3.9853], [18.07, 3.9802], [20.74, 3.9758], [23.41, 3.9718], [26.09, 3.9682], [28.76, 3.9651], [31.43, 3.9622], [36.77, 3.9574], [42.11, 3.9534], [47.46, 3.9501], [52.8, 3.9474], [58.14, 3.9452], [63.48, 3.9434], [68.83, 3.9419], [74.17, 3.9406], [79.51, 3.9396], [84.86, 3.9387], [90.2, 3.938], [95.54, 3.9374], [100.88, 3.9369], [106.23, 3.9364], [111.57, 3.936], [116.91, 3.9356], [122.25, 3.9352], [127.6, 3.9349], [132.94, 3.9345], [138.28, 3.9341], [143.63, 3.9337], [148.97, 3.9332], [154.31, 3.9328], [159.65, 3.9323], [165.0, 3.9317], [170.34, 3.9311], [175.68, 3.9305], [181.03, 3.9298], [186.37, 3.9291], [191.71, 3.9283], [197.05, 3.9275], [202.4, 3.9266], [207.74, 3.9257], [213.08, 3.9248], [223.77, 3.9228], [234.45, 3.9206], [255.82, 3.9159], [275.06, 3.9112], [294.29, 3.9062], [313.53, 3.9011], [332.76, 3.8958], [351.99, 3.8904], [371.23, 3.885], [409.69, 3.8742], [448.16, 3.8637], [486.63, 3.8536], [525.1, 3.8439], [563.57, 3.8348], [640.5, 3.8178], [717.44, 3.8023], [794.37, 3.7877], [871.31, 3.7732], [948.24, 3.7577], [1025.18, 3.7393], [1179.05, 3.6871], [1332.92, 3.6349], [1486.79, 3.5941], [1640.66, 3.561], [1794.53, 3.5339], [1948.4, 3.5097], [2102.27, 3.4856], [2410.02, 3.4225], [2717.76, 3.3339], [3025.5, 3.2519], [3333.24, 2.9994], [3562.39, 2.5]]}'><title>baseline_1c_spme.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.0 L56.0,16.1 L56.0,16.1 L56.0,16.2 L56.1,16.3 L56.1,16.4 L56.1,16.6 L56.1,16.8 L56.2,17.1 L56.3,17.6 L56.4,18.0 L56.5,18.4 L56.5,18.8 L56.6,19.1 L56.8,19.9 L57.0,20.5 L57.2,21.3 L57.4,22.0 L57.6,22.6 L57.8,23.2 L58.0,23.8 L58.4,24.8 L58.9,25.6 L59.3,26.4 L59.7,27.1 L60.1,27.7 L60.6,28.2 L61.0,28.7 L61.8,29.6 L62.7,30.2 L63.5,30.8 L64.4,31.3 L65.2,31.7 L66.1,32.0 L66.9,32.2 L67.7,32.4 L68.6,32.6 L69.4,32.8 L70.3,32.9 L71.1,33.0 L72.0,33.1 L72.8,33.2 L73.7,33.2 L74.5,33.3 L75.4,33.4 L76.2,33.4 L77.0,33.5 L77.9,33.6 L78.7,33.6 L79.6,33.7 L80.4,33.8 L81.3,33.9 L82.1,34.0 L83.0,34.1 L83.8,34.2 L84.7,34.3 L85.5,34.4 L86.4,34.6 L87.2,34.7 L88.0,34.8 L88.9,35.0 L89.7,35.2 L91.4,35.5 L93.1,35.9 L96.5,36.7 L99.5,37.5 L102.6,38.3 L105.6,39.2 L108.7,40.1 L111.7,41.1 L114.8,42.0 L120.9,43.9 L127.0,45.7 L133.0,47.4 L139.1,49.1 L145.2,50.6 L157.4,53.5 L169.6,56.2 L181.8,58.7 L193.9,61.2 L206.1,63.9 L218.3,67.0 L242.7,76.0 L267.0,85.0 L291.4,92.0 L315.8,97.7 L340.1,102.3 L364.5,106.5 L388.8,110.6 L437.6,121.5 L486.3,136.7 L535.0,150.8 L583.7,194.2 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.036</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 311.6 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">1781</text><text x="620.0" y="298" text-anchor="end">3562</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure><figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 02</span><span class="fname">constocp_test_1c.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 312.3 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="constocp_test_1c.json curves (model SPMe)" data-series='{&quot;voltage_v&quot;: [[0.0, 4.4133], [0.0, 4.4133], [0.0, 4.4133], [0.01, 4.4133], [0.02, 4.4133], [0.04, 4.4133], [0.07, 4.4133], [0.11, 4.4133], [0.18, 4.4133], [0.33, 4.4132], [0.48, 4.4132], [0.63, 4.4131], [0.92, 4.413], [1.22, 4.4129], [1.81, 4.4127], [2.34, 4.4124], [2.87, 4.4122], [3.4, 4.412], [3.93, 4.4117], [4.99, 4.4112], [6.05, 4.4108], [7.39, 4.4102], [8.72, 4.4096], [10.06, 4.4091], [11.39, 4.4085], [12.73, 4.408], [15.4, 4.407], [18.07, 4.4061], [20.74, 4.4053], [23.41, 4.4046], [26.09, 4.4039], [28.76, 4.4033], [31.43, 4.4027], [36.77, 4.4017], [42.11, 4.4009], [47.46, 4.4003], [52.8, 4.3998], [58.14, 4.3994], [63.48, 4.3991], [68.83, 4.3988], [74.17, 4.3987], [79.51, 4.3986], [84.86, 4.3986], [90.2, 4.3986], [95.54, 4.3986], [100.88, 4.3987], [106.23, 4.3988], [111.57, 4.399], [116.91, 4.3991], [122.25, 4.3993], [127.6, 4.3995], [132.94, 4.3997], [138.28, 4.4], [143.63, 4.4002], [148.97, 4.4004], [154.31, 4.4007], [159.65, 4.401], [165.0, 4.4012], [170.34, 4.4015], [175.68, 4.4018], [181.03, 4.4021], [186.37, 4.4023], [191.71, 4.4026], [197.05, 4.4029], [202.4, 4.4032], [207.74, 4.4035], [213.08, 4.4038], [223.77, 4.4043], [234.45, 4.4049], [255.82, 4.406], [275.06, 4.407], [294.29, 4.4079], [313.53, 4.4088], [332.76, 4.4097], [351.99, 4.4105], [371.23, 4.4114], [409.69, 4.4129], [448.16, 4.4144], [486.63, 4.4157], [525.1, 4.417], [563.57, 4.4182], [640.5, 4.4202], [717.44, 4.422], [794.37, 4.4234], [871.31, 4.4243], [948.24, 4.4242], [1025.18, 4.4216], [1179.05, 4.4043], [1332.92, 4.3917], [1486.79, 4.3899], [1640.66, 4.3899], [1794.53, 4.3896], [1948.4, 4.3885], [2102.27, 4.3856], [2410.02, 4.3629], [2717.76, 4.314], [3025.5, 4.2716], [3333.24, 4.0587], [3640.98, 3.0435], [3674.5, 2.6546], [3685.21, 2.5]]}'><title>constocp_test_1c.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,17.5 L56.0,17.5 L56.0,17.5 L56.0,17.5 L56.0,17.5 L56.0,17.5 L56.0,17.5 L56.0,17.5 L56.0,17.5 L56.1,17.5 L56.1,17.5 L56.1,17.5 L56.1,17.6 L56.2,17.6 L56.3,17.6 L56.4,17.6 L56.4,17.7 L56.5,17.7 L56.6,17.7 L56.8,17.8 L56.9,17.9 L57.1,17.9 L57.3,18.0 L57.5,18.1 L57.7,18.2 L57.9,18.2 L58.4,18.4 L58.8,18.5 L59.2,18.6 L59.6,18.7 L60.0,18.8 L60.4,18.9 L60.8,19.0 L61.6,19.1 L62.4,19.2 L63.3,19.3 L64.1,19.4 L64.9,19.4 L65.7,19.5 L66.5,19.5 L67.4,19.5 L68.2,19.5 L69.0,19.5 L69.8,19.5 L70.6,19.5 L71.4,19.5 L72.3,19.5 L73.1,19.5 L73.9,19.5 L74.7,19.4 L75.5,19.4 L76.3,19.4 L77.2,19.3 L78.0,19.3 L78.8,19.3 L79.6,19.2 L80.4,19.2 L81.3,19.2 L82.1,19.1 L82.9,19.1 L83.7,19.1 L84.5,19.0 L85.3,19.0 L86.2,18.9 L87.0,18.9 L87.8,18.9 L88.6,18.8 L90.2,18.7 L91.9,18.7 L95.2,18.5 L98.1,18.4 L101.0,18.3 L104.0,18.1 L106.9,18.0 L109.9,17.9 L112.8,17.8 L118.7,17.6 L124.6,17.4 L130.5,17.2 L136.4,17.0 L142.3,16.8 L154.0,16.6 L165.8,16.3 L177.6,16.1 L189.3,16.0 L201.1,16.0 L212.9,16.4 L236.4,18.7 L260.0,20.5 L283.5,20.7 L307.1,20.7 L330.6,20.8 L354.2,20.9 L377.7,21.3 L424.8,24.4 L471.9,31.1 L519.0,37.0 L566.1,66.2 L613.2,205.4 L618.4,258.8 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.424</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 312.3 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">1843</text><text x="620.0" y="298" text-anchor="end">3685</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure><figure class='plot'><figcaption><span class="eyebrow" style="margin:0">Plot 03</span><span class="fname">lnmo_ref_1c_spme.json</span><span class="chip">MODEL SPMe</span><span class="chip">T_max 309.5 K</span></figcaption><div class="plot-wrap"><svg class="plot" viewBox="0 0 640 320" role="img" aria-label="lnmo_ref_1c_spme.json curves (model SPMe)" data-series='{&quot;voltage_v&quot;: [[0.0, 4.1812], [0.0, 4.1812], [0.01, 4.1812], [0.01, 4.1812], [0.02, 4.1812], [0.04, 4.1811], [0.08, 4.1811], [0.12, 4.1811], [0.2, 4.1811], [0.29, 4.1811], [0.45, 4.181], [0.61, 4.181], [0.78, 4.1809], [1.11, 4.1808], [1.43, 4.1806], [2.09, 4.1804], [2.68, 4.1801], [3.27, 4.1798], [3.86, 4.1796], [4.45, 4.1793], [5.63, 4.1788], [6.8, 4.1783], [8.29, 4.1777], [9.77, 4.1771], [11.25, 4.1765], [12.73, 4.176], [14.21, 4.1754], [17.17, 4.1744], [20.13, 4.1735], [23.09, 4.1727], [26.05, 4.172], [29.01, 4.1713], [31.98, 4.1707], [37.9, 4.1696], [43.82, 4.1688], [49.74, 4.1681], [55.67, 4.1675], [61.59, 4.1671], [67.51, 4.1667], [73.43, 4.1665], [79.36, 4.1663], [85.28, 4.1662], [91.2, 4.1661], [97.12, 4.1661], [103.05, 4.1661], [108.97, 4.1661], [114.89, 4.1662], [120.82, 4.1663], [126.74, 4.1664], [132.66, 4.1666], [138.58, 4.1667], [144.51, 4.1669], [150.43, 4.167], [156.35, 4.1672], [162.27, 4.1674], [168.2, 4.1676], [174.12, 4.1678], [180.04, 4.168], [185.96, 4.1682], [191.89, 4.1684], [197.81, 4.1686], [203.73, 4.1688], [209.65, 4.1691], [215.58, 4.1693], [221.5, 4.1695], [233.35, 4.1699], [245.19, 4.1704], [268.88, 4.1712], [292.57, 4.1721], [316.26, 4.1729], [339.95, 4.1737], [363.64, 4.1745], [387.33, 4.1752], [434.72, 4.1767], [482.1, 4.178], [576.86, 4.1804], [671.62, 4.1825], [861.15, 4.1858], [1050.67, 4.1868], [1240.19, 4.1762], [1619.24, 4.1526], [1998.29, 4.1526], [2756.39, 4.1179], [3380.57, 4.0385], [3692.66, 3.8524], [4004.75, 3.1983], [4071.02, 2.6855], [4087.91, 2.5]]}'><title>lnmo_ref_1c_spme.json — model SPMe</title><line class="grid" x1="56.0" y1="16" x2="56.0" y2="280"/><line class="grid" x1="126.5" y1="16" x2="126.5" y2="280"/><line class="grid" x1="197.0" y1="16" x2="197.0" y2="280"/><line class="grid" x1="267.5" y1="16" x2="267.5" y2="280"/><line class="grid" x1="338.0" y1="16" x2="338.0" y2="280"/><line class="grid" x1="408.5" y1="16" x2="408.5" y2="280"/><line class="grid" x1="479.0" y1="16" x2="479.0" y2="280"/><line class="grid" x1="549.5" y1="16" x2="549.5" y2="280"/><line class="grid" x1="620.0" y1="16" x2="620.0" y2="280"/><line class="grid" x1="56" y1="16.0" x2="620" y2="16.0"/><line class="grid" x1="56" y1="82.0" x2="620" y2="82.0"/><line class="grid" x1="56" y1="148.0" x2="620" y2="148.0"/><line class="grid" x1="56" y1="214.0" x2="620" y2="214.0"/><line class="grid" x1="56" y1="280.0" x2="620" y2="280.0"/><line class="axis" x1="56" y1="16" x2="56" y2="280"/><line class="axis" x1="56" y1="280" x2="620" y2="280"/><path class="s-voltage" d="M56.0,16.9 L56.0,16.9 L56.0,16.9 L56.0,16.9 L56.0,16.9 L56.0,16.9 L56.0,16.9 L56.0,16.9 L56.0,16.9 L56.0,16.9 L56.1,16.9 L56.1,16.9 L56.1,16.9 L56.2,16.9 L56.2,17.0 L56.3,17.0 L56.4,17.0 L56.5,17.1 L56.5,17.1 L56.6,17.2 L56.8,17.2 L56.9,17.3 L57.1,17.4 L57.3,17.5 L57.6,17.6 L57.8,17.7 L58.0,17.8 L58.4,17.9 L58.8,18.1 L59.2,18.2 L59.6,18.3 L60.0,18.4 L60.4,18.5 L61.2,18.7 L62.0,18.8 L62.9,18.9 L63.7,19.0 L64.5,19.1 L65.3,19.1 L66.1,19.2 L66.9,19.2 L67.8,19.2 L68.6,19.2 L69.4,19.2 L70.2,19.2 L71.0,19.2 L71.9,19.2 L72.7,19.2 L73.5,19.2 L74.3,19.2 L75.1,19.1 L75.9,19.1 L76.8,19.1 L77.6,19.1 L78.4,19.0 L79.2,19.0 L80.0,19.0 L80.8,18.9 L81.7,18.9 L82.5,18.9 L83.3,18.8 L84.1,18.8 L84.9,18.8 L85.7,18.7 L86.6,18.7 L88.2,18.6 L89.8,18.6 L93.1,18.4 L96.4,18.3 L99.6,18.2 L102.9,18.0 L106.2,17.9 L109.4,17.8 L116.0,17.6 L122.5,17.4 L135.6,17.0 L148.7,16.7 L174.8,16.2 L201.0,16.0 L227.1,17.7 L279.4,21.4 L331.7,21.4 L436.3,26.8 L522.4,39.2 L565.5,68.3 L608.5,170.7 L617.7,251.0 L620.0,280.0"/><text x="50" y="20" text-anchor="end">4.187</text><text x="50" y="284" text-anchor="end">2.5</text><text x="60" y="26" fill="var(--blue)">— voltage_v [V]</text><text x="620" y="26" text-anchor="end">T_max = 309.5 K</text><text x="56.0" y="298" text-anchor="start">0</text><text x="338.0" y="298" text-anchor="middle">2044</text><text x="620.0" y="298" text-anchor="end">4088</text><text x="338.0" y="312" text-anchor="middle">time [s]</text></svg><div class="tooltip" hidden></div></div></figure>
+</section>
+
+<section id="endorse" class="sheet" aria-labelledby="endorse-title">
+  <div class="eyebrow">SHEET 05 · ENDORSEMENT</div>
+  <h2 id="endorse-title">True DFT/MD Endorsement</h2>
+  <p class="empty">No data</p>
+</section>
+
+<section id="final" class="sheet" aria-labelledby="final-title">
+  <div class="eyebrow">SHEET 06 · FINAL</div>
+  <h2 id="final-title">Final Recommendation</h2>
+  <blockquote class="final-quote">No cathode composition satisfies the contract within the six supported families. The binding result is the charging-potential gate: the ONLY candidate in 42 screened that cleared the 4.6 V computed window (AlB55, LiAl0.5B0.5O2, avg 4.641 V) charges its last Li (x: 0.4 -&gt; 0.3) at 7.41 V - 2.6 V above the 4.8 V anodic limit of the fixed electrolyte. Its window pass was an artifact of a pathological x=0.3 endpoint, and the mechanism condemns the entire d0/d10 O-redox layered line. The TM-redox layered band caps at ~4.0 V (measured: NiFe55 3.990, known-set max ~4.03), and every non-layered family is energy-density-infeasible under the contract's 0.9-capacity mapping rule (even an olivine at 4.8 V / 128 mAh/g yields ~322 &lt; 327.18 Wh/kg). Honest negative result: the window [4.6, 4.8] V on CHGNet-computed layered voltage is empty when the charging potential must stay &lt;= 4.8 V. No candidate is reported as passing.</blockquote><div class="final-verdict">Conclusion <span class="badge neutral">negative</span></div>
+</section>
+
+<section id="notes" class="sheet" aria-labelledby="notes-title">
+  <div class="eyebrow">SHEET 07 · DESIGN NOTES</div>
+  <h2 id="notes-title">Design Notes</h2>
+  <div class="note"><span class="chip">funnel</span> <span class="chip">R01</span><p>All 14 below the 4.6 V window (band 2.56-3.99 V); best LiNi0.5Fe0.5O2 3.990, LiFeO2 3.943; Cu layered computes 3.5-3.8 (CHGNet prices Cu layered low).</p></div><div class="note"><span class="chip">funnel</span> <span class="chip">R02</span><p>d0/d10 O-redox line lands at the window edge: LiAlO2 4.598 V (2 mV short of 4.6, disputed as refinement anchor), LiZnO2 4.492, LiGaO2 4.479, LiScO2 4.298; all redox mixes 3.55-4.0. Smaller d0 cation -&gt; higher V (Al &gt; Ga &gt; Sc).</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.707 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.943 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.750 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.512 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.807 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.492 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.990 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.682 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.342 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 2.564 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.693 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.722 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.615 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R01</span><p>computed avg voltage 3.670 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 4.298 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 4.598 V, within 0.11 V of the window - near-miss recorded | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 4.479 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 4.492 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 3.964 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 3.925 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 3.747 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 3.786 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 3.554 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 3.841 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 3.959 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 3.958 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 4.247 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R02</span><p>computed avg voltage 3.999 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">funnel</span> <span class="chip">R03</span><p>AlB55 (LiAl0.5B0.5O2) 4.6413 V clears the window (margin 41 mV) - the first candidate past 4.6 V in 42 screened. Non-monotonic in B content: sharp 50:50 peak (nearest neighbors AlB82 4.464, BAl73 4.226, AlB95 4.488, BGa55 4.504). The peak comes from the delithiated x=0.3 state being ~1.5 eV off the B-content trend - flagged as a sensitivity risk; the charging-potential profile is the co-gate. Pure LiBO2 4.253 is NOT higher than LiAlO2 4.598 - the ionic-radius trend does not extrapolate to B; the pass is a mixing effect.</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.253 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.641 V &gt;= 4.6 - passes the stage-1 window; advances to the charging-potential gate (comp/profile_voltage.py) | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.429 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.443 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.226 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.304 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.464 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.280 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.488 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.494 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.298 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.504 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.115 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R03</span><p>computed avg voltage 4.454 V &lt; 4.6 - rejected at the stage-1 window | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">funnel</span> <span class="chip">R04</span><p>Charging-potential gate DECISIVE FAILURE: AlB55 charging_potential_v = 7.410 V (incremental V(0.4 -&gt; 0.3) into the top-of-charge state) - 2.6 V above the 4.8 V anodic limit of the fixed EC/EMC + LiPF6 electrolyte. The round-3 window pass (avg 4.641 V) was bought with a pathological x=0.3 endpoint: E(0.3) sits ~9 eV off its composition neighbors and the final Li removal costs 7.4 V. The sharp 50:50 peak was this artifact's signature, not a designable chemistry. The mechanism is fatal for the whole d0/d10 O-redox layered line (any avg &gt;= 4.6 in that family comes from the same diseased endpoint). LiAlO2 (4.598 V) fails the window regardless. No candidate survives both stage-1 co-gates.</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R04</span><p>charging-potential gate: avg_voltage_v 4.641 V (window pass) but charging_potential_v 7.410 V &gt; 4.8 V - the window pass was bought with a pathological top-of-charge state (last Li removal costs 7.4 V); incompatible with the fixed electrolyte | unchecked criteria: energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div><div class="note"><span class="chip">evaluate</span> <span class="chip">R04</span><p>anchor: avg 4.598 V &lt; 4.6 (fails the window regardless); charging-gate profile not run - AlB55's decisive gate failure (7.41 V) identifies the d0-line mechanism as fatal for the family | unchecked criteria: charging_potential_v, energy_density_wh_kg, plated, triggered, sei_thickness_nm_end</p></div>
+</section>
+
+</main>
+
+<div class="ruler" aria-hidden="true">
+  <span style="left:0%">0</span><span style="left:20%">10</span><span style="left:40%">20</span>
+  <span style="left:60%">30</span><span style="left:80%">40</span><span style="left:100%">50</span>
+</div>
+<footer class="page-foot">
+  <span>Virtual Battery Factory · Design Report</span>
+  <span>Deterministically rendered from log.jsonl · zero-LLM rendering</span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* 锚点平滑滚动（reduced-motion 下直接跳转） */
+  var links = Array.prototype.slice.call(document.querySelectorAll(".nav a[href^='#']"));
+  links.forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      var target = document.getElementById(a.getAttribute("href").slice(1));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        if (history.replaceState) {
+          history.replaceState(null, "", a.getAttribute("href"));
+        }
+      }
+    });
+  });
+
+  /* 导航高亮当前章节 */
+  var sections = document.querySelectorAll("main section[id]");
+  if ("IntersectionObserver" in window && sections.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) { return; }
+        links.forEach(function (a) {
+          a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id);
+        });
+      });
+    }, { rootMargin: "-15% 0px -75% 0px" });
+    sections.forEach(function (s) { io.observe(s); });
+  }
+
+  /* SVG 曲线 hover 十字线 + 数值 tooltip（读 data-series 属性） */
+  var NS = "http://www.w3.org/2000/svg";
+  var esc = function (s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  };
+  document.querySelectorAll("svg.plot").forEach(function (svg) {
+    var series;
+    try { series = JSON.parse(svg.getAttribute("data-series") || "{}"); }
+    catch (err) { return; }
+    var keys = Object.keys(series);
+    if (!keys.length || !series[keys[0]].length) { return; }
+    var wrap = svg.parentElement;
+    var tip = wrap ? wrap.querySelector(".tooltip") : null;
+    var vb = svg.viewBox.baseVal;
+    var cross = document.createElementNS(NS, "line");
+    cross.setAttribute("y1", "0");
+    cross.setAttribute("y2", vb ? vb.height : 320);
+    cross.setAttribute("stroke", "#C97B3D");
+    cross.setAttribute("stroke-width", "1");
+    cross.setAttribute("stroke-dasharray", "3 3");
+    cross.style.opacity = "0";
+    svg.appendChild(cross);
+    svg.addEventListener("pointermove", function (e) {
+      var rect = svg.getBoundingClientRect();
+      if (!rect.width) { return; }
+      var fx = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      var first = series[keys[0]];
+      var idx = Math.round(fx * (first.length - 1));
+      var px = fx * (vb ? vb.width : 640);
+      cross.setAttribute("x1", px);
+      cross.setAttribute("x2", px);
+      cross.style.opacity = "0.9";
+      if (tip) {
+        var lines = keys.map(function (k) {
+          var row = series[k][Math.min(idx, series[k].length - 1)];
+          return esc(k) + ": " + row[1];
+        });
+        tip.innerHTML = "<span class='t-t'>t = " + first[idx][0] + " s</span><br>" + lines.join("<br>");
+        tip.hidden = false;
+        var wx = Math.min(wrap.clientWidth - tip.offsetWidth - 8, Math.max(4, e.clientX - rect.left + 12));
+        var wy = Math.min(wrap.clientHeight - tip.offsetHeight - 8, Math.max(4, e.clientY - rect.top - 36));
+        tip.style.left = wx + "px";
+        tip.style.top = wy + "px";
+      }
+    });
+    svg.addEventListener("pointerleave", function () {
+      cross.style.opacity = "0";
+      if (tip) { tip.hidden = true; }
+    });
+  });
+})();
+</script>
+</body>
+</html>

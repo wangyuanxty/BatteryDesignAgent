@@ -1,0 +1,13 @@
+﻿CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+{"name": "LiVPO4", "point": [5.245607217152913, 122.73838851386037, -2.565833943684896], "in_envelope": false, "verdict": "PASS (outside envelope)", "hull_ref": "known_set.json", "n_points": 90, "n_membership": 99, "computed": {"formula": "LiVPO4", "realized_tm_counts": {"V": 4}, "avg_voltage_v": 5.245607217152913, "capacity_mah_g": 122.73838851386037, "e_full_ev": -215.6937255859375, "e_delith_ev": -194.3214569091797, "converged": false, "rel_stability_ev_atom": -2.565833943684896, "name": "candidate"}}

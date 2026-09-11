@@ -1,0 +1,14 @@
+[20:53:00] UFFTYPER: Warning: hybridization set to SP3 for atom 1
+[20:53:00] UFFTYPER: Unrecognized charge state for atom: 1
+D:\anaconda\envs\py312\Lib\site-packages\e3nn\o3\_wigner.py:10: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+D:\anaconda\envs\py312\Lib\site-packages\mace\calculators\mace.py:226: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  torch.load(f=model_path, map_location=device)
+WARNING:root:Default dtype float32 does not match model dtype float64, converting models to float32.
+Using Materials Project MACE for MACECalculator with C:\Users\evari\.cache\mace/20231203mace128L1_epoch199model
+Using float32 for MACECalculator, which is faster but less accurate. Recommended for MD. Use float64 for geometry optimization.
+before relax: Fmax = 32.2 eV/A
+relax done in 18.5s | Fmax = 0.417 | E = -2251.80
+step 25: max disp = 22226769.825 A
+step 50: max disp = 41238944.484 A
+VERIFY_OK

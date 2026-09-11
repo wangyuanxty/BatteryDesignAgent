@@ -1,0 +1,12 @@
+{
+  "note": "Batch-1 adjudication via comp_envelope_check --point (raw triples from out_batch1.json, Delaunay vs the 102 known-set points). Li3Ni1.5Co0.5(PO4)3 (5.0117 V) and LiMnPO4F (4.6389 V) were not adjudicated: below the 5.3 V window regardless of hull position.",
+  "results": [
+    {"formula": "LiNi0.875Co0.125PO4F",       "point": [5.455288410186768, 104.44026254912963, -1.2567720961296693], "in_envelope": true,  "verdict": "REJECT (inside envelope)"},
+    {"formula": "LiNi0.875Mn0.125PO4F",       "point": [5.413759072621663, 104.73142222407259, -1.3396399487024064], "in_envelope": true,  "verdict": "REJECT (inside envelope)"},
+    {"formula": "LiNi0.75Co0.125Mn0.125PO4F", "point": [5.36533784866333,  104.71390058856014, -1.3766304103807467], "in_envelope": true,  "verdict": "REJECT (inside envelope)"},
+    {"formula": "LiNi0.875Al0.125PO4F",       "point": [5.467434406280518, 106.81517424026599, -1.3092791677891524], "in_envelope": true,  "verdict": "REJECT (inside envelope)"},
+    {"formula": "LiNi0.875Mg0.125PO4F",       "point": [5.508195718129476, 107.01902890330234, -1.223627375460219],  "in_envelope": false, "verdict": "PASS (outside envelope)"},
+    {"formula": "Li3Ni2(PO4)3",               "point": [5.113083362579346, 44.3393467510364,  -1.6227400037977429], "in_envelope": false, "verdict": "PASS (outside envelope) - but V < 5.3 (window fail)"},
+    {"formula": "LiNi0.75Mn0.25PO4",          "point": [5.522544066111247, 117.50108487169084, -2.028410237630209], "in_envelope": false, "verdict": "PASS (outside envelope) - but Ni-rich olivine trap (guard fail, true ~4.85 V)"}
+  ]
+}

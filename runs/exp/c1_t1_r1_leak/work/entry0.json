@@ -1,0 +1,42 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": 0.0,
+      "max_homo_ev": -6.0
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 392.61}
+    },
+    "stage3": {
+      "T_max_K": {"max": 333.15},
+      "plated": false,
+      "triggered": false
+    },
+    "meta": {
+      "goal_verbatim": "Design a battery for a next-generation pure electric sedan: energy density >= 392.61 Wh/kg, support 4C fast charge (no lithium plating), maximum temperature <= 60 C, overcharge to 4.7 V without triggering thermal runaway",
+      "task_origin": "headless zero-interaction session; no clarification possible -> widest degree-of-freedom interpretation recorded in freedoms",
+      "real_compute": false,
+      "start_stage": 3,
+      "start_stage_basis": "task text names no new materials/additives/electrolyte design -> Stage 3 cell design start; material escalation remains available via ceiling_escalation (on)",
+      "ablation": {
+        "exploration_force": "on",
+        "ceiling_escalation": "on",
+        "funnel_voting": "on"
+      },
+      "freedoms": {
+        "electrode_system": "adjustable - base parameter set switching (Chen2020/OKane2022/ORegan2022/Prada2013/custom system JSON, e.g. LNMO.json path); widest interpretation of task text",
+        "electrolyte_formulation": "adjustable - Electrolyte conductivity/diffusivity, Cation transference number overrides",
+        "electrode_modification": "adjustable - SEI kinetic rate constant, SEI reaction exchange current density, cracking rates",
+        "cell_architecture": "adjustable - thickness/porosity/N-P/separator/current collector/particle size",
+        "thermal_management": "adjustable - Total heat transfer coefficient"
+      },
+      "threshold_parsing": {
+        "energy_density_wh_kg >= 392.61": "stage2, calc-energy contract formula (electrolyte excluded)",
+        "maximum temperature <= 60 C": "stage3 T_max_K <= 333.15 K (60+273.15); applied to every simulated scenario (4C fast charge AND overcharge)",
+        "4C fast charge without lithium plating": "stage3 plated == false; 4C_charge_45C protocol with --plating, anode_potential_v min >= 0 V",
+        "overcharge to 4.7 V without thermal runaway": "stage3 triggered == false; overcharge protocol charges to upper cut-off +0.5 V, so 4.7 V target implies 4.2 V upper cut-off systems (Chen2020/OKane2022 family); run-tr --sim mechanical coupling",
+        "base_parameter_set": "task names no electrode system -> anchor-table default Chen2020 with record; system switching allowed under freedoms"
+      }
+    }
+  }
+}

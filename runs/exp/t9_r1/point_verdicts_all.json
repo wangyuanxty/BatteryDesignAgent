@@ -1,0 +1,170 @@
+﻿[
+    {
+        "name":  "candidate",
+        "point":  [
+                      7.004070520401,
+                      116.796780750593,
+                      -1.81196309407552
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiNi0.9Co0.1PO4"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      6.19858956336975,
+                      117.439066295334,
+                      -1.96073872884115
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiNi0.7Fe0.3PO4"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      6.93085885047913,
+                      104.457692721705,
+                      -1.81194173177083
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiNiPO4F"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      6.95493213335673,
+                      119.370135021159,
+                      -1.8129433186849
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiNi0.9Mg0.1PO4"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      6.19858956336975,
+                      117.2,
+                      -1.961
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiNi0.8Fe0.2PO4"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      7.971975738352,
+                      99.6203204665966,
+                      0.313033379448785
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiNi2O4"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      8.74029183387756,
+                      99.4936350793687,
+                      0.00793762207031268
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiCoNiO4"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      7.92097254232927,
+                      101.15020568588,
+                      -0.135028415256076
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiNiFeO4"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      7.75546184453097,
+                      103.498793851932,
+                      -0.776667955186632
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiMn1.5Fe0.5O4"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      8.669,
+                      108.6,
+                      -0.942
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiV2O4"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      9.008,
+                      104.6,
+                      -0.794
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiMn1.5Cr0.5O4"
+    },
+    {
+        "name":  "candidate",
+        "point":  [
+                      5.863,
+                      122.7,
+                      -2.64
+                  ],
+        "in_envelope":  false,
+        "verdict":  "PASS (outside envelope)",
+        "hull_ref":  "known_set.json",
+        "n_points":  90,
+        "n_membership":  99,
+        "formula":  "LiVPO4"
+    }
+]

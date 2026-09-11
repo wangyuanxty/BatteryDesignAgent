@@ -1,0 +1,13 @@
+﻿CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+{"name": "LiMn1.5Cr0.5O4", "point": [9.001701485026967, 104.60938895169268, -0.7932525634765621], "in_envelope": false, "verdict": "PASS (outside envelope)", "hull_ref": "known_set.json", "n_points": 90, "n_membership": 99, "computed": {"formula": "LiMn1.5Cr0.5O4", "realized_tm_counts": {"Mn": 6, "Cr": 2}, "avg_voltage_v": 9.001701485026967, "capacity_mah_g": 104.60938895169268, "e_full_ev": -308.4825439453125, "e_delith_ev": -188.80052185058594, "converged": false, "rel_stability_ev_atom": -0.7932525634765621, "name": "candidate"}}

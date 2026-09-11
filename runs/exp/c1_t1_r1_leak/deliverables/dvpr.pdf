@@ -1,0 +1,49 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+4 0 obj
+<< /Length 1269 >>
+stream
+BT /F1 8 Tf 11 TL 50 742 Td
+(VBF-C1T1R1 dvpr - Virtual Battery Factory deliverable) Tj T* T*
+(# Design Verification Plan and Report \(DVP&R\) - c1_t1_r1) Tj T*
+(VBF-C1T1R1-DVPR-001 I Virtual Battery Factory) Tj T*
+() Tj T*
+(I # I Requirement I Protocol I Result I Verdict I Evidence I) Tj T*
+(I---I---I---I---I---I---I) Tj T*
+(I 1 I ED >= 392.61 Wh/kg I 1C discharge + calc-energy contract I 502.70 Wh/kg I PASS I cell/r4_v3_ma) Tj T*
+(I 2 I 4C fast charge without lithium plating I 4C_charge_45C protocol, 20 A, --plating, SPMe I anode) Tj T*
+(I 3 I T_max <= 60 C in every scenario I lumped thermal, 45 C ambient \(4C\); overcharge 298.15 K ambie) Tj T*
+(I 4 I Overcharge to 4.7 V without thermal runaway I 0.5C charge to cut-off + 0.5 V \(4.70 V\), then ru) Tj T*
+(I 5 I \(backup\) all criteria on alternative I same protocols on R4-V1-cool I ED 499.43; anode min +0.) Tj T*
+(I 6 I \(negative control\) cooling ceiling I h=150 on R4-V4-coolmax I anode min -0.0006 V -> plated I ) Tj T*
+() Tj T*
+(Verification method note: verdicts on rows 1-4 are mechanically recorded by) Tj T*
+(`bda log-evaluate` in log.jsonl \(round 4, candidate R4-V3-margin: verdict=pass,) Tj T*
+(checked=4\). Rows 5-6 are the same protocol applied to backup/negative-control variants.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000000136 00000 n 
+0000000185 00000 n 
+0000001506 00000 n 
+trailer
+<< /Size 6 /Root 3 0 R >>
+startxref
+1632
+%%EOF

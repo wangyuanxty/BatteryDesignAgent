@@ -1,0 +1,32 @@
+[
+  {
+    "candidate": "LiNiPO4F",
+    "outputs": ["finalist_metrics.json"],
+    "note": "FINALIST. B' via literature route (QE domain-limited: no F pseudo): exact-chemistry DFT step 5.50 V (Mueller 2011, secondhand extraction - caveat), diluted anchor 5.23 V (Alfaruqi 2020, 50% Ni), family anchor 5.33 V (Li2NiPO4F documented + US20240150177A1 ~5.3 V patent). Ladder in b_prime_evidence.json."
+  },
+  {
+    "candidate": "LiNi0.75Co0.25PO4F",
+    "outputs": ["ev_TavP-Ni75Co25.json"],
+    "note": "Screened B-passer (5.3863 V); not finalist - B' not pursued (finalist has higher voltage and stronger literature anchor)."
+  },
+  {
+    "candidate": "LiNi0.5Co0.5PO4F",
+    "outputs": ["ev_TavP-Ni50Co50.json"],
+    "note": "Screened B-passer (5.3052 V, margin 0.005 V); not finalist - B' not pursued."
+  },
+  {
+    "candidate": "LiNi0.8Co0.2PO4",
+    "outputs": ["ev_Oli-Ni80Co20.json"],
+    "note": "Screened B-passer (5.4111 V); Ni-olivine overestimate family - B' would need run-qe and is expected ~5.0-5.1 V true; not finalist."
+  },
+  {
+    "candidate": "LiNi0.75Co0.25PO4",
+    "outputs": ["ev_Oli-Ni75Co25.json"],
+    "note": "Screened B-passer (5.4171 V); Ni-olivine overestimate family - B' expected negative; not finalist."
+  },
+  {
+    "candidate": "LiNi0.4Co0.6PO4",
+    "outputs": ["ev_Oli-Ni40Co60.json"],
+    "note": "Screened B-passer (5.4005 V); Ni-olivine overestimate family - B' expected negative; not finalist. (LiNi0.6Co0.4PO4 outlier 4.43 V noted: screening-precision local minimum.)"
+  }
+]

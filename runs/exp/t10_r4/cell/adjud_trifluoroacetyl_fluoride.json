@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "trifluoroacetyl fluoride",
+  "smiles": "O=C(F)C(F)(F)F",
+  "n_atoms": 7,
+  "homo_ev": -14.4049,
+  "lumo_ev": -10.3267,
+  "mace_energy_ev": -40.91416931152344,
+  "mace_converged": true,
+  "chgnet_energy_ev": -43.04949188232422,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

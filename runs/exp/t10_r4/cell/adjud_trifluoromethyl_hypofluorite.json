@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "trifluoromethyl hypofluorite",
+  "smiles": "FOC(F)(F)F",
+  "n_atoms": 6,
+  "homo_ev": -15.0159,
+  "lumo_ev": -9.2367,
+  "mace_energy_ev": -29.195049285888672,
+  "mace_converged": true,
+  "chgnet_energy_ev": -30.669071197509766,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

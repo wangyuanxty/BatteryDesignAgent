@@ -1,0 +1,211 @@
+{
+  "baseline": {
+    "formula": "Li(Ni0.8Mn0.1Co0.1)O2",
+    "e_full_ev": -290.971923828125,
+    "e_li_metal_ev": -1.8784823417663574,
+    "converged": false
+  },
+  "candidates": [
+    {
+      "formula": "LiMn2O4",
+      "realized_tm_counts": {
+        "Mn": 16
+      },
+      "avg_voltage_v": 3.7697466214497886,
+      "capacity_mah_g": 103.7583655398795,
+      "e_full_ev": -433.330078125,
+      "e_delith_ev": -399.4407043457031,
+      "converged": false,
+      "rel_stability_ev_atom": -2.604686482747396,
+      "name": "spinel recompute (was 8.911, bug)"
+    },
+    {
+      "formula": "LiNi0.5Mn1.5O4",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "Mn": 12
+      },
+      "avg_voltage_v": 4.334474404652913,
+      "capacity_mah_g": 102.69195673979098,
+      "e_full_ev": -412.0710144042969,
+      "e_delith_ev": -374.79327392578125,
+      "converged": false,
+      "rel_stability_ev_atom": -2.1795052083333326,
+      "name": "spinel recompute (was 8.263, bug)"
+    },
+    {
+      "formula": "LiCoMnO4",
+      "realized_tm_counts": {
+        "Co": 8,
+        "Mn": 8
+      },
+      "avg_voltage_v": 4.017590045928955,
+      "capacity_mah_g": 101.51535600052462,
+      "e_full_ev": -401.8682861328125,
+      "e_delith_ev": -366.4918518066406,
+      "converged": false,
+      "rel_stability_ev_atom": -1.9754506429036462,
+      "name": "spinel recompute (was 8.597, bug)"
+    },
+    {
+      "formula": "LiCrMnO4",
+      "realized_tm_counts": {
+        "Cr": 8,
+        "Mn": 8
+      },
+      "avg_voltage_v": 4.248246987660726,
+      "capacity_mah_g": 105.47448795485782,
+      "e_full_ev": -446.28704833984375,
+      "e_delith_ev": -409.52667236328125,
+      "converged": false,
+      "rel_stability_ev_atom": -2.8638258870442703,
+      "name": "spinel recompute (was 8.631, bug)"
+    },
+    {
+      "formula": "LiNiVO4",
+      "realized_tm_counts": {
+        "Ni": 8,
+        "V": 8
+      },
+      "avg_voltage_v": 4.167741616566976,
+      "capacity_mah_g": 103.89695442576013,
+      "e_full_ev": -404.0433044433594,
+      "e_delith_ev": -367.7659606933594,
+      "converged": false,
+      "rel_stability_ev_atom": -2.0189510091145833,
+      "name": "spinel recompute (was 8.195, bug)"
+    },
+    {
+      "formula": "LiCu0.5Mn1.5O4",
+      "realized_tm_counts": {
+        "Cu": 4,
+        "Mn": 12
+      },
+      "avg_voltage_v": 4.110490640004476,
+      "capacity_mah_g": 101.34600120757673,
+      "e_full_ev": -402.2103271484375,
+      "e_delith_ev": -366.2764892578125,
+      "converged": false,
+      "rel_stability_ev_atom": -1.9822914632161455,
+      "name": "spinel recompute (was 8.389, bug)"
+    },
+    {
+      "formula": "LiVPO4F",
+      "realized_tm_counts": {
+        "V": 8
+      },
+      "avg_voltage_v": 3.580034097035726,
+      "capacity_mah_g": 109.16956304396737,
+      "e_full_ev": -484.2890930175781,
+      "e_delith_ev": -451.5379943847656,
+      "converged": false,
+      "rel_stability_ev_atom": -2.287896868826329,
+      "name": "tavorite phosphate, exp ~4.2V (was membership-only)"
+    },
+    {
+      "formula": "LiFePO4F",
+      "realized_tm_counts": {
+        "Fe": 8
+      },
+      "avg_voltage_v": 4.919099648793538,
+      "capacity_mah_g": 106.14101711914061,
+      "e_full_ev": -462.3233642578125,
+      "e_delith_ev": -421.5378723144531,
+      "converged": false,
+      "rel_stability_ev_atom": -1.9091774074510592,
+      "name": "tavorite phosphate, exp ~2.75V (new documented member)"
+    },
+    {
+      "formula": "LiFeSO4F",
+      "realized_tm_counts": {
+        "Fe": 8
+      },
+      "avg_voltage_v": 3.435925006866455,
+      "capacity_mah_g": 105.48975446553938,
+      "e_full_ev": -428.421875,
+      "e_delith_ev": -396.5354309082031,
+      "converged": false,
+      "rel_stability_ev_atom": -1.3246689719715334,
+      "name": "tavorite sulfate, exp 3.6V (new documented member)"
+    },
+    {
+      "formula": "LiMnSO4F",
+      "realized_tm_counts": {
+        "Mn": 8
+      },
+      "avg_voltage_v": 3.961107095082601,
+      "capacity_mah_g": 106.03047128592338,
+      "e_full_ev": -443.1839599609375,
+      "e_delith_ev": -408.14642333984375,
+      "converged": false,
+      "rel_stability_ev_atom": -1.579187678194594,
+      "name": "tavorite sulfate, synthesized but inactive"
+    },
+    {
+      "formula": "LiCoSO4F",
+      "realized_tm_counts": {
+        "Co": 8
+      },
+      "avg_voltage_v": 4.2816535631815595,
+      "capacity_mah_g": 103.68925939585367,
+      "e_full_ev": -411.9679260253906,
+      "e_delith_ev": -375.0071105957031,
+      "converged": false,
+      "rel_stability_ev_atom": -1.0409801965472338,
+      "name": "tavorite sulfate, synthesized but inactive"
+    },
+    {
+      "formula": "LiNiSO4F",
+      "realized_tm_counts": {
+        "Ni": 8
+      },
+      "avg_voltage_v": 4.942125161488851,
+      "capacity_mah_g": 103.82686204382647,
+      "e_full_ev": -400.0489807128906,
+      "e_delith_ev": -359.1253356933594,
+      "converged": false,
+      "rel_stability_ev_atom": -0.8354811394351653,
+      "name": "tavorite sulfate, synthesized but inactive"
+    },
+    {
+      "formula": "Li3Fe2(PO4)3",
+      "realized_tm_counts": {
+        "Fe": 8
+      },
+      "avg_voltage_v": 4.699039936065674,
+      "capacity_mah_g": 44.94446414529026,
+      "e_full_ev": -592.2244873046875,
+      "e_delith_ev": -539.6043090820312,
+      "converged": false,
+      "rel_stability_ev_atom": -2.1634250217013884,
+      "name": "NASICON, exp 2.8V (new documented member)"
+    },
+    {
+      "formula": "Li3Cr2(PO4)3",
+      "realized_tm_counts": {
+        "Cr": 8
+      },
+      "avg_voltage_v": 4.404079914093018,
+      "capacity_mah_g": 45.788859476351895,
+      "e_full_ev": -613.3137817382812,
+      "e_delith_ev": -563.0532836914062,
+      "converged": false,
+      "rel_stability_ev_atom": -2.4563318888346357,
+      "name": "NASICON, exp ~4.8V Cr4+/Cr3+ (new documented member)"
+    },
+    {
+      "formula": "Li3Ti2(PO4)3",
+      "realized_tm_counts": {
+        "Ti": 8
+      },
+      "avg_voltage_v": 1.86832857131958,
+      "capacity_mah_g": 46.73072944535786,
+      "e_full_ev": -618.44775390625,
+      "e_delith_ev": -588.4732666015625,
+      "converged": false,
+      "rel_stability_ev_atom": -2.527637057834201,
+      "name": "NASICON, exp ~2.5V (anode-side phase)"
+    }
+  ],
+  "calibration_note": "NMC811 baseline self-calibration: literature average voltage ≈3.8 V, theoretical capacity ≈194 mAh/g (x∈[0.3,1] window) — if the baseline deviates markedly, this batch's results are not trustworthy (declared honestly)."
+}

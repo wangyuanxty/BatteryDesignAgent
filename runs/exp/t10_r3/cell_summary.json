@@ -1,0 +1,48 @@
+{
+  "pfta": {
+    "sei_thickness_nm_end": 162.52347465783905,
+    "k_m_s": 3.43399770042585e-15,
+    "k_over_k0": 0.00343399770042585,
+    "homo_ev": -14.9642
+  },
+  "pfhex": {
+    "sei_thickness_nm_end": 173.78099748173398,
+    "k_m_s": 3.84857540415743e-15,
+    "k_over_k0": 0.0038485754041574305,
+    "homo_ev": -14.9147
+  },
+  "pftea": {
+    "sei_thickness_nm_end": 181.36336079868943,
+    "k_m_s": 4.151451800405686e-15,
+    "k_over_k0": 0.004151451800405686,
+    "homo_ev": -14.8818
+  },
+  "pfpent": {
+    "sei_thickness_nm_end": 143.73776560000144,
+    "k_m_s": 2.8209799536634298e-15,
+    "k_over_k0": 0.00282097995366343,
+    "homo_ev": -15.0496
+  },
+  "ncf3": {
+    "sei_thickness_nm_end": 38.99250569828766,
+    "k_m_s": 5.1368868542272365e-16,
+    "k_over_k0": 0.0005136886854227237,
+    "homo_ev": -15.7893
+  },
+  "pfta_cell_window": {
+    "energy_density_wh_kg": 400.29251490350435,
+    "mass_kg": 0.0434545275216,
+    "charge4c_T_max_K": 332.3520384133432,
+    "anode_potential_min_v": -0.43848831043667447,
+    "run_tr_triggered": false
+  },
+  "window_edge_check": {
+    "k_at_homo_minus13p74": 5.754399373371569e-14,
+    "sei_thickness_nm_end": 366.86947135232464
+  },
+  "calibration_replication": {
+    "baseline_k0_sei_nm": 449.1163920849283,
+    "k0p1x_sei_nm": 384.9603816996875,
+    "contract_reference": "449.12 nm (k0), 385.10 nm (0.1x k0)"
+  }
+}

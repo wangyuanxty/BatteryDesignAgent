@@ -1,0 +1,54 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+4 0 obj
+<< /Length 1612 >>
+stream
+BT /F1 8 Tf 11 TL 50 742 Td
+(VBF-C1T1R1 calc - Virtual Battery Factory deliverable) Tj T* T*
+(CALC - VBF-C1T1R1-CALC-001) Tj T*
+() Tj T*
+([Sheet: Calc]) Tj T*
+(Section I Quantity I Value I Unit I Source file) Tj T*
+(Input I capacity_ah I 5.03063266671673 I Ah I cell/r4_v3_margin_energy.json) Tj T*
+(Input I energy_wh I 17.89754980087133 I Wh I cell/r4_v3_margin_energy.json) Tj T*
+(Input I mass_kg I 0.0356025250776 I kg I cell/r4_v3_margin_energy.json) Tj T*
+(Input I area_m2 I 0.1027 I m2 I cell/r4_v3_margin_energy.json) Tj T*
+(Input I thickness_m I 0.0001828 I m I cell/r4_v3_margin_energy.json) Tj T*
+(Input I electrolyte_included I false I - I cell/r4_v3_margin_energy.json) Tj T*
+(Layer I positive_electrode layer_kg_m2 I 0.163993788 I kg/m2 I cell/r4_v3_margin_energy.json) Tj T*
+(Layer I negative_electrode layer_kg_m2 I 0.1058823 I kg/m2 I cell/r4_v3_margin_energy.json) Tj T*
+(Layer I positive_cc layer_kg_m2 I 0.0216 I kg/m2 I cell/r4_v3_margin_energy.json) Tj T*
+(Layer I negative_cc layer_kg_m2 I 0.05376 I kg/m2 I cell/r4_v3_margin_energy.json) Tj T*
+(Layer I separator layer_kg_m2 I 0.0014292 I kg/m2 I cell/r4_v3_margin_energy.json) Tj T*
+(Formula I ED = energy_wh / mass_kg I 17.8975498 / 0.0356025 = 502.7045 I Wh/kg I calc-energy contrac) Tj T*
+(Result I energy_density_wh_kg I 502.7045065444505 I Wh/kg I cell/r4_v3_margin_energy.json) Tj T*
+(Result I energy_density_wh_l I 953.3380882939265 I Wh/L I cell/r4_v3_margin_energy.json) Tj T*
+(Check I ED threshold I 392.61 I Wh/kg I entry-0 criteria stage2) Tj T*
+(Check I ED >= threshold I PASS \(+110.09\) I - I log-evaluate round 4) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000000136 00000 n 
+0000000185 00000 n 
+0000001849 00000 n 
+trailer
+<< /Size 6 /Root 3 0 R >>
+startxref
+1975
+%%EOF

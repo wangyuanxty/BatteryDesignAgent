@@ -1,0 +1,24 @@
+{
+  "candidates": [
+    {"name": "NiCo55CTRL", "formula": "LiNi0.5Co0.5PO4"},
+    {"name": "LNMO", "formula": "LiNi0.5Mn1.5O4"},
+    {"name": "LCMO", "formula": "LiCoMnO4"},
+    {"name": "NiFluoro", "formula": "Li2NiPO4F"},
+    {"name": "CoFluoro", "formula": "Li2CoPO4F"},
+    {"name": "VFluoro", "formula": "LiVPO4F"},
+    {"name": "CuPO4", "formula": "LiCuPO4"},
+    {"name": "NVP", "formula": "Li3V2(PO4)3"},
+    {"name": "MnOF", "formula": "Li2MnO2F"},
+    {"name": "CoOF2", "formula": "Li2CoO2F"},
+    {"name": "CoOF", "formula": "LiCoOF"},
+    {"name": "NiOF", "formula": "Li2NiO2F"},
+    {"name": "VOF", "formula": "Li2VO2F"},
+    {"name": "CoSpinel", "formula": "LiCo2O4"},
+    {"name": "CrMnSpinel", "formula": "LiCrMnO4"},
+    {"name": "NiVSpinel", "formula": "LiNi0.5V1.5O4"},
+    {"name": "CuMnSpinel", "formula": "LiCu0.5Mn1.5O4"},
+    {"name": "LMO", "formula": "LiMn2O4"},
+    {"name": "MoLayered", "formula": "Li2MoO3"},
+    {"name": "CrMn38", "formula": "Li2CrMn3O8"}
+  ]
+}

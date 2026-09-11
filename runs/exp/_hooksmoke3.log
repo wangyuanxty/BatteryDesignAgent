@@ -1,0 +1,14 @@
+[system:hook_started] {"type": "system", "subtype": "hook_started", "hook_id": "62fe116c-bbcd-409a-a29f-f21c15a994f0", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "uuid": "596da9da-3358-4ec1-96fc-95d
+[system:hook_started] {"type": "system", "subtype": "hook_started", "hook_id": "306532b5-2b2d-4a1c-97fc-2a88b52fd0e4", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "uuid": "12f6fe05-a910-4758-a12f-6db
+[system:hook_started] {"type": "system", "subtype": "hook_started", "hook_id": "e3d6870e-f32d-4c21-94c5-0f14e5385bdf", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "uuid": "44c881b4-f746-4579-8f29-328
+[system:hook_response] {"type": "system", "subtype": "hook_response", "hook_id": "62fe116c-bbcd-409a-a29f-f21c15a994f0", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "output": "{\"hookSpecificOutput\":
+[system:hook_response] {"type": "system", "subtype": "hook_response", "hook_id": "e3d6870e-f32d-4c21-94c5-0f14e5385bdf", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "output": "{\"session_id\":\"db8b31
+[system:hook_response] {"type": "system", "subtype": "hook_response", "hook_id": "306532b5-2b2d-4a1c-97fc-2a88b52fd0e4", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "output": "{\"hookSpecificOutput\":
+[system:init] {"type": "system", "subtype": "init", "cwd": "D:\\research\\degradation_prognostics\\Battery_Design_Agent", "session_id": "db8b31d6-db1b-4de0-b806-5a6e0b6ac846", "tools": ["Task", "CronCreate", "CronD
+[claude-code:unrecognized_model] {"model":"official-deepseek-v4-pro","query_source":"sdk"}
+[assistant] [thinking]
+[assistant] OK
+[result] error=False cost=$0.2192 OK
+tokens: official-deepseek-v4-pro: in=43610 out=45 cache_read=0 cache_write=0
+result:
+OK

@@ -1,0 +1,13 @@
+﻿CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+CHGNet will run on cuda
+{"name": "LiCoMnO4", "point": [8.624196150086142, 101.51535600052462, -0.5260345035129124], "in_envelope": false, "verdict": "PASS (outside envelope)", "hull_ref": "envelope_stats_comp.json", "n_known": 84, "computed": {"formula": "LiCoMnO4", "realized_tm_counts": {"Co": 4, "Mn": 4}, "avg_voltage_v": 8.624196150086142, "capacity_mah_g": 101.51535600052462, "e_full_ev": -296.45770263671875, "e_delith_ev": -180.92823791503906, "converged": false, "rel_stability_ev_atom": -0.5260345035129124, "name": "candidate"}}

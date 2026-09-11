@@ -1,0 +1,13 @@
+{
+  "action": "funnel",
+  "passed": 2,
+  "rejected": 0,
+  "disputed": 2,
+  "detail": "All 4 candidates clear hard elimination lines (mace+chgnet converged=true, energy_ev<=0.0 eV; xtb homo_ev<=-6.0 eV). DFEC and FES pass cleanly (rank-spread 1). FVC and VEC flagged disputed: three-model rank-spread 2 == threshold max(2,0.3*4)=2 (FVC ML-energy rank 4/4 vs xtb-HOMO rank 2/4; VEC ML-energy rank 1/4 vs xtb-HOMO rank 3/4). Winner = DFEC O=C1OC(F)C(F)O1 (undisputed, best HOMO -13.48 eV + best LUMO -7.85 eV, dual-F LiF-rich SEI former).",
+  "dispositions": [
+    {"name": "FVC", "smiles": "O=C1OC=C(F)O1", "status": "disputed", "reason": "hard lines pass; ML energy rank 4/4 vs xtb HOMO rank 2/4, spread 2 >= threshold 2"},
+    {"name": "DFEC", "smiles": "O=C1OC(F)C(F)O1", "status": "passed", "reason": "converged, energy -62.19/-64.86 eV, HOMO -13.48 eV; rank-spread 1; best HOMO+LUMO; winner"},
+    {"name": "FES", "smiles": "O=S1OC(F)CO1", "status": "passed", "reason": "converged, energy -56.32/-58.97 eV, HOMO -11.47 eV; rank-spread 1"},
+    {"name": "VEC", "smiles": "C=CC1COC(=O)O1", "status": "disputed", "reason": "hard lines pass; ML energy rank 1/4 vs xtb HOMO rank 3/4, spread 2 >= threshold 2"}
+  ]
+}

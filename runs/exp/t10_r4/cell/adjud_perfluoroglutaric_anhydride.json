@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "perfluoroglutaric anhydride",
+  "smiles": "O=C1OC(=O)C(F)(F)C(F)(F)C1(F)F",
+  "n_atoms": 14,
+  "homo_ev": -14.331,
+  "lumo_ev": -11.0619,
+  "mace_energy_ev": -88.61294555664062,
+  "mace_converged": true,
+  "chgnet_energy_ev": -92.99955749511719,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

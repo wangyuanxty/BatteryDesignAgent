@@ -1,0 +1,127 @@
+{
+  "LiCoMnO4_exact_red": {
+    "data_available": 154387,
+    "data_returned": 0,
+    "sample_ids": [],
+    "sample_formulas": []
+  },
+  "Li_Co_Mn_O_nelem4": {
+    "data_available": 154387,
+    "data_returned": 1682,
+    "sample_ids": [
+      "mp-1173886",
+      "mp-1173902",
+      "mp-1173901",
+      "mp-1173897",
+      "mp-753482"
+    ],
+    "sample_formulas": [
+      "CoLi2MnO4",
+      "CoLi2MnO4",
+      "CoLi2MnO4",
+      "CoLi2MnO4",
+      "CoLi2MnO4"
+    ]
+  },
+  "Li2CoPO4F_exact_red": {
+    "data_available": 154387,
+    "data_returned": 0,
+    "sample_ids": [],
+    "sample_formulas": []
+  },
+  "Li_Co_P_O_F_nelem5": {
+    "data_available": 154387,
+    "data_returned": 8,
+    "sample_ids": [
+      "mp-25465",
+      "mp-818178",
+      "mp-25390",
+      "mp-776411",
+      "mp-758908"
+    ],
+    "sample_formulas": [
+      "CoFLiO4P",
+      "CoFLiO4P",
+      "CoFLi2O4P",
+      "CoFLiO4P",
+      "CoFLiO4P"
+    ]
+  },
+  "LiFePO4_ctrl": {
+    "data_available": 154387,
+    "data_returned": 0,
+    "sample_ids": [],
+    "sample_formulas": []
+  },
+  "LiNiPO4_ctrl": {
+    "data_available": 154387,
+    "data_returned": 0,
+    "sample_ids": [],
+    "sample_formulas": []
+  },
+  "refined_queries_2026-09-09": {
+    "LiCoMnO4_anon_A4BCD": {
+      "data_available": 154387,
+      "data_returned": 3,
+      "ids": [
+        "mp-1176657",
+        "mp-753984",
+        "mp-1176646"
+      ],
+      "formulas": [
+        "CoLiMnO4",
+        "CoLiMnO4",
+        "CoLiMnO4"
+      ]
+    },
+    "LiCoPO4F_anon_A4BCDE": {
+      "data_available": 154387,
+      "data_returned": 4,
+      "ids": [
+        "mp-25465",
+        "mp-818178",
+        "mp-776411",
+        "mp-758908"
+      ],
+      "formulas": [
+        "CoFLiO4P",
+        "CoFLiO4P",
+        "CoFLiO4P",
+        "CoFLiO4P"
+      ]
+    },
+    "Li2CoPO4F_anon_A4B2CDE": {
+      "data_available": 154387,
+      "data_returned": 3,
+      "ids": [
+        "mp-25390",
+        "mp-770853",
+        "mp-770624"
+      ],
+      "formulas": [
+        "CoFLi2O4P",
+        "CoFLi2O4P",
+        "CoFLi2O4P"
+      ]
+    },
+    "Li_Co_Mn_O_distinct_formulas_sample100": [
+      "Co2Li3Mn2O8",
+      "Co2Li3MnO6",
+      "Co2Li5MnO8",
+      "Co2LiMn2O8",
+      "Co3Li2MnO8",
+      "Co3Li3MnO8",
+      "Co3Li4MnO8",
+      "Co4Li3MnO8",
+      "CoLi2Mn2O8",
+      "CoLi2Mn3O8",
+      "CoLi2MnO4",
+      "CoLi3Mn2O6",
+      "CoLi3Mn3O8",
+      "CoLi4Mn3O8",
+      "CoLi5Mn2O8",
+      "CoLiMn2O6",
+      "CoLiMnO4"
+    ]
+  }
+}

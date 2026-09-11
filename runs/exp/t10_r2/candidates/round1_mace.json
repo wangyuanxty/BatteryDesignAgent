@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "smiles": "O=S(=O)(F)F",
+      "metrics": {
+        "energy_ev": -25.522483825683594,
+        "converged": true
+      },
+      "model": "mace"
+    },
+    {
+      "smiles": "FC(F)(F)S(F)(F)(F)(F)F",
+      "metrics": {
+        "energy_ev": -42.3804931640625,
+        "converged": false
+      },
+      "model": "mace"
+    },
+    {
+      "smiles": "FC(F)(F)C(F)(F)S(=O)(=O)F",
+      "metrics": {
+        "energy_ev": -59.05805969238281,
+        "converged": true
+      },
+      "model": "mace"
+    },
+    {
+      "smiles": "N#CS(=O)(=O)F",
+      "metrics": {
+        "energy_ev": -36.77976608276367,
+        "converged": true
+      },
+      "model": "mace"
+    },
+    {
+      "smiles": "FC(F)(F)S(=O)(=O)C(F)(F)F",
+      "metrics": {
+        "energy_ev": -58.80501937866211,
+        "converged": true
+      },
+      "model": "mace"
+    },
+    {
+      "smiles": "FC(F)(F)C#N",
+      "metrics": {
+        "energy_ev": -37.38871765136719,
+        "converged": true
+      },
+      "model": "mace"
+    },
+    {
+      "smiles": "FC(F)(F)[N+](=O)[O-]",
+      "metrics": {
+        "energy_ev": -40.18782043457031,
+        "converged": true
+      },
+      "model": "mace"
+    },
+    {
+      "smiles": "O=S(=O)(F)Cl",
+      "metrics": {
+        "energy_ev": -23.44150161743164,
+        "converged": true
+      },
+      "model": "mace"
+    },
+    {
+      "smiles": "O=C=NS(=O)(=O)F",
+      "metrics": {
+        "energy_ev": -44.33819580078125,
+        "converged": false
+      },
+      "model": "mace"
+    },
+    {
+      "smiles": "O=S(F)(F)(F)F",
+      "metrics": {
+        "energy_ev": -25.79615020751953,
+        "converged": true
+      },
+      "model": "mace"
+    }
+  ]
+}

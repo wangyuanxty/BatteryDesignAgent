@@ -1,0 +1,73 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+4 0 obj
+<< /Length 1864 >>
+stream
+BT /F1 8 Tf 11 TL 50 742 Td
+(VBF-C1T1R1 datasheet - Virtual Battery Factory deliverable) Tj T* T*
+(# Cell Datasheet - R4-V3-margin \(champion\)) Tj T*
+(VBF-C1T1R1-DSH-001 I Case c1_t1_r1 I Virtual Battery Factory) Tj T*
+() Tj T*
+(## General) Tj T*
+(I Item I Value I Source I) Tj T*
+(I---I---I---I) Tj T*
+(I System I NMC811 / graphite \(Chen2020 base\), 4.2 V upper cut-off I parameter dump I) Tj T*
+(I Cell area I 0.1027 m2 \(0.065 x 1.58 m\) I calc-energy output I) Tj T*
+(I Cell mass I 35.603 g I calc-energy output I) Tj T*
+(I Cell thickness I 182.8 um I calc-energy output I) Tj T*
+(I 1C current I 5 A I contract I) Tj T*
+() Tj T*
+(## Electrical) Tj T*
+(I Item I Value I) Tj T*
+(I---I---I) Tj T*
+(I Contract capacity I 5.0306 Ah I) Tj T*
+(I Contract energy I 17.8975 Wh I) Tj T*
+(I Gravimetric energy density I 502.70 Wh/kg \(threshold 392.61: PASS\) I) Tj T*
+(I Volumetric energy density I 953.34 Wh/L I) Tj T*
+(I Midpoint voltage I 4.0073 V I) Tj T*
+(I DCR I 0.14679 mOhm I) Tj T*
+(I Power density I 797.3 kW/kg I) Tj T*
+() Tj T*
+(## Fast charge \(4C = 20 A, 45 C ambient, SPMe + lumped thermal\)) Tj T*
+(I Item I Value I) Tj T*
+(I---I---I) Tj T*
+(I T_max I 323.98 K = 50.83 C \(threshold 60 C: PASS\) I) Tj T*
+(I Anode potential minimum I +0.0503 V \(>= 0 V: no lithium plating\) I) Tj T*
+() Tj T*
+(## Abuse tolerance) Tj T*
+(I Item I Value I) Tj T*
+(I---I---I) Tj T*
+(I Overcharge protocol \(0.5C to upper cut-off + 0.5 V\) I reached 4.70 V I) Tj T*
+(I Overcharge T_max I 299.45 K I) Tj T*
+(I Thermal runaway model \(run-tr --sim coupling, mass 0.0356025 kg\) I triggered = false; T_max 299.45) Tj T*
+() Tj T*
+(## Key design parameters \(overrides over Chen2020\)) Tj T*
+(Positive CC 8 um \(Al\); negative CC 6 um \(Cu\); separator 8 um / porosity 0.55;) Tj T*
+(t+ 0.7; D_e 2e-9 m2/s; kappa 3.0 S/m; negative particle radius 3 um; h = 100 W/m2/K.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000000136 00000 n 
+0000000185 00000 n 
+0000002101 00000 n 
+trailer
+<< /Size 6 /Root 3 0 R >>
+startxref
+2227
+%%EOF

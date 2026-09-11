@@ -1,0 +1,14 @@
+﻿{
+  "candidates": [
+    {"name": "sulfuryl fluoride", "role": "smallest perfluoro sulfonyl fluoride, deep HOMO, LiF/SO2-rich SEI", "smiles": "O=S(=O)(F)F"},
+    {"name": "CF3-SF5", "role": "hypervalent sulfur pentafluoride, extreme electron withdrawal", "smiles": "FC(F)(F)S(F)(F)(F)(F)F"},
+    {"name": "pentafluoroethylsulfonyl fluoride", "role": "perfluoro sulfonyl fluoride, elongated EWG chain", "smiles": "FC(F)(F)C(F)(F)S(=O)(=O)F"},
+    {"name": "cyanosulfonyl fluoride", "role": "cyano + sulfonyl fluoride dual electron withdrawal", "smiles": "N#CS(=O)(=O)F"},
+    {"name": "bis(trifluoromethyl)sulfone", "role": "perfluoro sulfone, deeply bound HOMO", "smiles": "FC(F)(F)S(=O)(=O)C(F)(F)F"},
+    {"name": "trifluoroacetonitrile", "role": "perfluoro nitrile film former", "smiles": "FC(F)(F)C#N"},
+    {"name": "trifluoronitromethane", "role": "perfluoro nitroalkane (nitromethane documented, this is novel)", "smiles": "FC(F)(F)[N+](=O)[O-]"},
+    {"name": "sulfuryl chloride fluoride", "role": "sulfonyl fluoride with Cl, unusual per-atom energy branch", "smiles": "O=S(=O)(F)Cl"},
+    {"name": "fluorosulfonyl isocyanate", "role": "isocyanate + sulfonyl fluoride dual functional", "smiles": "O=C=NS(=O)(=O)F"},
+    {"name": "thionyl tetrafluoride", "role": "hypervalent sulfur oxyfluoride, deep HOMO", "smiles": "O=S(F)(F)(F)F"}
+  ]
+}

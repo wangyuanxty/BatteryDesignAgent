@@ -1,0 +1,14 @@
+{
+  "provenance": "top-level scalars from finalist_envelope.json (official envelope_check v2 CLI record, batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull over envelope_stats_v2.json + family gate); converged = mace.converged AND chgnet.converged; energy_ev = mace energy_ev (funnel energy elimination line; chgnet energy_ev also negative, see chgnet_energy_ev)",
+  "smiles": "O=C(OC(=O)C(F)(F)F)C(F)(F)F",
+  "homo_ev": -14.1603,
+  "lumo_ev": -10.9558,
+  "energy_ev": -80.3763427734375,
+  "converged": true,
+  "mace_energy_ev": -80.3763427734375,
+  "mace_converged": true,
+  "chgnet_energy_ev": -84.47935485839844,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

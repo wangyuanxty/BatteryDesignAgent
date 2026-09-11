@@ -1,0 +1,315 @@
+{
+  "baseline": {
+    "formula": "Li(Ni0.8Mn0.1Co0.1)O2",
+    "e_full_ev": -290.971923828125,
+    "e_li_metal_ev": -1.8784825801849365,
+    "converged": false
+  },
+  "candidates": [
+    {
+      "formula": "LiNi0.9Co0.1PO4",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "Co": 0
+      },
+      "avg_voltage_v": 7.004070520401001,
+      "capacity_mah_g": 116.79678075059343,
+      "e_full_ev": -196.84695434570312,
+      "e_delith_ev": -170.1992950439453,
+      "converged": false,
+      "rel_stability_ev_atom": -1.8119630940755203,
+      "name": "NiCo91-olivine"
+    },
+    {
+      "formula": "LiNi0.8Mn0.2PO4",
+      "realized_tm_counts": {
+        "Ni": 3,
+        "Mn": 1
+      },
+      "avg_voltage_v": 4.844270308812459,
+      "capacity_mah_g": 117.36306631126638,
+      "e_full_ev": -202.25814819335938,
+      "e_delith_ev": -182.0898895263672,
+      "converged": false,
+      "rel_stability_ev_atom": -2.02841084798177,
+      "name": "NiMn82-olivine"
+    },
+    {
+      "formula": "LiNi0.7Fe0.3PO4",
+      "realized_tm_counts": {
+        "Ni": 3,
+        "Fe": 1
+      },
+      "avg_voltage_v": 6.198589563369751,
+      "capacity_mah_g": 117.43906629533433,
+      "e_full_ev": -200.56634521484375,
+      "e_delith_ev": -176.3351287841797,
+      "converged": false,
+      "rel_stability_ev_atom": -1.9607387288411458,
+      "name": "NiFe73-olivine"
+    },
+    {
+      "formula": "LiNi0.5Mn0.5PO4",
+      "realized_tm_counts": {
+        "Ni": 2,
+        "Mn": 2
+      },
+      "avg_voltage_v": 4.795930465062459,
+      "capacity_mah_g": 118.19607575494932,
+      "e_full_ev": -207.57545471191406,
+      "e_delith_ev": -187.55221557617188,
+      "converged": false,
+      "rel_stability_ev_atom": -2.2411031087239577,
+      "name": "NiMn55-olivine"
+    },
+    {
+      "formula": "LiNiPO4F",
+      "realized_tm_counts": {
+        "Ni": 4
+      },
+      "avg_voltage_v": 6.930858850479126,
+      "capacity_mah_g": 104.4576927217053,
+      "e_full_ev": -196.84642028808594,
+      "e_delith_ev": -170.41839599609375,
+      "converged": false,
+      "rel_stability_ev_atom": -1.8119417317708333,
+      "name": "NiPO4F-tavorite"
+    },
+    {
+      "formula": "LiNi0.9Mg0.1PO4",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "Mg": 0
+      },
+      "avg_voltage_v": 6.95493213335673,
+      "capacity_mah_g": 119.3701350211592,
+      "e_full_ev": -196.8714599609375,
+      "e_delith_ev": -170.3712158203125,
+      "converged": false,
+      "rel_stability_ev_atom": -1.812943318684895,
+      "name": "NiMg91-olivine"
+    },
+    {
+      "formula": "LiCuPO4",
+      "realized_tm_counts": {
+        "Cu": 4
+      },
+      "avg_voltage_v": 4.9119837284088135,
+      "capacity_mah_g": 113.38826562298495,
+      "e_full_ev": -183.99005126953125,
+      "e_delith_ev": -163.61865234375,
+      "converged": false,
+      "rel_stability_ev_atom": -1.2976869710286456,
+      "name": "CuPO4-olivine"
+    },
+    {
+      "formula": "LiCo0.9Mn0.1PO4",
+      "realized_tm_counts": {
+        "Co": 4,
+        "Mn": 0
+      },
+      "avg_voltage_v": 4.506511926651001,
+      "capacity_mah_g": 116.93050489833833,
+      "e_full_ev": -201.2084197998047,
+      "e_delith_ev": -182.05343627929688,
+      "converged": false,
+      "rel_stability_ev_atom": -1.9864217122395837,
+      "name": "CoMn91-olivine"
+    },
+    {
+      "formula": "LiNi2O4",
+      "realized_tm_counts": {
+        "Ni": 8
+      },
+      "avg_voltage_v": 7.971975738351995,
+      "capacity_mah_g": 99.62032046659662,
+      "e_full_ev": -258.6996765136719,
+      "e_delith_ev": -150.34463500976562,
+      "converged": false,
+      "rel_stability_ev_atom": 0.3130333794487852,
+      "name": "LiNi2O4-spinel"
+    },
+    {
+      "formula": "LiCoNiO4",
+      "realized_tm_counts": {
+        "Co": 4,
+        "Ni": 4
+      },
+      "avg_voltage_v": 8.740291833877563,
+      "capacity_mah_g": 99.49363507936869,
+      "e_full_ev": -272.4289855957031,
+      "e_delith_ev": -155.62246704101562,
+      "converged": false,
+      "rel_stability_ev_atom": 0.007937622070312678,
+      "name": "LiCoNiO4-spinel"
+    },
+    {
+      "formula": "LiNiFeO4",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "Fe": 4
+      },
+      "avg_voltage_v": 7.920972542329268,
+      "capacity_mah_g": 101.15020568588017,
+      "e_full_ev": -278.8624572753906,
+      "e_delith_ev": -171.06845092773438,
+      "converged": false,
+      "rel_stability_ev_atom": -0.1350284152560759,
+      "name": "LiNiFeO4-spinel"
+    },
+    {
+      "formula": "LiMn1.5Fe0.5O4",
+      "realized_tm_counts": {
+        "Mn": 6,
+        "Fe": 2
+      },
+      "avg_voltage_v": 7.755461844530973,
+      "capacity_mah_g": 103.49879385193209,
+      "e_full_ev": -307.7362365722656,
+      "e_delith_ev": -201.76284790039062,
+      "converged": false,
+      "rel_stability_ev_atom": -0.7766679551866318,
+      "name": "Mn15Fe05O4-spinel"
+    },
+    {
+      "formula": "LiMn1.5Al0.5O4",
+      "realized_tm_counts": {
+        "Mn": 6,
+        "Al": 2
+      },
+      "avg_voltage_v": 7.99001162702387,
+      "capacity_mah_g": 112.45167458527258,
+      "e_full_ev": -302.8467712402344,
+      "e_delith_ev": -194.2933349609375,
+      "converged": false,
+      "rel_stability_ev_atom": -0.668013170030382,
+      "name": "Mn15Al05O4-spinel"
+    },
+    {
+      "formula": "LiNi0.9Mg0.1O2",
+      "realized_tm_counts": {
+        "Ni": 11,
+        "Mg": 1
+      },
+      "avg_voltage_v": 3.9334566593170166,
+      "capacity_mah_g": 199.17367345560814,
+      "e_full_ev": -281.2464904785156,
+      "e_delith_ev": -234.7509765625,
+      "converged": false,
+      "rel_stability_ev_atom": -0.9692471822102862,
+      "name": "NiMg91-layered"
+    },
+    {
+      "formula": "LiNi0.85Co0.15O2",
+      "realized_tm_counts": {
+        "Ni": 10,
+        "Co": 2
+      },
+      "avg_voltage_v": 3.7514116764068604,
+      "capacity_mah_g": 192.0876039395615,
+      "e_full_ev": -286.182373046875,
+      "e_delith_ev": -241.14321899414062,
+      "converged": false,
+      "rel_stability_ev_atom": -1.0926442464192707,
+      "name": "NiCo85-layered"
+    },
+    {
+      "formula": "LiNi0.8Ti0.2O2",
+      "realized_tm_counts": {
+        "Ni": 10,
+        "Ti": 2
+      },
+      "avg_voltage_v": 4.025848627090454,
+      "capacity_mah_g": 196.51665920866398,
+      "e_full_ev": -302.60205078125,
+      "e_delith_ev": -255.36740112304688,
+      "converged": false,
+      "rel_stability_ev_atom": -1.5031361897786457,
+      "name": "NiTi82-layered"
+    },
+    {
+      "formula": "LiNi0.8W0.2O2",
+      "realized_tm_counts": {
+        "Ni": 10,
+        "W": 2
+      },
+      "avg_voltage_v": 3.854942560195923,
+      "capacity_mah_g": 152.94840428844927,
+      "e_full_ev": -308.9971008300781,
+      "e_delith_ev": -263.12969970703125,
+      "converged": false,
+      "rel_stability_ev_atom": -1.6630124409993483,
+      "name": "NiW82-layered"
+    },
+    {
+      "formula": "LiNi0.8Mo0.2O2",
+      "realized_tm_counts": {
+        "Ni": 10,
+        "Mo": 2
+      },
+      "avg_voltage_v": 3.8747446537017822,
+      "capacity_mah_g": 178.53622752861273,
+      "e_full_ev": -302.66143798828125,
+      "e_delith_ev": -256.6356201171875,
+      "converged": false,
+      "rel_stability_ev_atom": -1.5046208699544268,
+      "name": "NiMo82-layered"
+    },
+    {
+      "formula": "LiNi0.8Sb0.2O2",
+      "realized_tm_counts": {
+        "Ni": 10,
+        "Sb": 2
+      },
+      "avg_voltage_v": 4.0289881229400635,
+      "capacity_mah_g": 170.1735047963418,
+      "e_full_ev": -288.1434020996094,
+      "e_delith_ev": -240.88363647460938,
+      "converged": false,
+      "rel_stability_ev_atom": -1.1416699727376303,
+      "name": "NiSb82-layered"
+    },
+    {
+      "formula": "LiNi0.5Sb0.5O2",
+      "realized_tm_counts": {
+        "Ni": 6,
+        "Sb": 6
+      },
+      "avg_voltage_v": 3.0212900638580322,
+      "capacity_mah_g": 145.2469231573202,
+      "e_full_ev": -286.74761962890625,
+      "e_delith_ev": -247.5494384765625,
+      "converged": false,
+      "rel_stability_ev_atom": -1.1067754109700516,
+      "name": "NiSb55-layered"
+    },
+    {
+      "formula": "LiNi0.8Ge0.2O2",
+      "realized_tm_counts": {
+        "Ni": 10,
+        "Ge": 2
+      },
+      "avg_voltage_v": 3.9294588565826416,
+      "capacity_mah_g": 186.82101086489362,
+      "e_full_ev": -288.60968017578125,
+      "e_delith_ev": -242.14614868164062,
+      "converged": false,
+      "rel_stability_ev_atom": -1.1533269246419264,
+      "name": "NiGe82-layered"
+    },
+    {
+      "formula": "Li2NiO3",
+      "realized_tm_counts": {
+        "Ni": 12
+      },
+      "avg_voltage_v": 3.8954832553863525,
+      "capacity_mah_g": 155.59821304166084,
+      "e_full_ev": -281.8924865722656,
+      "e_delith_ev": -235.7007598876953,
+      "converged": false,
+      "rel_stability_ev_atom": -0.9853970845540365,
+      "name": "Li2NiO3-layered"
+    }
+  ],
+  "calibration_note": "NMC811 基线自校准：文献平均电压 ≈3.8 V、理论容量 ≈194 mAh/g（x∈[0.3,1] 窗口）——若基线预测显著偏离，说明本批结果不可信（如实标注）。"
+}

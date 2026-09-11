@@ -1,0 +1,52 @@
+{
+ "candidates": [
+  {
+   "name": "hexafluoroacetone",
+   "smiles": "O=C(C(F)(F)F)C(F)(F)F"
+  },
+  {
+   "name": "trifluoroacetic anhydride",
+   "smiles": "O=C(OC(=O)C(F)(F)F)C(F)(F)F"
+  },
+  {
+   "name": "hexafluorobenzene",
+   "smiles": "Fc1c(F)c(F)c(F)c(F)c1F"
+  },
+  {
+   "name": "pentafluoropyridine",
+   "smiles": "Fc1c(F)c(F)nc(F)c1F"
+  },
+  {
+   "name": "octafluoronaphthalene",
+   "smiles": "Fc1c(F)c(F)c2c(F)c(F)c(F)c(F)c2c1F"
+  },
+  {
+   "name": "hexafluorocyclotriphosphazene",
+   "smiles": "P1(F)(F)=NP(F)(F)=NP(F)(F)=N1"
+  },
+  {
+   "name": "trifluoromethyl isocyanate",
+   "smiles": "O=C=NC(F)(F)F"
+  },
+  {
+   "name": "perfluorohexane",
+   "smiles": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F"
+  },
+  {
+   "name": "sulfur hexafluoride",
+   "smiles": "FS(F)(F)(F)(F)F"
+  },
+  {
+   "name": "pentafluoroethyl iodide",
+   "smiles": "FC(F)(F)C(F)(F)I"
+  },
+  {
+   "name": "hexafluoroisopropanol",
+   "smiles": "OC(C(F)(F)F)C(F)(F)F"
+  },
+  {
+   "name": "perfluorotributylamine",
+   "smiles": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)N(C(F)(F)C(F)(F)C(F)(F)C(F)(F)F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F"
+  }
+ ]
+}

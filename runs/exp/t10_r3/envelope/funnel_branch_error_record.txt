@@ -1,0 +1,7 @@
+﻿D:/anaconda/envs/py312/python.exe : need mace+chgnet+xtb candidate outputs; check schemas
+At line:1 char:302
++ ... tch {} } }; D:/anaconda/envs/py312/python.exe "D:\research\degradatio ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (need mace+chgne...; check schemas:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

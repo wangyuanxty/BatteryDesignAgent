@@ -1,0 +1,29 @@
+[
+  {
+    "candidate": "R3-V1-por",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r3_v1_por_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r3_v1_por_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r3_v1_por_4c45c_spme.json"
+    ],
+    "note": "T_max_K last-wins from 4C file (binding scenario)"
+  },
+  {
+    "candidate": "R3-V2-tpt",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r3_v2_tpt_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r3_v2_tpt_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r3_v2_tpt_4c45c_spme.json"
+    ],
+    "note": "T_max_K last-wins from 4C file (binding scenario)"
+  },
+  {
+    "candidate": "R3-V3-full",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r3_v3_full_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r3_v3_full_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r3_v3_full_4c45c_spme.json"
+    ],
+    "note": "T_max_K last-wins from 4C file (binding scenario)"
+  }
+]

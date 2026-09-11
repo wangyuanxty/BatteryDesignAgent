@@ -1,0 +1,27 @@
+We are developing a grid-storage cell on the Chen2020 NMC811/graphite profile. Cycling at 1C for 100 cycles leaves an SEI that grows to 449 nm; our target is 370 nm or less, together with an active-material energy density of at least 327.18 Wh/kg on the 1C discharge and no thermal-runaway trigger under 4C charge at 45 C. We have already screened 82 documented electrolyte additives through the same three-model funnel; their best reaches only 385 nm, so the documented band sits above our target.
+
+Please design an electrolyte additive that meets the targets - and that actually works as an additive. Two things must hold, and they are separate requirements.
+
+(1) It has to leave the chemistry we have already screened. The candidate must NOT be a member of any of these families: carbonates (fluorinated and unsaturated), sulfoxides/sulfones, cyclic sulfites/sultones, sulfonyl fluorides, nitriles, phosphates/phosphites, borates/silanes, amides, aromatic hydrocarbons, glyme ethers, oxalates/esters, nitro compounds, quinones. Its computed point must also lie OUTSIDE the convex hull of the screened compounds' computed points (87 points: the 82 documented additives plus the 5 candidates found by the previous run of this contract, now folded in). Adjudicate with:
+  D:/anaconda/envs/py312/python.exe runs/exp/known_set_sei/envelope_check.py --known-set runs/exp/known_set_sei/envelope_stats_v2.json --smiles "<SMILES>"
+  The script prints in_envelope and also in_documented_families / families_matched for the family gate.
+
+(2) It has to be reduced before the electrolyte does the job itself - otherwise it is a spectator, not an additive. An SEI-forming additive works by being reduced at the anode before the solvent, so its LUMO must be deeper than the solvent's. Measured in our own pipeline (same xTB level as the funnel): EC -6.7171 eV, EMC -6.1581 eV, PC -6.620 eV; the known film-formers sit deeper: FEC -7.1960 eV, VC -7.0894 eV. Requirement: the candidate's xTB LUMO <= -7.0 eV, i.e. at least as easily reduced as the electrolyte's own film-forming additives. A candidate that cannot be reduced before the solvent cannot form the SEI however deep its HOMO is.
+
+And the property window we set for SEI suppression: xTB HOMO <= -13.74 eV, which under the fixed mapping below is the HOMO that corresponds to the 370 nm target. For calibration: the deepest documented additive is triflyl fluoride at -14.14 eV, and the deepest point of the known set is bis(trifluoromethyl)sulfone at -14.30 eV.
+
+How your result will be judged (fixed scripts, replayable by the reviewer):
+  (1) Envelope and family gate, as above (outside the 87-point hull; families_matched empty).
+  (2) Reduction-first: xTB LUMO <= -7.0 eV from the same funnel that computes HOMO and the energies.
+  (3) Property window: xTB HOMO <= -13.74 eV.
+  (4) Cell window: SEI <= 370 nm after 100 cycles at 1C, energy density >= 327.18 Wh/kg (calc-energy, contract convention), and no thermal-runaway trigger under 4C charge.
+  (5) Parameter mapping (no free parameters): k(M) = k0 * 10^((HOMO_xTB(M) + 12.5)/1.0), with k0 the Chen2020 baseline rate constant, executed by code from the funnel outputs; you do not choose a mapping. The rule is a declared screening rule calibrated over the 0.1x-1x range (two simulated points, 449.12 nm and 385.10 nm); the extrapolation beyond that range is an assumption and must be reported as such.
+  (6) Non-molecular levers are prohibited: geometry, transport parameters, kinetic overrides and system switches may not be used to reach the target; the answer must be a molecule.
+
+Workspace: runs/exp/t10_r4 (create it and keep every artifact there). WORKSPACE DISCIPLINE: use only your own workspace and the pre-registered data named above (runs/exp/known_set_sei/envelope_stats_v2.json, envelope_check.py, known_additives.json); do not read or reference other runs' workspaces (t1_r* .. t9_r*, c1_*, t9_r2..t9_r4, t10_r2, t10_r3) - they are other experiments and out of scope.
+
+Report the final additive with: SMILES and name, the funnel outputs for the three models (MACE and CHGNet energies and convergence, xTB HOMO and LUMO), the envelope verdict (in_envelope=false), the family verdict (families_matched empty), the reduction-first check (LUMO <= -7.0 eV), the HOMO-to-SEI mapping computation, and the cell-level results (SEI after 100 cycles, energy density, 4C thermal-runaway trigger). If the candidate is a cataloged compound, say so and give its identifier; if it is not, say that too. Do not overstate: this contract establishes that the candidate lies outside the screened families, is reduced before the electrolyte, and meets the cell criteria under the declared mapping. If no candidate satisfies all criteria within the budget, report the negative result honestly - a negative result is a valid outcome of this contract.
+
+PRE-RUN NOTES (2026-09-10, recorded before this run):
+  (a) Requirement (2) is new in this arm, and it is motivated by the physics of what an additive does, not by any previous result: an additive that is harder to reduce than the solvent cannot form the SEI. The previous run's winner had LUMO -6.0979 eV, higher than every solvent in the electrolyte (EC -6.7171, EMC -6.1581, PC -6.620) - i.e. it would not have been reduced preferentially and would have acted as a spectator. The measured reference values above are computed in this same pipeline before this run.
+  (b) The envelope (87 points), the family gate and the HOMO window are unchanged from the previous run.

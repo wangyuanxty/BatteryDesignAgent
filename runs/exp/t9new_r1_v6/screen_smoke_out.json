@@ -1,0 +1,39 @@
+{
+  "baseline": {
+    "formula": "Li(Ni0.8Mn0.1Co0.1)O2",
+    "e_full_ev": -290.971923828125,
+    "e_li_metal_ev": -1.878482460975647,
+    "converged": false
+  },
+  "candidates": [
+    {
+      "formula": "LiNi0.5Mn1.5O4",
+      "realized_tm_counts": {
+        "Ni": 2,
+        "Mn": 6
+      },
+      "avg_voltage_v": 7.9709590673446655,
+      "capacity_mah_g": 102.69195673979098,
+      "e_full_ev": -296.71331787109375,
+      "e_delith_ev": -188.3694610595703,
+      "converged": false,
+      "rel_stability_ev_atom": -0.5317142062717011,
+      "name": "LNMO"
+    },
+    {
+      "formula": "LiCoMnO4",
+      "realized_tm_counts": {
+        "Co": 4,
+        "Mn": 4
+      },
+      "avg_voltage_v": 8.188830993392251,
+      "capacity_mah_g": 101.51535600052462,
+      "e_full_ev": -296.4584045410156,
+      "e_delith_ev": -185.71795654296875,
+      "converged": false,
+      "rel_stability_ev_atom": -0.5260494656032986,
+      "name": "LCMO"
+    }
+  ],
+  "calibration_note": "NMC811 基线自校准：文献平均电压 ≈3.8 V、理论容量 ≈194 mAh/g（x∈[0.3,1] 窗口）——若基线预测显著偏离，说明本批结果不可信（如实标注）。"
+}

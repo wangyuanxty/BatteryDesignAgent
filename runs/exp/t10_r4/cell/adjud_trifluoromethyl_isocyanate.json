@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "trifluoromethyl isocyanate",
+  "smiles": "O=C=NC(F)(F)F",
+  "n_atoms": 7,
+  "homo_ev": -14.1748,
+  "lumo_ev": -8.3205,
+  "mace_energy_ev": -45.03033447265625,
+  "mace_converged": true,
+  "chgnet_energy_ev": -47.29834747314453,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

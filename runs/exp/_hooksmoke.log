@@ -1,0 +1,64 @@
+[system:hook_started] {"type": "system", "subtype": "hook_started", "hook_id": "2939833d-9169-4234-9782-261c0c4657b9", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "uuid": "31cf35aa-aea7-4c52-bf8d-359
+[system:hook_started] {"type": "system", "subtype": "hook_started", "hook_id": "0b94850b-ef40-4b7d-af11-1eca4dae0f1a", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "uuid": "f470c0f7-1645-4720-88a4-b70
+[system:hook_started] {"type": "system", "subtype": "hook_started", "hook_id": "5ba0a5d8-6ae6-40a9-9412-57d106d013a1", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "uuid": "39247a10-846c-43cc-9b68-507
+[system:hook_response] {"type": "system", "subtype": "hook_response", "hook_id": "2939833d-9169-4234-9782-261c0c4657b9", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "output": "{\"hookSpecificOutput\":
+[system:hook_response] {"type": "system", "subtype": "hook_response", "hook_id": "5ba0a5d8-6ae6-40a9-9412-57d106d013a1", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "output": "{\"session_id\":\"418279
+[system:hook_response] {"type": "system", "subtype": "hook_response", "hook_id": "0b94850b-ef40-4b7d-af11-1eca4dae0f1a", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "output": "{\"hookSpecificOutput\":
+[system:init] {"type": "system", "subtype": "init", "cwd": "D:\\research\\degradation_prognostics\\Battery_Design_Agent", "session_id": "418279dd-59b6-465c-bd1a-b2ae4aad79bb", "tools": ["Task", "CronCreate", "CronD
+[claude-code:unrecognized_model] {"model":"official-deepseek-v4-pro","query_source":"sdk"}
+[assistant] [thinking]
+[assistant] [tool:Read] file_path='D:/research/degradation_prognostics/Battery_Design_Agent/.claude/skills/virtual-battery-factory/references/cli-commands.'
+[user] [tool_result]1	# Simulation Library CLI Full Reference (`python -m bda`) 2	 3	> Read on demand per the SKILL.md Section 4 guidance. The simulation library package lives in this skill's `scripts/bda/` (pip-editable-installed to this path; `python -m bda` invokes it). 4	 5	## General conventions 6	 7	- Invocation (Bash tool, repo root): `.venv\Scripts\python.exe -m bda <subcommand> ...`; all subcommands listed via `-m bda --help` 8	- The parameter bridge is a protocol rule (PyBaMM parameter-name m
+[assistant] [thinking]
+[assistant] I read the file. Here's what I found:
+
+## `cli-commands.md` — Simulation Library CLI Full Reference (`python -m bda`)
+
+This is a reference doc for the `bda` simulation library (part of the `virtual-battery-factory` skill), covering 11 CLI subcommands plus general conventions.
+
+### General conventions
+- **Invocation**: `.venv\Scripts\python.exe -m bda <subcommand> ...` from repo root
+- **Must use the Bash tool** — PowerShell is guardrail-limited for simulation/render commands
+- **JSON contract**:
+[result] error=False cost=$0.3047 I read the file. Here's what I found:
+
+## `cli-commands.md` — Simulation Library CLI Full Reference (`python -m bda`)
+
+T
+tokens: official-deepseek-v4-pro: in=50689 out=1179 cache_read=43648 cache_write=0
+result:
+I read the file. Here's what I found:
+
+## `cli-commands.md` — Simulation Library CLI Full Reference (`python -m bda`)
+
+This is a reference doc for the `bda` simulation library (part of the `virtual-battery-factory` skill), covering 11 CLI subcommands plus general conventions.
+
+### General conventions
+- **Invocation**: `.venv\Scripts\python.exe -m bda <subcommand> ...` from repo root
+- **Must use the Bash tool** — PowerShell is guardrail-limited for simulation/render commands
+- **JSON contract**: all inputs/outputs are UTF-8 JSON files via `--out`; each step is independently rerunnable
+- **Cache**: all `run-*` commands check a store cache first (keyed on parameter combinations), reusing on hit
+- **Errors**: validation failures print `bda error: <reason>` with exit 1; missing files/keys raise Python tracebacks
+- **Env deps**: `run-xtb` needs xtb on PATH; `run-orca` needs ORCA; `run-cp2k` needs MSYS2 CP2K + `C:\cp2k-data`; `run-qe` needs MSYS2 pw.x + SSSP pseudopotentials; `run-md` gromacs engine needs gmx + .itp templates
+
+### The subcommands
+1. **`run-pyamm`** — cell simulation (PyBaMM). 8 protocols (1C/0.1C/4C/5C discharge, lowT, overcharge, 2 aging protocols), SPMe/DFN modes, thermal options, plating module, output keys (voltage, capacity, T_max, etc.)
+2. **`run-mlp`** — ML potential structure relaxation (mace/chgnet models) for Stage 2 funnel
+3. **`run-xtb`** — semi-empirical quantum single point (HOMO/LUMO)
+4. **`run-orca`** — true DFT endorsement (r2SCAN-3c), **only for closing Top-3**, ~2–3 hrs/molecule, forbidden inside the funnel
+5. **`run-md`** — MD diffusion (gromacs or mace engine), **only closing Top-1**, outputs D_Li_m2_s
+6. **`render`** — deterministic HTML report from `log.jsonl` (7 sections), no LLM calls
+7. **`run-comp`** — electrode composition screening (CHGNet periodic relaxation); **requires CUDA torch** via `D:/anaconda/envs/py312/python.exe` (local .venv is CPU-only)
+8. **`run-qe`** — periodic DFT true endorsement, **closing only**; handles two machine-specific pitfalls (2 MB stack overflow → patched `pw_stack4g.exe`, backslash-in-Fortran-namelist)
+9. **`log-evaluate`** — mechanical evaluate-entry recorder; verdict computed by code against entry-0 criteria (prevents the v3 incident of evaluations never being logged); auto-derives plating from `anode_potential_v`
+10. **`verify-deliverables`** — checks 7 deliverable categories, PDF/xlsx validity, VBF numbering, and audit chain completeness (every propose round must have a same-round evaluate entry)
+11. **`calc-energy`** — contract-caliber energy density using a fixed formula (ED = ∫V·I dt / mass) to prevent cross-task precedent copying
+12. **`run-tr`** — thermal-runaway three-side-reaction ODE for Stage 4 abuse scenarios; auto-couples from overcharge simulation's T_max; `--mass-kg` mandatory (fixes the t7_r1 incident where a 40 g cell was judged as 1 kg)
+13. **`run-cp2k`** — molecular true DFT cross-validation (PBE+D3), isomorphic output with run-orca, closing Top-3 only, optional
+
+### Notable process rules encoded in the doc
+- Funnel judgment (Stage 2) is **not a CLI command** — run the three models in order, then judge by reading the three output JSONs directly
+- Iron rule: expensive true-endorsement commands (orca, qe, cp2k, md) are **closing-only, forbidden inside the funnel**
+- Honesty requirements repeated throughout: record non-convergence, artifacts (aging capacity climb-then-saturate, `converged=false` in run-comp), and exclusions (electrolyte mass) as-is rather than fabricating values
+
+That's the full report. Stopping here per the task instruction.

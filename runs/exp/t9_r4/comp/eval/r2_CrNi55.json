@@ -1,0 +1,7 @@
+{
+  "avg_voltage_v": 3.785793662071228,
+  "capacity_mah_g": 198.98314941313288,
+  "rel_stability_ev_atom": -2.1397679646809893,
+  "converged": false,
+  "source": "comp/batch2_layered_out.json:candidates[7]"
+}

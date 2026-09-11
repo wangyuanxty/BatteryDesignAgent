@@ -1,0 +1,100 @@
+[
+  {
+    "candidate": "LiBO2",
+    "outputs": [
+      "comp/eval/r3_LiBO2.json"
+    ],
+    "note": "computed avg voltage 4.253 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "AlB55",
+    "outputs": [
+      "comp/eval/r3_AlB55.json"
+    ],
+    "note": "computed avg voltage 4.641 V >= 4.6 - passes the stage-1 window; advances to the charging-potential gate (comp/profile_voltage.py)"
+  },
+  {
+    "candidate": "AlB73",
+    "outputs": [
+      "comp/eval/r3_AlB73.json"
+    ],
+    "note": "computed avg voltage 4.429 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "AlB91",
+    "outputs": [
+      "comp/eval/r3_AlB91.json"
+    ],
+    "note": "computed avg voltage 4.443 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "BAl73",
+    "outputs": [
+      "comp/eval/r3_BAl73.json"
+    ],
+    "note": "computed avg voltage 4.226 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "BAl91",
+    "outputs": [
+      "comp/eval/r3_BAl91.json"
+    ],
+    "note": "computed avg voltage 4.304 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "AlB82",
+    "outputs": [
+      "comp/eval/r3_AlB82.json"
+    ],
+    "note": "computed avg voltage 4.464 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "AlB64",
+    "outputs": [
+      "comp/eval/r3_AlB64.json"
+    ],
+    "note": "computed avg voltage 4.280 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "AlB95",
+    "outputs": [
+      "comp/eval/r3_AlB95.json"
+    ],
+    "note": "computed avg voltage 4.488 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "GaAl55",
+    "outputs": [
+      "comp/eval/r3_GaAl55.json"
+    ],
+    "note": "computed avg voltage 4.494 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "AlSc55",
+    "outputs": [
+      "comp/eval/r3_AlSc55.json"
+    ],
+    "note": "computed avg voltage 4.298 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "BGa55",
+    "outputs": [
+      "comp/eval/r3_BGa55.json"
+    ],
+    "note": "computed avg voltage 4.504 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "BSc55",
+    "outputs": [
+      "comp/eval/r3_BSc55.json"
+    ],
+    "note": "computed avg voltage 4.115 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "GaAl91",
+    "outputs": [
+      "comp/eval/r3_GaAl91.json"
+    ],
+    "note": "computed avg voltage 4.454 V < 4.6 - rejected at the stage-1 window"
+  }
+]

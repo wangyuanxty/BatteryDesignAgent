@@ -1,0 +1,11 @@
+{
+  "candidates": [
+    {
+      "smiles": "FS(F)(F)(F)(F)F",
+      "metrics": {
+        "homo_ev": -9.2861,
+        "lumo_ev": -7.5398
+      }
+    }
+  ]
+}

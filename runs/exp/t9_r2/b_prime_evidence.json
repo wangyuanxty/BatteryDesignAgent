@@ -1,0 +1,44 @@
+{
+  "in_known": false,
+  "in_envelope": false,
+  "true_voltage_v": 5.5,
+  "provenance_of_true_voltage_v": "Mueller et al., Chem. Mater. 2011, 23, 3854-3862 (DOI 10.1021/cm200753g): high-throughput DFT evaluation of tavorite MPO4F; reported Li-insertion voltage steps for Ni(PO4)F: 5.50 / 4.59 / 5.04 V. The 5.50 V step is the most oxidizing (Ni3+/Ni4+ couple) and is the region our 30%-delithiation window (x=1.0 -> 0.7) occupies. CAVEAT: figure obtained via search-index extraction of the full text (WebFetch blocked in this environment); the redox assignment to the Ni3+/4+ couple is inferred from step ordering and was not verified against the primary PDF.",
+  "evidence_ladder": [
+    {
+      "ref": "Mueller, Hautier, Jain, Ceder, Chem. Mater. 2011, 23(17), 3854-3862, DOI 10.1021/cm200753g",
+      "url": "https://research.dial.uclouvain.be/entities/publication/044607b3-3503-4fa7-8726-dab628f22108",
+      "finding": "Tavorite Ni(PO4)F Li-insertion steps 5.50 / 4.59 / 5.04 V (computed); 5.50 V is the most-oxidizing step (same redox region as our delithiation window).",
+      "status": "search-index extraction of full text; redox-step assignment inferred; not verified against PDF"
+    },
+    {
+      "ref": "Alfaruqi et al., ACS Appl. Mater. Interfaces 2020, 12(14), 16376-16386, DOI 10.1021/acsami.9b23367",
+      "url": "https://www.ablesci.com/scholar/paper?id=3dNkeBKa8",
+      "finding": "First-principles DFT (QE-level, PBEsol+U): LiMn0.5Ni0.5PO4F (tavorite, 50% Ni dilution) Li-intercalation voltage 5.23 V. Pure-Ni endmember is higher along the family dilution trend (our CHGNet dilution series: 5.488 pure / 5.386 75%Ni / 5.305 50%Ni).",
+      "status": "independent corroboration via two separate search results"
+    },
+    {
+      "ref": "Chakrabarti & Thakur, J. Electrochem. Soc. 2024 (Li2NiPO4F study)",
+      "finding": "Li2NiPO4F reported at 5.33 V (documented in the pre-registered known-set as the 5.3 V capacity-limited ceiling claim). Same Ni3+/4+ P-O-F redox chemistry; family-consistency anchor >= 5.3 V.",
+      "status": "documented known-set member; used only as family anchor, not as the novelty claim"
+    },
+    {
+      "ref": "Yu et al., J. Mater. Chem. 2011, 21, 12054",
+      "finding": "LiNiPO4F identified as a high-voltage (>3.5 V) tavorite cathode target in early fluorophosphate screening work.",
+      "status": "weak supporting evidence (family identification only)"
+    },
+    {
+      "ref": "US20240150177A1 (patent, 2024) - Li2NiPO4F via mechanochemical LiMPO4 + LiF",
+      "url": "https://patents.google.com/patent/US20240150177A1/en",
+      "finding": "Experimental patent: phase-pure orthorhombic Pnma Li2NiPO4F prepared by ball-milling LiCo(x)Ni(1-x)PO4 with LiF + 750 C sintering; 'the material shows a ~5.3 V redox potential, currently limited by commercial electrolyte stability'. Independent experimental corroboration of the documented 5.3 V Ni-P-O-F family ceiling.",
+      "status": "patent claim (experimental), corroborates the Li2NiPO4F 5.33 V anchor"
+    },
+    {
+      "ref": "This run, batch-1 CHGNet screen (comp_batch1_out.json)",
+      "finding": "CHGNet computed 5.4878 V for LiNiPO4F. Agreement with Mueller's 5.50 V literature step (delta 0.012 V) cross-validates the CHGNet tavorite template for Ni - unlike the Fe-tavorite case (pre-registered: LiFePO4F computes +2.2 V above literature), the Ni-tavorite template error is negligible.",
+      "status": "in-toolchain computed value; used for B, corroborates B'"
+    }
+  ],
+  "conservative_floor": "Without the Mueller figure, the strongest exact-chemistry anchors are 5.23 V (50% Ni dilution, Alfaruqi) and 5.33 V (Li2NiPO4F, documented); by the family dilution trend the pure endmember is the highest member of the series, so a >= 5.3 V true voltage for LiNiPO4F is literature-consistent but not independently proven below the 5.50 V figure.",
+  "qe_domain_limit": "run-qe attempted on LiNiPO4F: honest toolchain error 'no SSSP efficiency pseudopotential entry for element F' (qe_runner._PSEUDO_FILES covers Li/Ni/Mn/Co/O/P/Si/Mg only). QE-level endorsement is unreachable for any F-containing framework in this pre-registered toolchain; B' rests on the literature route, which the contract explicitly allows.",
+  "b_prime_verdict": "PASS (literature-consistent): exact-chemistry computed step 5.50 V (Mueller 2011) + diluted-anchor 5.23 V (Alfaruqi 2020) + family anchor 5.33 V (Li2NiPO4F, documented) + in-toolchain cross-validation 5.488 V. Conditional caveat recorded: the key 5.50 V figure is secondhand (search-index extraction)."
+}

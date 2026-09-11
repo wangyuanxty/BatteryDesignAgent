@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "fluoroformic anhydride",
+  "smiles": "O=C(F)OC(=O)F",
+  "n_atoms": 7,
+  "homo_ev": -14.0896,
+  "lumo_ev": -9.7042,
+  "mace_energy_ev": -46.399810791015625,
+  "mace_converged": true,
+  "chgnet_energy_ev": -48.793888092041016,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

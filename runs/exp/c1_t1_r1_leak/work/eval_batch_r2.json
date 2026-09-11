@@ -1,0 +1,38 @@
+[
+  {
+    "candidate": "R2-V1-thincc",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r2_v1_thincc_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r2_v1_thincc_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r2_v1_thincc_4c45c_spme.json"
+    ],
+    "note": "T_max_K last-wins from 4C file (binding scenario)"
+  },
+  {
+    "candidate": "R2-V2-fastk",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r2_v2_fastk_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r2_v2_fastk_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r2_v2_fastk_4c45c_spme.json"
+    ],
+    "note": "T_max_K last-wins from 4C file (binding scenario)"
+  },
+  {
+    "candidate": "R2-V3-anodeup",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r2_v3_anodeup_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r2_v3_anodeup_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r2_v3_anodeup_4c45c_spme.json"
+    ],
+    "note": "T_max_K last-wins from 4C file (binding scenario)"
+  },
+  {
+    "candidate": "R2-V4-combo1",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r2_v4_combo1_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r2_v4_combo1_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r2_v4_combo1_4c45c_spme.json"
+    ],
+    "note": "T_max_K last-wins from 4C file (binding scenario)"
+  }
+]

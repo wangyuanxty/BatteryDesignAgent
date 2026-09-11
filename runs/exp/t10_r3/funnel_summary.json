@@ -1,0 +1,121 @@
+[
+  {
+    "key": "pfta",
+    "name": "perfluorotributylamine",
+    "smiles": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)N(C(F)(F)C(F)(F)C(F)(F)C(F)(F)F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+    "n_atoms": 40,
+    "mace_energy_ev": -224.63243103027344,
+    "mace_converged": true,
+    "chgnet_energy_ev": -236.7171630859375,
+    "chgnet_converged": false,
+    "xtb_homo_ev": -14.9642,
+    "xtb_lumo_ev": -6.0979,
+    "mace_per_atom": -5.615810775756836,
+    "chgnet_per_atom": -5.917929077148438,
+    "in_envelope": false,
+    "families_matched": [],
+    "point_per_atom": [
+      -5.615810775756836,
+      -5.917929077148438,
+      -14.9642
+    ]
+  },
+  {
+    "key": "pfhex",
+    "name": "perfluorohexane",
+    "smiles": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+    "n_atoms": 20,
+    "mace_energy_ev": -110.57454681396484,
+    "mace_converged": true,
+    "chgnet_energy_ev": -116.62883758544922,
+    "chgnet_converged": true,
+    "xtb_homo_ev": -14.9147,
+    "xtb_lumo_ev": -5.3146,
+    "mace_per_atom": -5.528727340698242,
+    "chgnet_per_atom": -5.831441879272461,
+    "in_envelope": false,
+    "families_matched": [],
+    "point_per_atom": [
+      -5.528727340698242,
+      -5.831441879272461,
+      -14.9147
+    ]
+  },
+  {
+    "key": "pftea",
+    "name": "tris(pentafluoroethyl)amine (perfluorotriethylamine)",
+    "smiles": "FC(F)(F)C(F)(F)N(C(F)(F)C(F)(F)F)C(F)(F)C(F)(F)F",
+    "n_atoms": 22,
+    "mace_energy_ev": -123.38143157958984,
+    "mace_converged": false,
+    "chgnet_energy_ev": -129.9434814453125,
+    "chgnet_converged": false,
+    "xtb_homo_ev": -14.8818,
+    "xtb_lumo_ev": -5.7187,
+    "mace_per_atom": -5.6082468899813565,
+    "chgnet_per_atom": -5.906521883877841,
+    "in_envelope": false,
+    "families_matched": [],
+    "point_per_atom": [
+      -5.6082468899813565,
+      -5.906520496715199,
+      -14.8818
+    ]
+  },
+  {
+    "key": "pfpent",
+    "name": "perfluoropentane",
+    "smiles": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+    "n_atoms": 17,
+    "mace_energy_ev": -93.62474060058594,
+    "mace_converged": true,
+    "chgnet_energy_ev": -98.74636840820312,
+    "chgnet_converged": true,
+    "xtb_homo_ev": -15.0496,
+    "xtb_lumo_ev": -4.8664,
+    "mace_per_atom": -5.5073376823874085,
+    "chgnet_per_atom": -5.8086099063648895,
+    "in_envelope": false,
+    "families_matched": [],
+    "point_per_atom": [
+      -5.5073376823874085,
+      -5.808609457576976,
+      -15.0496
+    ]
+  },
+  {
+    "key": "ncf3",
+    "name": "tris(trifluoromethyl)amine",
+    "smiles": "FC(F)(F)N(C(F)(F)F)C(F)(F)F",
+    "n_atoms": 13,
+    "mace_energy_ev": -73.03131866455078,
+    "mace_converged": true,
+    "chgnet_energy_ev": -76.75110626220703,
+    "chgnet_converged": true,
+    "xtb_homo_ev": -15.7893,
+    "xtb_lumo_ev": -2.7685,
+    "mace_per_atom": -5.617793743426983,
+    "chgnet_per_atom": -5.903931250939002,
+    "in_envelope": false,
+    "families_matched": [],
+    "point_per_atom": [
+      -5.617793743426983,
+      -5.903931250939002,
+      -15.7893
+    ]
+  },
+  {
+    "key": "sf6",
+    "name": "sulfur hexafluoride",
+    "smiles": "FS(F)(F)(F)(F)F",
+    "n_atoms": 7,
+    "mace_energy_ev": -24.260757446289062,
+    "mace_converged": true,
+    "chgnet_energy_ev": -24.63898468017578,
+    "chgnet_converged": false,
+    "xtb_homo_ev": -9.2861,
+    "xtb_lumo_ev": -7.5398,
+    "mace_per_atom": -3.465822492327009,
+    "chgnet_per_atom": -3.519854954310826
+  }
+]

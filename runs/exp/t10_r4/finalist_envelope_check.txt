@@ -1,0 +1,63 @@
+﻿D:/anaconda/envs/py312/python.exe : D:\anaconda\envs\py312\Lib\site-packages\e3nn\o3\_wigner.py:10: UserWarning: Enviro
+nment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to
+ `torch.load`, forcing weights_only=False.
+At line:1 char:302
++ ... tch {} } }; D:/anaconda/envs/py312/python.exe runs/exp/known_set_sei/ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\anaconda\env...hts_only=False.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+D:\anaconda\envs\py312\Lib\site-packages\mace\calculators\mace.py:226: UserWarning: Environment variable TORCH_FORCE_NO
+_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weight
+s_only=False.
+  torch.load(f=model_path, map_location=device)
+WARNING:root:Default dtype float32 does not match model dtype float64, converting models to float32.
+D:\anaconda\envs\py312\Lib\site-packages\chgnet\model\model.py:898: UserWarning: Converting a tensor with requires_grad
+=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autog
+rad\generated\python_variable_methods.cpp:823.)
+  volumes = torch.tensor(volumes, dtype=TORCH_DTYPE, device=atomic_numbers.device)
+Using Materials Project MACE for MACECalculator with C:\Users\evari\.cache\mace/20231203mace128L1_epoch199model
+Using float32 for MACECalculator, which is faster but less accurate. Recommended for MD. Use float64 for geometry optimization.
+      Step     Time          Energy          fmax
+BFGS:    0 21:32:22      -80.227448        2.563065
+BFGS:    1 21:32:22      -80.202591        4.280180
+BFGS:    2 21:32:23      -80.353012        0.452739
+BFGS:    3 21:32:23      -80.361511        0.207797
+BFGS:    4 21:32:23      -80.366104        0.143949
+BFGS:    5 21:32:23      -80.366989        0.103344
+BFGS:    6 21:32:23      -80.368713        0.080790
+BFGS:    7 21:32:23      -80.369682        0.088013
+BFGS:    8 21:32:23      -80.370430        0.072725
+BFGS:    9 21:32:23      -80.370804        0.059127
+BFGS:   10 21:32:23      -80.371269        0.081109
+BFGS:   11 21:32:23      -80.371956        0.167159
+BFGS:   12 21:32:23      -80.372963        0.148499
+BFGS:   13 21:32:23      -80.374146        0.102196
+BFGS:   14 21:32:23      -80.374649        0.053541
+BFGS:   15 21:32:23      -80.374901        0.059731
+BFGS:   16 21:32:23      -80.375259        0.092457
+BFGS:   17 21:32:23      -80.375664        0.091243
+BFGS:   18 21:32:24      -80.376053        0.052248
+BFGS:   19 21:32:24      -80.376343        0.048149
+CHGNet v0.3.0 initialized with 412,525 parameters
+CHGNet will run on cuda
+      Step     Time          Energy          fmax
+BFGS:    0 21:32:24      -84.329300        2.489384
+BFGS:    1 21:32:24      -84.307968        3.788245
+BFGS:    2 21:32:24      -84.440735        0.345824
+BFGS:    3 21:32:24      -84.450325        0.257461
+BFGS:    4 21:32:24      -84.458679        0.524419
+BFGS:    5 21:32:24      -84.464035        0.192795
+BFGS:    6 21:32:24      -84.467667        0.185985
+BFGS:    7 21:32:24      -84.470833        0.148403
+BFGS:    8 21:32:24      -84.472939        0.138560
+BFGS:    9 21:32:24      -84.473862        0.140112
+BFGS:   10 21:32:24      -84.475456        0.151361
+BFGS:   11 21:32:24      -84.476418        0.107929
+BFGS:   12 21:32:24      -84.477432        0.118402
+BFGS:   13 21:32:24      -84.478676        0.079092
+BFGS:   14 21:32:25      -84.479156        0.060230
+BFGS:   15 21:32:25      -84.479355        0.045740
+{"name": "candidate", "smiles": "O=C(OC(=O)C(F)(F)F)C(F)(F)F", "n_atoms": 13, "mace": {"energy_ev": -80.3763427734375, "converged": true}, "chgnet": {"energy_ev": -84.47935485839844, "converged": true}, "xtb": {"homo_ev": -14.1603, "lumo_ev": -10.9558, "total_energy_ev": -1336.3822725301889}, "point_per_atom": [-6.182795597956731, -6.498411912184495, -14.1603], "in_envelope": false, "hull_ref": "envelope_stats_v2.json", "in_documented_families": false, "families_matched": []}

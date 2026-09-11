@@ -1,0 +1,23 @@
+{
+  "command": "D:/anaconda/envs/py312/python.exe comp_envelope_check.py --known-set runs/exp/known_set_comp/known_set_v3.json --formula \"LiNi0.875Mg0.125PO4F\"",
+  "output": {
+    "name": "LiNi0.875Mg0.125PO4F",
+    "point": [5.508190393447876, 107.01902890330234, -1.223627485077957],
+    "in_envelope": false,
+    "verdict": "PASS (outside envelope)",
+    "hull_ref": "known_set_v3.json",
+    "n_points": 102,
+    "n_membership": 115,
+    "computed": {
+      "formula": "LiNi0.875Mg0.125PO4F",
+      "realized_tm_counts": {"Ni": 7, "Mg": 1},
+      "avg_voltage_v": 5.508190393447876,
+      "capacity_mah_g": 107.01902890330234,
+      "e_full_ev": -422.5614318847656,
+      "e_delith_ev": -378.24139404296875,
+      "converged": false,
+      "rel_stability_ev_atom": -1.223627485077957,
+      "name": "candidate"
+    }
+  }
+}

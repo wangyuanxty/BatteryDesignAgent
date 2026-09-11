@@ -1,0 +1,354 @@
+{
+  "candidates": [
+    {
+      "smiles": "O=C(F)C(F)(F)F",
+      "name": "trifluoroacetyl fluoride",
+      "role": "perfluoro acyl fluoride film-former"
+    },
+    {
+      "smiles": "O=C(F)C(=O)F",
+      "name": "oxalyl fluoride",
+      "role": "alpha-dicarbonyl difluoride"
+    },
+    {
+      "smiles": "O=C(F)F",
+      "name": "carbonyl difluoride",
+      "role": "minimal carbonyl fluoride"
+    },
+    {
+      "smiles": "O=C(C(F)(F)F)C(F)(F)F",
+      "name": "hexafluoroacetone",
+      "role": "perfluoroketone"
+    },
+    {
+      "smiles": "O=C(C(F)(F)F)C(=O)C(F)(F)F",
+      "name": "hexafluoro-2,3-butanedione",
+      "role": "perfluoro alpha-diketone"
+    },
+    {
+      "smiles": "O=C(F)C(=O)C(F)(F)F",
+      "name": "trifluoropyruvoyl fluoride",
+      "role": "mixed COF/CF3 diketone"
+    },
+    {
+      "smiles": "O=C(F)C(F)(F)C(F)(F)F",
+      "name": "pentafluoropropionyl fluoride",
+      "role": "perfluoroacyl fluoride"
+    },
+    {
+      "smiles": "O=C(Cl)C(F)(F)F",
+      "name": "trifluoroacetyl chloride",
+      "role": "perfluoroacyl chloride"
+    },
+    {
+      "smiles": "O=C(F)C(F)(F)C(=O)F",
+      "name": "difluoromalonyl difluoride",
+      "role": "bis(acyl fluoride)"
+    },
+    {
+      "smiles": "O=C(F)C(F)(F)C(F)(F)C(=O)F",
+      "name": "perfluorosuccinyl difluoride",
+      "role": "bis(acyl fluoride) C4"
+    },
+    {
+      "smiles": "O=C(F)Cl",
+      "name": "fluorocarbonyl chloride",
+      "role": "mixed acyl halide"
+    },
+    {
+      "smiles": "O=C(Cl)C(=O)Cl",
+      "name": "oxalyl chloride",
+      "role": "alpha-dicarbonyl dichloride"
+    },
+    {
+      "smiles": "S=C(F)F",
+      "name": "thiocarbonyl fluoride",
+      "role": "thio analog of COF2"
+    },
+    {
+      "smiles": "S=C(C(F)(F)F)C(F)(F)F",
+      "name": "hexafluorothioacetone",
+      "role": "perfluorothioketone"
+    },
+    {
+      "smiles": "S=C(F)C(F)(F)F",
+      "name": "trifluorothioacetyl fluoride",
+      "role": "thioacyl fluoride"
+    },
+    {
+      "smiles": "S=C(Cl)Cl",
+      "name": "thiophosgene",
+      "role": "thiocarbonyl chloride"
+    },
+    {
+      "smiles": "O=C=S",
+      "name": "carbonyl sulfide",
+      "role": "carbonyl sulfide"
+    },
+    {
+      "smiles": "S=C=S",
+      "name": "carbon disulfide",
+      "role": "carbon disulfide"
+    },
+    {
+      "smiles": "FC(F)(F)C(=C=O)C(F)(F)F",
+      "name": "bis(trifluoromethyl)ketene",
+      "role": "perfluoroketene"
+    },
+    {
+      "smiles": "FC(F)=C=O",
+      "name": "difluoroketene",
+      "role": "fluoroketene"
+    },
+    {
+      "smiles": "FC(F)=C=C(F)F",
+      "name": "tetrafluoroallene",
+      "role": "perfluoroallene"
+    },
+    {
+      "smiles": "O=C=NC(F)(F)F",
+      "name": "trifluoromethyl isocyanate",
+      "role": "perfluoroalkyl isocyanate"
+    },
+    {
+      "smiles": "O=C=NC(=O)F",
+      "name": "fluorocarbonyl isocyanate",
+      "role": "acyl isocyanate"
+    },
+    {
+      "smiles": "S=C=NC(F)(F)F",
+      "name": "trifluoromethyl isothiocyanate",
+      "role": "perfluoroalkyl isothiocyanate"
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)N=C=O",
+      "name": "pentafluorosulfanyl isocyanate",
+      "role": "SF5 isocyanate"
+    },
+    {
+      "smiles": "O=C(OC(=O)C(F)(F)F)C(F)(F)F",
+      "name": "trifluoroacetic anhydride",
+      "role": "perfluoro anhydride"
+    },
+    {
+      "smiles": "O=C(F)OC(=O)F",
+      "name": "fluoroformic anhydride",
+      "role": "bis(fluorocarbonyl) oxide"
+    },
+    {
+      "smiles": "O=C1OC(=O)C(F)(F)C1(F)F",
+      "name": "perfluorosuccinic anhydride",
+      "role": "perfluoro cyclic anhydride"
+    },
+    {
+      "smiles": "O=C1OC(=O)C(F)=C1F",
+      "name": "difluoromaleic anhydride",
+      "role": "perfluoroalkene anhydride"
+    },
+    {
+      "smiles": "O=C1OC(=O)C(C(F)(F)F)=C1C(F)(F)F",
+      "name": "bis(trifluoromethyl)maleic anhydride",
+      "role": "bis-CF3 alkene anhydride"
+    },
+    {
+      "smiles": "O=C1OC(=O)C(F)(F)C(F)(F)C1(F)F",
+      "name": "perfluoroglutaric anhydride",
+      "role": "perfluoro cyclic anhydride C5"
+    },
+    {
+      "smiles": "FN(F)C(F)(F)F",
+      "name": "trifluoromethyl difluoramine",
+      "role": "R-NF2 amine"
+    },
+    {
+      "smiles": "FN(F)F",
+      "name": "nitrogen trifluoride",
+      "role": "NF3"
+    },
+    {
+      "smiles": "FN(F)N(F)F",
+      "name": "tetrafluorohydrazine",
+      "role": "N2F4"
+    },
+    {
+      "smiles": "F/N=N/F",
+      "name": "difluorodiazene",
+      "role": "azo fluoride"
+    },
+    {
+      "smiles": "[O-][N+](F)(F)F",
+      "name": "trifluoramine oxide",
+      "role": "F3NO"
+    },
+    {
+      "smiles": "FN=O",
+      "name": "nitrosyl fluoride",
+      "role": "nitrosyl fluoride"
+    },
+    {
+      "smiles": "FN(F)OC(F)(F)F",
+      "name": "difluoroamino trifluoromethyl ether",
+      "role": "N-O-F oxidizer"
+    },
+    {
+      "smiles": "FC(F)=NF",
+      "name": "N-fluorodifluoromethanimine",
+      "role": "N-fluoro imine"
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)C(F)(F)F",
+      "name": "trifluoromethyl sulfur pentafluoride",
+      "role": "SF5CF3"
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)F",
+      "name": "sulfur hexafluoride",
+      "role": "SF6"
+    },
+    {
+      "smiles": "FS(F)(F)F",
+      "name": "sulfur tetrafluoride",
+      "role": "SF4"
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)S(F)(F)(F)(F)F",
+      "name": "disulfur decafluoride",
+      "role": "S2F10"
+    },
+    {
+      "smiles": "O=C(F)S(F)(F)(F)(F)F",
+      "name": "pentafluorosulfanyl carbonyl fluoride",
+      "role": "SF5-COF"
+    },
+    {
+      "smiles": "O=C(C(F)(F)F)S(F)(F)(F)(F)F",
+      "name": "pentafluorosulfanyl trifluoromethyl ketone",
+      "role": "SF5 ketone"
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)N(F)F",
+      "name": "pentafluorosulfanyl difluoramine",
+      "role": "SF5-NF2"
+    },
+    {
+      "smiles": "FOC(F)(F)F",
+      "name": "trifluoromethyl hypofluorite",
+      "role": "C-O-F hypofluorite"
+    },
+    {
+      "smiles": "FC(F)(F)SC(F)(F)F",
+      "name": "bis(trifluoromethyl) sulfide",
+      "role": "perfluoro thioether"
+    },
+    {
+      "smiles": "FC(F)(F)SSC(F)(F)F",
+      "name": "bis(trifluoromethyl) disulfide",
+      "role": "perfluoro disulfide"
+    },
+    {
+      "smiles": "O=C(SC(F)(F)F)C(F)(F)F",
+      "name": "S-trifluoromethyl trifluorothioacetate",
+      "role": "thioester (C(=O)-S)"
+    },
+    {
+      "smiles": "O=C(F)SC(F)(F)F",
+      "name": "S-trifluoromethyl fluorothioformate",
+      "role": "fluorothioformate"
+    },
+    {
+      "smiles": "O=C(F)SC(=O)F",
+      "name": "bis(fluorocarbonyl) sulfide",
+      "role": "diacyl sulfide"
+    },
+    {
+      "smiles": "FC1(F)SC1(F)F",
+      "name": "perfluorothiirane",
+      "role": "perfluoro thiirane"
+    },
+    {
+      "smiles": "O=C1C(F)(F)C(F)(F)C1(F)F",
+      "name": "perfluorocyclobutanone",
+      "role": "perfluoro cyclic ketone"
+    },
+    {
+      "smiles": "O=C1C(F)(F)C1(F)F",
+      "name": "perfluorocyclopropanone",
+      "role": "perfluoro cyclopropanone"
+    },
+    {
+      "smiles": "FC(F)=C(F)C(F)(F)F",
+      "name": "perfluoropropene",
+      "role": "perfluoroalkene"
+    },
+    {
+      "smiles": "FC(F)=C(F)C(F)=C(F)F",
+      "name": "perfluorobutadiene",
+      "role": "perfluoro diene"
+    },
+    {
+      "smiles": "FC1=C(F)C(F)(F)C1(F)F",
+      "name": "perfluorocyclobutene",
+      "role": "perfluoro cycloalkene"
+    },
+    {
+      "smiles": "FC1(F)C(F)(F)C1(F)F",
+      "name": "perfluorocyclopropane",
+      "role": "perfluorocyclopropane"
+    },
+    {
+      "smiles": "FC1=C(F)C1(F)F",
+      "name": "perfluorocyclopropene",
+      "role": "perfluoro cyclopropene"
+    },
+    {
+      "smiles": "FC(F)(F)C#CC(F)(F)F",
+      "name": "hexafluoro-2-butyne",
+      "role": "perfluoro alkyne (C#C, not C#N)"
+    },
+    {
+      "smiles": "FC(F)=C(F)C(=O)F",
+      "name": "perfluoroacryloyl fluoride",
+      "role": "alkene-COF conjugate"
+    },
+    {
+      "smiles": "O=C(F)C(F)=C(F)C(=O)F",
+      "name": "difluorofumaryl difluoride",
+      "role": "bis(COF) alkene"
+    },
+    {
+      "smiles": "O=C(C(F)(F)F)C(F)=C(F)F",
+      "name": "perfluoro(methyl vinyl ketone)",
+      "role": "CF3 ketone + alkene"
+    },
+    {
+      "smiles": "FC(F)(F)C(=NC(F)(F)F)C(F)(F)F",
+      "name": "hexafluoroacetone N-(trifluoromethyl)imine",
+      "role": "perfluoro imine"
+    },
+    {
+      "smiles": "FC(F)(F)C(=NO)C(F)(F)F",
+      "name": "hexafluoroacetone oxime",
+      "role": "perfluoro oxime"
+    },
+    {
+      "smiles": "FC(F)(F)C(=NN=C(C(F)(F)F)C(F)(F)F)C(F)(F)F",
+      "name": "hexafluoroacetone azine",
+      "role": "perfluoro ketazine"
+    },
+    {
+      "smiles": "FC(F)(F)N(C(F)(F)F)C(F)(F)F",
+      "name": "tris(trifluoromethyl)amine",
+      "role": "perfluoro tertiary amine"
+    },
+    {
+      "smiles": "FC(F)=C(F)OC(F)(F)F",
+      "name": "trifluorovinyl trifluoromethyl ether",
+      "role": "perfluoro vinyl ether"
+    },
+    {
+      "smiles": "F[P]1(F)=N[P](F)(F)=N[P](F)(F)=N1",
+      "name": "hexafluorocyclotriphosphazene",
+      "role": "P3N3F6 ring"
+    }
+  ]
+}

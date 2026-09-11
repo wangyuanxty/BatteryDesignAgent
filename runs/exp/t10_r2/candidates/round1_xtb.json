@@ -1,0 +1,74 @@
+{
+  "candidates": [
+    {
+      "smiles": "O=S(=O)(F)F",
+      "metrics": {
+        "homo_ev": -13.8919,
+        "lumo_ev": -6.8798
+      }
+    },
+    {
+      "smiles": "FC(F)(F)S(F)(F)(F)(F)F",
+      "metrics": {
+        "homo_ev": -10.4106,
+        "lumo_ev": -9.8224
+      }
+    },
+    {
+      "smiles": "FC(F)(F)C(F)(F)S(=O)(=O)F",
+      "metrics": {
+        "homo_ev": -14.2697,
+        "lumo_ev": -7.0873
+      }
+    },
+    {
+      "smiles": "N#CS(=O)(=O)F",
+      "metrics": {
+        "homo_ev": -13.0634,
+        "lumo_ev": -8.8313
+      }
+    },
+    {
+      "smiles": "FC(F)(F)S(=O)(=O)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.2961,
+        "lumo_ev": -7.4557
+      }
+    },
+    {
+      "smiles": "FC(F)(F)C#N",
+      "metrics": {
+        "homo_ev": -13.8447,
+        "lumo_ev": -8.6686
+      }
+    },
+    {
+      "smiles": "FC(F)(F)[N+](=O)[O-]",
+      "metrics": {
+        "homo_ev": -14.1208,
+        "lumo_ev": -10.9883
+      }
+    },
+    {
+      "smiles": "O=S(=O)(F)Cl",
+      "metrics": {
+        "homo_ev": -13.3912,
+        "lumo_ev": -8.3618
+      }
+    },
+    {
+      "smiles": "O=C=NS(=O)(=O)F",
+      "metrics": {
+        "homo_ev": -13.6846,
+        "lumo_ev": -8.5597
+      }
+    },
+    {
+      "smiles": "O=S(F)(F)(F)F",
+      "metrics": {
+        "homo_ev": -11.9764,
+        "lumo_ev": -11.887
+      }
+    }
+  ]
+}

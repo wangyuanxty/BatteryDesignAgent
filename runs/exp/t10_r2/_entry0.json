@@ -1,0 +1,48 @@
+{
+  "criteria": {
+    "stage1": {
+      "max_energy_ev": {"max": 0.0},
+      "max_homo_ev": {"max": -6.0},
+      "homo_ev": {"max": -13.74},
+      "envelope_outside": true
+    },
+    "stage2": {
+      "energy_density_wh_kg": {"min": 327.18},
+      "sei_thickness_nm_end": {"max": 370.0}
+    },
+    "stage3": {
+      "triggered": false
+    },
+    "meta": {
+      "system": "Chen2020",
+      "start_stage": 2,
+      "real_compute": false,
+      "base": "Chen2020",
+      "k_rule": "k(M) = 1.0e-12 * 10^((HOMO_xtb + 12.5)/1.0)  [m/s]",
+      "k0": 1.0e-12,
+      "envelope": "candidate (E_mace_per_atom, E_chgnet_per_atom, homo) must lie OUTSIDE the 82-point convex hull (runs/exp/known_set_sei/envelope_stats.json); adjudicated mechanically by runs/exp/known_set_sei/envelope_check.py (Delaunay find_simplex>=0 == inside == REJECT)",
+      "freedoms": {
+        "electrode_system": "locked (Chen2020, no --base switch)",
+        "electrolyte_transport": "locked (default conductivity/diffusivity/transference)",
+        "electrode_modification": "locked (no coating/doping params)",
+        "cell_architecture": "locked (thickness/porosity/N-P/separator/current-collector/particle-size default)",
+        "thermal_management": "locked (default cooling)",
+        "sei_kinetic_constant": "locked (NOT a free lever; driven only by k-rule from xTB HOMO)",
+        "system_switch": "locked",
+        "new_molecule": "ALLOWED (the only design lever)"
+      },
+      "ablation": {
+        "exploration_force": "off",
+        "ceiling_escalation": "off",
+        "funnel_voting": "on"
+      },
+      "reference": {
+        "baseline_sei_nm": 449.12,
+        "best_documented_sei_nm": 385.1,
+        "model_asymptote_sei_nm": 5.07,
+        "deepest_documented_homo_ev": -14.14,
+        "deepest_documented_name": "triflyl fluoride (inside envelope, rejected)"
+      }
+    }
+  }
+}

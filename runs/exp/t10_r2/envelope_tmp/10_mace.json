@@ -1,0 +1,1 @@
+{"model": "mace", "candidates": [{"smiles": "O=S(F)(F)(F)F", "metrics": {"energy_ev": -25.79615020751953, "converged": true}, "model": "mace"}]}

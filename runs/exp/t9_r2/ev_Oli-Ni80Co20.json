@@ -1,0 +1,8 @@
+{
+  "in_known": false,
+  "avg_voltage_v": 5.4111396471659345,
+  "capacity_mah_g": 116.7793474263817,
+  "rel_stability_ev_atom": -1.8721962483723953,
+  "converged": false,
+  "in_envelope": false
+}

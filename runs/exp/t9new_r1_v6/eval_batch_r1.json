@@ -1,0 +1,154 @@
+[
+  {
+    "candidate": "NiCo55CTRL",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/NiCo55CTRL.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Ni': 2, 'Co': 2}; ni_frac=0.5"
+  },
+  {
+    "candidate": "LNMO",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/LNMO.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Ni': 2, 'Mn': 6}; ni_frac=0.25"
+  },
+  {
+    "candidate": "LCMO",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/LCMO.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Co': 4, 'Mn': 4}; ni_frac=0.0"
+  },
+  {
+    "candidate": "NiFluoro",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/NiFluoro.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Ni': 4}; ni_frac=1.0"
+  },
+  {
+    "candidate": "CoFluoro",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/CoFluoro.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Co': 4}; ni_frac=0.0"
+  },
+  {
+    "candidate": "VFluoro",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/VFluoro.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'V': 4}; ni_frac=0.0"
+  },
+  {
+    "candidate": "CuPO4",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/CuPO4.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Cu': 4}; ni_frac=0.0"
+  },
+  {
+    "candidate": "NVP",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/NVP.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'V': 4}; ni_frac=0.0"
+  },
+  {
+    "candidate": "MnOF",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/MnOF.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Mn': 4, 'F': 4}; ni_frac=0.0"
+  },
+  {
+    "candidate": "CoOF2",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/CoOF2.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Co': 4, 'F': 4}; ni_frac=0.0"
+  },
+  {
+    "candidate": "CoOF",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/CoOF.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Co': 4, 'F': 4}; ni_frac=0.0"
+  },
+  {
+    "candidate": "NiOF",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/NiOF.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Ni': 4, 'F': 4}; ni_frac=1.0"
+  },
+  {
+    "candidate": "VOF",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/VOF.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'V': 4, 'F': 4}; ni_frac=0.0"
+  },
+  {
+    "candidate": "CoSpinel",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/CoSpinel.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Co': 8}; ni_frac=0.0"
+  },
+  {
+    "candidate": "CrMnSpinel",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/CrMnSpinel.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Cr': 4, 'Mn': 4}; ni_frac=0.0"
+  },
+  {
+    "candidate": "NiVSpinel",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/NiVSpinel.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Ni': 2, 'V': 6}; ni_frac=0.25"
+  },
+  {
+    "candidate": "CuMnSpinel",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/CuMnSpinel.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Cu': 2, 'Mn': 6}; ni_frac=0.0"
+  },
+  {
+    "candidate": "LMO",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/LMO.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Mn': 8}; ni_frac=0.0"
+  },
+  {
+    "candidate": "MoLayered",
+    "round": 1,
+    "outputs": [
+      "runs/exp/t9new_r1/eval/MoLayered.json"
+    ],
+    "note": "round-1 screen family probe; realized_tm={'Mo': 12}; ni_frac=0.0"
+  }
+]

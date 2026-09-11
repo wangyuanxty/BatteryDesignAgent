@@ -1,0 +1,69 @@
+&CONTROL
+  calculation = 'relax',
+  etot_conv_thr = 0.0001,
+  forc_conv_thr = 0.001,
+  nstep = 60,
+  outdir = 'D://research//degradation_prognostics//Battery_Design_Agent//runs//exp//t9new_r1//qe_dryrun//out',
+  prefix = 'delith',
+  pseudo_dir = 'D://anaconda//envs//py312//share//sssp//efficiency',
+  tprnfor = .TRUE.,
+  tstress = .FALSE.,
+  verbosity = 'low',
+/
+&SYSTEM
+  degauss = 0.02,
+  ecutrho = 400.0,
+  ecutwfc = 50.0,
+  nspin = 2,
+  occupations = 'smearing',
+  starting_magnetization = 0.6,
+  ibrav = 0,
+  nat = 25,
+  ntyp = 5,
+/
+&ELECTRONS
+  conv_thr = 1d-07,
+  mixing_beta = 0.3,
+/
+&IONS
+/
+&CELL
+/
+ATOMIC_SPECIES
+  Co  58.9332 Co_pbe_v1.2.uspp.F.UPF
+  Li  6.9410 li_pbe_v1.4.uspp.F.UPF
+  Ni  58.6934 ni_pbe_v1.4.uspp.F.UPF
+  O  15.9994 O.pbe-n-kjpaw_psl.0.1.UPF
+  P  30.9738 P.pbe-n-rrkjus_psl.1.0.0.UPF
+ATOMIC_POSITIONS crystal
+  Li 0.000000 0.500000 0.000000
+  Co 0.782000 0.750000 0.798000
+  Ni 0.282000 0.750000 0.702000
+  Ni 0.718000 0.250000 0.298000
+  Ni 0.218000 0.250000 0.202000
+  P 0.905400 0.750000 0.938100
+  P 0.405400 0.750000 0.561900
+  P 0.594600 0.250000 0.438100
+  P 0.094600 0.250000 0.061900
+  O 0.901600 0.750000 0.257300
+  O 0.401600 0.750000 0.242700
+  O 0.598400 0.250000 0.757300
+  O 0.098400 0.250000 0.742700
+  O 0.955000 0.750000 0.715100
+  O 0.455000 0.750000 0.784900
+  O 0.545000 0.250000 0.215100
+  O 0.045000 0.250000 0.284900
+  O 0.914100 0.535800 0.467000
+  O 0.914100 0.964200 0.467000
+  O 0.414100 0.964200 0.033000
+  O 0.585900 0.464200 0.967000
+  O 0.085900 0.035800 0.533000
+  O 0.585900 0.035800 0.967000
+  O 0.414100 0.535800 0.033000
+  O 0.085900 0.464200 0.533000
+K_POINTS automatic
+  1 1 1 0 0 0
+CELL_PARAMETERS angstrom
+  10.332000 0.000000 0.000000
+  0.000000 6.010000 0.000000
+  0.000000 0.000000 4.694000

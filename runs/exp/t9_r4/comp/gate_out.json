@@ -1,0 +1,18 @@
+{
+  "name": "AlB55",
+  "formula": "LiAl0.5B0.5O2",
+  "avg_voltage_v": 4.641315937042236,
+  "avg_voltage_v_from_gate_states": 4.6393855810165405,
+  "charging_potential_v": 7.410274863243103,
+  "charging_potential_source": "incremental V(0.4 -> 0.3), the last charge step into the top-of-charge state; E(0.4) from this gate relaxation, E(0.3) from comp/batch3_layered_out.json (same machinery/seed, nested removal order)",
+  "n_li_removed_04_03": 1,
+  "e_full_ev": -338.11053466796875,
+  "e_04_ev": -295.25634765625,
+  "e_03_ev": -285.96759033203125,
+  "e_li_metal_ev": -1.878482460975647,
+  "capacity_mah_g": 324.3829832675022,
+  "rel_stability_ev_atom": -2.391234970092773,
+  "density_g_cm3": 2.8363593599961345,
+  "density_source": "relaxed-final-structure",
+  "converged": false
+}

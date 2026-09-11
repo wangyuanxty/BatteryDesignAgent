@@ -1,0 +1,1 @@
+{"model": "chgnet", "candidates": [{"smiles": "O=S(=O)(F)Cl", "metrics": {"energy_ev": -25.56187152862549, "converged": true}, "model": "chgnet"}]}

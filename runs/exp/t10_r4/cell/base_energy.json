@@ -1,0 +1,22 @@
+{
+  "capacity_ah": 4.947764086814652,
+  "energy_wh": 17.394522105564807,
+  "mass_kg": 0.0434545275216,
+  "energy_density_wh_kg": 400.29251490350435,
+  "volume_m3": 2.0622160000000005e-05,
+  "energy_density_wh_l": 843.4869143467417,
+  "thickness_m": 0.0002008,
+  "midpoint_voltage_v": 3.9352432821382726,
+  "dcr_ohm": 0.0003475518357161533,
+  "power_density_w_kg": 269681.2273746195,
+  "layer_kg_m2": {
+    "positive_electrode": 0.163993788,
+    "negative_electrode": 0.10588229999999998,
+    "positive_cc": 0.043199999999999995,
+    "negative_cc": 0.10752,
+    "separator": 0.00252492
+  },
+  "area_m2": 0.10270000000000001,
+  "electrolyte_included": false,
+  "note": "electrolyte is not counted toward mass or volume (parameter set has no density)"
+}

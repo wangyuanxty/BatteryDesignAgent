@@ -1,0 +1,80 @@
+[
+  {
+    "name": "LiNiPO4F (TavP-Ni)",
+    "point": [
+      5.4877998034159345,
+      104.4576927217053,
+      -1.2199373793327943
+    ],
+    "in_envelope": false,
+    "verdict": "PASS (outside envelope)",
+    "hull_ref": "known_set_v2.json",
+    "n_points": 96,
+    "n_membership": 109
+  },
+  {
+    "name": "LiNi0.75Co0.25PO4F (TavP-Ni75Co25)",
+    "point": [
+      5.386308511098226,
+      104.42283819250147,
+      -1.294231897112967
+    ],
+    "in_envelope": false,
+    "verdict": "PASS (outside envelope)",
+    "hull_ref": "known_set_v2.json",
+    "n_points": 96,
+    "n_membership": 109
+  },
+  {
+    "name": "LiNi0.5Co0.5PO4F (TavP-Ni50Co50)",
+    "point": [
+      5.305167357126872,
+      104.38800691544793,
+      -1.3631989928497665
+    ],
+    "in_envelope": false,
+    "verdict": "PASS (outside envelope)",
+    "hull_ref": "known_set_v2.json",
+    "n_points": 96,
+    "n_membership": 109
+  },
+  {
+    "name": "LiNi0.8Co0.2PO4 (Oli-Ni80Co20)",
+    "point": [
+      5.4111396471659345,
+      116.7793474263817,
+      -1.8721962483723953
+    ],
+    "in_envelope": false,
+    "verdict": "PASS (outside envelope)",
+    "hull_ref": "known_set_v2.json",
+    "n_points": 96,
+    "n_membership": 109
+  },
+  {
+    "name": "LiNi0.75Co0.25PO4 (Oli-Ni75Co25)",
+    "point": [
+      5.417126178741455,
+      116.7706327157302,
+      -1.8721840413411455
+    ],
+    "in_envelope": false,
+    "verdict": "PASS (outside envelope)",
+    "hull_ref": "known_set_v2.json",
+    "n_points": 96,
+    "n_membership": 109
+  },
+  {
+    "name": "LiNi0.4Co0.6PO4 (Oli-Ni40Co60)",
+    "point": [
+      5.400483926137288,
+      116.70966614114758,
+      -1.9305281575520832
+    ],
+    "in_envelope": false,
+    "verdict": "PASS (outside envelope)",
+    "hull_ref": "known_set_v2.json",
+    "n_points": 96,
+    "n_membership": 109
+  }
+]

@@ -1,0 +1,24 @@
+{
+ "candidates": [
+  {
+   "name": "tavorite-phosphate 锚点 文献~4.1V",
+   "formula": "LiVPO4F"
+  },
+  {
+   "name": "tavorite-sulfate 锚点 文献~3.6V",
+   "formula": "LiFeSO4F"
+  },
+  {
+   "name": "NASICON 锚点 文献~3.8V",
+   "formula": "Li3V2(PO4)3"
+  },
+  {
+   "name": "olivine 对照 文献~3.4V",
+   "formula": "LiFePO4"
+  },
+  {
+   "name": "新能力：氟硫酸盐 DFT 文献~5.35V",
+   "formula": "LiNiSO4F"
+  }
+ ]
+}

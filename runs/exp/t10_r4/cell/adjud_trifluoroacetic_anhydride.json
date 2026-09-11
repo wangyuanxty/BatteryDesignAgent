@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "trifluoroacetic anhydride",
+  "smiles": "O=C(OC(=O)C(F)(F)F)C(F)(F)F",
+  "n_atoms": 13,
+  "homo_ev": -14.1603,
+  "lumo_ev": -10.9558,
+  "mace_energy_ev": -80.3763427734375,
+  "mace_converged": true,
+  "chgnet_energy_ev": -84.47936248779297,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

@@ -1,0 +1,14 @@
+{
+  "provenance": "flattened from adjudication_r1.jsonl (envelope_check v2 pipeline: batch_funnel mace+chgnet CUDA + xtb GFN2 + Delaunay hull + family gate)",
+  "name": "difluoromalonyl difluoride",
+  "smiles": "O=C(F)C(F)(F)C(=O)F",
+  "n_atoms": 9,
+  "homo_ev": -14.2546,
+  "lumo_ev": -10.46,
+  "mace_energy_ev": -56.1020622253418,
+  "mace_converged": true,
+  "chgnet_energy_ev": -58.875343322753906,
+  "chgnet_converged": true,
+  "in_envelope": false,
+  "in_documented_families": false
+}

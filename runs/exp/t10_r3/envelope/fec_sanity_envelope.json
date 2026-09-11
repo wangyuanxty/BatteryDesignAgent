@@ -1,0 +1,30 @@
+{
+  "name": "candidate",
+  "smiles": "O=C1OC(F)CO1",
+  "n_atoms": 7,
+  "mace": {
+    "energy_ev": -61.88981246948242,
+    "converged": true
+  },
+  "chgnet": {
+    "energy_ev": -64.09980010986328,
+    "converged": true
+  },
+  "xtb": {
+    "homo_ev": -12.8198,
+    "lumo_ev": -7.196,
+    "total_energy_ev": -677.6852306713048
+  },
+  "point_per_atom": [
+    -8.841401781354632,
+    -9.15711430140904,
+    -12.8198
+  ],
+  "in_envelope": true,
+  "hull_ref": "envelope_stats_v2.json",
+  "in_documented_families": true,
+  "families_matched": [
+    "ester",
+    "carbonate"
+  ]
+}

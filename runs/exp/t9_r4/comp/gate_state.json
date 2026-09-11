@@ -1,0 +1,14 @@
+{
+  "done": {
+    "full": {
+      "e_full_ev": -338.11053466796875,
+      "converged": false,
+      "density_g_cm3": 2.8363593599961345,
+      "density_source": "relaxed-final-structure"
+    },
+    "x04": {
+      "e_04_ev": -295.25634765625,
+      "converged": false
+    }
+  }
+}

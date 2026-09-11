@@ -1,0 +1,640 @@
+{
+ "points": [
+  {
+   "name": "FEC",
+   "smiles": "O=C1OC(F)CO1",
+   "E_mace_per_atom": -8.841401781354632,
+   "E_chgnet_per_atom": -9.15711430140904,
+   "homo": -12.8198
+  },
+  {
+   "name": "DFEC",
+   "smiles": "O=C1OC(F)C(F)O1",
+   "E_mace_per_atom": -7.773900032043457,
+   "E_chgnet_per_atom": -8.108010292053223,
+   "homo": -13.4813
+  },
+  {
+   "name": "FEMC",
+   "smiles": "COC(=O)OCCF",
+   "E_mace_per_atom": -10.766746520996094,
+   "E_chgnet_per_atom": -10.991986274719238,
+   "homo": -12.2935
+  },
+  {
+   "name": "F-EPE",
+   "smiles": "CCOC(=O)OCCF",
+   "E_mace_per_atom": -11.43028344048394,
+   "E_chgnet_per_atom": -11.619422912597656,
+   "homo": -12.149
+  },
+  {
+   "name": "VC",
+   "smiles": "O=C1OC=CO1",
+   "E_mace_per_atom": -8.889592488606771,
+   "E_chgnet_per_atom": -9.164947509765625,
+   "homo": -11.9981
+  },
+  {
+   "name": "VEC",
+   "smiles": "C=CC1COC(=O)O1",
+   "E_mace_per_atom": -10.781877517700195,
+   "E_chgnet_per_atom": -10.986186027526855,
+   "homo": -12.0701
+  },
+  {
+   "name": "FVC",
+   "smiles": "O=C1OC=C(F)O1",
+   "E_mace_per_atom": -7.652168273925781,
+   "E_chgnet_per_atom": -7.968355996268136,
+   "homo": -12.4852
+  },
+  {
+   "name": "ES",
+   "smiles": "O=S1OCCO1",
+   "E_mace_per_atom": -9.35221036275228,
+   "E_chgnet_per_atom": -9.697671254475912,
+   "homo": -11.1208
+  },
+  {
+   "name": "1,3-PS",
+   "smiles": "O=S1(=O)CCCO1",
+   "E_mace_per_atom": -10.427621023995536,
+   "E_chgnet_per_atom": -10.670892987932477,
+   "homo": -11.9424
+  },
+  {
+   "name": "PES",
+   "smiles": "O=S1(=O)OCCCO1",
+   "E_mace_per_atom": -9.942511558532715,
+   "E_chgnet_per_atom": -10.21617317199707,
+   "homo": -12.3965
+  },
+  {
+   "name": "DTD",
+   "smiles": "O=S1(=O)OCCO1",
+   "E_mace_per_atom": -8.974387577601842,
+   "E_chgnet_per_atom": -9.306964329310826,
+   "homo": -12.5916
+  },
+  {
+   "name": "1,4-BS",
+   "smiles": "O=S1(=O)CCCCO1",
+   "E_mace_per_atom": -11.198911666870117,
+   "E_chgnet_per_atom": -11.408293724060059,
+   "homo": -11.6339
+  },
+  {
+   "name": "1,3-propylene sulfite",
+   "smiles": "O=S1OCCCO1",
+   "E_mace_per_atom": -10.400103977748326,
+   "E_chgnet_per_atom": -10.684747968401227,
+   "homo": -10.975
+  },
+  {
+   "name": "FES",
+   "smiles": "O=S1OC(F)CO1",
+   "E_mace_per_atom": -8.045880998883929,
+   "E_chgnet_per_atom": -8.424747467041016,
+   "homo": -11.472
+  },
+  {
+   "name": "MSF",
+   "smiles": "CS(=O)(=O)F",
+   "E_mace_per_atom": -8.31211166381836,
+   "E_chgnet_per_atom": -8.602553558349609,
+   "homo": -12.5622
+  },
+  {
+   "name": "ESF",
+   "smiles": "CCS(=O)(=O)F",
+   "E_mace_per_atom": -9.711476643880209,
+   "E_chgnet_per_atom": -9.924196243286133,
+   "homo": -12.2739
+  },
+  {
+   "name": "ethenesulfonyl fluoride",
+   "smiles": "C=CS(=O)(=O)F",
+   "E_mace_per_atom": -8.219114939371744,
+   "E_chgnet_per_atom": -8.452047983805338,
+   "homo": -12.3953
+  },
+  {
+   "name": "2-fluoroethanesulfonyl fluoride",
+   "smiles": "FS(=O)(=O)CCF",
+   "E_mace_per_atom": -8.326977866036552,
+   "E_chgnet_per_atom": -8.58494622366769,
+   "homo": -12.605
+  },
+  {
+   "name": "3-fluoropropanesulfonyl fluoride",
+   "smiles": "FS(=O)(=O)CCCF",
+   "E_mace_per_atom": -9.36194133758545,
+   "E_chgnet_per_atom": -9.593132972717285,
+   "homo": -12.4329
+  },
+  {
+   "name": "2-cyanoethanesulfonyl fluoride",
+   "smiles": "N#CCS(=O)(=O)F",
+   "E_mace_per_atom": -7.693861825125558,
+   "E_chgnet_per_atom": -7.948241642543247,
+   "homo": -12.9073
+  },
+  {
+   "name": "triflyl fluoride",
+   "smiles": "FC(F)(F)S(=O)(=O)F",
+   "E_mace_per_atom": -5.263091564178467,
+   "E_chgnet_per_atom": -5.638071060180664,
+   "homo": -14.1428
+  },
+  {
+   "name": "TMSB",
+   "smiles": "B(O[Si](C)(C)C)(O[Si](C)(C)C)O[Si](C)(C)C",
+   "E_mace_per_atom": -14.541884422302246,
+   "E_chgnet_per_atom": -14.631525993347168,
+   "homo": -10.2606
+  },
+  {
+   "name": "TMSP",
+   "smiles": "P(O[Si](C)(C)C)(O[Si](C)(C)C)O[Si](C)(C)C",
+   "E_mace_per_atom": -14.305463790893555,
+   "E_chgnet_per_atom": -14.4271240234375,
+   "homo": -9.9523
+  },
+  {
+   "name": "trimethyl borate",
+   "smiles": "B(OC)(OC)OC",
+   "E_mace_per_atom": -12.783030918666295,
+   "E_chgnet_per_atom": -13.065657479422432,
+   "homo": -11.1729
+  },
+  {
+   "name": "triethyl borate",
+   "smiles": "B(OCC)(OCC)OCC",
+   "E_mace_per_atom": -13.974081420898438,
+   "E_chgnet_per_atom": -14.11352081298828,
+   "homo": -10.8527
+  },
+  {
+   "name": "tributyl borate",
+   "smiles": "B(OCCCC)(OCCCC)OCCCC",
+   "E_mace_per_atom": -14.93321418762207,
+   "E_chgnet_per_atom": -15.009906768798828,
+   "homo": -10.7419
+  },
+  {
+   "name": "TMSCN",
+   "smiles": "C[Si](C)(C)C#N",
+   "E_mace_per_atom": -13.815170288085938,
+   "E_chgnet_per_atom": -13.767842610677084,
+   "homo": -11.0071
+  },
+  {
+   "name": "VTES",
+   "smiles": "C=C[Si](OCC)(OCC)OCC",
+   "E_mace_per_atom": -13.87753423055013,
+   "E_chgnet_per_atom": -14.010108947753906,
+   "homo": -10.781
+  },
+  {
+   "name": "hexamethyldisiloxane",
+   "smiles": "C[Si](C)(C)O[Si](C)(C)C",
+   "E_mace_per_atom": -15.752722846137154,
+   "E_chgnet_per_atom": -15.773139105902779,
+   "homo": -10.3744
+  },
+  {
+   "name": "acetonitrile",
+   "smiles": "CC#N",
+   "E_mace_per_atom": -12.203329722086588,
+   "E_chgnet_per_atom": -12.233043670654297,
+   "homo": -11.6849
+  },
+  {
+   "name": "propionitrile",
+   "smiles": "CCC#N",
+   "E_mace_per_atom": -13.291074752807617,
+   "E_chgnet_per_atom": -13.30263900756836,
+   "homo": -11.5847
+  },
+  {
+   "name": "butyronitrile",
+   "smiles": "CCCC#N",
+   "E_mace_per_atom": -13.949607849121094,
+   "E_chgnet_per_atom": -13.953314208984375,
+   "homo": -11.5212
+  },
+  {
+   "name": "3-methoxypropionitrile",
+   "smiles": "COCCC#N",
+   "E_mace_per_atom": -12.608551025390625,
+   "E_chgnet_per_atom": -12.752890268961588,
+   "homo": -11.3624
+  },
+  {
+   "name": "succinonitrile",
+   "smiles": "N#CCCC#N",
+   "E_mace_per_atom": -10.949124654134115,
+   "E_chgnet_per_atom": -11.007789611816406,
+   "homo": -11.9908
+  },
+  {
+   "name": "glutaronitrile",
+   "smiles": "N#CCCCC#N",
+   "E_mace_per_atom": -11.758841378348214,
+   "E_chgnet_per_atom": -11.810381208147321,
+   "homo": -11.8498
+  },
+  {
+   "name": "adiponitrile",
+   "smiles": "N#CCCCCC#N",
+   "E_mace_per_atom": -12.356412887573242,
+   "E_chgnet_per_atom": -12.392342567443848,
+   "homo": -11.7564
+  },
+  {
+   "name": "sebaconitrile",
+   "smiles": "N#CCCCCCCCCC#N",
+   "E_mace_per_atom": -13.7525634765625,
+   "E_chgnet_per_atom": -13.767893473307291,
+   "homo": -11.5231
+  },
+  {
+   "name": "acrylonitrile",
+   "smiles": "C=CC#N",
+   "E_mace_per_atom": -11.130202293395996,
+   "E_chgnet_per_atom": -11.152143478393555,
+   "homo": -11.6767
+  },
+  {
+   "name": "methacrylonitrile",
+   "smiles": "C=C(C)C#N",
+   "E_mace_per_atom": -12.250366973876954,
+   "E_chgnet_per_atom": -12.260559844970704,
+   "homo": -11.5205
+  },
+  {
+   "name": "3-hydroxypropionitrile",
+   "smiles": "OCCC#N",
+   "E_mace_per_atom": -11.902674102783203,
+   "E_chgnet_per_atom": -12.071178436279297,
+   "homo": -11.6083
+  },
+  {
+   "name": "4-hydroxybutyronitrile",
+   "smiles": "OCCCC#N",
+   "E_mace_per_atom": -12.696885426839193,
+   "E_chgnet_per_atom": -12.818405151367188,
+   "homo": -11.5154
+  },
+  {
+   "name": "TEP",
+   "smiles": "CCOP(=O)(OCC)OCC",
+   "E_mace_per_atom": -13.159418279474432,
+   "E_chgnet_per_atom": -13.35317022150213,
+   "homo": -11.5064
+  },
+  {
+   "name": "TMP",
+   "smiles": "COP(=O)(OC)OC",
+   "E_mace_per_atom": -11.780713081359863,
+   "E_chgnet_per_atom": -12.13123607635498,
+   "homo": -11.6596
+  },
+  {
+   "name": "triphenyl phosphate",
+   "smiles": "O=P(OC1=CC=CC=C1)(OC1=CC=CC=C1)OC1=CC=CC=C1",
+   "E_mace_per_atom": -10.89671458368716,
+   "E_chgnet_per_atom": -10.974817027216373,
+   "homo": -10.8629
+  },
+  {
+   "name": "triphenyl phosphite",
+   "smiles": "P(OC1=CC=CC=C1)(OC1=CC=CC=C1)OC1=CC=CC=C1",
+   "E_mace_per_atom": -11.009851629083807,
+   "E_chgnet_per_atom": -11.072848233309658,
+   "homo": -10.3153
+  },
+  {
+   "name": "DMMP",
+   "smiles": "COP(=O)(OC)C",
+   "E_mace_per_atom": -12.509443010602679,
+   "E_chgnet_per_atom": -12.784386771065849,
+   "homo": -11.391
+  },
+  {
+   "name": "DEEP",
+   "smiles": "CCOP(=O)(OCC)CC",
+   "E_mace_per_atom": -13.775987243652343,
+   "E_chgnet_per_atom": -13.92542724609375,
+   "homo": -11.1711
+  },
+  {
+   "name": "triethyl phosphite",
+   "smiles": "P(OCC)(OCC)OCC",
+   "E_mace_per_atom": -13.664508056640624,
+   "E_chgnet_per_atom": -13.82529296875,
+   "homo": -10.4505
+  },
+  {
+   "name": "trimethyl phosphite",
+   "smiles": "P(OC)(OC)OC",
+   "E_mace_per_atom": -12.323424203055245,
+   "E_chgnet_per_atom": -12.630610874720983,
+   "homo": -10.4019
+  },
+  {
+   "name": "tris(2,2,2-trifluoroethyl) phosphite",
+   "smiles": "P(OCC(F)(F)F)(OCC(F)(F)F)OCC(F)(F)F",
+   "E_mace_per_atom": -7.345185129266036,
+   "E_chgnet_per_atom": -7.680157310084293,
+   "homo": -12.2088
+  },
+  {
+   "name": "DMSO",
+   "smiles": "CS(C)=O",
+   "E_mace_per_atom": -12.622649192810059,
+   "E_chgnet_per_atom": -12.765349388122559,
+   "homo": -10.3482
+  },
+  {
+   "name": "dimethyl sulfone",
+   "smiles": "CS(=O)(=O)C",
+   "E_mace_per_atom": -11.471770477294921,
+   "E_chgnet_per_atom": -11.687071990966796,
+   "homo": -11.4974
+  },
+  {
+   "name": "EMS",
+   "smiles": "CCS(=O)(=O)OC",
+   "E_mace_per_atom": -11.503541128976005,
+   "E_chgnet_per_atom": -11.74014391217913,
+   "homo": -11.7607
+  },
+  {
+   "name": "ethyl methyl sulfone",
+   "smiles": "CCS(=O)(=O)C",
+   "E_mace_per_atom": -12.33655039469401,
+   "E_chgnet_per_atom": -12.501839955647787,
+   "homo": -11.3248
+  },
+  {
+   "name": "diethyl sulfone",
+   "smiles": "CCS(=O)(=O)CC",
+   "E_mace_per_atom": -12.956426348005023,
+   "E_chgnet_per_atom": -13.079392569405693,
+   "homo": -11.1647
+  },
+  {
+   "name": "dimethyl sulfate",
+   "smiles": "COS(=O)(=O)OC",
+   "E_mace_per_atom": -10.028235299246651,
+   "E_chgnet_per_atom": -10.379336765834264,
+   "homo": -12.3757
+  },
+  {
+   "name": "sulfolane",
+   "smiles": "O=S1(=O)CCCC1",
+   "E_mace_per_atom": -11.89957754952567,
+   "E_chgnet_per_atom": -12.004599434988839,
+   "homo": -11.277
+  },
+  {
+   "name": "dimethyl sulfite",
+   "smiles": "COS(=O)OC",
+   "E_mace_per_atom": -10.572408676147461,
+   "E_chgnet_per_atom": -10.924886067708334,
+   "homo": -10.8059
+  },
+  {
+   "name": "diethyl sulfite",
+   "smiles": "CCOS(=O)OCC",
+   "E_mace_per_atom": -12.15182113647461,
+   "E_chgnet_per_atom": -12.340633392333984,
+   "homo": -10.7957
+  },
+  {
+   "name": "dimethyl oxalate",
+   "smiles": "COC(=O)C(=O)OC",
+   "E_mace_per_atom": -10.539789199829102,
+   "E_chgnet_per_atom": -10.843579292297363,
+   "homo": -11.5289
+  },
+  {
+   "name": "diethyl oxalate",
+   "smiles": "CCOC(=O)C(=O)OCC",
+   "E_mace_per_atom": -11.782140350341797,
+   "E_chgnet_per_atom": -12.00028305053711,
+   "homo": -11.3813
+  },
+  {
+   "name": "dibutyl oxalate",
+   "smiles": "CCCCOC(=O)C(=O)OCCCC",
+   "E_mace_per_atom": -13.15453120640346,
+   "E_chgnet_per_atom": -13.296112060546875,
+   "homo": -11.3144
+  },
+  {
+   "name": "methyl trifluoroacetate",
+   "smiles": "COC(=O)C(F)(F)F",
+   "E_mace_per_atom": -7.950846195220947,
+   "E_chgnet_per_atom": -8.241705894470215,
+   "homo": -13.1727
+  },
+  {
+   "name": "ethyl trifluoroacetate",
+   "smiles": "CCOC(=O)C(F)(F)F",
+   "E_mace_per_atom": -8.928215874565971,
+   "E_chgnet_per_atom": -9.174246046278212,
+   "homo": -12.863
+  },
+  {
+   "name": "methyl cyanoacetate",
+   "smiles": "COC(=O)CC#N",
+   "E_mace_per_atom": -10.751229422433036,
+   "E_chgnet_per_atom": -10.920818873814174,
+   "homo": -11.9767
+  },
+  {
+   "name": "ethyl cyanoacetate",
+   "smiles": "CCOC(=O)CC#N",
+   "E_mace_per_atom": -11.50819206237793,
+   "E_chgnet_per_atom": -11.631484985351562,
+   "homo": -11.9198
+  },
+  {
+   "name": "biphenyl",
+   "smiles": "c1ccc(-c2ccccc2)cc1",
+   "E_mace_per_atom": -12.029764811197916,
+   "E_chgnet_per_atom": -11.987648010253906,
+   "homo": -10.4908
+  },
+  {
+   "name": "cyclohexylbenzene",
+   "smiles": "c1ccc(CC2CCCCC2)cc1",
+   "E_mace_per_atom": -14.179293118990385,
+   "E_chgnet_per_atom": -14.136238685021034,
+   "homo": -10.532
+  },
+  {
+   "name": "tert-butylbenzene",
+   "smiles": "CC(C)(C)c1ccccc1",
+   "E_mace_per_atom": -14.224696350097656,
+   "E_chgnet_per_atom": -14.155661010742188,
+   "homo": -10.5658
+  },
+  {
+   "name": "fluorobenzene",
+   "smiles": "Fc1ccccc1",
+   "E_mace_per_atom": -10.875085013253349,
+   "E_chgnet_per_atom": -10.892242431640625,
+   "homo": -11.1413
+  },
+  {
+   "name": "benzotriazole",
+   "smiles": "c1ccc2c(c1)[nH]nn2",
+   "E_mace_per_atom": -10.58184560139974,
+   "E_chgnet_per_atom": -10.682908799913195,
+   "homo": -10.5323
+  },
+  {
+   "name": "saccharin",
+   "smiles": "O=C1c2ccccc2S(=O)(=O)N1",
+   "E_mace_per_atom": -9.426620483398438,
+   "E_chgnet_per_atom": -9.559142430623373,
+   "homo": -11.7923
+  },
+  {
+   "name": "DME",
+   "smiles": "COCCOC",
+   "E_mace_per_atom": -14.278480529785156,
+   "E_chgnet_per_atom": -14.476252237955729,
+   "homo": -10.8512
+  },
+  {
+   "name": "diglyme",
+   "smiles": "COCCOCCOC",
+   "E_mace_per_atom": -13.842061360677084,
+   "E_chgnet_per_atom": -14.09557851155599,
+   "homo": -10.9703
+  },
+  {
+   "name": "triglyme",
+   "smiles": "COCCOCCOCCOC",
+   "E_mace_per_atom": -13.654555002848307,
+   "E_chgnet_per_atom": -13.894875844319662,
+   "homo": -10.8731
+  },
+  {
+   "name": "DOL",
+   "smiles": "C1COCO1",
+   "E_mace_per_atom": -12.380368041992188,
+   "E_chgnet_per_atom": -12.625292205810547,
+   "homo": -11.0945
+  },
+  {
+   "name": "PC",
+   "smiles": "CC1COC(=O)O1",
+   "E_mace_per_atom": -11.197422572544642,
+   "E_chgnet_per_atom": -11.427164350237165,
+   "homo": -12.2656
+  },
+  {
+   "name": "DMF",
+   "smiles": "CN(C)C=O",
+   "E_mace_per_atom": -13.536149597167968,
+   "E_chgnet_per_atom": -13.673249816894531,
+   "homo": -10.6944
+  },
+  {
+   "name": "DMAc",
+   "smiles": "CC(=O)N(C)C",
+   "E_mace_per_atom": -14.090742746988932,
+   "E_chgnet_per_atom": -14.195889790852865,
+   "homo": -10.4016
+  },
+  {
+   "name": "NMP",
+   "smiles": "O=C1CCCN1C",
+   "E_mace_per_atom": -13.401781354631696,
+   "E_chgnet_per_atom": -13.461777823311943,
+   "homo": -10.3986
+  },
+  {
+   "name": "nitromethane",
+   "smiles": "C[N+](=O)[O-]",
+   "E_mace_per_atom": -9.688175201416016,
+   "E_chgnet_per_atom": -10.010305404663086,
+   "homo": -12.3931
+  },
+  {
+   "name": "benzoquinone",
+   "smiles": "O=C1C=CC(=O)C=C1",
+   "E_mace_per_atom": -10.103972434997559,
+   "E_chgnet_per_atom": -10.222716331481934,
+   "homo": -11.3466
+  },
+  {
+   "name": "bis(trifluoromethyl)sulfone",
+   "smiles": "FC(F)(F)S(=O)(=O)C(F)(F)F",
+   "E_mace_per_atom": -5.3459108526056465,
+   "E_chgnet_per_atom": -5.703486442565918,
+   "homo": -14.2961
+  },
+  {
+   "name": "pentafluoroethylsulfonyl fluoride",
+   "smiles": "FC(F)(F)C(F)(F)S(=O)(=O)F",
+   "E_mace_per_atom": -5.368914517489347,
+   "E_chgnet_per_atom": -5.731390953063965,
+   "homo": -14.2697
+  },
+  {
+   "name": "trifluoronitromethane",
+   "smiles": "FC(F)(F)[N+](=O)[O-]",
+   "E_mace_per_atom": -5.741117204938616,
+   "E_chgnet_per_atom": -6.090280532836914,
+   "homo": -14.1208
+  },
+  {
+   "name": "sulfuryl fluoride",
+   "smiles": "O=S(=O)(F)F",
+   "E_mace_per_atom": -5.104496765136719,
+   "E_chgnet_per_atom": -5.456849098205566,
+   "homo": -13.8919
+  },
+  {
+   "name": "trifluoroacetonitrile",
+   "smiles": "FC(F)(F)C#N",
+   "E_mace_per_atom": -6.231452941894531,
+   "E_chgnet_per_atom": -6.4654974937438965,
+   "homo": -13.8447
+  }
+ ],
+ "n": 87,
+ "hull_vertices_idx": [
+  1,
+  13,
+  20,
+  22,
+  25,
+  26,
+  28,
+  31,
+  37,
+  41,
+  42,
+  44,
+  48,
+  57,
+  66,
+  68,
+  72,
+  73,
+  76,
+  82,
+  83,
+  85,
+  86
+ ],
+ "provenance": "v2: 82 documented additives + 5 candidates found by the T10 v2 run (folded in before the T10 v3 run; original envelope_stats.json unchanged)"
+}

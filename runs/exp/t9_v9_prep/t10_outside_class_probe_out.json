@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "smiles": "O=C(C(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.2769,
+        "lumo_ev": -11.4824
+      }
+    },
+    {
+      "smiles": "O=C(OC(=O)C(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.1603,
+        "lumo_ev": -10.9558
+      }
+    },
+    {
+      "smiles": "Fc1c(F)c(F)c(F)c(F)c1F",
+      "metrics": {
+        "homo_ev": -13.0052,
+        "lumo_ev": -8.722
+      }
+    },
+    {
+      "smiles": "Fc1c(F)c(F)nc(F)c1F",
+      "metrics": {
+        "homo_ev": -13.037,
+        "lumo_ev": -9.3433
+      }
+    },
+    {
+      "smiles": "Fc1c(F)c(F)c2c(F)c(F)c(F)c(F)c2c1F",
+      "metrics": {
+        "homo_ev": -12.2674,
+        "lumo_ev": -9.6437
+      }
+    },
+    {
+      "smiles": "P1(F)(F)=NP(F)(F)=NP(F)(F)=N1",
+      "metrics": {
+        "homo_ev": -11.485,
+        "lumo_ev": -5.1785
+      }
+    },
+    {
+      "smiles": "O=C=NC(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.1748,
+        "lumo_ev": -8.3205
+      }
+    },
+    {
+      "smiles": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.9147,
+        "lumo_ev": -5.3146
+      }
+    },
+    {
+      "smiles": "FS(F)(F)(F)(F)F",
+      "metrics": {
+        "homo_ev": -9.2861,
+        "lumo_ev": -7.5398
+      }
+    },
+    {
+      "smiles": "FC(F)(F)C(F)(F)I",
+      "metrics": {
+        "homo_ev": -13.1062,
+        "lumo_ev": -8.669
+      }
+    },
+    {
+      "smiles": "OC(C(F)(F)F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -13.6978,
+        "lumo_ev": -3.6161
+      }
+    },
+    {
+      "smiles": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)N(C(F)(F)C(F)(F)C(F)(F)C(F)(F)F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+      "metrics": {
+        "homo_ev": -14.9642,
+        "lumo_ev": -6.0979
+      }
+    }
+  ]
+}

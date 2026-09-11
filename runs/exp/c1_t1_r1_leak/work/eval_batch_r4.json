@@ -1,0 +1,42 @@
+[
+  {
+    "candidate": "R4-V1-cool",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r4_v1_cool_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r4_v1_cool_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r4_v1_cool_4c45c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r4_v1_cool_overcharge_spme.json",
+      "runs/exp/c1_t1_r1_leak/validation/r4_v1_cool_tr.json"
+    ],
+    "note": "full stage-3+4 evidence; T_max_K last-wins from TR file"
+  },
+  {
+    "candidate": "R4-V2-coolfull",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r4_v2_coolfull_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r4_v2_coolfull_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r4_v2_coolfull_4c45c_spme.json"
+    ],
+    "note": "stage-3 evidence; triggered unchecked (TR not run for this variant)"
+  },
+  {
+    "candidate": "R4-V3-margin",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r4_v3_margin_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r4_v3_margin_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r4_v3_margin_4c45c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r4_v3_margin_overcharge_spme.json",
+      "runs/exp/c1_t1_r1_leak/validation/r4_v3_margin_tr.json"
+    ],
+    "note": "full stage-3+4 evidence; T_max_K last-wins from TR file"
+  },
+  {
+    "candidate": "R4-V4-coolmax",
+    "outputs": [
+      "runs/exp/c1_t1_r1_leak/cell/r4_v4_coolmax_1c_spme.json",
+      "runs/exp/c1_t1_r1_leak/cell/r4_v4_coolmax_energy.json",
+      "runs/exp/c1_t1_r1_leak/cell/r4_v4_coolmax_4c45c_spme.json"
+    ],
+    "note": "stage-3 evidence; triggered unchecked (TR not run for this variant)"
+  }
+]

@@ -1,0 +1,64 @@
+{
+ "candidates": [
+  {
+   "name": "spinel recompute (was 8.911, bug)",
+   "formula": "LiMn2O4"
+  },
+  {
+   "name": "spinel recompute (was 8.263, bug)",
+   "formula": "LiNi0.5Mn1.5O4"
+  },
+  {
+   "name": "spinel recompute (was 8.597, bug)",
+   "formula": "LiCoMnO4"
+  },
+  {
+   "name": "spinel recompute (was 8.631, bug)",
+   "formula": "LiCrMnO4"
+  },
+  {
+   "name": "spinel recompute (was 8.195, bug)",
+   "formula": "LiNiVO4"
+  },
+  {
+   "name": "spinel recompute (was 8.389, bug)",
+   "formula": "LiCu0.5Mn1.5O4"
+  },
+  {
+   "name": "tavorite phosphate, exp ~4.2V (was membership-only)",
+   "formula": "LiVPO4F"
+  },
+  {
+   "name": "tavorite phosphate, exp ~2.75V (new documented member)",
+   "formula": "LiFePO4F"
+  },
+  {
+   "name": "tavorite sulfate, exp 3.6V (new documented member)",
+   "formula": "LiFeSO4F"
+  },
+  {
+   "name": "tavorite sulfate, synthesized but inactive",
+   "formula": "LiMnSO4F"
+  },
+  {
+   "name": "tavorite sulfate, synthesized but inactive",
+   "formula": "LiCoSO4F"
+  },
+  {
+   "name": "tavorite sulfate, synthesized but inactive",
+   "formula": "LiNiSO4F"
+  },
+  {
+   "name": "NASICON, exp 2.8V (new documented member)",
+   "formula": "Li3Fe2(PO4)3"
+  },
+  {
+   "name": "NASICON, exp ~4.8V Cr4+/Cr3+ (new documented member)",
+   "formula": "Li3Cr2(PO4)3"
+  },
+  {
+   "name": "NASICON, exp ~2.5V (anode-side phase)",
+   "formula": "Li3Ti2(PO4)3"
+  }
+ ]
+}

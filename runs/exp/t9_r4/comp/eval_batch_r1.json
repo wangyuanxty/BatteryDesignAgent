@@ -1,0 +1,100 @@
+[
+  {
+    "candidate": "LiCuO2",
+    "outputs": [
+      "comp/eval/r1_LiCuO2.json"
+    ],
+    "note": "computed avg voltage 3.707 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "LiFeO2",
+    "outputs": [
+      "comp/eval/r1_LiFeO2.json"
+    ],
+    "note": "computed avg voltage 3.943 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CuNi55",
+    "outputs": [
+      "comp/eval/r1_CuNi55.json"
+    ],
+    "note": "computed avg voltage 3.750 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CuMn55",
+    "outputs": [
+      "comp/eval/r1_CuMn55.json"
+    ],
+    "note": "computed avg voltage 3.512 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CuFe55",
+    "outputs": [
+      "comp/eval/r1_CuFe55.json"
+    ],
+    "note": "computed avg voltage 3.807 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CuCo55",
+    "outputs": [
+      "comp/eval/r1_CuCo55.json"
+    ],
+    "note": "computed avg voltage 3.492 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "NiFe55",
+    "outputs": [
+      "comp/eval/r1_NiFe55.json"
+    ],
+    "note": "computed avg voltage 3.990 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CoFe55",
+    "outputs": [
+      "comp/eval/r1_CoFe55.json"
+    ],
+    "note": "computed avg voltage 3.682 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "FeMn55",
+    "outputs": [
+      "comp/eval/r1_FeMn55.json"
+    ],
+    "note": "computed avg voltage 3.342 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "LiVO2",
+    "outputs": [
+      "comp/eval/r1_LiVO2.json"
+    ],
+    "note": "computed avg voltage 2.564 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CuAl91",
+    "outputs": [
+      "comp/eval/r1_CuAl91.json"
+    ],
+    "note": "computed avg voltage 3.693 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CuZr91",
+    "outputs": [
+      "comp/eval/r1_CuZr91.json"
+    ],
+    "note": "computed avg voltage 3.722 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CuMn73",
+    "outputs": [
+      "comp/eval/r1_CuMn73.json"
+    ],
+    "note": "computed avg voltage 3.615 V < 4.6 - rejected at the stage-1 window"
+  },
+  {
+    "candidate": "CuNi82",
+    "outputs": [
+      "comp/eval/r1_CuNi82.json"
+    ],
+    "note": "computed avg voltage 3.670 V < 4.6 - rejected at the stage-1 window"
+  }
+]

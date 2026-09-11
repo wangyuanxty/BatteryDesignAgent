@@ -1,0 +1,9 @@
+{
+  "avg_voltage_v_computed": 8.606108936396511,
+  "capacity_mah_g_bridged": 91.36382,
+  "in_envelope": false,
+  "ni_olivine_family": false,
+  "true_voltage_v": 5.0,
+  "ed_active_wh_kg": 786.287,
+  "_sources": "replay values from comp_envelope_check.py --formula LiCoMnO4 (2026-09-09); true_voltage_v from literature Kawai et al. 1998 ESSL 1(5) 212-214 DOI 10.1149/1.1390688 (~5.0 V plateau); ed_active_wh_kg = V*C*0.9 (reported, not a criterion)"
+}

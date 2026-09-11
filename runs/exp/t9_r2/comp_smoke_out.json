@@ -1,0 +1,38 @@
+{
+  "baseline": {
+    "formula": "Li(Ni0.8Mn0.1Co0.1)O2",
+    "e_full_ev": -290.9718933105469,
+    "e_li_metal_ev": -1.8784823417663574,
+    "converged": false
+  },
+  "candidates": [
+    {
+      "formula": "LiNiPO4F",
+      "realized_tm_counts": {
+        "Ni": 8
+      },
+      "avg_voltage_v": 5.487804889678955,
+      "capacity_mah_g": 104.4576927217053,
+      "e_full_ev": -422.3474426269531,
+      "e_delith_ev": -378.14971923828125,
+      "converged": false,
+      "rel_stability_ev_atom": -1.2199380151156722,
+      "name": "TavP-Ni"
+    },
+    {
+      "formula": "LiNi0.75Co0.25PO4",
+      "realized_tm_counts": {
+        "Ni": 3,
+        "Co": 1
+      },
+      "avg_voltage_v": 5.410636107126872,
+      "capacity_mah_g": 116.7706327157302,
+      "e_full_ev": -198.35263061523438,
+      "e_delith_ev": -176.4852752685547,
+      "converged": false,
+      "rel_stability_ev_atom": -1.8721907806396487,
+      "name": "Oli-Ni75Co25"
+    }
+  ],
+  "calibration_note": "NMC811 baseline self-calibration: literature average voltage ≈3.8 V, theoretical capacity ≈194 mAh/g (x∈[0.3,1] window) — if the baseline deviates markedly, this batch's results are not trustworthy (declared honestly)."
+}

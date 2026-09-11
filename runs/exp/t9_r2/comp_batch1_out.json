@@ -1,0 +1,337 @@
+{
+  "baseline": {
+    "formula": "Li(Ni0.8Mn0.1Co0.1)O2",
+    "e_full_ev": -290.971923828125,
+    "e_li_metal_ev": -1.8784823417663574,
+    "converged": false
+  },
+  "candidates": [
+    {
+      "formula": "LiNiPO4F",
+      "realized_tm_counts": {
+        "Ni": 8
+      },
+      "avg_voltage_v": 5.4877998034159345,
+      "capacity_mah_g": 104.4576927217053,
+      "e_full_ev": -422.3474426269531,
+      "e_delith_ev": -378.1497497558594,
+      "converged": false,
+      "rel_stability_ev_atom": -1.2199373793327943,
+      "name": "TavP-Ni"
+    },
+    {
+      "formula": "LiNi0.75Co0.25PO4F",
+      "realized_tm_counts": {
+        "Ni": 6,
+        "Co": 2
+      },
+      "avg_voltage_v": 5.386308511098226,
+      "capacity_mah_g": 104.42283819250147,
+      "e_full_ev": -426.6565246582031,
+      "e_delith_ev": -383.0677795410156,
+      "converged": false,
+      "rel_stability_ev_atom": -1.294231897112967,
+      "name": "TavP-Ni75Co25"
+    },
+    {
+      "formula": "LiNi0.5Co0.5PO4F",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "Co": 4
+      },
+      "avg_voltage_v": 5.305167357126872,
+      "capacity_mah_g": 104.38800691544793,
+      "e_full_ev": -430.6566162109375,
+      "e_delith_ev": -387.5547180175781,
+      "converged": false,
+      "rel_stability_ev_atom": -1.3631989928497665,
+      "name": "TavP-Ni50Co50"
+    },
+    {
+      "formula": "LiCoPO4F",
+      "realized_tm_counts": {
+        "Co": 8
+      },
+      "avg_voltage_v": 5.064719359079997,
+      "capacity_mah_g": 104.31841402478187,
+      "e_full_ev": -438.5718078613281,
+      "e_delith_ev": -396.91259765625,
+      "converged": false,
+      "rel_stability_ev_atom": -1.499667814408225,
+      "name": "TavP-Co"
+    },
+    {
+      "formula": "LiMnPO4F",
+      "realized_tm_counts": {
+        "Mn": 8
+      },
+      "avg_voltage_v": 4.6388923327128095,
+      "capacity_mah_g": 106.68844832479849,
+      "e_full_ev": -473.1944885253906,
+      "e_delith_ev": -434.0902404785156,
+      "converged": false,
+      "rel_stability_ev_atom": -2.0966105844782676,
+      "name": "TavP-Mn"
+    },
+    {
+      "formula": "LiCrPO4F",
+      "realized_tm_counts": {
+        "Cr": 8
+      },
+      "avg_voltage_v": 4.645829995473226,
+      "capacity_mah_g": 108.50371197406912,
+      "e_full_ev": -483.98248291015625,
+      "e_delith_ev": -444.83660888671875,
+      "converged": false,
+      "rel_stability_ev_atom": -2.2826104876638817,
+      "name": "TavP-Cr"
+    },
+    {
+      "formula": "LiNi0.5Mn0.5PO4F",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "Mn": 4
+      },
+      "avg_voltage_v": 5.154105345408122,
+      "capacity_mah_g": 105.56128657461785,
+      "e_full_ev": -449.0504455566406,
+      "e_delith_ev": -406.85491943359375,
+      "converged": false,
+      "rel_stability_ev_atom": -1.6803339815687854,
+      "name": "TavP-Ni50Mn50"
+    },
+    {
+      "formula": "LiNi0.5V0.5PO4F",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "V": 4
+      },
+      "avg_voltage_v": 4.62766695022583,
+      "capacity_mah_g": 106.76166419062335,
+      "e_full_ev": -457.7867126464844,
+      "e_delith_ev": -418.74981689453125,
+      "converged": false,
+      "rel_stability_ev_atom": -1.8309592762212636,
+      "name": "TavP-Ni50V50"
+    },
+    {
+      "formula": "LiCuPO4F",
+      "realized_tm_counts": {
+        "Cu": 8
+      },
+      "avg_voltage_v": 5.1214973131815595,
+      "capacity_mah_g": 101.70966990372006,
+      "e_full_ev": -402.50469970703125,
+      "e_delith_ev": -360.50482177734375,
+      "converged": false,
+      "rel_stability_ev_atom": -0.8778211220927616,
+      "name": "TavP-Cu"
+    },
+    {
+      "formula": "LiNi0.75Co0.25SO4F",
+      "realized_tm_counts": {
+        "Ni": 6,
+        "Co": 2
+      },
+      "avg_voltage_v": 4.69981050491333,
+      "capacity_mah_g": 103.79242715418806,
+      "e_full_ev": -403.1248474121094,
+      "e_delith_ev": -363.65509033203125,
+      "converged": false,
+      "rel_stability_ev_atom": -0.888513323904454,
+      "name": "TavS-Ni75Co25"
+    },
+    {
+      "formula": "LiNi0.5Co0.5SO4F",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "Co": 4
+      },
+      "avg_voltage_v": 4.543652057647705,
+      "capacity_mah_g": 103.75801509811052,
+      "e_full_ev": -406.1301574707031,
+      "e_delith_ev": -367.59735107421875,
+      "converged": false,
+      "rel_stability_ev_atom": -0.9403290145698628,
+      "name": "TavS-Ni50Co50"
+    },
+    {
+      "formula": "LiCuSO4F",
+      "realized_tm_counts": {
+        "Cu": 8
+      },
+      "avg_voltage_v": 4.446077187856038,
+      "capacity_mah_g": 101.11149878437494,
+      "e_full_ev": -376.0001525878906,
+      "e_delith_ev": -338.05279541015625,
+      "converged": false,
+      "rel_stability_ev_atom": -0.42084617176275074,
+      "name": "TavS-Cu"
+    },
+    {
+      "formula": "LiNi0.8Co0.2PO4",
+      "realized_tm_counts": {
+        "Ni": 3,
+        "Co": 1
+      },
+      "avg_voltage_v": 5.4111396471659345,
+      "capacity_mah_g": 116.7793474263817,
+      "e_full_ev": -198.352783203125,
+      "e_delith_ev": -176.48391723632812,
+      "converged": false,
+      "rel_stability_ev_atom": -1.8721962483723953,
+      "name": "Oli-Ni80Co20"
+    },
+    {
+      "formula": "LiNi0.75Co0.25PO4",
+      "realized_tm_counts": {
+        "Ni": 3,
+        "Co": 1
+      },
+      "avg_voltage_v": 5.417126178741455,
+      "capacity_mah_g": 116.7706327157302,
+      "e_full_ev": -198.35247802734375,
+      "e_delith_ev": -176.4656524658203,
+      "converged": false,
+      "rel_stability_ev_atom": -1.8721840413411455,
+      "name": "Oli-Ni75Co25"
+    },
+    {
+      "formula": "LiNi0.6Co0.4PO4",
+      "realized_tm_counts": {
+        "Ni": 2,
+        "Co": 2
+      },
+      "avg_voltage_v": 4.426169554392497,
+      "capacity_mah_g": 116.74449638609873,
+      "e_full_ev": -197.34475708007812,
+      "e_delith_ev": -178.43080139160156,
+      "converged": false,
+      "rel_stability_ev_atom": -1.8318752034505206,
+      "name": "Oli-Ni60Co40"
+    },
+    {
+      "formula": "LiNi0.4Co0.6PO4",
+      "realized_tm_counts": {
+        "Ni": 2,
+        "Co": 2
+      },
+      "avg_voltage_v": 5.400483926137288,
+      "capacity_mah_g": 116.70966614114758,
+      "e_full_ev": -199.8110809326172,
+      "e_delith_ev": -177.97418212890625,
+      "converged": false,
+      "rel_stability_ev_atom": -1.9305281575520832,
+      "name": "Oli-Ni40Co60"
+    },
+    {
+      "formula": "LiCo2O4",
+      "realized_tm_counts": {
+        "Co": 16
+      },
+      "avg_voltage_v": 3.889990965525309,
+      "capacity_mah_g": 99.36727149001727,
+      "e_full_ev": -367.9061279296875,
+      "e_delith_ev": -333.2952880859375,
+      "converged": false,
+      "rel_stability_ev_atom": -1.2962074788411453,
+      "name": "Spi-Co2"
+    },
+    {
+      "formula": "LiNi0.5Co1.5O4",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "Co": 12
+      },
+      "avg_voltage_v": 4.021201292673747,
+      "capacity_mah_g": 99.43041313663927,
+      "e_full_ev": -359.61236572265625,
+      "e_delith_ev": -324.2142639160156,
+      "converged": false,
+      "rel_stability_ev_atom": -1.1303322347005205,
+      "name": "Spi-Ni05Co15"
+    },
+    {
+      "formula": "LiNiCoO4",
+      "realized_tm_counts": {
+        "Ni": 8,
+        "Co": 8
+      },
+      "avg_voltage_v": 4.1796943346659345,
+      "capacity_mah_g": 99.49363507936869,
+      "e_full_ev": -350.95904541015625,
+      "e_delith_ev": -314.6099853515625,
+      "converged": false,
+      "rel_stability_ev_atom": -0.9572658284505202,
+      "name": "Spi-NiCo"
+    },
+    {
+      "formula": "LiNi0.75Co1.25O4",
+      "realized_tm_counts": {
+        "Ni": 6,
+        "Co": 10
+      },
+      "avg_voltage_v": 4.100338459014893,
+      "capacity_mah_g": 99.46201406142067,
+      "e_full_ev": -355.37860107421875,
+      "e_delith_ev": -319.50567626953125,
+      "converged": false,
+      "rel_stability_ev_atom": -1.045656941731771,
+      "name": "Spi-Ni75Co125"
+    },
+    {
+      "formula": "Li3Ni2(PO4)3",
+      "realized_tm_counts": {
+        "Ni": 8
+      },
+      "avg_voltage_v": 5.113087177276611,
+      "capacity_mah_g": 44.3393467510364,
+      "e_full_ev": -553.295166015625,
+      "e_delith_ev": -497.36260986328125,
+      "converged": false,
+      "rel_stability_ev_atom": -1.6227400037977429,
+      "name": "Nas-Ni2"
+    },
+    {
+      "formula": "Li3NiCo(PO4)3",
+      "realized_tm_counts": {
+        "Ni": 4,
+        "Co": 4
+      },
+      "avg_voltage_v": 4.951782703399658,
+      "capacity_mah_g": 44.31423275536004,
+      "e_full_ev": -561.3536376953125,
+      "e_delith_ev": -506.7115173339844,
+      "converged": false,
+      "rel_stability_ev_atom": -1.7346632215711804,
+      "name": "Nas-NiCo"
+    },
+    {
+      "formula": "Li3Co2(PO4)3",
+      "realized_tm_counts": {
+        "Co": 8
+      },
+      "avg_voltage_v": 4.77286958694458,
+      "capacity_mah_g": 44.28914719292813,
+      "e_full_ev": -569.0435180664062,
+      "e_delith_ev": -515.8327026367188,
+      "converged": false,
+      "rel_stability_ev_atom": -1.841467115614149,
+      "name": "Nas-Co2"
+    },
+    {
+      "formula": "Li3Mn2(PO4)3",
+      "realized_tm_counts": {
+        "Mn": 8
+      },
+      "avg_voltage_v": 4.449711322784424,
+      "capacity_mah_g": 45.14062061401055,
+      "e_full_ev": -602.9830932617188,
+      "e_delith_ev": -552.3575439453125,
+      "converged": false,
+      "rel_stability_ev_atom": -2.312850104437934,
+      "name": "Nas-Mn2"
+    }
+  ],
+  "calibration_note": "NMC811 baseline self-calibration: literature average voltage ≈3.8 V, theoretical capacity ≈194 mAh/g (x∈[0.3,1] window) — if the baseline deviates markedly, this batch's results are not trustworthy (declared honestly)."
+}
