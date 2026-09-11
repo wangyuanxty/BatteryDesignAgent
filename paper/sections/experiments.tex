@@ -15,14 +15,14 @@ cold (low temperature plus volumetric density), a flagship vehicle (extreme
 energy density), a smartphone (volumetric ceiling plus a strict temperature
 red line plus a voltage plateau), a hybrid vehicle (high-temperature aging
 plus nail penetration), and a drone (specific energy plus a mass ceiling).
-Across the eight tasks, fourteen distinct metric types are adjudicated, and
+Across the eight tasks, fourteen distinct metric types are checked, and
 all criteria of a task are AND-judged: a design must satisfy every clause
-of its contract to be ``achieved.''
+of its target to be ``achieved.''
 
 Three design choices deserve emphasis. First, the tasks carry no constraint
 declarations beyond the metrics: nothing states which levers are adjustable,
 which chemistry to use, or where the baseline sits. Undeclared items are
-interpreted in the widest sense under protocol rules, with the derivation
+interpreted in the widest sense under the workflow rules, with the derivation
 recorded---this is what forces the agent to make the design-space decisions
 itself. Second, every number in every task is absolute; no relative-baseline
 phrasing appears, so an agent cannot redefine the reference it measures
@@ -32,7 +32,7 @@ constraint lives: T1, T4, and T8 are solvable inside a structural space
 formulation, or transport levers---the distinction on which the comparison
 with the Bayesian baseline turns.
 
-The contract quantities are defined on standard cell models from the cited
+The target quantities are defined on standard cell models from the cited
 literature. Plating is judged on the negative-electrode potential against
 Li/Li$^+$, written as the sum of the equilibrium potential and the kinetic
 overpotential \cite{arora1999plating, ren2018plating}:
@@ -65,8 +65,8 @@ from the underlying parameter sets) is documented in the supplementary
 materials; each threshold is the anchoring parameter set's baseline value
 for that criterion shifted by a fixed increment (e.g., $+20\%$ energy
 density over the baseline configuration, a $5$-point cut on 5C retention),
-never a frontier-tight value---the experiment measures governance
-contribution at fixed contracts, not frontier performance. The anchoring is
+never a frontier-tight value---the experiment measures the workflow's
+contribution at fixed targets, not frontier performance. The anchoring is
 a Methods-section explanation and never appears in the task text seen by
 any agent.
 
@@ -78,7 +78,7 @@ AND-judged; nothing else is declared in the task text.}
 \setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{p{1.0cm}p{10.5cm}}
 \toprule
-ID & Contract (abridged; all values absolute) \\
+ID & Design target (abridged; all values absolute) \\
 \midrule
 T1 & Sedan: energy density $\geq 392.61$ Wh/kg; 4C charge without lithium
 plating; $T_{\max}\leq 60\,^\circ$C; overcharge to 4.7 V without thermal
@@ -109,30 +109,41 @@ cell mass $\leq 40$ g. \\
 
 The design follows a treatment-plus-two-controls structure. The governed
 agent is the treatment; two control groups isolate, respectively, the
-protocol itself and the classical-optimization boundary. All three
+workflow itself and the classical-optimization boundary. All three
 conditions share the task texts, the simulation stack, and the session
 budget, so each observed difference is attributable to the single variable
 that condition removes.
 
-\textbf{Governed agent (G).} The full protocol of Section~3, executed under
+\textbf{Governed agent (G).} The full workflow of Section~3, executed under
 two large language models separately (deepseek-v4-pro and
 deepseek-v4-flash) giving eight runs per model and a model-robustness
-axis. Two further legs re-execute the eight sessions under GPT-5.6 Luna
-and under mimo-v2.5 (foreign-vendor models served through
-OpenAI-compatible APIs, same protocol, harness, task texts, and budget) so
-the cross-family comparison is made outside the primary vendor at matched
+axis. Two further runs re-execute the eight sessions under GPT-5.6 Luna
+and under mimo-v2.5 (two other models served through
+OpenAI-compatible APIs, same workflow, harness, task texts, and budget) so
+the cross-family comparison is made on models outside the primary family at matched
 tier logic.
 
-\textbf{Protocol-free agent (C1).} The same LLM, the same agent harness
-(tool-use loop), the same tools available in the environment (a Python
-interpreter with the simulation libraries, shell, and file tools), and the
-same session budget---but no protocol: the system prompt carries only a role
-statement, the tool descriptions, a ban on true-compute calls, the budget,
-and the deliverable request. There are no stage rules, no funnel, no
-pre-registered criteria, no mechanical evaluator, and no audit-chain
-verifier. C1 is the \emph{protocol-removal control}: it isolates the
-governance layer by holding every other resource constant: model, harness,
-toolset, budget, task texts. One run per task, deepseek-v4-pro.
+\textbf{The design workflow-free agent (C1).} The same LLM, the same agent harness
+(tool-use loop), the same session budget, and the same task texts---but the
+workflow is removed in full: both its written layer (stage rules, the funnel,
+criteria, the evaluator, the audit-chain verifier) and its
+instrument, the curated simulation library that ships inside the workflow's
+skill directory and encodes the workflow's calibration choices (its named aging
+workflow, its energy-density caliber, its screening recipes). The control
+retains the general-purpose simulation stack---a Python interpreter with PyBaMM,
+MACE, CHGNet, ASE, pymatgen and RDKit, plus shell and file tools---and, in the
+current design, its prompt states the interpreter path and the installed
+libraries with their entry points, recording explicitly that no workflow,
+workflow, or measurement standard is prescribed. What the condition removes is
+therefore not capability but \emph{pre-committed measurement machinery}: to
+obtain an aging result, an energy density, or a screening verdict, the
+workflow-free agent must construct the chain itself and choose its own
+definitions. One run per task, deepseek-v4-pro. The batch tabulated in
+Section~5.5 was run with the general-purpose libraries only (no curated
+tooling) and without an environment statement in its prompt; that asymmetry is
+disclosed there, its claims are re-checked against the given targets, and
+the batch is therefore reported as a bundled condition rather than as an
+equal-tooling control.
 
 \textbf{Bayesian optimization (C2).} A classical BO baseline in the
 architecture parameter space (ten structural parameters: electrode
@@ -143,7 +154,7 @@ searching the objective \emph{energy density minus safety penalties},
 \label{eq:bo}
 \mathrm{obj} = \mathrm{ED} - \sum_{k} \lambda_k\, \mathbb{1}[v_k \not\geq t_k],
 \end{equation}
-with a fixed penalty set that covers every contract criterion except the
+with a fixed penalty set that covers every target criterion except the
 T1 overcharge-runaway trigger (plating, temperature limit, SEI, plateau,
 mass); a criterion absent from this set is invisible to the search. The
 material-bottleneck failures are therefore not a visibility artifact: SEI
@@ -154,7 +165,7 @@ structural only---and that boundary is the point: the configuration
 replicates Battery-Sim-Agent's published BO standard
 \cite{chen2026battery}: Meta's Ax platform, Sobol initialization, GPEI with
 LogNEI acquisition, fixed seed 1234, fifty evaluations per task---the same
-simulator and the same contract-caliber energy accounting as the agents, so
+simulator and the same prescribed energy accounting as the agents, so
 the comparison is on identical physics. The search is deterministic in its
 seed; a three-seed replication (1234, 5678, 9012) reproduces the attained-task
 set $\{T1,T4,T8\}$ identically, with per-task best objectives within $9\%$
@@ -166,14 +177,15 @@ One run (fifty evaluations) per task.
 \textbf{Resources held constant.} All three conditions receive the same
 task texts, the same simulation stack, and the same session budget: the
 agents run under the same harness turn budget (the agent SDK's
-\texttt{max\_turns}=300 setting) and the protocol carries no round cap of
-its own. Table~4 reports a log-derived activity metric, \emph{assistant
-messages}, which is finer-grained than the harness's internal turn counter;
-the budget \emph{setting}, not the message count, is the controlled
-resource. The two units are empirically anchored: the one session that hit
-the budget (the protocol-free agent on T6) did so at 443 assistant messages.
-Every other session concluded before the cap. The BO baseline's fifty evaluations define its
-budget. A second, simulator-native currency is likewise anchored: the
+\texttt{max\_turns}=300 setting) and the workflow carries no round cap of
+its own. Under the SDK's turn definition---one user-message
+$\leftrightarrow$ assistant-response pair---the extension run T10, the
+longest governed session, consumed 207 turn pairs (303 assistant
+messages); the longest control session hit the cap at 443. Table~4
+reports a log-derived activity metric, \emph{assistant messages}, the
+finer-grain counterpart of the SDK turn counter; the budget
+\emph{setting}, not the message count, is the controlled resource. The
+BO baseline's fifty evaluations define its budget. A second, simulator-native currency is likewise anchored: the
 governed sessions average 25 run-pyamm calls per task (range 0--55; 31
 including calc-energy), against BO's fixed fifty: the agents hold no
 evaluation-count advantage, and both conditions sit in the same order of
@@ -186,8 +198,8 @@ separately in Section~5.8.
 
 \subsection{Ablation Design}
 
-The governance components are fixed properties of the protocol; ablation is
-an experimental intervention that relaxes exactly one component per run.
+These rules are fixed properties of the workflow; ablation is
+an experimental intervention that relaxes exactly one rule per run.
 An ablation variant is declared in the task text itself (``ceiling
 escalation disabled'') (keeping the natural-language requirement the sole
 entry point) and the declaration is recorded in the run's entry-0 metadata.
@@ -197,24 +209,24 @@ the text names materials), on T2/T5/T6; \emph{architecture forcing off} (no
 required 2--4 architecture variants per round), on T1/T2/T3/T4/T7/T8; and
 \emph{funnel voting off} (molecular screening by a single ML potential
 instead of three-model heterogeneous voting), on T2/T5/T6. Each ablation run
-uses deepseek-v4-pro and the full protocol otherwise. Twelve ablation runs
+uses deepseek-v4-pro and the full workflow otherwise. Twelve ablation runs
 in total.
 
-\subsection{Judgment Machinery}
+\subsection{How Designs Are Evaluated}
 
-All verdicts reported in this paper come from the mechanized adjudication
+All verdicts reported in this paper come from the code-based evaluation
 layer of Section~3: criteria pre-registered in entry 0, verdicts computed
 by \texttt{log-evaluate} from tool-output files, evidence chains per
 criterion, and the deliverable verifier's audit-chain checks. Two further
 audits are applied to the control conditions. For C1, the agent's own
-``achieved'' claims are re-adjudicated at the protocol's contract caliber by
-the authors: every claimed metric is recomputed mechanically from the
-artifact files the agent produced, on the protocol's own definitions. Two calibers recur throughout and are fixed here:
+``achieved'' claims are re-checked at the workflow's target caliber by
+the authors: every claimed metric is recomputed by code from the
+artifact files the agent produced, on the workflow's own definitions. Two calibers recur throughout and are fixed here:
 \begin{equation}
 \label{eq:ed}
 \mathrm{ED} = \frac{\int V(t)\, I\, dt}{\sum_i l_i\,(1-\varepsilon_i)\,\rho_i \cdot A},
 \end{equation}
-the contract-caliber energy density (mass = layer stack, electrolyte
+the prescribed energy density (mass = layer stack, electrolyte
 excluded), and
 \begin{equation}
 \label{eq:ret}
@@ -233,8 +245,8 @@ with $V(t_{10\%})$ the voltage at 10\% of discharge time. A claim computed
 against a different reference (e.g., 5C over C/3) or a different mass model
 is a different caliber and is recomputed (nail penetration means a
 thermal-runaway trigger criterion, not a steady-state temperature). For C2, the objective trajectory
-is recomputed from the logged evaluation outputs. The re-adjudication rules
-are mechanical and are listed in the supplementary materials.
+is recomputed from the logged evaluation outputs. The re-checking rules
+are applied by code and are listed in the supplementary materials.
 
 \subsection{Real-Data Anchor}
 
@@ -263,19 +275,19 @@ $20.6$ mV over 2--82\% depth of discharge.}
 
 \subsection{Cross-Harness Portability}
 
-The protocol's independence from any specific agent framework
+The workflow's independence from any specific agent framework
 (Section~3.4) is a design property of the artifact itself; its empirical
 demonstration is reported here and executed in Section~5.7, so that its
 results slot into Section~5 without methodological ambiguity. The design:
-the identical protocol (the same declarative rule set, the same
-command-line tool library, and therefore the same adjudication layer) runs
-the same task texts (T1, a structural-bottleneck contract, and T6, a
-material-bottleneck contract) under the same LLM and the same nominal budget setting
+the identical workflow (the same declarative rule set, the same
+command-line tool library, and therefore the same evaluator) runs
+the same task texts (T1, a structural-bottleneck target, and T6, a
+material-bottleneck target) under the same LLM and the same nominal budget setting
 (300, in each harness's own turn unit) across three harnesses: the harness used throughout this paper, the
-OpenAI Agents SDK, and LangChain. The measured quantities are contract
-attainment (mechanically judged, identical criteria) and audit-chain
-completeness (the verifier's checks). Because the adjudication layer is a
+OpenAI Agents SDK, and LangChain. The measured quantities are target
+attainment (checked by code, identical criteria) and audit-chain
+completeness (the verifier's checks). Because the evaluator is a
 command-line tool rather than harness code, the verdict mechanics are
 harness-independent by design; the experiment measures whether agent
-behavior under the same governance remains contract-faithful when the
+behavior under the same workflow remains faithful to the given targets when the
 orchestration substrate changes, as reported in Section~5.7.

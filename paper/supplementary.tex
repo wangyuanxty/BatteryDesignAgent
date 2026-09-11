@@ -27,54 +27,54 @@
 
 \appendix
 
-\section{Mechanical Re-Adjudication Rules (Control Conditions)}
+\section{Re-Checking Rules (Control Conditions)}
 
-The re-adjudication of the control conditions applies the protocol's own
-definitions mechanically, by recomputing from artifact files. The rules:
+The re-checking of the control conditions applies the workflow's own
+definitions by code, by recomputing from artifact files. The rules:
 
 \begin{itemize}
 \item \textbf{Plating.} A design plates if the minimum of the anode surface
 potential time series (vs.\ Li/Li$^+$) during the 4C charge is below
 $0$ V. A claim of ``safe margin'' phrased in kinetic overpotential is not a
 substitute for the potential series; if no potential series exists in the
-artifacts, the criterion is \emph{unadjudicable} and counted as failed.
+artifacts, the criterion is \emph{uncheckable} and counted as failed.
 \item \textbf{5C retention.} Computed as the 5C discharge capacity divided
 by the 1C discharge capacity of the same cell ($5C/1C$). A ratio computed
 against a $C/3$ reference is a different caliber and is recomputed.
-\item \textbf{SEI thickness.} Judged on the contract aging model (Chen2020,
+\item \textbf{SEI thickness.} Judged on the design target aging model (Chen2020,
 ec-reaction-limited SEI kinetics) with the design's full declared parameters.
 A design that reports SEI from a different growth law (e.g., the
-solvent-diffusion-limited variant) is recomputed under the contract
-model---the SEI model option is a contract-caliber fixture, not a design
+solvent-diffusion-limited variant) is recomputed under the design target
+model---the SEI model option is fixed by the target, not a design
 lever.
 \item \textbf{Thermal runaway / nail penetration.} Judged by the trigger
 criterion of the three-side-reaction ODE solver (\texttt{run-tr}):
 \texttt{triggered} must be \texttt{False}. A steady-state hotspot
 temperature is not a trigger criterion.
 \item \textbf{Measurement space.} A design is out-of-space if its chemistry
-or model is not reproducible by the protocol's verified parameter sets
+or model is not reproducible by the workflow's verified parameter sets
 (Chen2020, ORegan2022, OKane2022, Prada2013); such designs are documented
 separately and excluded from the same-space attainment counts.
 \end{itemize}
 
-\section{C1 Re-Adjudication Detail}
+\section{C1 Re-Checking Detail}
 
 Table~\ref{tab:c1supp} restates the main-text table with the exact values
 and the failing criterion per task, and Figure~\ref{fig:splating} shows
-the mechanical plating criterion applied to the T2 design;
+the plating criterion applied to the T2 design;
 Figure~\ref{fig:ssei} quantifies the SEI-kinetics bridge on the same
 task.
 
 \begin{table}[!ht]
 \centering
-\caption{Protocol-free agent claims vs.\ contract-caliber re-adjudication.}
+\caption{The design workflow-free agent claims vs.\ re-checking against the targets.}
 \label{tab:c1supp}
 \begin{tabular}{p{0.9cm}p{3.7cm}p{2.6cm}p{4.0cm}}
 \toprule
-Task & Self-reported & Re-adjudicated value & Failing criterion \\
+Task & Self-reported & Re-checked value & Failing criterion \\
 \midrule
 T1 & ``safe'' plating margin & min $\eta=-6.9$ mV & $<0$ V $\Rightarrow$ plated \\
-T2 & SEI 8.1/15.1 nm ``all verified'' & 818.9 nm @500 cyc (contract model, full design); 4C plating $-360.9$ mV & SEI $\leq 550$ nm @500 cyc; no plating \\
+T2 & SEI 8.1/15.1 nm ``all verified'' & 818.9 nm @500 cyc (target model, full design); 4C plating $-360.9$ mV & SEI $\leq 550$ nm @500 cyc; no plating \\
 T3 & 5C retention 96.7\% & 84.8\% ($5C/1C$) & retention $\geq 95\%$ \\
 T4 & achieved (Li-metal cell) & --- & out-of-space \\
 T5 & $|\eta|$ ``3--4$\times$ safe'' & min $\eta=-12.6$ mV & $<0$ V; no series \\
@@ -88,7 +88,7 @@ T8 & achieved (Li-metal cell) & --- & out-of-space \\
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.8\linewidth]{figs/fig_supp_plating.pdf}
-\caption{The mechanical plating criterion as applied: anode potential time
+\caption{The plating criterion as applied: anode potential time
 series of the governed T2 design during 4C charge, with the $0$ V line.
 A design plates if and only if the minimum crosses this line.}
 \label{fig:splating}
@@ -99,14 +99,14 @@ A design plates if and only if the minimum crosses this line.}
 \includegraphics[width=0.8\linewidth]{figs/fig_supp_sei.pdf}
 \caption{SEI-kinetics bridge effect on T2: Chen2020 baseline SEI after 100
 cycles versus the governed design's bridged value, against the 500 nm
-contract line.}
+target line.}
 \label{fig:ssei}
 \end{figure}
 
 \section{Task--Product Anchoring Table}
 
 The thresholds in the task texts are calibrated from the underlying
-parameter sets at the DFN contract caliber (mechanically derived via
+parameter sets at the DFN target caliber (derived by the code via
 \texttt{calc-energy}); the anchoring is a Methods-section record and never
 appears in the task text seen by any agent. Table~\ref{tab:anchor} lists
 the anchoring source per task.
@@ -119,11 +119,11 @@ the anchoring source per task.
 \toprule
 Task & Anchored scenario & Calibration source \\
 \midrule
-T1 & LG M50T fast-charge EV (4C + thermal red line) & ORegan2022 contract-caliber baseline 327.18 Wh/kg $\rightarrow$ target 392.61 (+20\%) \\
+T1 & LG M50T fast-charge EV (4C + thermal red line) & ORegan2022 baseline 327.18 Wh/kg $\rightarrow$ target 392.61 (+20\%) \\
 T2 & Grid storage (cycle + low temperature) & OKane2022 100-cycle SEI baseline 626.8 nm $\rightarrow$ 500 nm limit; Chen2020 low-T retention 99.5\% $\rightarrow$ 90\% limit \\
 T3 & Power-tool high-rate & OKane2022 5C/1C $\approx$ 100\% $\rightarrow$ 95\%; power baseline 3814 $\rightarrow$ 4000 W/kg \\
 T4 & Extreme-cold equipment & OKane2022 volumetric baseline 854 $\rightarrow$ 880 Wh/L \\
-T5 & Flagship extreme verification & Chen2020 contract baseline 400.75 $\rightarrow$ 500.94 Wh/kg \\
+T5 & Flagship extreme verification & Chen2020 target baseline 400.75 $\rightarrow$ 500.94 Wh/kg \\
 T6 & Smartphone (volumetric + temperature red line) & OKane2022 854 $\rightarrow$ 950 Wh/L; NMC811 plateau limit 4.03 V $\rightarrow$ 4.1 V \\
 T7 & Hybrid (high-temperature + nail) & 45\,$^\circ$C 100-cycle SEI $\leq 550$ nm; 10 W nail penetration \\
 T8 & Long-endurance drone & OKane2022 baseline 405.62 $\rightarrow$ 446.18 Wh/kg; mass $\leq 40$ g \\
@@ -131,9 +131,9 @@ T8 & Long-endurance drone & OKane2022 baseline 405.62 $\rightarrow$ 446.18 Wh/kg
 \end{tabular}
 \end{table}
 
-\section{Contract Margins of the Governed Runs}
+\section{Target Margins of the Governed Runs}
 
-Margins are computed mechanically from the evidence chains of the final
+Margins are computed by code from the evidence chains of the final
 passing evaluations: $\text{margin} = (v - t)/|t|$ for minimum thresholds
 and $(t - v)/|t|$ for maximum ones, with $v$ the evidence value and $t$ the
 pre-registered threshold. Boolean criteria (plating, thermal-runaway
@@ -169,8 +169,8 @@ evaluations) are tabulated in Table~\ref{tab:boseeds}:
 
 \begin{table}[!ht]
 \centering
-\caption{BO contract-attaining trials per task across three seeds
-(mechanical criteria as in the main text; the attained-task set is
+\caption{BO target-attaining trials per task across three seeds
+(criteria as in the main text; the attained-task set is
 $\{T1, T4, T8\}$ in every seed).}
 \label{tab:boseeds}
 \begin{tabular}{lccc}
@@ -189,14 +189,14 @@ T8 & 10 & 5 & 1 \\
 \end{tabular}
 \end{table}
 
-The SEI criteria are adjudicated on the contract aging model (Chen2020,
+The SEI criteria are checked on the design target aging model (Chen2020,
 ec-reaction-limited), in which the electrode-modification bridge scales the
 SEI kinetic rate constant $k_{\mathrm{SEI}}$ (standard $10^{-12}$ m/s).
 The governed runs used this lever as follows. T2 shipped $k_{\mathrm{SEI}} =
 10^{-16}$ m/s ($10^{-4}\times$), declared in the audit as an estimate
 beyond the bare-ALD literature magnitude under a dual-mechanism coating
 claim (ALD plus fluorinated-additive inner SEI); the same design at
-$10^{-14}$ m/s ($10^{-2}\times$) meets the identical contract, with the
+$10^{-14}$ m/s ($10^{-2}\times$) meets the identical target, with the
 500-cycle SEI at 500.4 nm against the 550 nm limit (a $9\%$ margin) so
 the T2 SEI criteria do not hinge on the extreme setting. T6's SEI work uses
 a $0.5\times$ solvent-diffusivity and concentration cut, derived from the
@@ -216,7 +216,7 @@ Experiment 5
 
 \section{Replication Runs (N=3, All Eight Tasks)}
 
-Three seeds of every task under the governed protocol, deepseek-v4-pro,
+Three seeds of every task under the governed workflow, deepseek-v4-pro,
 same budget as the main matrix (Table~\ref{tab:replication}).
 
 \begin{table}[!ht]
@@ -239,11 +239,11 @@ T8 (drone) & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
 \end{tabular}
 \end{table}
 
-All twenty-four runs achieve their contracts under the mechanical
-adjudicator, with complete evidence coverage of every pre-registered
+All twenty-four runs achieve their targets under the evaluator,
+with complete evidence coverage of every pre-registered
 criterion in every run. On T6, all three seeds independently reach the same
 material-bottleneck diagnosis and solution (the LNMO system switch) through
-three different designs. Contract attainment and the bottleneck diagnosis
+three different designs. Target attainment and the bottleneck diagnosis
 are reproducible across seeds; the designs themselves differ.
 
 \section{Positioning vs.\ Battery-Sim-Agent}
@@ -259,10 +259,10 @@ Table~\ref{tab:bsa} positions the two papers side by side.
 \toprule
  & Battery-Sim-Agent & This paper \\
 \midrule
-Task & inverse parameter estimation (200 synthetic calibration cases) & forward cell design (8 scenario contracts) \\
-Objective & curve-matching error & multi-criterion contract attainment \\
-Baselines & BO (Ax, seed 1234), CMA-ES, defaults & BO (Ax, seed 1234, same config), protocol-free agent \\
-Adjudication & agent-reported error & code-mechanical verdicts + evidence chain \\
+Task & inverse parameter estimation (200 synthetic calibration cases) & forward cell design (8 scenario targets) \\
+Objective & curve-matching error & multi-criterion target attainment \\
+Baselines & BO (Ax, seed 1234), CMA-ES, defaults & BO (Ax, seed 1234, same config), workflow-free agent \\
+Evaluation & agent-reported error & code-computed verdicts + evidence chain \\
 Headline & 67--95\% error reduction vs.\ BO & 8/8 vs.\ 3/8 (BO) vs.\ 0/8 in-space (C1) \\
 Honesty calibration & low-headroom: BO can tie or win & same low-headroom pattern, plus a yardstick-failure axis BO cannot exhibit \\
 \bottomrule
@@ -271,14 +271,14 @@ Honesty calibration & low-headroom: BO can tie or win & same low-headroom patter
 
 \section{Reproducibility Statement}
 
-All simulation protocols, the adjudication layer, and the audit-chain
+All simulation runs, the evaluator, and the audit-chain
 verifier are distributed with the tool library and pinned by an automated
-regression suite. The full code base (protocol, tool library, experiment
-harnesses (including the cross-harness legs)) is open source at
+regression suite. The full code base (workflow, tool library, experiment
+harnesses (including the cross-harness runs)) is open source at
 \url{https://github.com/wangyuanxty/BatteryDesignAgent}. The audit ledgers (\texttt{log.jsonl}) of every run are
 the primary data source of the paper; every table value can be re-derived
-mechanically from the ledgers and the tool outputs they reference. LLM runs
-are not seed-reproducible; the protocol's verdicts are.
+by code from the ledgers and the tool outputs they reference. LLM runs
+are not seed-reproducible; the workflow's verdicts are.
 
 \section{The T6 Case: Candidate Sheet, Datasheet, and Curves}
 
@@ -293,7 +293,7 @@ combined candidate, DFN confirmation, and finally DFN-gap fixes with a
 margin-widening probe. Table~\ref{supp:tab:datasheet} condenses the
 technical datasheet of the final design (VBF-T6R1-DSH-01), whose Source
 column points each value at its tool-output file.
-Figure~\ref{supp:fig:trace} plots the decision trajectory with the contract
+Figure~\ref{supp:fig:trace} plots the decision trajectory with the target
 line and the baseline ceiling; Figure~\ref{supp:fig:t6curves} shows the two
 decisive curves---the plateau gap that forced the system switch and the
 plating margin the criterion judges.
@@ -376,8 +376,8 @@ deliverable labels its own estimates.
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.8\linewidth]{figs/fig_trace_t6.pdf}
-\caption{Governed decision trace on T6 (smartphone contract): volumetric
-energy density by round, with the contract line (950 Wh/L) and the baseline
+\caption{Governed decision trace on T6 (smartphone target): volumetric
+energy density by round, with the design target line (950 Wh/L) and the baseline
 ceiling (854 Wh/L). The jump across the dashed line is the ceiling
 escalation (the LNMO system switch) followed by rounds of refinement to
 1135.8 Wh/L.}
@@ -388,7 +388,7 @@ escalation (the LNMO system switch) followed by rounds of refinement to
 \centering
 \includegraphics[width=\linewidth]{figs/fig_case_t6_curves.pdf}
 \caption{The T6 case at curve level. (a) 1C discharge: the Chen2020
-baseline's midpoint voltage sits below the 4.1 V contract plateau, which is
+baseline's midpoint voltage sits below the 4.1 V target plateau, which is
 what the ceiling assessment diagnosed; the final LNMO design clears it
 (4.1145 V). (b) The final design's anode potential during 4C charge stays
 above the 0 V plating criterion throughout (min $+11.0$ mV).}
@@ -397,7 +397,7 @@ above the 0 V plating criterion throughout (min $+11.0$ mV).}
 
 \section{Threshold Sensitivity of the Baseline Attainment}
 
-The contract thresholds are author-anchored (fixed increments over the
+The target thresholds are author-anchored (fixed increments over the
 anchoring parameter sets' baselines), so the reader's natural question is
 how far the comparison depends on where exactly the thresholds sit.
 Table~\ref{supp:tab:bosens} recomputes the Bayesian-optimizer attainment
@@ -431,7 +431,7 @@ Two structural properties follow. \emph{First}, the five
 material-bottleneck tasks are threshold-invariant at $\pm 5\%$: the
 optimizer's failure there is ceiling-bound, not threshold-bound. Across all
 400 trials, the highest midpoint voltage any design reaches is $4.0115$ V
-against the $4.1$ V contract line; plating and SEI violations are
+against the $4.1$ V target line; plating and SEI violations are
 lever-bound, so loosening the numeric thresholds cannot admit a design that
 is physically outside the parameter space's reachable set. \emph{Second},
 on the three structural tasks the same criteria bind both conditions in

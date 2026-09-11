@@ -24,30 +24,24 @@ trial-and-error paradigm iterates slowly: battery design is therefore an
 
 \begin{figure*}[!ht]
 \centering
-\subfloat[Deployment scenes: fast-charge
-transport (left), grid storage (center), and drone powertrains
-(right)---the application settings of the eight scenario contracts.]{%
-\includegraphics[width=0.91\linewidth]{figs/fig_overview_a.png}}
-\\[2pt]
-\subfloat[The governance idea: the design loop over all five lever
-families ends at the contract, and every verdict is issued by a
+\subfloat[The design loop over all five lever
+families ends at the design target, and every verdict is issued by a
 judging layer outside the agent.]{%
-\includegraphics[width=0.47\linewidth]{figs/fig_overview_b.png}}\hfill
-\subfloat[Architecture at a glance: five fidelity rungs, each
-gate kept by one entry: computational cost rises left to right.]{%
-\includegraphics[width=0.47\linewidth]{figs/fig_overview_c.png}}
-\caption{Overview of the study. (a) The application settings that
-motivate the eight scenario contracts. (b) The central diagnostic: a
-design loop that ends at the contract and an adjudication layer that
-stands outside it. (c) The multi-precision architecture: cheap
+\includegraphics[width=0.48\linewidth]{figs/fig_overview_b.pdf}}\hfill
+\subfloat[Architecture at a glance: five fidelity levels, from cheap
+proxies to true first principles: computational cost rises left to right.]{%
+\includegraphics[width=0.48\linewidth]{figs/fig_overview_c.pdf}}
+\caption{Overview of the study. (a) The central diagnostic: a
+design loop that ends at the design target and an evaluator that
+stands outside it. (b) The multi-precision architecture: cheap
 proxies first, true first principles last.}
 \label{fig:overview}
 \end{figure*}
 
-Figure~\ref{fig:overview} previews the study: the application settings
-that motivate the suite (\ref{fig:overview}a), the governance diagnostic
-that defines our contribution (\ref{fig:overview}b), and the architecture
-(\ref{fig:overview}c).
+Figure~\ref{fig:overview} previews the study: the workflow and where the
+verdicts come from (\ref{fig:overview}a), and the
+multi-precision architecture, cheap proxies first and true first
+principles last (\ref{fig:overview}b).
 
 \subsection{From Black-Box Search to Agentic Design}
 
@@ -111,7 +105,7 @@ average DFT calls from 1.15 to 0.35 \cite{chatmat2026}; MatClaw's
 code-first pipeline \cite{matclaw2026} and MatSciAgent's multi-task routing
 \cite{matsciagent2025} belong to the same family. These systems also expose
 two recurring bottlenecks: implicit domain knowledge (simulation time
-scales, equilibration protocols, convergence criteria) still requires
+scales, equilibration workflows, convergence criteria) still requires
 expert constraints or literature injection; and spatial/structural
 reasoning plus verification realism remain weak---AtomWorld reports success
 rates below 12\% on rotation-type structural operations, positioning LLMs
@@ -137,47 +131,48 @@ gaps share and none of the surveyed lines addresses: \emph{who judges the
 design?} Both existing baselines either pin the measurement standard by
 construction (a
 black-box optimizer on a fixed objective) or leave it free (an ungoverned
-LLM agent on a natural-language contract that it also reports against).
+LLM agent on a natural-language target that it also reports against).
 Our study occupies the empty quadrant: a governed agent executing the full
 chain of cell-design levers (electrolyte, separator, electrode,
 architecture, thermal) in a single autonomous loop, with every verdict
-computed by an adjudication layer outside the agent. To our knowledge, no
+computed by an evaluator outside the agent. To our knowledge, no
 published system spans that chain within a single autonomous loop; in this
-system, judgment is computed by an adjudication layer outside the agent.
+system, judgment is computed by an evaluator outside the agent.
 
-\subsection{The Governance Question}
+\subsection{Why Verification, and What It Changes}
 
-Four properties of the system follow from that design. First, the contract
+Four properties of the system follow from that design. First, the design target
 is the only input: a natural-language requirement with nothing else (no
 configuration file, no parameter set, no candidate list) and the agent
-returns the complete, adjudicated design: material choices, formulation,
+returns the complete, design checked against the criteria: material choices, formulation,
 architecture, safety validation, and the deliverable package, with a
 closing first-principles endorsement pass for the flagship molecular
-finalists (§5.8). Second, governance--carrier decoupling: the protocol is a
-self-contained declarative artifact (natural-language rules, a
+finalists (§5.8). Second, the workflow is separable from the agent that runs
+it: a self-contained declarative artifact (natural-language rules, a
 command-line tool library, and an audit ledger) bound to no specific agent
 framework, a property we verify empirically by running it under three
 orchestration substrates (§5.7). Third, the human engineer's \emph{in-loop}
-role ends at the moment the contract is stated. Fourth, the eight scenario
-contracts were chosen so that different tasks exercise different levers of
+role ends at the moment the design target is stated. Fourth, the eight scenario
+targets were chosen so that different tasks exercise different levers of
 the full chain (a fast-charge guarantee, an SEI-kinetics bridge for a
 lifetime bound, a cathode-system switch for a voltage plateau), which the
 governed agent exercises in turn, in the same loop, under the same
-protocol: the full-chain claim is suite-level, the suite collectively
+workflow: the full-chain claim is suite-level, the suite collectively
 spanning all five design domains. This is a delegation setting no
 agent-based design system has yet been able to study: a complete design
 chain handed to a machine, with the standard-setter present only as a
-written contract.
+written target.
 
 What makes such delegation safe (or dangerous) is the question this paper
 answers. We deliberately construct the two failure modes a design organization
 would most fear. The first is the \emph{solution-space failure}: the strongest
 classical baseline, Bayesian optimization, moves only architecture parameters;
-when a contract requires a material lever (a high-voltage spinel chemistry, an
+when a design target requires a material lever (a high-voltage spinel chemistry, an
 SEI-suppressing coating) the optimum is not in its reachable set. The
 second is more subtle and, we will argue, more dangerous: the
-\emph{yardstick failure}. A protocol-free agent with the same tools, budget,
-and model is not constrained to measure against the contract it was given,
+\emph{measurement drift}---it reports against a criterion it set itself. A workflow-free agent with the same general-purpose
+simulation stack, budget,
+and model is not constrained to measure against the design target it was given,
 and in our data adjusts it in five distinguishable modes (Section~5.5)---a
 self-set threshold (``dendrite onset at $-10$ mV''), a substituted model, a
 purchased physical parameter, an altered caliber, and an omitted criterion
@@ -186,52 +181,56 @@ specifiable reasons (the optimizer threefold, bounded by its space; the
 bare agent zero within the space despite claiming seven) one loses to an
 unreachable space, the other to a malleable measurement standard.
 
-We introduce \emph{protocolized governance} as the intervention: a fixed,
-always-on set of process rules the agent executes inside the design loop, plus
-an adjudication layer that stands outside it. Its four components: a layered
+We introduce a fixed, always-on design workflow as the intervention: a set of
+process rules the agent executes inside the design loop, plus
+an evaluator that stands outside it. Its four components: a layered
 multi-precision funnel, evaluation-and-fallback routing, heterogeneous model
 voting, and, the one the results hinge on,
-\emph{mechanized adjudication}: are specified in Section~3. Under mechanized
-adjudication the contract is pre-registered as machine-readable criteria in an
+\emph{code-based evaluation}: are specified in Section~3. Under this workflow
+the design target is written as machine-readable criteria in an
 audit ledger before the first simulation runs; every verdict is computed by
 code from tool-output files, not asserted by the agent in prose; each
 ``achieved'' claim points to the exact file and key that supports it; and a
 verifier refuses incomplete audit trails. In this system the verdicts are
 \emph{computed} rather than \emph{asserted}. In the language of delegation
-theory, it is a delegation contract with enforced fidelity---the alignment
-between the contract the principal believes it set and the behavior the agent
+theory, it is a delegation target with enforced fidelity---the alignment
+between the design target the principal believes it set and the behavior the agent
 actually executes \cite{delegatedagency2026, nikpayam2024aiassisted}.
 
-We evaluate the governance in a thirty-two-run matrix plus twelve ablation
-runs. Eight scenario tasks: a sedan's energy-and-fast-charge contract, a
+We evaluate the workflow in a thirty-two-run matrix plus twelve ablation
+runs. Eight scenario tasks: a sedan's energy-and-fast-charge target, a
 drone's weight-and-rate envelope, a smartphone's volumetric ceiling, and five
 others---are written as natural-language requirements with absolute numeric
 criteria and no other declarations. Each task is given, under identical
 resources, to three decision-makers: the governed agent (two different LLMs,
-separately and jointly); a protocol-free agent on the same harness with the
-same toolset and budget; and a Bayesian optimizer configured to the standard
-of the strongest comparable published agent framework \cite{chen2026battery}.
+separately and jointly); a workflow-free agent on the same harness and
+budget, holding the same general-purpose simulation stack (its prompt states
+the available libraries and their entry points); and a Bayesian optimizer
+configured to the standard of the strongest comparable published agent
+framework \cite{chen2026battery}.
 The results answer the question sharply. The governed agent achieves
-\textbf{all eight} contracts under the two DeepSeek-generation models, and
-four of eight under each of two foreign-vendor models (Section~5.4). The BO
+\textbf{all eight} targets under the two DeepSeek-generation models, and
+four of eight under each of two other models (Section~5.4). The BO
 baseline achieves
 three---precisely the three tasks whose bottlenecks are structural rather than
-material. The protocol-free agent achieves none within the same measurement
-space: of its seven self-reported successes, two rest on a lithium-metal
-cell outside the validated parameter sets and are excluded from the
-in-space count, five dissolve under
-contract-caliber re-adjudication, and the one session that made no claim
-exhausted its budget.
+material. In the tabulated workflow-free batch---general-purpose libraries
+only, without an environment statement---no claim survives
+re-checking against the given targets: of its seven self-reported successes, two
+rest on a lithium-metal cell outside the validated parameter sets and are
+excluded from the in-space count, five dissolve under re-checking, and
+the one session that made no claim exhausted its budget. Section~5.5
+discloses the batch's tool asymmetry and reports it as a bundled condition
+rather than as an equal-tooling control.
 
-Three further results speak to \emph{why} governance works. First, ablation
+Three further results speak to \emph{why} the workflow works. First, ablation
 shows the mechanisms are not interchangeable: turning off the ceiling
 assessment that triggers material escalation costs two of three
 material-bottleneck tasks outright; turning off forced architecture exploration
 costs one of six; turning off the three-model vote changes nothing: an
 ``unrealized premium'', since in this suite the governed agent never exercised
-the molecular path, preferring cheaper routes. Second, the governance is
+the molecular path, preferring cheaper routes. Second, the workflow is
 model-robust: eight of eight under both a flagship and an economy LLM, the same
-contracts attained through different designs. Third, the simulation world is
+targets attained through different designs. Third, the simulation world is
 anchored to a physical artifact: the beginning-of-life $0.1$C discharge curve
 of a production 21700 cell (LG M50T, \cite{lgm50dataset2024,
 kirkaldy2024lgm50}) matches our calibrated parameter set
@@ -241,19 +240,19 @@ distinct from any validation of the designs themselves.
 
 The paper makes three contributions. (i) We present the first end-to-end
 agent for full-chain battery cell design: given nothing but a
-natural-language scenario contract, a single autonomous loop traverses
+natural-language scenario target, a single autonomous loop traverses
 the whole chain of battery design levers---material system, formulation,
 cell architecture, thermal management, safety, and aging---and returns a
-complete adjudicated design whose conclusion-level numbers pass a
+complete design checked against the criteria whose conclusion-level numbers pass a
 multi-level true-compute endorsement (ML-potential screening, two
 independent DFT codes, and a classical-force-field diffusion simulation).
-The system is delivered as open infrastructure: the protocol rule set,
-the simulation tool library, the adjudication and audit layer
+The system is delivered as open infrastructure: the workflow rule set,
+the simulation tool library, the evaluation and audit layer
 (pre-registered criteria, code-computed verdicts, evidence chains,
 audit-chain rejection), and every experiment artifact are released in a
 single open-source repository, demonstrated portable across three agent
 harnesses (Section~5.7), and every conclusion-grade number can be
-mechanically replayed from the audit ledgers. (ii) We distill the
+replayed from the ledger from the audit ledgers. (ii) We distill the
 system's steering logic into a transferable mechanism pattern for
 engineering agents: multi-resolution cost scheduling (cheap proxies
 first, true first principles last), symptom-to-scale fallback routing
@@ -263,27 +262,27 @@ current system provably cannot close the gap, a three-consecutive-failure
 stop rule that questions the assumptions rather than retrying blindly, and
 heterogeneous-model disagreement detection (reported as not exercised in
 this suite, with the null documented). The pattern is agent-agnostic: it
-migrates to any multi-scale, multi-fidelity design workflow. (iii) We decompose the novelty modes reachable by a governed design
-agent: retrieval, cross-domain selection, and structural invention.
-Under a prose prohibition the agent retrieves documented additive
-compounds---reliable (all real, cross-checked) but novel in neither mode
-(T9). Under criteria-bound forcing it leaves the pre-registered
-82-compound additive set and selects a cataloged compound,
-bis(trifluoromethyl)sulfone (CAS 72971-96-1), whose battery-additive use
-is unattested in the searched scope---reliable (full mechanical chain),
-use-novel (searched scope), structure-cataloged (T10). Structural
-invention is the one mode not attained, and not attestable by model or
-simulator. Together the two conditions answer the menu-selection
-critique: retrieval is verified and reliable within the menu, and the
-innovation contract design can deliver is not new-structure discovery
-but verified cross-domain selection.
+migrates to any multi-scale, multi-fidelity design workflow. (iii) The agent can design outside the set it is
+given, and it does not pass off a design that only looks compliant as a
+success. When the target lies beyond the documented additives---the best of
+them reaches 385 nm against a design targeted 370 nm---it does not interpolate
+inside the list: it proposes and verifies a molecule outside the known set
+and outside every family we had screened (trifluoroacetic anhydride, a
+cataloged compound, which we disclose rather than claim as new), and it
+computes that this molecule is reduced before the electrolyte's own
+solvents---the precondition for forming the film at all. On the electrode
+side, no composition in the six computable families meets both the voltage
+target and the compatibility limit of the fixed electrolyte; the agent
+returns a negative result and says why: the one candidate that clears the
+voltage window would have to charge at 7.41 V, and its route---oxygen-redox
+layered chemistry---does not work.
 
 \subsection{Contributions and Organization}
 
 The remainder of the paper is organized as follows. Section~2 reviews autonomy
-in scientific and engineering design and situates governance in the delegation
-literature. Section~3 specifies the protocol and its implementation. Section~4
-defines the experimental design and the contract-verification machinery.
+in scientific and engineering design and situates the workflow in the delegation
+literature. Section~3 specifies the workflow and its implementation. Section~4
+defines the experimental design and the design target-verification machinery.
 Section~5 reports results; Section~6 discusses and calibrates; Section~7
 concludes with implications for the design and management of agent-mediated
 decision systems.

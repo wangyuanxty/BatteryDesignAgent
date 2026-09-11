@@ -4,33 +4,33 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-We asked what governs the quality of design decisions when they are handed
-to an LLM agent, and what governs the trustworthiness of the measurement
-standard the agent measures against. The controlled experiment in a
-virtual battery factory answers three questions.
+We asked how far an LLM agent can carry battery cell design on its own, and
+whether the numbers it reports can be checked rather than taken on trust.
+The controlled experiment in a virtual battery factory answers three
+questions.
 
-First, end-to-end delegation is real and measurable. A single governed
-agent, given nothing but a natural-language contract, spans the full chain
+First, the agent can carry the design end to end. A single governed
+agent, given nothing but a natural-language target, spans the full chain
 of cell-design levers (electrolyte, separator, electrode, architecture,
-thermal) and achieves all eight scenario contracts under two
+thermal) and achieves all eight scenario targets under two
 DeepSeek-generation models, and four of eight under each of two
-foreign-vendor models, with every verdict computed by an adjudication layer
+other models, with every verdict computed by an evaluator
 outside the agent and traceable to the exact file and key that supports it.
-The human engineer's role ends at the statement of the contract.
+The human engineer's role ends at the statement of the design target.
 
 Second, the two failure modes of ungoverned delegation are real, orthogonal,
 and both visible in our data. A Bayesian optimizer configured to the
-published standard achieves exactly the three contracts whose bottlenecks
+published standard achieves exactly the three targets whose bottlenecks
 are structural, and fails the five that need material levers: a
-solution-space failure. A protocol-free agent with identical resources
+solution-space failure. A workflow-free agent with identical resources
 achieves none within the measurement space: its claims dissolve under
-mechanical re-adjudication into shifted thresholds, substituted models,
-purchased parameters, altered calibers, and omitted criteria: a yardstick
-failure. Both baselines fall short for orthogonal, specifiable
+re-checking against the criteria into shifted thresholds, substituted models,
+purchased parameters, altered calibers, and omitted criteria: what moved
+was the measurement, not the design. Both baselines fall short for orthogonal, specifiable
 reasons (the optimizer threefold, the bare agent zero within the space) and
-only governance passes all eight.
+only the governed agent passes all eight.
 
-Third, the governance itself decomposes cleanly. Ceiling escalation is
+Third, the workflow itself decomposes cleanly. Ceiling escalation is
 causal for the material-bottleneck tasks, and disabling it costs two of
 the three outright; forced architecture exploration is a narrow lever
 (one of six tasks); the three-model vote showed no verdict change in this
@@ -42,10 +42,10 @@ For agent-mediated design systems, the implications are
 direct. The decision to delegate a design chain to a machine is not
 primarily a question of model capability (the same model under- or
 over-performs depending on the process wrapped around it) but of three
-infrastructural conditions that our protocol makes explicit:
+infrastructural conditions that our workflow makes explicit:
 
 \begin{enumerate}
-\item \emph{Pre-register the contract.} The criteria are machine-readable
+\item \emph{Pre-register the design target.} The criteria are machine-readable
 before work begins, so the standard-setter's criteria cannot drift after the
 fact. (C1's shifted thresholds and altered calibers are the failures this
 condition prevents.)
@@ -60,23 +60,23 @@ missing final entry) was caught by exactly this check and became a
 regression test.)
 \end{enumerate}
 
-Where these three conditions hold, the marginal cost of adjudication is a
+Where these three conditions hold, the marginal cost of evaluation is a
 command-line evaluator and a ledger---and the class of design decisions that
 can safely leave the human loop widens accordingly. Where they do not hold,
-the protocol-free control shows what the same model does with the same
-tools: seven self-reported successes survive re-adjudication as zero
+the workflow-free control shows what the same model does with the same
+tools: seven self-reported successes survive re-checking as zero
 in-space attainments.
 
 The extensions anticipated at the design stage are now executed and
 reported above: the true first-principles endorsement of the flagship
 finalists in two independent codes (Section~5.8), the threefold replication
 of all eight tasks ($24/24$ achieved, supplementary materials), and the
-cross-harness demonstration of the protocol as a declarative artifact
+cross-harness demonstration of the workflow as a declarative artifact
 (Section~5.7). Each tightens,
 rather than overturns, the claim this experiment establishes: when design
 decisions go to the agent, the infrastructure that matters most is not
-search but judgment. A contract that requires exercised
+search but judgment. A target that requires exercised
 material invention (say, an unreported additive verified at kinetic
 resolution) would need a more expensive evidence infrastructure than this
 experiment's multi-precision funnel carries; we list it as the natural
-extension of the governance design.
+extension of the workflow design.

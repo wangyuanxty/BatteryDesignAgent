@@ -18,9 +18,6 @@
 \usepackage{subfig}
 \usepackage[hidelinks]{hyperref}
 
-%% ---- Journal ----
-\journal{Management Science and Engineering (target venue)}
-
 %% ---- Title / Authors (fill in real names at typeset) ----
 \begin{document}
 
@@ -36,10 +33,10 @@
 
 \begin{abstract}
 We report the first end-to-end battery design agent for full-chain cell
-design: given nothing but a natural-language contract, a single autonomous
+design: given nothing but a natural-language target, a single autonomous
 loop traverses the whole chain of cell-design levers---material system,
 formulation, electrode architecture, thermal management, safety, and
-aging---and returns a complete adjudicated design together with a
+aging---and returns a complete design checked against the criteria together with a
 multi-level true-compute endorsement (ML potentials, two independent DFT
 codes, and a classical-force-field diffusion simulation). Its steering
 logic is a transferable mechanism: cross-scale bottleneck routing
@@ -48,19 +45,24 @@ assessment that triggers material-level search only when the current
 system provably cannot close the gap, and code-computed verdicts for
 every criterion with audit-chain rejection. Eight scenario tasks with
 absolute numeric criteria are given, under
-matched resources (same model, same tools, same task texts, each
-condition's standard budget), to three decision-makers: the governed
-agent, a protocol-free agent on the same harness, and a Bayesian optimizer
+matched resources (same model, same task texts, each condition's standard
+budget, and the same general-purpose simulation stack---identical libraries
+and versions, with each condition's prompt stating the available tools and
+their entry points), to three decision-makers: the governed agent, a
+workflow-free agent on the same harness, and a Bayesian optimizer
 configured to the standard of the strongest comparable published agent
-framework. The governed agent attains all eight contracts under two
+framework. The governed agent attains all eight targets under two
 DeepSeek-generation models, and four of eight under each of two
-foreign-vendor models; the eight under the primary model are replicated
+other models; the eight under the primary model are replicated
 under three seeds (24/24 attained). The optimizer attains three, exactly
-the three whose bottleneck is structural. The protocol-free agent attains
-none within the same measurement space: of its seven self-reported
-successes, two sit on a lithium-metal cell outside the validated parameter
-sets and five dissolve under contract-caliber re-adjudication. Ablation
-measures each governance component in turn: ceiling assessment with
+the three whose bottleneck is structural. In the workflow-free condition, no claim
+survives re-checking against the given targets: of the seven self-reported
+successes in the tabulated batch (general-purpose libraries only, without an
+environment statement), two sit on a lithium-metal cell outside the
+validated parameter sets and five dissolve under re-checking; that
+batch's tool asymmetry is disclosed, and it is reported as a bundled
+condition rather than as an equal-tooling control. Ablation
+measures each workflow rule in turn: ceiling assessment with
 material escalation is causal for two of three material-bottleneck tasks,
 forced architecture exploration for one of six, and the molecular funnel's
 three-model vote was exercised but never verdict-changing in this suite.
@@ -70,12 +72,12 @@ calibrated parameter set to $0.45\%$ capacity and $20.6$ mV RMSE. The
 true-compute endorsement of the flagship finalists confirms the screening
 verdicts in two independent codes, and a 1 ns classical-force-field
 diffusion simulation reports $D_{\mathrm{Li}} = 5.4\times10^{-11}$
-m$^2$/s. Protocol, simulation library, adjudication layer, and experiment
+m$^2$/s. The design workflow, simulation library, evaluator, and experiment
 harnesses are open source at \url{https://github.com/wangyuanxty/BatteryDesignAgent}.
 \end{abstract}
 
 \begin{keyword}
-LLM agents \sep battery cell design \sep cross-scale bottleneck routing \sep multi-fidelity endorsement \sep mechanized adjudication \sep Bayesian optimization
+LLM agents \sep battery cell design \sep cross-scale bottleneck routing \sep multi-fidelity endorsement \sep code-based evaluation \sep Bayesian optimization
 \end{keyword}
 
 \end{frontmatter}

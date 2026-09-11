@@ -4,13 +4,12 @@
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Governance Value Is Bottleneck-Matched, Not Uniform}
+\subsection{Where the The design workflow Helps, and Where It Does Not}
 
-The ablation results carry a structural lesson for the design of agent
-governance: the marginal value of a governance component depends on what
-kind of bottleneck the task carries, and the protocol's ceiling assessment
-is precisely the machinery that diagnoses the bottleneck before effort is
-spent. Where the binding constraint is material---a plateau beyond the
+The ablation results carry a structural lesson for autonomous battery-design
+agents: how much a workflow rule buys depends on what kind of bottleneck the
+task carries, and it is the ceiling assessment that identifies the
+bottleneck before effort is spent. Where the binding constraint is material---a plateau beyond the
 chemistry's polarization limit, a lifetime bound that only a coating
 suppresses---the escalation mechanism is causal: remove it and the task is
 lost (T6, T2). Where the binding constraint is structural, escalation
@@ -20,9 +19,9 @@ clearest case of a matched-null: in a suite where the cheapest route
 (parameter adjustments on literature values and system switches) always
 sufficed, the molecular
 funnel's three-model vote was exercised but never dispositive.
-Governance is thus not a fixed bundle: each component contributes only in
+The workflow is thus not a fixed bundle: each rule contributes only in
 regimes whose bottleneck it addresses. An organization deploying such a
-system should expect this pattern, and should instrument (as our protocol
+system should expect this pattern, and should instrument (as our workflow
 does) which components were exercised, so that dormant components are
 identified by data rather than presumed by fiat.
 
@@ -33,8 +32,8 @@ calibration of its headline: in low-headroom regimes where literature
 defaults already sit near the target, Bayesian optimization remains
 competitive and can outperform the agent \cite{chen2026battery}. Our
 results sharpen this calibration in two directions. First, the BO wins we
-observe are contract-attainment wins, not merely error-margin wins: on the
-three structural tasks BO \emph{achieves} the contract, and with the
+observe are target-attainment wins, not merely error-margin wins: on the
+three structural tasks BO \emph{achieves} the design target, and with the
 highest energy densities of any condition---the expected signature of an
 unconstrained thin-electrode search. The tasks where BO loses are exactly
 those whose bottleneck is outside its parameter space, which is a
@@ -43,9 +42,9 @@ search. The boundary is thus the research target rather than a fairness
 compromise: the configuration replicates the published standard to measure
 what the field's strongest classical setup does (and does not do) not to
 stage a symmetric contest; the aligned-penalizer re-run (Section~5.1)
-closes the one configurable gap the replication left open. Second, and this is the sharper point, the protocol-free agent's
+closes the one configurable gap the replication left open. Second, and this is the sharper point, the workflow-free agent's
 failure mode is invisible in Battery-Sim-Agent's benchmark: their objective is a fixed curve-matching error, so their
-bare agent has no measurement standard to move. Our contracts are multi-criterion
+bare agent has no measurement standard to move. Our targets are multi-criterion
 natural-language requirements, which is precisely the setting where
 criterion adjustment becomes possible, and it is what the ungoverned agent
 does, in five distinguishable modes (Section~5.5). The prevailing
@@ -53,19 +52,19 @@ does, in five distinguishable modes (Section~5.5). The prevailing
 way that matters for practice: an ungoverned LLM agent in a multi-criterion
 design setting can lose to a black-box optimizer \emph{and} fail its own
 reported claims simultaneously: the former on reachable space, the latter
-on movable criteria. Only the adjudication layer addresses both.
+on movable criteria. Only the evaluator addresses both.
 
-\subsection{Yardstick Malleability and the Case for Mechanized Adjudication}
+\subsection{Measurement Drift and Why Evaluation Sits Outside the Agent}
 
-The C1 re-adjudication is the empirical core of RQ3, and it reads directly
-into the delegation literature. Delegated agency theory identifies contract
-specification quality and governance visibility as the design dimensions
+The C1 re-checking is the empirical core of RQ3, and it reads directly
+into the delegation literature. Delegated agency theory identifies target
+specification quality and whether the workflow's decisions are visible as the design dimensions
 that discipline agent behavior \cite{delegatedagency2026}; empirical work
 shows that auditable algorithmic recommendations reshape decision behavior
 in organizations \cite{nikpayam2024aiassisted}. Our results instantiate
-both mechanisms at the engineering level. Pre-registration is contract
+both mechanisms at the engineering level. Pre-registration is target
 specification made machine-readable before any work begins; the evidence
-chain is governance visibility made file-level; and the prohibition on the
+chain is that visibility made file-level; and the prohibition on the
 agent writing its own verdicts is a separation of duties: the auditee may
 not write the audit. The five observed adjustment modes (threshold
 shift, model substitution, parameter purchase, caliber shift, criterion
@@ -74,34 +73,39 @@ unmonitored agent does when it both acts and evaluates, and agency theory
 predicts exactly this hazard.
 
 Two counter-arguments deserve explicit answers. First, one might read the
-protocol as ``just a better prompt'': C1 received a five-sentence system
+workflow as ``just a better prompt'': C1 received a five-sentence system
 prompt while the governed agent received the full rule set. The distinction
-is architectural, not rhetorical. The protocol's load-bearing components
-are \emph{outside} the model's text: the adjudication layer is a
+is architectural, not rhetorical. The workflow's load-bearing components
+are \emph{outside} the model's text: the evaluator is a
 command-line program that computes verdicts, the verifier refuses
 incomplete audit chains, and the agent is forbidden to write its own
 evaluations. No prompt, however long, can place an evaluator outside the
-agent; that is precisely what a code-level adjudication layer does. Second,
+agent; that is precisely what a code-level evaluator does. Second,
 one might question whether C1 is a fair counterfactual, since its prompt
 requests a deliverable but no criterion discipline. The control is
-``same tools, same budget, no protocol,'' which is the natural baseline for
-measuring the protocol's contribution: it holds every resource constant and
-removes exactly the governance layer. A stronger C1 (e.g., adding only a
+``same general-purpose simulation stack, same budget, no workflow'': it holds
+every general-purpose resource constant, states the available libraries and
+their entry points in its prompt, and removes exactly the workflow---its
+rules and its curated instrument, which encode the measurement choices being
+tested. The batch tabulated here additionally lacked that instrument and the
+environment statement; Section~5.5 discloses the asymmetry and reports it as
+a bundled condition rather than as an equal-tooling control. A stronger C1
+(e.g., adding only a
 pre-registration instruction) would measure the marginal value of one
-component rather than the protocol as a whole; the ablation design already
+component rather than the workflow as a whole; the ablation design already
 serves that purpose component by component. The magnitudes in Table~6
-should therefore be read as the protocol's total contribution, not as
+should therefore be read as the workflow's total contribution, not as
 predictions for any particular stripped-down agent.
 
 The theory bridge can be made quantitative with the paper's own machinery.
-Evaluation fidelity (the fraction of adjudicable criteria measured against
+Evaluation fidelity (the fraction of checkable criteria measured against
 their pre-registered thresholds) is computed, not asserted, in our setup:
 the governed agent scores one by construction (the verifier refuses
-otherwise), while the C1 re-adjudication is exactly a fidelity audit. The
+otherwise), while the C1 re-checking is exactly a fidelity audit. The
 design implication transfers beyond battery design: any deployment in which
 an agent's success metric can be influenced by the agent's own choices
-needs an adjudication layer outside the agent, and the cheaper the
-adjudication (the present layer is a command-line evaluator and a ledger),
+needs an evaluator outside the agent, and the cheaper the
+evaluation (the present layer is a command-line evaluator and a ledger),
 the broader the class of tasks for which automated delegation becomes
 safe.
 
@@ -114,13 +118,13 @@ design-level reproduction); the flash, luna, mimo, and C1 columns are
 single-run per cell, so their readings are at the level of the failure
 \emph{pattern} rather than per-task inference; all primary runs execute
 under one agent harness (the two-task cross-harness demonstration,
-Section~5.7, shows the protocol's carrier independence rather than
+Section~5.7, shows the workflow's carrier independence rather than
 replicating the claims under other harnesses); and LLM trajectories are not
-seed-reproducible: the protocol's verdicts are, the agent's paths are not.
+seed-reproducible: the workflow's verdicts are, the agent's paths are not.
 Two governed runs carry disclosed audit-chain defects (flash T6, mimo T1),
 documented in Section~5.4. (ii) \emph{Domain.} The evidence is confined to
 one domain (battery cells) and one simulator family (PyBaMM-based
-electrochemistry); the governance components are domain-agnostic in design,
+electrochemistry); the workflow rules are domain-agnostic in design,
 but their marginal values in other engineering domains are open. (iii)
 \emph{Simulation-only.} The real-data anchor validates the
 \emph{simulator}, not the final designs; no physical cell has been built

@@ -1,10 +1,10 @@
 % ============================================================
-% 3. System Framework: Protocolized Governance
+% 3. System Framework: An Agent with a Fixed Design Workflow
 % ============================================================
-\section{System Framework: Protocolized Governance}
+\section{System Framework: An Agent with a Fixed Design Workflow}
 \label{sec:framework}
 
-\subsection{The Design Space and the Contract}
+\subsection{The Design Space and the Target}
 
 A battery cell design is one indivisible decision spanning
 five interlocking design domains: electrode chemistry, electrolyte
@@ -25,15 +25,15 @@ integration) within a single autonomous closed loop.
 
 The system we describe does. In the virtual battery factory, a single LLM
 agent receives a natural-language requirement and returns a complete
-adjudicated cell design covering materials, formulation, architecture,
+checked cell design covering materials, formulation, architecture,
 safety validation, and a first-principles endorsement pass. The system's
-core design principle is \emph{governance--carrier decoupling}: the
-protocol exists as a declarative natural-language rule set bound to no
+core design principle is \emph{separation of workflow and agent}: the
+workflow exists as a declarative natural-language rule set bound to no
 specific agent framework and portable across orchestration environments
 (demonstrated empirically in Section~5.7). The human engineer's role ends
-at the moment the contract is stated; the agent then plans, screens,
+at the moment the design target is stated; the agent then plans, screens,
 simulates, diagnoses, falls back, and concludes with no intermediate human
-oversight. The eight scenario contracts were chosen so that each exercises
+oversight. The eight scenario targets were chosen so that each exercises
 different levers of this chain, and the suite collectively spans all five
 design domains.
 
@@ -51,7 +51,7 @@ separator, current collectors, particle radii); and \emph{thermal
 management} (the cooling coefficient). A sixth family (solid-phase
 conductivity and diffusivity) is deliberately excluded as a design lever
 because no formulation model maps them, so any adjustment would be an
-unverifiable estimate: the protocol treats ``what can be simulated'' as the
+unverifiable estimate: the workflow treats ``what can be simulated'' as the
 boundary of ``what may be designed'', and estimates may not masquerade as
 simulation output. A direct consequence is the material-innovation frontier
 of this experiment: a novel additive or composition has no simulator
@@ -59,7 +59,7 @@ parameter counterpart without kinetic-level data, so material design in the
 operational sense runs through system switches, electrode-modification
 bridges, formulation matching, and screening of literature candidates.
 
-The contract is the only input. A task is a natural-language requirement
+The target is the only input. A task is a natural-language requirement
 with absolute numeric criteria---``design a battery for a sedan: energy
 density $\geq 392.61$ Wh/kg, 4C fast charge without lithium plating, maximum
 temperature $\leq 60\,^\circ$C, overcharge to 4.7 V without thermal
@@ -67,39 +67,39 @@ runaway'', and nothing else. There is no configuration file, no parameter
 set assignment, no candidate list, no round budget: every case-level
 decision (which parameter set, which starting stage, which levers are
 adjustable, which safety defaults apply when the text is silent) is derived
-by protocol rules from the text alone, and the derivation is written into
+by workflow rules from the text alone, and the derivation is written into
 the audit ledger before the first simulation. The task text's numbers are
-the contract verbatim; the agent may not re-anchor, re-calibrate, or
+the design target verbatim; the agent may not re-anchor, re-calibrate, or
 re-interpret them. Figure~\ref{fig:arch} summarizes the system: the
-contract enters the governed loop, and the adjudication layer writes every
+target enters the governed loop, and the evaluator writes every
 verdict into the audit ledger outside it.
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=0.85\linewidth]{figs/fig_arch_v6.png}
-\caption{System architecture. The natural-language contract is the sole
+\includegraphics[width=0.85\linewidth]{figs/fig_arch.pdf}
+\caption{System architecture. The natural-language target is the sole
 input; the agent executes the five-stage loop over a command-line tool
-library; the adjudication layer sits outside the agent and writes mechanical
+library; the evaluator sits outside the agent and writes code-computed
 verdicts with per-criterion evidence into the audit ledger.}
 \label{fig:arch}
 \end{figure}
 
-\subsection{The Pipeline and the Five Governance Components}
+\subsection{The Pipeline: Five Stages and the Workflow's Rules}
 
-The protocol organizes work as a five-stage funnel: planning, molecular
+The workflow organizes work as a five-stage funnel: planning, molecular
 screening, cell design, safety assessment, and a closing true-compute
-endorsement---inside which four protocol components operate as fixed,
+endorsement---inside which four workflow components operate as fixed,
 always-on rules. Figure~\ref{fig:protocol} shows the loop with its
-fallback routing and the outside-agent adjudication layer.
+fallback routing and the outside-agent evaluator.
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=0.88\linewidth]{figs/fig_protocol_v2.png}
-\caption{The protocolized design loop. The contract is the sole input;
+\includegraphics[width=0.88\linewidth]{figs/fig_protocol.pdf}
+\caption{The fixed design loop. The target is the sole input;
 each round proposes, screens (when the bottleneck is molecular), simulates,
-and is adjudicated by code outside the agent; diagnosed failures route back
+and is checked by code outside the agent; diagnosed failures route back
 to the scale of their cause, and a material ceiling escalates to a system
-switch. The red-dashed adjudication layer delivers the mechanical verdict
+switch. The red-dashed evaluator delivers the code-computed verdict
 and refuses incomplete audit chains; the exit path ends in endorsement and
 the deliverable package.}
 \label{fig:protocol}
@@ -113,7 +113,7 @@ machine-learning potentials (MACE \cite{batatia2022mace}, CHGNet
 minutes-scale DFN at the cell scale. The opening of cell design triggers a
 \emph{ceiling assessment}: the agent estimates the best architecture-plus-
 formulation achievable within the current system and compares it to the
-contract. If the objective exceeds the ceiling, the agent is required to
+target. If the objective exceeds the ceiling, the agent is required to
 escalate into material design (inventing additives or switching systems) 
 rather than tuning parameters inside a space that provably cannot close the
 gap:
@@ -121,12 +121,12 @@ gap:
 \label{eq:escalate}
 \text{escalate} \iff \exists c:\; t_c > \mathrm{ceiling}_c(\text{system}),
 \end{equation}
-where $\mathrm{ceiling}_c(\text{system})$ is the best contract value the
+where $\mathrm{ceiling}_c(\text{system})$ is the best target value the
 current system's architecture and formulation can reach on criterion $c$. The escalation decision is written to the log with its evidence (which
 levers were assessed, the limit values, the gap).
 
 \textbf{Component 2: evaluation and fallback routing.} Every stage output is
-evaluated against the contract immediately; on failure, the agent must
+evaluated against the design target immediately; on failure, the agent must
 diagnose the scale at which the cause lives and fall back there (material
 problems to the molecular stage, architecture problems to cell design) not
 blindly rerun the pipeline. A three-consecutive-failure discipline is attached to the
@@ -142,7 +142,7 @@ is screened by three methodologically distinct models (two ML potentials
 from different families plus a semi-empirical quantum method) whose
 agreement or disagreement is itself signal. Hard elimination lines (energy
 above the stability ceiling, non-convergence, HOMO above the oxidation
-line) are mechanical; disagreement among the three ranks marks a candidate
+line) are applied by code; disagreement among the three ranks marks a candidate
 \emph{disputed}:
 \begin{equation}
 \label{eq:disputed}
@@ -152,9 +152,9 @@ where $r_1, r_2, r_3$ are the candidate's ranks under the three models
 among $N$ candidates---forcing reasoning-based refinement rather than
 acceptance or rejection on a single model's word.
 
-\textbf{Component 4: mechanized adjudication and the audit chain.} Unlike
+\textbf{Component 4: code-based evaluation and the audit chain.} Unlike
 the other components, this one pins the outcome itself. Before the first simulation, the
-agent writes entry~0 of the audit ledger: the contract criteria,
+agent writes entry~0 of the audit ledger: the design target criteria,
 pre-registered in machine-readable form and layered by decision stage, with
 case-level metadata recording every rule-derived decision and its basis.
 Thereafter the agent is \emph{forbidden from judging}: every evaluation must
@@ -168,7 +168,7 @@ A design is ``achieved'' exactly when
 \text{achieved} = \bigwedge_{c} \left(v_c \geq t_c^{\min} \;\wedge\; v_c \leq t_c^{\max}\right),
 \end{equation}
 where the conjunction ranges over the pre-registered criteria of the
-contract. Derived criteria are computed mechanically; the plating criterion
+target. Derived criteria are computed by code; the plating criterion
 is the minimum of the anode potential time series against zero, never a
 threshold the agent may pick:
 \begin{equation}
@@ -176,16 +176,16 @@ threshold the agent may pick:
 \text{plated} = \left[\min_t \phi_{\text{anode}}(t) < 0\right].
 \end{equation}
 Equations~\eqref{eq:attain}--\eqref{eq:plating}, like every criterion
-expression in this section, are evaluated verbatim by the adjudication
+expression in this section, are evaluated verbatim by the evaluation
 layer. A closing verifier (\texttt{verify-deliverables}) checks the
 deliverable set and, crucially, the audit chain itself: every proposal round
-must have a same-round mechanical evaluation, and a final judgment entry
+must have a same-round code-computed evaluation, and a final judgment entry
 must exist---a run whose ledger lacks either is refused as incomplete.
 Judgment is thus an infrastructure layer outside the agent, following the
 separation of duties in auditing: the entity under audit does not write
 its own verdicts.
 
-The protocol, the tool library, the adjudication layer, and the
+The workflow, the tool library, the evaluator, and the
 cross-harness harnesses are open source
 (\href{https://github.com/wangyuanxty/BatteryDesignAgent}{github.com/wangyuanxty/BatteryDesignAgent}).
 
@@ -196,11 +196,11 @@ with optional cross-validation in an independent code (CP2K, PBE-D3
 diffusion coefficient. The endorsement \emph{signs} conclusions; it never
 screens. In the experiment matrix reported here the endorsement runs are
 executed for the flagship cases and reported separately (Section~5.8);
-turning it on or off does not change any contract verdict, by design.
+turning it on or off does not change any target verdict, by design.
 
-\subsection{The Protocol as a Declarative Artifact}
+\subsection{The The design workflow as a Declarative Artifact}
 
-The protocol is packaged as a self-contained declarative artifact: a
+The workflow is packaged as a self-contained declarative artifact: a
 natural-language rule set, a command-line tool library (twenty-plus
 simulation, evaluation, and audit commands), and the audit ledger format;
 in the open-source release it is distributed as the project's skill
@@ -208,11 +208,11 @@ package (SKILL.md together with the reference documentation and the tool
 library), so the rule set and the tools an agent executes against are
 versioned and installed as one unit.
 It binds to no agent framework---any harness that can loop a model over a
-shell and files can execute it. The governance travels with the contract,
+shell and files can execute it. The workflow travels with the design target,
 not with the harness. In the present study every run executes under one
 harness; cross-harness portability is a structural property by
-construction, and its empirical demonstration (the same protocol under
-additional agent frameworks) is demonstrated empirically with identical contract outcomes (Section~5.7).
+construction, and its empirical demonstration (the same workflow under
+additional agent frameworks) is demonstrated empirically with identical target outcomes (Section~5.7).
 
 \subsection{Implementation}
 
@@ -221,11 +221,11 @@ The tool library is implemented as a Python package over PyBaMM
 thermal-electrochemical parameters \cite{oregan2022electrochim} and
 degradation physics \cite{okane2022pccp, peled1979sei,
 arora1999plating, ren2018plating, wang2012thermalrunaway}: plus surrogate
-and true-compute runners. Twenty-plus commands cover simulation protocols
+and true-compute runners. Twenty-plus commands cover simulation runs
 (discharge at 1C/0.1C/5C, 4C charge at 45\,$^\circ$C, low-temperature
 discharge, overcharge, 100-cycle aging, nail penetration with a
-three-reaction thermal-runaway ODE), contract-caliber energy accounting, the
-mechanical evaluator, and the deliverable verifier. The adjudication layer
+three-reaction thermal-runaway ODE), prescribed energy accounting, the
+evaluator, and the deliverable verifier. The evaluator
 is pinned by an automated regression suite distributed with the tool
 library.
 All conclusion-grade numbers in every report originate in tool outputs;

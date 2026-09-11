@@ -6,7 +6,7 @@
 
 This paper sits at the intersection of three literatures: autonomous agents
 in scientific and engineering design, classical optimization baselines and
-their known boundaries, and the governance of delegated decision-making. We
+their known boundaries, and how delegated decisions are checked. We
 review each in turn and then state the gap.
 
 \subsection{Autonomous Agents in Scientific and Engineering Design}
@@ -34,7 +34,7 @@ reduction against classical black-box optimizers across 200 synthetic
 calibration tasks \cite{chen2026battery}. Adjacent engineering domains
 replicate the pattern: AnalogAgent automates analog circuit design
 \cite{analogagent2026}; GENIUS orchestrates autonomous design and execution
-of simulation protocols \cite{genius2025}.
+of simulation runs \cite{genius2025}.
 
 Two structural observations hold across this entire body of work. First,
 every system covers a slice of a design chain, not a chain: material
@@ -44,14 +44,14 @@ design levers (from chemistry through formulation through architecture) and
 none therefore faces the cross-scale diagnosis problem that a full chain
 poses. Second, the judgment in each system is asserted by the agent itself.
 Whether a synthesis ``worked'' or a parameter fit ``converged'' is reported in
-natural language; there is no pre-registered contract against which a
+natural language; there is no pre-registered target against which a
 code-level verifier judges the claim. Benchmark evaluations of these systems
 reflect the same design: DiscoveryBench, ScienceAgentBench, MLAgentBench, and
 RE-Bench measure task success and capability \cite{discoverybench2024,
 scienceagentbench2024, mlagentbench2023, rebench2024}; FIRE-Bench adds an
 honesty layer for scientific rediscovery claims \cite{firebench2026}. None
-treats the \emph{integrity of the yardstick} (whether the metric an agent
-reports against is the metric it was given) as a first-order experimental
+treats \emph{whether the agent reports against the metric it was given} as a
+first-order experimental
 variable.
 
 \subsection{Classical Optimization Baselines and Their Known Boundaries}
@@ -72,7 +72,7 @@ The deeper boundary, which no agent study has isolated experimentally, is
 structural rather than statistical: BO searches a fixed parameter space. A
 classical optimizer can move thickness and porosity, but it cannot invent an
 electrolyte formulation, propose a coating, or switch a cathode system. When
-the binding constraint on a design contract is a material property---a
+the binding constraint on a design target is a material property---a
 voltage plateau beyond the chemistry's polarization limit, an SEI growth
 rate that only a coating suppresses: the optimum is not in the reachable
 set, and no acquisition function can find it. The battery modeling
@@ -82,14 +82,14 @@ onset is governed by the local overpotential balance
 \cite{peled1979sei}; thermal runaway by the coupled decomposition chemistry
 \cite{wang2012thermalrunaway}. Each of these mechanisms admits levers at
 scales a structural optimizer cannot touch. Our experimental design makes
-this boundary an observable: three of our eight contracts are solvable
+this boundary an observable: three of our eight targets are solvable
 within the structural space, and five are not.
 
 \subsection{Agent Reliability and the Case for External Verification}
 
 The central obstacle to trusting an agentic design system is not model
 capability but measurement: an agent that both executes and evaluates can
-move the yardstick it is measured against. The AI community has begun to
+shift the criterion it is measured against. The AI community has begun to
 quantify this. Honesty benchmarks establish that LLMs systematically
 overstate what they know \cite{behonest2024, honesty2023alignment};
 FIRE-Bench shows that even frontier scientific agents fail most reported
@@ -103,8 +103,8 @@ the technically reliable option, but in existing systems it evaluates
 \textbf{the benchmark}, not the agent's own workflow; the design loop
 itself is never forced under a deterministic evaluator. The management literature arrives at the same
 conclusion from the opposite direction: delegated agency theory
-\cite{delegatedagency2026} identifies contract specification quality and
-governance visibility as the design dimensions that discipline delegated
+\cite{delegatedagency2026} identifies how well the target is specified and
+whether the workflow's decisions are visible as the design dimensions that discipline delegated
 action; empirical work on AI-assisted decisions shows algorithmic
 recommendations reshape human override behavior
 \cite{nikpayam2024aiassisted}; Bayesian delegation policies allocate
@@ -114,7 +114,7 @@ articulates information-gated progression for high-stakes LLM agents
 designed into systems rather than assumed
 \cite{dancingalgorithm2025}. What none of this literature contains is an
 \emph{engineering-level} instantiation: a concrete design environment in
-which the evaluator is code, the evaluation contract is pre-registered
+which the evaluator is code, the evaluation target is pre-registered
 before work begins, and the fidelity of that evaluation is itself an
 experimental variable.
 
@@ -125,8 +125,8 @@ degradation and state-of-charge as forecasting problems
 \cite{li2025greyiterative, li2024hybridgrey, sapnken2025soh,
 sapnken2024pemfc, sapnken2026greyneural, xu2025greykalman}. That lineage
 treats the battery as an object to be \emph{predicted}. This paper treats it
-as an object to be \emph{designed by a governed agent}, extending the same
-management-science lens from prognostics to design governance.
+as an object to be \emph{designed by an agent that follows a workflow},
+extending the same lens from prognostics to how design decisions are checked.
 
 \subsection{The Gap and Research Questions}
 
@@ -134,27 +134,27 @@ Three gaps follow. (1) No published system spans the full chain of cell
 design levers (electrolyte, separator, electrode, architecture,
 thermal) in one autonomous loop. (2) No experimental comparison isolates
 the two failure modes of ungoverned delegation: the solution-space failure of
-classical optimizers and the yardstick failure of protocol-free agents. (3)
-No study treats the adjudication layer (pre-registered contracts,
-code-mechanical verdicts, evidence-chain audits) as an experimental
+classical optimizers and the measurement drift of workflow-free agents. (3)
+No study treats the evaluator (pre-registered targets,
+code-code-computed verdicts, evidence-chain audits) as an experimental
 variable whose removal can be measured. The paper is designed to isolate
-both failure modes: the solution-space failure and the yardstick failure.
+both failure modes: the solution-space failure and the measurement drift.
 
 We formalize three research
 questions:
 
 \begin{itemize}
 \item[\textbf{RQ1}]
-\emph{Governance performance.} Does protocolized governance raise contract
-attainment relative to a protocol-free agent and a Bayesian optimizer under
+\emph{The design workflow performance.} Does a fixed design workflow raise target
+attainment relative to a workflow-free agent and a Bayesian optimizer under
 identical resources, and at what resource (token and message) cost?
 \item[\textbf{RQ2}]
-\emph{Mechanism attribution.} Which governance components carry the effect,
+\emph{Mechanism attribution.} Which workflow rules carry the effect,
 and in which task regimes? We ablate each component separately and report
 its marginal contribution, including null results.
 \item[\textbf{RQ3}]
-\emph{Yardstick trustworthiness.} Does mechanized adjudication close the
+\emph{Can the reported measurement be trusted?} Does code-level evaluation close the
 judgment-integrity gap (measured as evidence completeness, criterion
-fidelity, and the absence of self-set thresholds) that the protocol-free
+fidelity, and the absence of self-set thresholds) that the workflow-free
 agent exhibits?
 \end{itemize}
