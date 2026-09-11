@@ -55,7 +55,7 @@ mechanism behind the BO's 678 versus 472 Wh/kg on T4, and precisely the
 margin the governed designs partially spend on the safety and durability
 criteria. Per-criterion margins for all achieved runs are tabulated in the
 supplementary materials. The SEI criteria deserve one further disclosure,
-because they are the single criterion class whose bridge lever (the
+because they are the single criterion class whose parameter bridge (the
 electrode-modification coating scaling the SEI kinetic rate constant) can
 move a verdict: T2 shipped a $10^{-4}\times$ rate constant (declared in
 the audit as an estimate beyond the bare-ALD literature magnitude), yet the
@@ -69,7 +69,7 @@ invariant under a uniform perturbation of them. On the five
 material-bottleneck tasks the optimizer's failure is ceiling-bound, not
 threshold-bound---across all 400 baseline trials, the highest midpoint
 voltage any design reaches is 4.0115 V against the 4.1 V target line, and
-plating and SEI violations are lever-bound (supplementary materials). On the
+plating and SEI violations are bound by the available variables (supplementary materials). On the
 three structural tasks the same criteria bind both conditions in parallel:
 under a uniform $+5\%$ tightening the optimizer's attained counts fall from
 25/34/10 to 0/22/1, while the governed runs' own binding margins
@@ -196,7 +196,7 @@ outright: T6 loses its LNMO system switch (the 4.1 V plateau is unreachable
 in NMC811 space) and T2 loses its SEI-kinetics bridge (three of five
 criteria pass, the in-space result): while T5, whose tipping point
 turned out to live inside the configuration space, is unaffected.
-Architecture forcing is a narrow lever: disabling it changes exactly one
+Architecture forcing matters narrowly: disabling it changes exactly one
 task (T2), where forced breadth was the exploration that found the design.
 Funnel voting shows no verdict change in any of its three cells: with the three-model vote off,
 the molecular path was actually taken \emph{more} often (six molecules
@@ -289,7 +289,7 @@ plating under both other models, T6 stalls at the NMC811 plateau
 (mimo: 852.8 Wh/L and 3.97 V), and T8 stalls at the mass boundary (41.5 g)
 plus its thermal line (361.8 K against the workflow's $333.15$ K safety
 default). The workflow supplied the machinery; the models' searches did not
-reach the material lever, so the honest result is a lower score rather than
+reach the material-level variable, so the honest result is a lower score rather than
 a shifted criterion---the same failure the ablation already pointed to,
 observed now from the model side. One standard-setting observation deserves
 recording: mimo's T8 run pre-registered the thermal threshold at $358.15$ K
@@ -462,10 +462,10 @@ Round & Agent reasoning (recorded rationale) & Simulation artifacts & Key values
 Entry-0 & Task text names a smartphone use case; the plateau $\geq 4.1$ V clause is flagged from the outset as the suspected material bottleneck (NMC811-class midpoint $\approx 3.6$ V). & parameter-set anchor check & criteria pre-registered, five freedom classes & target locked \\
 R01 & Baseline vs.\ system switch: the Chen2020 baseline cannot reach the plateau; LNMO at defaults meets ED and midpoint. & r1\_chen2020\_1c, r1\_lnmo\_1c, calc-energy $\times2$ & ED\_l 843.5 / 1005.3; Vmid 4.166 & $\times$ base / $\checkmark$ LNMO \\
 Funnel & Molecular funnel over the screening set; candidates benchmarked by three-model vote. & run-mlp (MACE, CHGNet), run-xtb & four molecules below the HOMO line & funnel passed \\
-R02 & Gap quantification on the LNMO design: plating and SEI $>$500 nm; SEI growth is temperature-insensitive, so cooling is not the lever. & r2\_lnmo\_aging; r2\_lnmo\_4c (h=200/500) & plated; SEI 753.1 & $\times\times\times$ \\
+R02 & Gap quantification on the LNMO design: plating and SEI $>$500 nm; SEI growth is temperature-insensitive, so cooling is not the variable. & r2\_lnmo\_aging; r2\_lnmo\_4c (h=200/500) & plated; SEI 753.1 & $\times\times\times$ \\
 R03 & \emph{``Round 3 results: np120 (N/P 1.2) 321.20 K,\ $\mathrm{-0.0049}$ V---STILL plated (borderline!)''} (thinking): N/P dominates plating (end-of-charge kinetics); particle radius weak; electrolyte transport direction dropped. & r3\_np120\_4c, r3\_nr35\_4c, r3\_elyte\_4c & SEI 736.0 nm (aging probe) & $\times\times\times\times$ \\
 R04 & SEI probes from the rate law: $c_0$ and $D_{\mathrm{EC}}$ cuts ($0.5\times$) bring SEI below 500 nm. & r4\_np125, r4\_np120nr35, r4\_sei1/2\_aging & SEI 395.2 nm & $\times$/$\checkmark\checkmark\checkmark$ \\
-R05 & Combine the measured levers into one shipping candidate; run the complete SPMe evidence battery. & r5\_final\_\_spme (1c/aging/4c) & 1135.2 Wh/L; 4.188 V; 321.09 K; SEI 435.4 & $\checkmark$ (SPMe) \\
+R05 & Combine the measured variables into one shipping candidate; run the complete SPMe evidence battery. & r5\_final\_\_spme (1c/aging/4c) & 1135.2 Wh/L; 4.188 V; 321.09 K; SEI 435.4 & $\checkmark$ (SPMe) \\
 R06 & \emph{``DFN confirmation FLIPPED two criteria: T\_max 323.80 K; plated TRUE''} (thinking): proxy layering rule: conclusion-grade numbers must come from DFN; the SPMe win is re-checked at high fidelity. & r6\_final\_\_dfn (energy/aging/4c) & 1127.1 Wh/L; Vmid 4.097; plated & $\times$ \\
 R07 & DFN flipped three criteria; probe the three fixes in isolation and in combination (h=400, r=3.5, D$_e$=5e-10). & r7\_d5, r7\_nr30, r7\_combo (DFN) & tip 1138.6 Wh/L; 321.62 K & $\checkmark$/$\times$/$\times$ \\
 R08 & \emph{``Round 8 evaluated: both candidates pass with all 5 criteria checked''} (thinking): final combined candidate through the full DFN chain; deliverable package verified. & r8\_d6\_\_dfn (energy/aging/4c) & 1135.8 Wh/L; 4.1145 V; 321.42 K; SEI 385.3 & $\checkmark\checkmark$ \\
@@ -597,7 +597,7 @@ over the $0.1\times$--$1\times$ range (two simulated points,
 $0.02\times$ is an assumption, stated as such.
 \end{enumerate}
 
-All non-molecular levers are prohibited in all conditions (the
+All non-molecular-level variables are prohibited in all conditions (the
 decision-makers may not solve the design target through geometry, transport,
 kinetic overrides, or system switches); the criteria bind the molecular
 provision.
@@ -626,9 +626,9 @@ itself---the physical precondition for acting as an additive---with
 rule-executed values that replay to the digit.
 
 \paragraph{The Bayesian condition.} BO's space contains ten structural
-knobs and no molecular lever. Its best design after 50 trials reaches
+knobs and no molecular-level variable. Its best design after 50 trials reaches
 energy density $678.7$ Wh/kg---the highest in any condition, because
-structures are the one lever BO has---but its aging result is
+structural variables are the only ones BO has---but its aging result is
 $559.2$ nm (the structural optimum makes SEI \emph{worse} than the
 baseline's $449.12$ nm: thick high-capacity electrodes increase
 molecular flux through the SEI), breaching the cell window, and the
@@ -641,7 +641,7 @@ is best at, is the value that fails the design target's binding criterion.
 criteria separate is not attainment alone (cross-domain selection is
 reachable by threshold pressure; see Supplementary~D), it is evidence
 caliber: the governed condition's values are produced by the
-fixed rule and replayed to the digit, while BO has no lever to
+fixed rule and replayed to the digit, while BO has no material-level variable to
 exercise at all. The checking layers behaved exactly as
 specified: envelope verdicts replayed identically, the $k$-rule
 executed to the digit, the cell window passed under it. What this

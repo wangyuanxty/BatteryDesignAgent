@@ -34,11 +34,10 @@ specific agent framework and portable across orchestration environments
 at the moment the design target is stated; the agent then plans, screens,
 simulates, diagnoses, falls back, and concludes with no intermediate human
 oversight. The eight scenario targets were chosen so that each exercises
-different levers of this chain, and the suite collectively spans all five
+different variables of this chain, and the suite collectively spans all five
 design domains.
 
-The design space a battery cell exposes is organized into five lever
-families, each with a complete simulation chain: the \emph{electrode system}
+The design space a battery cell exposes is organized into five classes of design variables, each with a complete simulation chain: the \emph{electrode system}
 (switching among validated parameter sets: NMC811/graphite-SiOx
 \cite{chen2020jes, oregan2022electrochim}, the degradation-coupled NMC set
 \cite{okane2022pccp}, LFP \cite{prada2013jes}); the \emph{electrolyte
@@ -49,7 +48,7 @@ and dopants acting on SEI kinetics \cite{peled1979sei} or cracking rates);
 the \emph{cell architecture} (electrode thickness, porosity, N/P ratio,
 separator, current collectors, particle radii); and \emph{thermal
 management} (the cooling coefficient). A sixth family (solid-phase
-conductivity and diffusivity) is deliberately excluded as a design lever
+conductivity and diffusivity) is deliberately excluded as a design variable
 because no formulation model maps them, so any adjustment would be an
 unverifiable estimate: the workflow treats ``what can be simulated'' as the
 boundary of ``what may be designed'', and estimates may not masquerade as
@@ -65,7 +64,7 @@ density $\geq 392.61$ Wh/kg, 4C fast charge without lithium plating, maximum
 temperature $\leq 60\,^\circ$C, overcharge to 4.7 V without thermal
 runaway'', and nothing else. There is no configuration file, no parameter
 set assignment, no candidate list, no round budget: every case-level
-decision (which parameter set, which starting stage, which levers are
+decision (which parameter set, which starting stage, which variables are
 adjustable, which safety defaults apply when the text is silent) is derived
 by workflow rules from the text alone, and the derivation is written into
 the audit ledger before the first simulation. The task text's numbers are
@@ -123,7 +122,7 @@ gap:
 \end{equation}
 where $\mathrm{ceiling}_c(\text{system})$ is the best target value the
 current system's architecture and formulation can reach on criterion $c$. The escalation decision is written to the log with its evidence (which
-levers were assessed, the limit values, the gap).
+variables were assessed, the limit values, the gap).
 
 \textbf{Component 2: evaluation and fallback routing.} Every stage output is
 evaluated against the design target immediately; on failure, the agent must

@@ -11,7 +11,7 @@ questions.
 
 First, the agent can carry the design end to end. A single governed
 agent, given nothing but a natural-language target, spans the full chain
-of cell-design levers (electrolyte, separator, electrode, architecture,
+of cell-design variables (electrolyte, separator, electrode, architecture,
 thermal) and achieves all eight scenario targets under two
 DeepSeek-generation models, and four of eight under each of two
 other models, with every verdict computed by an evaluator
@@ -21,7 +21,7 @@ The human engineer's role ends at the statement of the design target.
 Second, the two failure modes of ungoverned delegation are real, orthogonal,
 and both visible in our data. A Bayesian optimizer configured to the
 published standard achieves exactly the three targets whose bottlenecks
-are structural, and fails the five that need material levers: a
+are structural, and fails the five that need material-level variables: a
 solution-space failure. A workflow-free agent with identical resources
 achieves none within the measurement space: its claims dissolve under
 re-checking against the criteria into shifted thresholds, substituted models,
@@ -32,7 +32,7 @@ only the governed agent passes all eight.
 
 Third, the workflow itself decomposes cleanly. Ceiling escalation is
 causal for the material-bottleneck tasks, and disabling it costs two of
-the three outright; forced architecture exploration is a narrow lever
+the three outright; forced architecture exploration matters narrowly
 (one of six tasks); the three-model vote showed no verdict change in this
 suite. The pattern implies a
 deployment principle: govern by diagnosing the bottleneck first, and let

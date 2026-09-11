@@ -46,7 +46,7 @@ ec-reaction-limited SEI kinetics) with the design's full declared parameters.
 A design that reports SEI from a different growth law (e.g., the
 solvent-diffusion-limited variant) is recomputed under the design target
 model---the SEI model option is fixed by the target, not a design
-lever.
+variable.
 \item \textbf{Thermal runaway / nail penetration.} Judged by the trigger
 criterion of the three-side-reaction ODE solver (\texttt{run-tr}):
 \texttt{triggered} must be \texttt{False}. A steady-state hotspot
@@ -192,7 +192,7 @@ T8 & 10 & 5 & 1 \\
 The SEI criteria are checked on the design target aging model (Chen2020,
 ec-reaction-limited), in which the electrode-modification bridge scales the
 SEI kinetic rate constant $k_{\mathrm{SEI}}$ (standard $10^{-12}$ m/s).
-The governed runs used this lever as follows. T2 shipped $k_{\mathrm{SEI}} =
+The governed runs used this variable as follows. T2 shipped $k_{\mathrm{SEI}} =
 10^{-16}$ m/s ($10^{-4}\times$), declared in the audit as an estimate
 beyond the bare-ALD literature magnitude under a dual-mechanism coating
 claim (ALD plus fluorinated-additive inner SEI); the same design at
@@ -287,8 +287,8 @@ materials to their decision structure. This section carries the detail.
 Table~\ref{supp:tab:candidates} reproduces the run's full candidate
 sheet: twenty proposals, each logged with its name, type, and one-line
 rationale; the sequence reads like a design engineer's notebook: thermal
-probes first, then plating fixes on three distinct levers (anode capacity
-headroom, anode kinetics, electrolyte transport), then SEI levers, a
+probes first, then plating fixes on three distinct variables (anode capacity
+headroom, anode kinetics, electrolyte transport), then SEI variables, a
 combined candidate, DFN confirmation, and finally DFN-gap fixes with a
 margin-widening probe. Table~\ref{supp:tab:datasheet} condenses the
 technical datasheet of the final design (VBF-T6R1-DSH-01), whose Source
@@ -314,7 +314,7 @@ R02 & lnmo\_h200 / h500 & thermal probes at 4C ($h=200/500$) \\
 R03 & np120 / nr35 / elyte & plating fixes: N/P headroom; anode kinetics; electrolyte transport \\
 R03 & sei6e13 & SEI-suppression probe (electrode modification) \\
 R04 & np125 / np120\_nr35 & plating closure: N/P 1.25 and a leaner alternative \\
-R04 & sei\_c2270\_d12 / d10 & SEI levers: EC concentration and $D_{\mathrm{EC}}$ cuts \\
+R04 & sei\_c2270\_d12 / d10 & SEI variables: EC concentration and $D_{\mathrm{EC}}$ cuts \\
 R05 & lnmo\_final & combined final candidate \\
 R06 & lnmo\_final & DFN confirmation of the combined candidate \\
 R07 & r7\_h400\_d5 / nr30 / combo & DFN-gap fixes: thermal; plating; combined \\
@@ -360,7 +360,7 @@ Positive electrode & 75.6 µm, porosity 0.335, particle 5.22 µm \\
 Negative electrode & 102.2 µm, porosity 0.25, particle 3.5 µm \\
 Separator & 12 µm, porosity 0.47 \\
 Current collectors & Al 16 µm / Cu 12 µm \\
-Electrolyte & EC/EMC + LiPF$_6$; EC 2270.5 mol/m³, $D_{\mathrm{EC}}=1\times10^{-18}$ m$^2$/s (SEI lever) \\
+Electrolyte & EC/EMC + LiPF$_6$; EC 2270.5 mol/m³, $D_{\mathrm{EC}}=1\times10^{-18}$ m$^2$/s (SEI variable) \\
 Cooling & $h = 400$ W/m$^2$K \\
 \bottomrule
 \end{tabular}
@@ -432,7 +432,7 @@ material-bottleneck tasks are threshold-invariant at $\pm 5\%$: the
 optimizer's failure there is ceiling-bound, not threshold-bound. Across all
 400 trials, the highest midpoint voltage any design reaches is $4.0115$ V
 against the $4.1$ V target line; plating and SEI violations are
-lever-bound, so loosening the numeric thresholds cannot admit a design that
+bound by the available variables, so loosening the numeric thresholds cannot admit a design that
 is physically outside the parameter space's reachable set. \emph{Second},
 on the three structural tasks the same criteria bind both conditions in
 parallel: the governed agent's binding margins on T1/T4/T8 are

@@ -20,7 +20,7 @@ all criteria of a task are AND-judged: a design must satisfy every clause
 of its target to be ``achieved.''
 
 Three design choices deserve emphasis. First, the tasks carry no constraint
-declarations beyond the metrics: nothing states which levers are adjustable,
+declarations beyond the metrics: nothing states which variables are adjustable,
 which chemistry to use, or where the baseline sits. Undeclared items are
 interpreted in the widest sense under the workflow rules, with the derivation
 recorded---this is what forces the agent to make the design-space decisions
@@ -29,7 +29,7 @@ phrasing appears, so an agent cannot redefine the reference it measures
 against. Third, the tasks are heterogeneous in where their binding
 constraint lives: T1, T4, and T8 are solvable inside a structural space
 (thickness, porosity, mass), while T2, T3, T5, T6, and T7 require material,
-formulation, or transport levers---the distinction on which the comparison
+formulation, or transport variables---the distinction on which the comparison
 with the Bayesian baseline turns.
 
 The target quantities are defined on standard cell models from the cited
@@ -41,7 +41,7 @@ overpotential \cite{arora1999plating, ren2018plating}:
 \phi_{a} = U_a + \eta_c.
 \end{equation}
 The SEI criterion reads a state variable of the degradation model, whose
-growth law supplies the coating lever that T2 and T6 exploit
+growth law supplies the coating variable that T2 and T6 exploit
 \cite{peled1979sei, okane2022pccp}:
 \begin{equation}
 \label{eq:sei}
@@ -56,7 +56,7 @@ nail-penetration criteria is the three-side-reaction energy balance
 m c_p \frac{dT}{dt} = \sum_k \Delta H_k r_k(T) - hA\,(T - T_{\mathrm{amb}}),
 \end{equation}
 with $\text{triggered}$ iff the trajectory crosses the runaway onset; the
-cooling coefficient $h$ is the thermal-management lever. Criterion values are model-relative (an SEI limit reads the state variable
+cooling coefficient $h$ is the thermal-management variable. Criterion values are model-relative (an SEI limit reads the state variable
 of a specific degradation model, a plateau reads a specific OCP set) so
 cross-system comparisons are made only within the same model. The scenario
 anchoring (which production

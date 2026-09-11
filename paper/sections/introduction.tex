@@ -24,8 +24,7 @@ trial-and-error paradigm iterates slowly: battery design is therefore an
 
 \begin{figure*}[!ht]
 \centering
-\subfloat[The design loop over all five lever
-families ends at the design target, and every verdict is issued by a
+\subfloat[The design loop over all five classes of design variables ends at the design target, and every verdict is issued by a
 judging layer outside the agent.]{%
 \includegraphics[width=0.48\linewidth]{figs/fig_overview_b.pdf}}\hfill
 \subfloat[Architecture at a glance: five fidelity levels, from cheap
@@ -133,7 +132,7 @@ construction (a
 black-box optimizer on a fixed objective) or leave it free (an ungoverned
 LLM agent on a natural-language target that it also reports against).
 Our study occupies the empty quadrant: a governed agent executing the full
-chain of cell-design levers (electrolyte, separator, electrode,
+chain of cell-design variables (electrolyte, separator, electrode,
 architecture, thermal) in a single autonomous loop, with every verdict
 computed by an evaluator outside the agent. To our knowledge, no
 published system spans that chain within a single autonomous loop; in this
@@ -153,7 +152,7 @@ command-line tool library, and an audit ledger) bound to no specific agent
 framework, a property we verify empirically by running it under three
 orchestration substrates (§5.7). Third, the human engineer's \emph{in-loop}
 role ends at the moment the design target is stated. Fourth, the eight scenario
-targets were chosen so that different tasks exercise different levers of
+targets were chosen so that different tasks exercise different variables of
 the full chain (a fast-charge guarantee, an SEI-kinetics bridge for a
 lifetime bound, a cathode-system switch for a voltage plateau), which the
 governed agent exercises in turn, in the same loop, under the same
@@ -167,7 +166,7 @@ What makes such delegation safe (or dangerous) is the question this paper
 answers. We deliberately construct the two failure modes a design organization
 would most fear. The first is the \emph{solution-space failure}: the strongest
 classical baseline, Bayesian optimization, moves only architecture parameters;
-when a design target requires a material lever (a high-voltage spinel chemistry, an
+when a design target requires a material-level variable (a high-voltage spinel chemistry, an
 SEI-suppressing coating) the optimum is not in its reachable set. The
 second is more subtle and, we will argue, more dangerous: the
 \emph{measurement drift}---it reports against a criterion it set itself. A workflow-free agent with the same general-purpose
@@ -241,7 +240,7 @@ distinct from any validation of the designs themselves.
 The paper makes four contributions. (i) We present the first end-to-end
 agent for full-chain battery cell design: given nothing but a
 natural-language scenario target, a single autonomous loop traverses
-the whole chain of battery design levers---material system, formulation,
+the whole chain of battery design variables---material system, formulation,
 cell architecture, thermal management, safety, and aging---and returns a
 complete design checked against the criteria whose conclusion-level numbers pass a
 multi-level true-compute endorsement (ML-potential screening, two
