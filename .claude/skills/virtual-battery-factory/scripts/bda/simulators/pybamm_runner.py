@@ -5,19 +5,25 @@ PROTOCOLS = {
     "1C_discharge": {"kind": "discharge", "C_rate": 1.0, "t_end_s": 3600.0, "T_amb_K": 298.15},
     "0.1C_discharge": {"kind": "discharge", "C_rate": 0.1, "t_end_s": 36000.0, "T_amb_K": 298.15},
     "4C_charge_45C": {"kind": "charge", "C_rate": 4.0, "t_end_s": 900.0, "T_amb_K": 318.15},
-    # 倍率放电：5C 恒流放电（电动工具/混动场景）。容量保持率 = 5C 容量 ÷ 同参数 1C 容量，
-    # 由 agent 机械计算后落盘供 log-evaluate 判定。
+    # Rate discharge: 5C constant-current discharge (power-tool/hybrid scenarios). Capacity
+    # retention = 5C capacity ÷ 1C capacity at the same parameters, computed mechanically by
+    # the agent and written to disk for log-evaluate to judge.
     "5C_discharge": {"kind": "discharge", "C_rate": 5.0, "t_end_s": 720.0, "T_amb_K": 298.15},
-    # 低温放电：-20 ℃（253.15 K）1C 放电（极寒场景）。低温容量保持率 = -20℃ 容量 ÷ 25℃ 容量。
+    # Low-temperature discharge: 1C discharge at -20 ℃ (253.15 K) (extreme-cold scenario).
+    # Low-temperature capacity retention = -20℃ capacity ÷ 25℃ capacity.
     "lowT_discharge": {"kind": "discharge", "C_rate": 1.0, "t_end_s": 3600.0, "T_amb_K": 253.15},
-    # 过充协议：先 1C 放到下限，再以 C_rate 充电至 上限+0.5V（过充场景）。
-    # 输出含 T_max_K 与过充段电压曲线；过充后是否热失控由 thermal_runaway 模块耦合判定。
+    # Overcharge protocol: first discharge at 1C to the lower limit, then charge at C_rate to
+    # upper limit + 0.5V (overcharge scenario). The output contains T_max_K and the overcharge
+    # segment voltage curve; whether thermal runaway follows the overcharge is determined by
+    # coupling with the thermal_runaway module.
     "overcharge": {"kind": "overcharge", "C_rate": 0.5, "t_end_s": 7200.0, "T_amb_K": 298.15, "cutoff_add_v": 0.5},
-    # 老化协议：N 圈 1C 恒流充放（SEI ec reaction limited + isothermal）；
-    # 电压上下限取参数集自身值。要求基参数集带 SEI 动力学参数（Chen2020/OKane2022 等）。
-    # cycles 可通过 run-pyamm --cycles 覆盖（默认 100）。
+    # Aging protocol: N cycles of 1C constant-current charge/discharge (SEI ec reaction
+    # limited + isothermal); the voltage limits come from the parameter set itself. The base
+    # parameter set must carry SEI kinetic parameters (Chen2020/OKane2022, etc.). cycles can
+    # be overridden via run-pyamm --cycles (default 100).
     "aging_1C_100cyc": {"kind": "aging", "cycles": 100, "C_rate": 1.0, "T_amb_K": 298.15},
-    # 高温老化：45 ℃（318.15 K）1C 循环（高温存储/循环场景，SEI 生长加速）。
+    # High-temperature aging: 1C cycling at 45 ℃ (318.15 K) (high-temperature storage/cycling
+    # scenario, accelerated SEI growth).
     "aging_1C_100cyc_45C": {"kind": "aging", "cycles": 100, "C_rate": 1.0, "T_amb_K": 318.15},
 }
 
@@ -83,10 +89,12 @@ def _cell_volume_default(parameter_values: pybamm.ParameterValues) -> float | No
 
 
 def _run_aging(parameter_values: pybamm.ParameterValues, p: dict, mode: str) -> dict:
-    """老化协议：N 圈 1C 恒流充放（SEI ec reaction limited + isothermal）。
+    """Aging protocol: N cycles of 1C constant-current charge/discharge (SEI ec reaction
+    limited + isothermal).
 
-    输出 cycle_numbers / capacity_ah_per_cycle / sei_thickness_nm_end。
-    基参数集无 SEI 动力学参数时报错（老化必须用老化体系，如 Chen2020/OKane2022）。
+    Outputs cycle_numbers / capacity_ah_per_cycle / sei_thickness_nm_end. Raises if the base
+    parameter set has no SEI kinetic parameters (aging must use an aging-capable system, such
+    as Chen2020/OKane2022).
     """
     sei_required = "SEI kinetic rate constant [m.s-1]"
     if sei_required not in parameter_values:
@@ -143,8 +151,9 @@ def run_simulation(
     if cycles is not None and p["kind"] == "aging":
         p["cycles"] = cycles
     if base.endswith(".json"):
-        # 自定义参数集（如高电压 LNMO）：Chen2020 基底 + JSON 覆盖键
-        # （JSON 为扁平覆盖键集，见 data/LNMO.json；OCP 等函数键手动解析为 Python 函数）
+        # Custom parameter set (e.g. high-voltage LNMO): Chen2020 base plus JSON override keys
+        # (the JSON is a flat set of override keys, see data/LNMO.json; function keys such as
+        # the OCP are parsed into Python functions by hand)
         import json as _json
         from pathlib import Path as _Path
 
@@ -164,7 +173,7 @@ def run_simulation(
     parameter_values.update(params)
     parameter_values.update({"Ambient temperature [K]": p["T_amb_K"]}, check_already_exists=False)
     if p["kind"] == "aging":
-        # 老化协议内部固定 isothermal + SEI，--thermal/--plating 不参与
+        # The aging protocol fixes isothermal + SEI internally; --thermal/--plating do not apply
         return _run_aging(parameter_values, p, mode)
     if plating:
         parameter_values.update(PLATING_PARAM_DEFAULTS, check_already_exists=False)
@@ -192,14 +201,17 @@ def run_simulation(
         options["lithium plating"] = "irreversible"
 
     def _solve(model):
-        # Experiment 驱动：C_rate 真实生效（此前只影响 capacity 口径，4C 协议实际跑
-        # 默认 1C 放电；agent 传负电流时与默认满电初始条件冲突，触发
-        # "Maximum voltage non-positive at initial conditions"）。电压事件由实验处理。
-        # 充电从空电开始：默认满电初始会让充电步骤立即不可行，故先 1C 放到 v_min 再充。
+        # Experiment-driven: C_rate actually takes effect (previously it only affected the
+        # capacity convention, and the 4C protocol really ran the default 1C discharge; when
+        # the agent passed a negative current it conflicted with the default fully charged
+        # initial condition, triggering "Maximum voltage non-positive at initial conditions").
+        # Voltage events are handled by the experiment.
+        # Charging starts from empty: the default fully charged initial state makes the charge
+        # step immediately infeasible, so discharge at 1C to v_min first and then charge.
         v_min = float(parameter_values["Lower voltage cut-off [V]"])
         v_max = float(parameter_values["Upper voltage cut-off [V]"])
         if p["kind"] in ("charge", "overcharge"):
-            # 过充协议：充电截止 = 上限 + cutoff_add_v（默认 +0.5 V）
+            # Overcharge protocol: charge cut-off = upper limit + cutoff_add_v (default +0.5 V)
             v_cut = v_max + p.get("cutoff_add_v", 0.0)
             exp = pybamm.Experiment(
                 [
@@ -239,7 +251,7 @@ def run_simulation(
     if p["kind"] == "discharge":
         out["capacity_ah"] = float(sol.cycles[-1]["Discharge capacity [A.h]"].entries[-1])
     else:
-        # 充电容量 = 最后一段（充电段）时长 × C_rate（恒流）
+        # Charge capacity = duration of the last (charge) segment × C_rate (constant current)
         cyc = sol.cycles[-1]
         t_cyc = cyc["Time [s]"].entries
         out["capacity_ah"] = float(t_cyc[-1] - t_cyc[0]) * p["C_rate"] / 3600.0

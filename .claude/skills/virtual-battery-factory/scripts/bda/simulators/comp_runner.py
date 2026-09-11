@@ -1,11 +1,15 @@
-"""电极组分候选筛选（run-comp）：NMC811 层状原型 + 位点替换 → CHGNet 弛豫（满锂/去锂两态）
-→ 相对稳定性 + 平均电压 + 容量代理。
+"""Electrode composition screening (run-comp): NMC811 layered prototype + site substitution
+→ CHGNet relaxation (full-lithium / delithiated) → relative stability + average voltage
++ capacity proxy.
 
-口径（如实声明）：
-- 结构：NMC811 层状 R-3m 原型（六方 a≈2.87 Å, c≈14.19 Å；Li 3b / TM 3a / O 6c z≈0.241），
-  4×4×1 超胞（64 原子、16 个 TM 位点）；掺杂组分按最大余数法取整，实际实现组分写入输出。
-- 能量/电压：CHGNet 代理（筛选口径，误差 0.1-0.3 V 量级）；周期 DFT 真背书缺工具（如实标注）。
-- 去锂态：x_Li=0.3 随机去锂（种子由 formula 哈希决定，可复现）。
+Caliber (declared honestly):
+- Structure: NMC811 layered R-3m prototype (hexagonal a≈2.87 Å, c≈14.19 Å; Li 3b / TM 3a /
+  O 6c z≈0.241), 2×2×1 supercell (48 atoms, 12 TM sites); doped compositions are rounded by
+  the largest-remainder method and the realized composition is written to the output.
+- Energy/voltage: CHGNet proxy (screening caliber, error on the 0.1-0.3 V scale); periodic-DFT
+  true endorsement lacks a tool here (declared honestly).
+- Delithiated state: random delithiation to x_Li=0.3 (seed derived from the formula hash,
+  reproducible).
 """
 
 import hashlib
@@ -14,10 +18,10 @@ import json
 import numpy as np
 from pymatgen.core import Composition, Lattice, Structure
 
-_A, _C, _O_Z = 2.87, 14.19, 0.241  # NMC811 层状 R-3m 文献晶格参数
+_A, _C, _O_Z = 2.87, 14.19, 0.241  # NMC811 layered R-3m literature lattice parameters
 _SUPERCELL = (2, 2, 1)
-_X_FULL, _X_DELITH = 1.0, 0.3  # 满锂 / 去锂态的 Li 占位
-_F = 26801.481  # 法拉第常数折算：F/3.6 (mAh·mol⁻¹)
+_X_FULL, _X_DELITH = 1.0, 0.3  # Li occupancy of the full-lithium / delithiated states
+_F = 26801.481  # Faraday constant conversion: F/3.6 (mAh·mol⁻¹)
 
 NMC_BASE_FORMULA = "Li(Ni0.8Mn0.1Co0.1)O2"
 
@@ -27,10 +31,10 @@ def _seed(formula: str) -> int:
 
 
 def _base_structure() -> Structure:
-    """NMC811 层状 R-3m 原型 2×2×1 超胞（每六方晶胞 3 个化学式单元 = 12 原子；
-    超胞 48 原子：12 Li / 12 TM / 24 O）。Wyckoff 位点：
-    Li 3b (0,0,1/2)(1/3,2/3,5/6)(2/3,1/3,1/6)；TM 3a (0,0,0)(1/3,2/3,1/3)(2/3,1/3,2/3)；
-    O 6c (0,0,±z)(1/3,2/3,1/3±z)(2/3,1/3,2/3±z)。"""
+    """NMC811 layered R-3m prototype, 2×2×1 supercell (3 formula units per hexagonal cell
+    = 12 atoms; supercell 48 atoms: 12 Li / 12 TM / 24 O). Wyckoff sites:
+    Li 3b (0,0,1/2)(1/3,2/3,5/6)(2/3,1/3,1/6); TM 3a (0,0,0)(1/3,2/3,1/3)(2/3,1/3,2/3);
+    O 6c (0,0,±z)(1/3,2/3,1/3±z)(2/3,1/3,2/3±z)."""
     li = [[0, 0, 0.5], [1 / 3, 2 / 3, 5 / 6], [2 / 3, 1 / 3, 1 / 6]]
     tm = [[0, 0, 0], [1 / 3, 2 / 3, 1 / 3], [2 / 3, 1 / 3, 2 / 3]]
     o = [
@@ -56,7 +60,7 @@ def _tm_fractions(formula: str) -> dict[str, float]:
 
 
 def _largest_remainder(fractions: dict[str, float], n: int) -> dict[str, int]:
-    """组分分数 → 整数计数（最大余数法，和恰为 n）。"""
+    """Composition fractions → integer counts (largest-remainder method, sum exactly n)."""
     counts = {sym: int(f * n) for sym, f in fractions.items()}
     rest = n - sum(counts.values())
     order = sorted(fractions, key=lambda s: (fractions[s] * n - counts[s]), reverse=True)
@@ -66,7 +70,35 @@ def _largest_remainder(fractions: dict[str, float], n: int) -> dict[str, int]:
 
 
 def build_doped_structure(formula: str) -> tuple[Structure, dict[str, int], list[int]]:
-    """按组分在原型上替换 TM 位点 → (结构, 实现计数, TM 位点下标列表)。"""
+    """Substitute TM sites on the prototype for the requested composition → (structure,
+    realized counts, TM site indices).
+
+    **Strict dispatch (since 2026-09-10)**: the framework is determined uniquely by the
+    stoichiometry; anything unrecognized raises instead of being guessed. The former behavior
+    (any P → olivine, TM count = 2 → spinel, everything else → layered) silently forced
+    cross-domain formulas into the wrong prototype (e.g. LiNiSO4F as a layered oxide,
+    Li3V2(PO4)3 as an olivine), producing "wrong numbers that look credible".
+    Supported frameworks (crystallographic provenance in each builder's docstring):
+      - layered LiMO2 (R-3m, NMC811 prototype)
+      - olivine LiMPO4 (Pnma, LiFePO4 prototype)
+      - spinel LiM2O4 (Fd-3m, LiMn2O4 prototype)
+      - tavorite phosphate LiM(PO4)F (P-1, LiVPO4F prototype)
+      - tavorite sulfate LiM(SO4)F (P-1, LiFeSO4F cell + tavorite framework coordinates)
+      - NASICON Li3M2(PO4)3 (P2₁/c, Li3V2(PO4)3 prototype, COD 2237423)
+    Other frameworks (oxyfluorides Li2MO2F, Li2CoPO4F/Li2NiPO4F, ...) have no template →
+    explicit error.
+    """
+    framework = _framework(formula)
+    if framework == "tavorite_phosphate":
+        return _build_tavorite(formula, sulfate=False)
+    if framework == "tavorite_sulfate":
+        return _build_tavorite(formula, sulfate=True)
+    if framework == "nasicon":
+        return _build_nasicon(formula)
+    if framework == "olivine":
+        return _build_olivine(formula)
+    if framework == "spinel":
+        return _build_spinel(formula)
     tm = _tm_fractions(formula)
     struct = _base_structure()
     tm_sites = [
@@ -84,8 +116,222 @@ def build_doped_structure(formula: str) -> tuple[Structure, dict[str, int], list
     return struct, counts, tm_sites
 
 
+def _framework(formula: str) -> str:
+    """Stoichiometry → framework name (strict; raises ValueError on no match — never guesses)."""
+    comp = Composition(formula)
+    els = {str(k): float(v) for k, v in comp.items()}
+    tm_total = sum(v for k, v in els.items() if k not in ("Li", "O", "P", "S", "F"))
+
+    def eq(name: str, value: float) -> bool:
+        return abs(els.get(name, 0.0) - value) < 1e-6
+
+    if eq("Li", 1.0) and eq("O", 4.0) and eq("F", 1.0) and tm_total > 1e-9:
+        if eq("P", 1.0) and not els.get("S", 0.0):
+            return "tavorite_phosphate"
+        if eq("S", 1.0) and not els.get("P", 0.0):
+            return "tavorite_sulfate"
+    if eq("Li", 3.0) and eq("P", 3.0) and eq("O", 12.0) and abs(tm_total - 2.0) < 1e-6:
+        return "nasicon"
+    if eq("Li", 1.0) and eq("O", 4.0) and eq("P", 1.0) \
+            and not els.get("F", 0.0) and not els.get("S", 0.0):
+        return "olivine"
+    if eq("Li", 1.0) and eq("O", 4.0) and abs(tm_total - 2.0) < 1e-6 \
+            and not els.get("P", 0.0) and not els.get("S", 0.0) and not els.get("F", 0.0):
+        return "spinel"
+    if eq("Li", 1.0) and eq("O", 2.0) and abs(tm_total - 1.0) < 1e-6 \
+            and not els.get("P", 0.0) and not els.get("S", 0.0) and not els.get("F", 0.0):
+        return "layered"
+    raise ValueError(
+        f"unsupported framework for {formula}: supported are layered LiMO2, olivine LiMPO4, "
+        f"spinel LiM2O4, tavorite LiM(PO4)F, tavorite LiM(SO4)F, NASICON Li3M2(PO4)3"
+    )
+
+
+def _build_olivine(formula: str) -> tuple[Structure, dict[str, int], list[int]]:
+    """Olivine Pnma (LiFePO4 standard parameters: a=10.332 b=6.010 c=4.694 Å).
+    Representative coordinates (Wyckoff): Li 4a (0,0,0); M 4c (0.218,0.25,0.202);
+    P 4c (0.0946,0.25,0.0619); O 4c×2 + 8d → 28-atom primitive cell (from_spacegroup)."""
+    struct = Structure.from_spacegroup(
+        "Pnma",
+        Lattice.orthorhombic(10.332, 6.010, 4.694),
+        ["Li", "M", "P", "O", "O", "O"],
+        [[0, 0, 0],
+         [0.218, 0.25, 0.202],
+         [0.0946, 0.25, 0.0619],
+         [0.0984, 0.25, 0.7427],
+         [0.0450, 0.25, 0.2849],
+         [0.0859, 0.0358, 0.5330]],
+    )
+    tm_sites = [i for i, site in enumerate(struct) if site.specie.symbol == "M"]
+    tm = {str(k): float(v) for k, v in Composition(formula).items()
+          if str(k) not in ("Li", "O", "P", "Si", "F")}
+    total = sum(tm.values())
+    tm = {k: v / total for k, v in tm.items()}  # normalized (olivine M site = 1.0)
+    counts = _largest_remainder(tm, len(tm_sites))
+    rng = np.random.default_rng(_seed(formula))
+    order = rng.permutation(len(tm_sites))
+    assignment: list[str] = []
+    for sym, k in counts.items():
+        assignment += [sym] * k
+    rng.shuffle(assignment)
+    for pos, sym in zip(order, assignment):
+        struct.replace(tm_sites[pos], sym)
+    return struct, counts, tm_sites
+
+
+def _build_spinel(formula: str) -> tuple[Structure, dict[str, int], list[int]]:
+    """Spinel Fd-3m (LiMn2O4, COD 1513964: a=8.251 Å; 56-atom cell = 8 Li / 16 M / 32 O).
+
+    **Coordinate provenance and a corrected bug (2026-09-10).** The authoritative COD entry
+    describes this structure in the Fd-3m origin-choice-2 setting: Li on 8a (1/8,1/8,1/8),
+    M on 16d (1/2,1/2,1/2), O on 32e with x=0.263. pymatgen's `from_spacegroup` applies the
+    *origin-choice-1* setting, in which those same fractional coordinates generate 16 and 8
+    sites respectively — i.e. the previous code built Li16 M8 O32 (Li2MO4) with Li in
+    octahedral holes and M ~3.4 Å from any oxygen. Its "voltages" (7.8-9.0 V) were artefacts
+    of that wrong structure. The setting-correct assignment used here is
+    Li 8-fold (1/2,1/2,1/2), M 16-fold (1/8,1/8,1/8), O 32e x=0.3622 (= 0.625 - 0.2628).
+    Verified against the COD entry: identical cell volume and coordination spectra —
+    Li 4 O at 1.97 Å (tetrahedral), M 6 O at 1.96 Å (octahedral).
+    """
+    struct = Structure.from_spacegroup(
+        "Fd-3m",
+        Lattice.cubic(8.251),
+        ["Li", "M", "O"],
+        [[0.5, 0.5, 0.5],
+         [0.125, 0.125, 0.125],
+         [0.3622, 0.3622, 0.3622]],
+    )
+    tm_sites = [i for i, site in enumerate(struct) if site.specie.symbol == "M"]
+    tm = {str(k): float(v) for k, v in Composition(formula).items()
+          if str(k) not in ("Li", "O")}
+    total = sum(tm.values())
+    tm = {k: v / total for k, v in tm.items()}  # normalized (spinel M site ratio 1.5-2.0)
+    counts = _largest_remainder(tm, len(tm_sites))
+    rng = np.random.default_rng(_seed(formula))
+    order = rng.permutation(len(tm_sites))
+    assignment: list[str] = []
+    for sym, k in counts.items():
+        assignment += [sym] * k
+    rng.shuffle(assignment)
+    for pos, sym in zip(order, assignment):
+        struct.replace(tm_sites[pos], sym)
+    return struct, counts, tm_sites
+
+
+# ---- Cross-domain prototypes (added 2026-09-10 for the T9 v9 contract) ---------
+# Cells and coordinates are inlined from public literature/open databases, with the
+# provenance written in each builder (never guess coordinates from memory).
+_TAVORITE_SITES: tuple[tuple[str, tuple[float, float, float]], ...] = (
+    ("M", (0.0, 0.0, 0.0)),            # TM site 1 (inversion center)
+    ("M", (0.0, 0.0, 0.5)),            # TM site 2 (inversion center)
+    ("X", (0.3193, 0.6456, 0.2514)),   # P (phosphate family) / S (sulfate family)
+    ("F", (-0.1204, 0.0925, 0.2439)),
+    ("O", (0.3690, 0.2446, 0.5811)),
+    ("O", (0.1140, 0.6696, 0.3628)),
+    ("O", (0.3210, 0.3380, 0.1388)),
+    ("O", (0.2775, 0.7968, 0.0920)),
+    ("Li", (0.7090, 0.3930, 0.2210)),
+)
+
+_NASICON_SITES: tuple[tuple[str, tuple[float, float, float]], ...] = (
+    ("Li", (0.1133, 0.5883, 0.1934)),
+    ("Li", (0.1891, 0.1919, 0.2599)),
+    ("Li", (0.4730, 0.2213, 0.1767)),
+    ("M", (0.13814, 0.52846, 0.38977)),
+    ("M", (0.36217, 0.53898, 0.11037)),
+    ("P", (0.04417, 0.25109, 0.00782)),
+    ("P", (0.45782, 0.39759, 0.35181)),
+    ("P", (0.75192, 0.38467, 0.14738)),
+    ("O", (0.0267, 0.1788, 0.09643)),
+    ("O", (0.0361, 0.3649, 0.42742)),
+    ("O", (0.0850, 0.0021, 0.28038)),
+    ("O", (0.1152, 0.6330, 0.06577)),
+    ("O", (0.1785, 0.7151, 0.31962)),
+    ("O", (0.2392, 0.3319, 0.07040)),
+    ("O", (0.2789, 0.3861, 0.35185)),
+    ("O", (0.3675, 0.5514, 0.54043)),
+    ("O", (0.4764, 0.2357, 0.31413)),
+    ("O", (0.5906, 0.0200, 0.23807)),
+    ("O", (0.5994, 0.4098, 0.16881)),
+    ("O", (0.6748, 0.4125, 0.02723)),
+)
+
+_TM_EXCLUDED = ("Li", "O", "P", "S", "F")
+
+
+def _substitute_tm(
+    struct: Structure, tm_sites: list[int], formula: str
+) -> tuple[Structure, dict[str, int], list[int]]:
+    """Assign all TM sites on the prototype by formula fractions (normalized) via the
+    largest-remainder method."""
+    tm = {
+        str(k): float(v)
+        for k, v in Composition(formula).items()
+        if str(k) not in _TM_EXCLUDED
+    }
+    if not tm or any(v <= 0 for v in tm.values()):
+        raise ValueError(f"no transition-metal species in formula: {formula}")
+    total = sum(tm.values())
+    counts = _largest_remainder({k: v / total for k, v in tm.items()}, len(tm_sites))
+    rng = np.random.default_rng(_seed(formula))
+    order = rng.permutation(len(tm_sites))
+    assignment: list[str] = []
+    for sym, k in counts.items():
+        assignment += [sym] * k
+    rng.shuffle(assignment)
+    for pos, sym in zip(order, assignment):
+        struct.replace(tm_sites[pos], sym)
+    return struct, counts, tm_sites
+
+
+def _build_tavorite(formula: str, *, sulfate: bool) -> tuple[Structure, dict[str, int], list[int]]:
+    """Tavorite-type LiM(XO4)F (X=P phosphate / X=S sulfate), triclinic P-1, Z=2.
+
+    Cell and coordinate provenance:
+    - Phosphate family (X=P): LiVPO4F, a=5.184 b=5.312 c=7.266 Å, α=107.58 β=107.95 γ=98.45°
+      with the asymmetric-unit coordinates (V 1a/1b inversion centers; P/F/O×4/Li each 2i)
+      taken from LiVPO4F powder neutron/synchrotron refinement (OSTI; cf. the same family in
+      ICSD 184601: a=5.1708 b=5.3083 c=7.2631 Å — consistent across reports).
+    - Sulfate family (X=S): LiFeSO4F, a=5.1747 b=5.4943 c=7.2224 Å,
+      α=106.522 β=107.210 γ=97.791° (Barpanda et al., Nat. Mater. 2011, supplementary).
+      This family shares the tavorite topology with the phosphate family, so the framework
+      fractional coordinates above are reused with S on the X site and the sulfate cell;
+      **that approximation is validated by a literature voltage anchor**: the computed
+      LiFeSO4F value must land near the literature ~3.6 V, otherwise this family is excluded
+      honestly.
+    2×2×1 supercell → 64 atoms / 8 Li / 8 TM.
+    """
+    if sulfate:
+        lat = Lattice.from_parameters(5.1747, 5.4943, 7.2224, 106.522, 107.210, 97.791)
+        x_species = "S"
+    else:
+        lat = Lattice.from_parameters(5.184, 5.312, 7.266, 107.58, 107.95, 98.45)
+        x_species = "P"
+    species = [x_species if sym == "X" else sym for sym, _ in _TAVORITE_SITES]
+    coords = [list(xyz) for _, xyz in _TAVORITE_SITES]
+    struct = Structure.from_spacegroup("P-1", lat, species, coords)
+    struct.make_supercell((2, 2, 1))
+    tm_sites = [i for i, site in enumerate(struct) if site.specie.symbol == "M"]
+    return _substitute_tm(struct, tm_sites, formula)
+
+
+def _build_nasicon(formula: str) -> tuple[Structure, dict[str, int], list[int]]:
+    """NASICON-type Li3M2(PO4)3, monoclinic P2₁/c.
+
+    Cell and the 20 asymmetric-unit sites from: Li3V2(PO4)3, a=8.6201 b=8.6013 c=14.7465 Å,
+    β=125.204°, Crystallography Open Database entry COD 2237423 (from_spacegroup generates the
+    80-atom cell = 12 Li / 8 TM / 12 P / 48 O, matching this file's parent stoichiometry).
+    """
+    lat = Lattice.from_parameters(8.6201, 8.6013, 14.7465, 90.0, 125.204, 90.0)
+    species = [sym for sym, _ in _NASICON_SITES]
+    coords = [list(xyz) for _, xyz in _NASICON_SITES]
+    struct = Structure.from_spacegroup("P2_1/c", lat, species, coords)
+    tm_sites = [i for i, site in enumerate(struct) if site.specie.symbol == "M"]
+    return _substitute_tm(struct, tm_sites, formula)
+
+
 def delithiate(struct: Structure, x_li: float, seed: int) -> tuple[Structure, int]:
-    """随机去锂至 x_li 占位（种子可复现）→ (结构, 保留 Li 数)。"""
+    """Randomly delithiate to x_li occupancy (seeded, reproducible) → (structure, Li kept)."""
     li_sites = [i for i, site in enumerate(struct) if site.specie.symbol == "Li"]
     keep = int(round(x_li * len(li_sites)))
     rng = np.random.default_rng(seed)
@@ -95,7 +341,7 @@ def delithiate(struct: Structure, x_li: float, seed: int) -> tuple[Structure, in
 
 
 def relax_energy(struct: Structure) -> tuple[float, bool]:
-    """CHGNet 原生 StructOptimizer（FIRE）+ GPU 弛豫 → (能量 eV, 是否收敛)。"""
+    """CHGNet native StructOptimizer (FIRE) + GPU relaxation → (energy eV, converged)."""
     from chgnet.model import CHGNet
     from chgnet.model.dynamics import AseAtomsAdaptor
     from chgnet.model.dynamics import FIRE
@@ -105,7 +351,7 @@ def relax_energy(struct: Structure) -> tuple[float, bool]:
     relaxer = StructOptimizer(model=CHGNet.load(), optimizer_class=FIRE)
     result = relaxer.relax(atoms, fmax=0.1, steps=300, relax_cell=True, verbose=False)
     traj = result.get("trajectory")
-    # chgnet 0.4.x：TrajectoryObserver 对象（.trajectory 帧列表）或帧列表
+    # chgnet 0.4.x: TrajectoryObserver object (.trajectory = frame list) or a frame list
     frames = getattr(traj, "trajectory", None) or (traj if isinstance(traj, list) else [])
     if not frames:
         return float(atoms.get_potential_energy()), False
@@ -122,22 +368,23 @@ def relax_energy(struct: Structure) -> tuple[float, bool]:
 
 
 def _n_fu(formula: str) -> int:
-    """超胞所含化学式单元数（按 Li 数定：满锂态 Li 数 = 12 → n_fu = 12/1）。"""
-    return 12  # 2×2×1 超胞：12 个 Li
+    """Formula units contained in the supercell (set by Li count: full-lithium Li = 12 → 12)."""
+    return 12  # 2×2×1 supercell: 12 Li
 
 
 def average_voltage(e_full: float, e_delith: float, n_removed: int, e_li: float) -> float:
-    """平均电压（vs Li 金属）：V = −[E(Li_x2) − E(Li_x1) − n_removed·E_Li] / n_removed。"""
+    """Average voltage (vs Li metal): V = −[E(Li_x2) − E(Li_x1) − n_removed·E_Li] / n_removed."""
     if n_removed <= 0:
         raise ValueError("n_removed must be positive")
     return -(e_full - e_delith - n_removed * e_li) / n_removed
 
 
 def screen_candidate(formula: str, base_energy_fu: float | None, e_li: float) -> dict:
-    """单个组分候选：满锂/去锂弛豫 → 相对稳定性 + 平均电压 + 容量代理。
+    """One composition candidate: full-lithium/delithiated relaxation → relative stability
+    + average voltage + capacity proxy.
 
-    平均电压（vs Li 金属）：V = −[E(Li_x2MO2) − E(Li_x1MO2) − n_removed·E_Li] / n_removed
-    （E_Li 为 CHGNet 的 bcc Li 金属参考能量，每轮基线计算一次）。
+    Average voltage (vs Li metal): V = −[E(Li_x2MO2) − E(Li_x1MO2) − n_removed·E_Li] / n_removed
+    (E_Li is CHGNet's bcc Li metal reference energy, computed once per baseline batch).
     """
     struct_full, counts, _ = build_doped_structure(formula)
     seed = _seed(formula)
@@ -168,7 +415,7 @@ def screen_candidate(formula: str, base_energy_fu: float | None, e_li: float) ->
 
 
 def _li_metal_energy() -> float:
-    """bcc Li 金属参考能量（每原子 eV，CHGNet 弛豫 2 原子胞）。"""
+    """bcc Li metal reference energy (eV per atom, CHGNet relaxation of a 2-atom cell)."""
     from pymatgen.core import Lattice as _Lattice
 
     li = Structure(_Lattice.cubic(3.51), ["Li", "Li"], [[0, 0, 0], [0.5, 0.5, 0.5]])
@@ -177,12 +424,13 @@ def _li_metal_energy() -> float:
 
 
 def run_composition_screen(in_data: dict) -> dict:
-    """IN: {"candidates": [{"formula": "...", "name": "..."}]} → OUT: 每候选 metrics + 基线。"""
+    """IN: {"candidates": [{"formula": "...", "name": "..."}]} → OUT: metrics per candidate
+    + baseline."""
     cands = in_data.get("candidates", [])
     if not cands:
         raise ValueError("input must contain a non-empty 'candidates' list")
     base_e_fu = None
-    # 基线 NMC811 + bcc Li 金属参考能量
+    # baseline NMC811 + bcc Li metal reference energy
     base_struct, _, _ = build_doped_structure(NMC_BASE_FORMULA)
     e_base, conv_base = relax_energy(base_struct)
     base_e_fu = e_base / _n_fu(NMC_BASE_FORMULA)
@@ -206,7 +454,8 @@ def run_composition_screen(in_data: dict) -> dict:
         },
         "candidates": results,
         "calibration_note": (
-            "NMC811 基线自校准：文献平均电压 ≈3.8 V、理论容量 ≈194 mAh/g（x∈[0.3,1] 窗口）"
-            "——若基线预测显著偏离，说明本批结果不可信（如实标注）。"
+            "NMC811 baseline self-calibration: literature average voltage ≈3.8 V, theoretical "
+            "capacity ≈194 mAh/g (x∈[0.3,1] window) — if the baseline deviates markedly, this "
+            "batch's results are not trustworthy (declared honestly)."
         ),
     }

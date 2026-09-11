@@ -4,7 +4,7 @@
 
 ## General conventions
 
-- Invocation (Bash tool, repo root): `.venv\Scripts\python.exe -m bda <subcommand> ...`; all subcommands listed via `-m bda --help`
+- Invocation (Bash tool, repo root): `D:/anaconda/envs/py312/python.exe -m bda <subcommand> ...`; all subcommands listed via `-m bda --help`
 - The parameter bridge is a protocol rule (PyBaMM parameter-name mapping table in SKILL.md Section 1, Step 2); it has no CLI command.
 - **Must use the Bash tool for simulation and render commands**: the PowerShell tool in this environment is guardrail-limited (`$()` subexpressions, `Set-Location`, `&` multi-operations are all blocked and unapprovable); if only PowerShell is available, the session tool allowlist is abnormal (resume rotation restores it) — retry with Bash first.
 - JSON is the contract: all inputs/outputs are UTF-8 JSON files; `--out` specifies the output path; each step can be rerun independently.
@@ -119,7 +119,7 @@ bda render --case-dir CASE_DIR [--out OUT]
 bda run-comp --in IN --out OUT
 ```
 
-- **Environment requirement**: CUDA torch (GPU relaxation ~20 s/state); CPU torch relaxation does not converge (measured). Local `.venv` is CPU torch — use `D:/anaconda/envs/py312/python.exe -m bda run-comp ...` (py312 has chgnet/pymatgen/ase + torch 2.13.0+cu126)
+- **Environment requirement**: CUDA torch (GPU relaxation ~20 s/state); CPU torch relaxation does not converge (measured). Use the single environment `D:/anaconda/envs/py312/python.exe` (CUDA torch 2.13.0+cu126, chgnet/pymatgen/ase) for every command, including run-comp.
 - Input `--in`: `{"candidates": [{"formula": "Li(Ni0.7Mn0.05Co0.05Si0.1Mg0.1)O2", "name": "NMC-SiMg"}]}` — NMC811 lattice site substitution; TM fractions must sum to 1
 - Output: `{"baseline": {NMC811 energy + Li metal reference}, "candidates": [{formula, realized_tm_counts, avg_voltage_v, capacity_mah_g, e_full_ev, e_delith_ev, converged, rel_stability_ev_atom}], "calibration_note"}`
 - Definitions (stated honestly, written to the report):

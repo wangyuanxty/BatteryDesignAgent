@@ -22,7 +22,8 @@ def relax_structure(smiles: str, model: str = "mace") -> dict:
 
         calc = mace_mp(model="medium", device="cpu")
     else:
-        # CHGNet 需周期性晶格（pymatgen 结构转换要求非奇异晶胞）：置于 20 Å 真空盒
+        # CHGNet requires a periodic lattice (pymatgen's structure conversion needs a
+        # non-singular unit cell): place the molecule in a 20 Å vacuum box
         atoms.cell = [20.0, 20.0, 20.0]
         atoms.pbc = True
         atoms.center()

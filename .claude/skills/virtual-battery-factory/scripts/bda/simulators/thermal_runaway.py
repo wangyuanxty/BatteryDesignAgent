@@ -1,23 +1,28 @@
-"""热失控子模型：三副反应放热（SEI 分解 / 负极-电解液 / 正极-电解液）+ 牛顿冷却。
+"""Thermal runaway sub-model: three side-reaction heat releases (SEI decomposition /
+anode-electrolyte / cathode-electrolyte) plus Newtonian cooling.
 
-实现口径（论文方法节可复现）：
-- 零维集总热平衡：m·Cp·dT/dt = Σ(Q_i·r_i) − hA(T − T_amb) + Q_nail
-- 三副反应动力学（Kim et al. 2019 / Coman et al. 2016 标准 Arrhenius 形式）：
-  R1 SEI 分解：          r1 = A1·exp(−E1/RT)·x          （x = SEI 覆盖度，初始 1）
-  R2 负极-电解液反应：   r2 = A2·exp(−E2/RT)·exp(−a/x)  （x→0 时 SEI 保护失效，反应爆发）
-  R3 正极-电解液反应：   r3 = A3·exp(−E3/RT)·(1−y)·z    （y = 正极分解度；z 为电解液可用度）
-- 副反应消耗：dx/dt = −r1；dy/dt = r3·y 的简化（保持双状态 x/y）
-- 刚性 ODE → scipy solve_ivp(method="BDF", rtol=1e-8, atol=1e-10)
-- 触发判定：dT/dt > 1 K/s（温升拐点）或 T ≥ 573 K（300℃ 工程红线）
-- 针刺：Q_nail = I_sc²·R_short（局部短路产热），作为常热源项注入
-- 过充耦合：run-pyamm overcharge 协议的 T_max_K 作为初始温度喂入
+Conventions (reproducible from the paper's methods section):
+- zero-dimensional lumped thermal balance: m·Cp·dT/dt = Σ(Q_i·r_i) − hA(T − T_amb) + Q_nail
+- three side-reaction kinetics (standard Arrhenius form, Kim et al. 2019 / Coman et al. 2016):
+  R1 SEI decomposition:   r1 = A1·exp(−E1/RT)·x          (x = SEI coverage, initially 1)
+  R2 anode-electrolyte:   r2 = A2·exp(−E2/RT)·exp(−a/x)  (as x→0 the SEI protection fails and the reaction runs away)
+  R3 cathode-electrolyte: r3 = A3·exp(−E3/RT)·(1−y)·z    (y = cathode decomposition degree; z = electrolyte availability)
+- side-reaction consumption: dx/dt = −r1; a simplification of dy/dt = r3·y (keeping the
+  two states x/y)
+- stiff ODE → scipy solve_ivp(method="BDF", rtol=1e-8, atol=1e-10)
+- trigger test: dT/dt > 1 K/s (temperature-rise inflection) or T ≥ 573 K (300 °C engineering red line)
+- nail penetration: Q_nail = I_sc²·R_short (local short-circuit heating), injected as a
+  constant heat source term
+- overcharge coupling: the T_max_K of the run-pyamm overcharge protocol is fed in as the
+  initial temperature
 
-参数（Kim et al. 2019 锂离子电芯热失控标定值，J/kg 基）：
+Parameters (Kim et al. 2019 thermal-runaway calibration for lithium-ion cells, J/kg basis):
   R1: A=1.667e15 s⁻¹  Ea=1.3508e5 J/mol  ΔH=2.57e5 J/kg
   R2: A=2.5e13 s⁻¹    Ea=1.3508e5 J/mol  ΔH=1.714e6 J/kg
   R3: A=1.75e14 s⁻¹   Ea=1.65e5 J/mol   ΔH=1.13e5 J/kg
-  覆盖度因子 a = 0.05（R2 对 SEI 残量敏感度）
-  电芯热容 m·Cp 与散热 hA 由调用方传入（默认 1 kg·Cp≈1000 J/K，hA=0.05 W/K 绝热近似）
+  coverage factor a = 0.05 (R2's sensitivity to the residual SEI)
+  the cell heat capacity m·Cp and the cooling hA are passed in by the caller (defaults
+  1 kg·Cp≈1000 J/K, hA=0.05 W/K as an adiabatic approximation)
 """
 from __future__ import annotations
 
@@ -28,52 +33,60 @@ from pathlib import Path
 import numpy as np
 from scipy.integrate import solve_ivp
 
-# ---- 三副反应参数（文献标定值，J/kg 基；m = 活性材料质量 kg）----
+# ---- three side-reaction parameters (literature calibration, J/kg basis; m = active material mass in kg) ----
 R1 = {"A": 1.667e15, "Ea": 1.3508e5, "dH": 2.57e5}
 R2 = {"A": 2.5e13, "Ea": 1.3508e5, "dH": 1.714e6}
 R3 = {"A": 1.75e14, "Ea": 1.65e5, "dH": 1.13e5}
-COVERAGE_FACTOR = 0.05  # 保留（历史参数名）；R2 覆盖因子现用 (1-x) 形式
+COVERAGE_FACTOR = 0.05  # retained (historical parameter name); the R2 coverage factor now uses the (1-x) form
 R_GAS = 8.314
-# 活性材料质量占整芯比：dH 为活性材料基（J/kg），整芯热容 mcp 含惰性组分
-# （集流体/隔膜/壳体），能量释放到整芯需按此比例折算——否则 ΔT 高估 ~3 倍。
+# Active material mass as a fraction of the whole cell: dH is on an active-material basis
+# (J/kg) while the whole-cell heat capacity mcp includes inert components (current
+# collectors/separator/casing), so the energy released into the whole cell must be scaled by
+# this fraction — otherwise ΔT is overestimated by ~3x.
 ACTIVE_MASS_FRAC = 0.3
 
-# 触发判定
-TRIGGER_DTDT = 1.0   # K/s：温升拐点
-TRIGGER_T_K = 573.0  # 300 ℃ 工程红线
+# Trigger test
+TRIGGER_DTDT = 1.0   # K/s: temperature-rise inflection
+TRIGGER_T_K = 573.0  # 300 ℃ engineering red line
 
 
 def _rhs(t: float, y: np.ndarray, mcp: float, hA: float, t_amb: float, q_nail: float) -> np.ndarray:
-    """y = [T_K, x_sei, y_cath, u_anode]；返回 [dT/dt, dx/dt, dy/dt, du/dt]。
+    """y = [T_K, x_sei, y_cath, u_anode]; returns [dT/dt, dx/dt, dy/dt, du/dt].
 
-    反应物耗尽保证能量守恒（温度有界）：
-    - x（SEI 量）被 R1 消耗；- R3 以 (1-y) 饱和（y→1 停止）；
-    - u（负极可燃物）被 R2 消耗——此前版本缺此耗尽项导致温度数值爆炸（10^15 K）。
+    Reactant depletion guarantees energy conservation (the temperature stays bounded):
+    - x (SEI amount) is consumed by R1; R3 saturates via (1-y) (it stops as y→1);
+    - u (anode combustibles) is consumed by R2 — earlier versions lacked this depletion
+      term, which made the temperature blow up numerically (10^15 K).
     """
     t_k, x, yc, u = y
-    # 状态 clamp：x/y/u ∈ [0,1]（求解器数值越界防护，物理量域）
+    # State clamp: x/y/u ∈ [0,1] (solver numerical out-of-range protection, physical domain)
     x = min(max(x, 0.0), 1.0)
     yc = min(max(yc, 0.0), 1.0)
     u = min(max(u, 0.0), 1.0)
     inv_rt = 1.0 / (R_GAS * t_k)
-    # 速率 clamp（物质输运限制）：Arrhenius 频率因子在高温下无物理上限（10^15 s⁻¹），
-    # 不设上限会使瞬时功率无限大、能量不守恒（T_max 爆炸到 10^8 K 量级）。
-    # 反应物转化率受输运限制，工程上取 100 s⁻¹ 上限（对应 ms 级耗尽，能量守恒封顶）。
+    # Rate clamp (mass-transport limitation): the Arrhenius pre-exponential factor has no
+    # physical upper bound at high temperature (10^15 s⁻¹), and without a cap the
+    # instantaneous power becomes infinite and energy is not conserved (T_max explodes to
+    # the 10^8 K range). Reactant conversion is transport-limited, so an engineering cap of
+    # 100 s⁻¹ is used (corresponding to ms-scale depletion, capping energy conservation).
     RATE_CAP = 1e2
-    # 注意：x 不设 floor——x=0 时 r1 必须真为 0（SEI 耗尽即止）。
-    # 此前 max(x, 1e-12) 使高温下 r1 = A1·exp·1e-12 ≈ 1.6e3 > cap → R1 满功率永燃（T 爆表）。
+    # Note: x gets no floor — at x=0 r1 must truly be 0 (SEI exhaustion stops it).
+    # The earlier max(x, 1e-12) made r1 = A1·exp·1e-12 ≈ 1.6e3 > cap at high temperature →
+    # R1 burns at full power forever (T blows up).
     r1 = min(R1["A"] * np.exp(-R1["Ea"] * inv_rt) * x, RATE_CAP)
-    # R2 覆盖因子 = (1-x)：SEI 完整（x=1）时负极-电解液反应被抑制（factor=0），
-    # SEI 分解（x→0）后爆发（factor→1）；受 u（负极可燃物）消耗限制，能量有界。
+    # R2 coverage factor = (1-x): with intact SEI (x=1) the anode-electrolyte reaction is
+    # suppressed (factor=0), and it runs away (factor→1) after the SEI decomposes (x→0);
+    # it is limited by the consumption of u (anode combustibles), so the energy is bounded.
     r2 = min(R2["A"] * np.exp(-R2["Ea"] * inv_rt) * (1.0 - x) * u, RATE_CAP)
     r3 = min(R3["A"] * np.exp(-R3["Ea"] * inv_rt) * (1.0 - yc), RATE_CAP)
     q_gen = (R1["dH"] * r1 + R2["dH"] * r2 + R3["dH"] * r3) * ACTIVE_MASS_FRAC
     dtdt = (q_gen - hA * (t_k - t_amb) + q_nail) / mcp
-    # 反应物一次消耗（∫r dt = 反应物消耗量 = 1，能量守恒）：
-    # 二次形式（-r2·u）使 u 渐近趋 0 永不达，∫r dt 对数发散 → 能量超额（T_max 爆炸）。
+    # First-order reactant consumption (∫r dt = amount consumed = 1, energy conserved):
+    # the second-order form (-r2·u) makes u approach 0 asymptotically and never reach it,
+    # so ∫r dt diverges logarithmically → excess energy (T_max blows up).
     dxdt = -r1
-    dydt = r3  # r3 已含 (1-yc) 饱和因子
-    dudt = -r2  # r2 已含 u 反应物因子
+    dydt = r3  # r3 already contains the (1-yc) saturation factor
+    dudt = -r2  # r2 already contains the u reactant factor
     return np.asarray([dtdt, dxdt, dydt, dudt])
 
 
@@ -87,16 +100,20 @@ def run_thermal_runaway(
     q_nail_w: float = 0.0,
     mass_kg: float | None = None,
 ) -> dict:
-    """积分热失控 ODE。返回温度曲线与触发判定。
+    """Integrate the thermal runaway ODE. Returns the temperature curve and the trigger verdict.
 
-    注意：dH 为 J/kg（活性材料质量基）。本实现将三副反应放热按
-    dH·r_i（r_i 为 s⁻¹ 量级速率）累加并以 mcp 归一——当 mcp 取整芯热容
-    （约 1 kg × 1000 J/kg/K）时，dH 需理解为"整芯等效放热焓"（J）。
-    为保持文献量级，调用方应传入 mcp ≈ 电芯质量 × 比热，并知悉
-    该简化下触发温度边界与文献一致（sanity 测试验证）。
-    **mass_kg 优先**：提供时 mcp = mass_kg × 900（电芯比热近似 J/kg/K），
-    覆盖 mcp 参数——针刺/热失控必须传电芯实际质量（从 calc-energy mass_kg 机械取），
-    否则 mcp 默认为 1000（≈1 kg 基准电芯）导致小电芯 dT/dt 被系统性低估。
+    Note: dH is in J/kg (on an active-material mass basis). This implementation sums the
+    three side-reaction heat releases as dH·r_i (r_i is a rate of order s⁻¹) and normalizes
+    by mcp — when mcp is the whole-cell heat capacity (about 1 kg × 1000 J/kg/K), dH must be
+    read as the "whole-cell equivalent heat of release" (J). To preserve the literature
+    magnitude, the caller should pass mcp ≈ cell mass × specific heat, and be aware that
+    under this simplification the trigger temperature boundary agrees with the literature
+    (verified by the sanity tests).
+    **mass_kg takes precedence**: when provided, mcp = mass_kg × 900 (approximate cell
+    specific heat in J/kg/K), overriding the mcp parameter — nail penetration/thermal
+    runaway must pass the cell's actual mass (taken mechanically from calc-energy mass_kg),
+    otherwise mcp defaults to 1000 (≈ a 1 kg reference cell) and dT/dt is systematically
+    underestimated for small cells.
     """
     if mass_kg is not None:
         mcp_j_k = mass_kg * 900.0
@@ -108,7 +125,7 @@ def run_thermal_runaway(
         method="BDF",
         rtol=1e-7,
         atol=1e-9,
-        max_step=0.2,  # 反应耗尽发生在 ms~0.1s 量级，步长上限必须小于该量级
+        max_step=0.2,  # reaction depletion happens on the ms~0.1s scale, so the step cap must be below that
         args=(mcp_j_k, hA_w_k, t_amb_k, q_nail_w),
         dense_output=True,
     )
@@ -134,7 +151,7 @@ def run_thermal_runaway(
             "hA_W_K": hA_w_k,
             "t_amb_K": t_amb_k,
             "q_nail_W": q_nail_w,
-            "source": "Kim et al. 2019 / Coman et al. 2016 Arrhenius 三副反应，零维集总热平衡",
+            "source": "Kim et al. 2019 / Coman et al. 2016 Arrhenius three side reactions, zero-dimensional lumped thermal balance",
         },
     }
 
@@ -143,10 +160,11 @@ def cmd_run_thermal_runaway(args) -> int:
     try:
         t_init_k = args.t_init
         if args.sim:
-            # 过充/放电仿真输出耦合：读取其 T_max_K 作为热失控初始温度（自动串联）
+            # Overcharge/discharge simulation output coupling: read its T_max_K as the
+            # thermal runaway initial temperature (automatic chaining)
             sim = json.loads(Path(args.sim).read_text(encoding="utf-8-sig"))
             if "T_max_K" not in sim:
-                raise ValueError(f"--sim 文件缺少 T_max_K 键（应传 run-pyamm 输出）: {args.sim}")
+                raise ValueError(f"--sim file is missing the T_max_K key (expected a run-pyamm output): {args.sim}")
             t_init_k = float(sim["T_max_K"])
         out = run_thermal_runaway(
             t_init_k=t_init_k,

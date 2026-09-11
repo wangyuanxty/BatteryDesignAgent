@@ -33,9 +33,10 @@ the OpenAI Agents SDK and LangChain live in `paper/portability/`.
 ## Installation
 
 ```powershell
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -e ".claude/skills/virtual-battery-factory/scripts[dev,ml,host]"
+# Environment: D:/anaconda/envs/py312 (Python 3.12, CUDA) — the single environment for this
+# repo since 2026-09-10; the former repo-local .venv was retired. bda is installed editable
+# from the skill directory (re-run the line below only if dependencies need reinstalling):
+D:/anaconda/envs/py312/python.exe -m pip install -e ".claude/skills/virtual-battery-factory/scripts[dev,ml,host]"
 ```
 
 External binaries (needed only for the closing true-compute endorsement;
@@ -64,7 +65,7 @@ Create `.env` in the repo root before running:
 
 Secrets are injected only into child-process environment variables, never
 written to files, never printed. Connectivity smoke test:
-`.venv\Scripts\python.exe run.py --smoke-test`.
+`D:/anaconda/envs/py312/python.exe run.py --smoke-test`.
 
 ## Running
 
@@ -110,10 +111,10 @@ endorsement → final recommendation); open `report.html` in the workspace.
 
 ```powershell
 # fast tests (skip slow)
-.venv\Scripts\python.exe -m pytest -m "not slow"
+D:/anaconda/envs/py312/python.exe -m pytest -m "not slow"
 
 # full suite (runner smoke tests auto-skip when the binary is missing)
-.venv\Scripts\python.exe -m pytest
+D:/anaconda/envs/py312/python.exe -m pytest
 ```
 
 ## Repository policy

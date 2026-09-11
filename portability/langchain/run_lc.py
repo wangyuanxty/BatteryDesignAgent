@@ -7,7 +7,7 @@ remains the shared tool library. Same task texts, same model, same budget
 (recursion_limit) as the other legs.
 
 Usage:
-    .venv/Scripts/python.exe paper/portability/langchain/run_lc.py "TASK TEXT" \
+    D:/anaconda/envs/py312/python.exe paper/portability/langchain/run_lc.py "TASK TEXT" \
         --workspace runs/portability/t1_lc --max-turns 300
 """
 import argparse
@@ -53,7 +53,7 @@ def load_skill(skill_name: str) -> str:
 @tool
 def run_shell(command: str) -> str:
     """Run a shell command in the repository root and return stdout/stderr (truncated to 8000 chars).
-    Use for ALL bda simulation/evaluation commands, e.g. `.venv/Scripts/python.exe -m bda run-pyamm ...`.
+    Use for ALL bda simulation/evaluation commands, e.g. `D:/anaconda/envs/py312/python.exe -m bda run-pyamm ...`.
     Long simulations may take minutes; the command has a 30-minute timeout."""
     import subprocess
 
@@ -126,7 +126,7 @@ def build_system_prompt(workspace: Path) -> str:
         f"Your workspace (artifacts, log.jsonl, deliverables) is: {workspace}\n"
         "Shell commands execute in the repository root; use the read/write/list "
         "tools with workspace-relative paths. The bda tool library is invoked as "
-        "`.venv/Scripts/python.exe -m bda <subcommand> ...`.\n"
+        "`D:/anaconda/envs/py312/python.exe -m bda <subcommand> ...`.\n"
         "Do everything yourself with the provided tools.\n"
     )
 

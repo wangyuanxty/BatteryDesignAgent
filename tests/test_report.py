@@ -51,7 +51,7 @@ def full_case(tmp_path):
         "candidates": [{"smiles": "CCOC(=O)O",
                         "endorsement": {"level": "ORCA-PBE0", "E_hartree": -343.12, "note": "stable"}}],
     })
-    append_entry(ws, {"action": "final", "recommendation": "FEC 2wt%", "verdict": "达标"})
+    append_entry(ws, {"action": "final", "recommendation": "FEC 2wt%", "verdict": "pass"})
     return ws
 
 
@@ -120,7 +120,7 @@ def test_flow_overview_strip(tmp_path, full_case):
     assert "True DFT/MD endorsement" in html  # 收尾流程项更名为True DFT/MD endorsement
     assert '<span class="badge stage end">STAGE 5 True DFT/MD</span>' in html
     assert "mol. propose 1 · funnel 2" in html
-    assert "Endorse 1 · Final 1 · Verdict 达标" in html
+    assert "Endorse 1 · Final 1 · Verdict pass" in html
 
 
 def test_closing_phase_badge_is_stage_5(tmp_path, full_case):
@@ -586,7 +586,7 @@ def test_render_is_deterministic(tmp_path, full_case):
 
 def test_verdict_variants(tmp_path):
     ws = _make_case(tmp_path)
-    append_entry(ws, {"action": "final", "recommendation": "x", "verdict": "不达标"})
+    append_entry(ws, {"action": "final", "recommendation": "x", "verdict": "failed"})
     html = _render(ws)
     assert 'class="verdict bad"' in html
     assert 'class="badge bad"' in html
@@ -654,11 +654,11 @@ def test_unit_helpers():
     assert _as_list(5) == [5]
     assert _as_list(None) == []
     assert _as_list([]) == []
-    assert _verdict_class("达标") == "ok"
-    assert _verdict_class("不达标") == "bad"
+    assert _verdict_class("passed") == "ok"
+    assert _verdict_class("failed") == "bad"
     assert _verdict_class("pass") == "ok"
     assert _verdict_class("fail") == "bad"
-    assert _verdict_class("待定") == "neutral"
+    assert _verdict_class("pending") == "neutral"
     assert _verdict_class("") == "neutral"
     with pytest.raises(ValueError):
         _fill_template({})

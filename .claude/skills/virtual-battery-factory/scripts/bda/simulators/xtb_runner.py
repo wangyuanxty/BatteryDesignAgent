@@ -7,7 +7,8 @@ HARTREE_TO_EV = 27.2114
 
 
 def _embed_mol_xyz(smiles: str, workdir: Path) -> None:
-    """RDKit 构象嵌入，写 workdir/mol.xyz（含氢，MMFF 预优化）。"""
+    """RDKit conformer embedding; writes workdir/mol.xyz (hydrogens included, MMFF
+    pre-optimized)."""
     from rdkit import Chem
     from rdkit.Chem import AllChem
 
@@ -27,11 +28,12 @@ def _embed_mol_xyz(smiles: str, workdir: Path) -> None:
 
 
 def _parse_output_text(text: str) -> tuple[float | None, float | None, float | None]:
-    """从 xtb 输出文本解析 HOMO/LUMO 与总能量。
+    """Parse HOMO/LUMO and the total energy from xtb output text.
 
-    兼容两种格式：
-    - xtb >= 6.5：输出全部走 stdout，轨道行带 `(HOMO)`/`(LUMO)` 后缀（能量为前一列）；
-    - 旧版 xtb.out：`HOMO/LUMO ... eV` 合并行 + `TOTAL ENERGY ... Eh` 行。
+    Handles two formats:
+    - xtb >= 6.5: all output goes to stdout, orbital lines carry a `(HOMO)`/`(LUMO)`
+      suffix (the energy is the preceding column);
+    - older xtb.out: a combined `HOMO/LUMO ... eV` line plus a `TOTAL ENERGY ... Eh` line.
     """
     homo: float | None = None
     lumo: float | None = None
@@ -76,7 +78,8 @@ def xtb_single_point(smiles: str) -> dict:
         if proc.returncode != 0:
             raise RuntimeError(f"xtb failed: {proc.stderr[-500:]}")
         out_text = proc.stdout or ""
-        # 旧版 xtb 在 stdout 重定向时改写 xtb.out：stdout 无内容则回退读文件
+        # Older xtb rewrites xtb.out when stdout is redirected: fall back to reading the
+        # file if stdout is empty
         if not out_text and (workdir / "xtb.out").exists():
             out_text = (workdir / "xtb.out").read_text(encoding="utf-8")
     homo, lumo, total_e = _parse_output_text(out_text)

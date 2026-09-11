@@ -12,7 +12,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RUNNER = REPO_ROOT / "paper" / "portability" / "langchain" / "run_lc.py"
-PY = REPO_ROOT / ".venv" / "Scripts" / "python.exe"
+PY = Path('D:/anaconda/envs/py312/python.exe')  # migrated from the retired .venv
 
 TASKS = [
     (

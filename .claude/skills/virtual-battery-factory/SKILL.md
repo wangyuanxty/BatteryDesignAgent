@@ -89,8 +89,8 @@ Cross-cutting: parameter bridge (Stage 2→3 property mapping) · evaluation & f
 ### Preparation (once per case)
 
 0. **Environment self-check and self-install** (first thing each session):
-   - Check `.venv\Scripts\python.exe -c "import bda"` succeeds; if yes → skip this step
-   - If not → install yourself (Bash, do not wait for the user): create a virtual environment and `pip install -e "<this skill dir>/scripts[dev,ml,host]"` (pyproject.toml inside scripts/ is the **only install definition**; no pyproject at repo root). ml extra dependencies (torch/mace-torch/chgnet) are bulky — install per Stage 2 need, but the closing run-md mace engine requires mace-torch
+   - Check `D:/anaconda/envs/py312/python.exe -c "import bda"` succeeds; if yes → skip this step
+   - If not → install yourself (Bash, do not wait for the user): `D:/anaconda/envs/py312/python.exe -m pip install -e "<this skill dir>/scripts[dev,ml,host]"` (pyproject.toml inside scripts/ is the **only install definition**; no pyproject at repo root). ml extra dependencies (torch/mace-torch/chgnet) are bulky — install per Stage 2 need, but the closing run-md mace engine requires mace-torch
    - External binaries (xtb/orca/gmx/cp2k) are outside pip scope: the corresponding command gives installation guidance when missing; follow it or record skipping honestly
 1. Parse the case from the **natural-language task text (the only input — no config file, no YAML template)**. The task originator's message carries the objective (with all thresholds verbatim); every other case parameter is determined by protocol rules: electrode system → the §1.5 anchor table (deterministic mapping), starting layer → the §0 starting-point determination rule, `real_compute` → default `false` (§0 clarification default). All conclusions of this step are audited into log.jsonl entry 0 (criteria + meta) before running. Workspace = the directory designated by the task originator or created by you. **Task isolation**: this task is an independent data point — **do not read/reference other tasks' workspaces** (log.jsonl/artifacts/scripts in other directories under `runs/exp/`) — shared computational definitions go through bda commands (e.g., `calc-energy`); do not copy scripts across tasks; only read your own workspace and the bda tool library.
 1.5 **System → parameter set mapping** (the determination anchor for `base_params`, **deterministic mapping** — the same system description must land on the same parameter set, preventing parsing drift (t1_r1_v2 incident: agent picked the wrong parameter set by impression). Before determining, dump the chosen parameter set and verify the discriminant anchor; do not pick by domain impression):
@@ -151,7 +151,7 @@ At `start_stage: 3` skip Stage 2 molecular screening; material properties use sy
 **Stage 2 anti-patterns**:
 - ❌ Incomplete composition site placement (Li 3b/TM 3a/O 6c in-plane positions; only (0,0,z) lines → non-physical structure, 20–50 V voltage)
 - ❌ Missing the Li-metal reference term in composition voltage (V requires −n·E_Li; omitted → negative/wrong-magnitude voltage)
-- ❌ Running run-comp with .venv (CPU torch) — must use `D:/anaconda/envs/py312` (CUDA)
+- ❌ Running bda under any interpreter other than `D:/anaconda/envs/py312/python.exe` (single env; CPU-torch relaxation does not converge for run-comp)
 - ❌ Treating `converged=false` as screening failure (strict fmax 0.1 convergence often unreached in 300 steps; energy at screening precision); `rel_stability` only for within-batch ranking, not an absolute quantity
 - ❌ Running ML potentials/xtb on charged/ionic solids (coating/dopant inorganics) — skip the funnel directly into Stage 3 aging; note the skip reason in funnel
 
@@ -257,7 +257,7 @@ Supplementary discipline:
 
 ## 4. Simulation Library Command Quick Reference
 
-Invocation (Bash tool, repo root): `.venv\Scripts\python.exe -m bda <subcommand> ...`. **Full parameters/IO schemas/error handling in `references/cli-commands.md` (Read it when details are needed)** — especially run-pyamm's `--base` passing rules; read before first run. **Read-output contract**: after every call confirm output completeness (`--out` file generated, key keys present, error message readable) before proceeding — "command ran" ≠ "result usable"; on missing keys/errors, record honestly and fix before rerun.
+Invocation (Bash tool, repo root): `D:/anaconda/envs/py312/python.exe -m bda <subcommand> ...`. **Full parameters/IO schemas/error handling in `references/cli-commands.md` (Read it when details are needed)** — especially run-pyamm's `--base` passing rules; read before first run. **Read-output contract**: after every call confirm output completeness (`--out` file generated, key keys present, error message readable) before proceeding — "command ran" ≠ "result usable"; on missing keys/errors, record honestly and fix before rerun.
 
 | Subcommand | Purpose | Where used |
 |---|---|---|

@@ -1,11 +1,15 @@
-"""周期 DFT 真背书（run-qe）：组分 → QE vc-relax → 相对稳定性 + 平均电压（含 QE Li 金属参考）。
+"""Periodic-DFT true endorsement (run-qe): composition → QE vc-relax → relative stability +
+average voltage (including the QE Li metal reference).
 
-环境：pw.x（conda-forge q-e 包）+ SSSP efficiency 赝势（conda-forge sssp 包）。
-口径：
-- ecutwfc=50 Ry / ecutrho=400 Ry（SSSP efficiency 标准）；nspin=2（Ni/Mn/Co 磁性，铁磁初猜）；
-- 满锂态 vc-relax（晶胞+离子）；去锂态固定弛豫后晶胞、仅离子 relax（节省成本，如实标注）；
-- 电压公式与 run-comp 一致：V = −[E_full − E_delith − n_removed·E_Li]/n_removed。
-- 运行时间：12 原子原胞 ~1 小时/态；48 原子超胞小时级（CPU 挂夜）。
+Environment: pw.x (the conda-forge q-e package) + SSSP efficiency pseudopotentials (the
+conda-forge sssp package).
+Conventions:
+- ecutwfc=50 Ry / ecutrho=400 Ry (SSSP efficiency standard); nspin=2 (Ni/Mn/Co magnetism, ferromagnetic initial guess);
+- fully lithiated state vc-relax (cell + ions); delithiated state relaxes ions only on the
+  fixed post-relaxation cell (saves cost; stated as-is);
+- the voltage formula matches run-comp: V = −[E_full − E_delith − n_removed·E_Li]/n_removed.
+- runtime: a 12-atom primitive cell ~1 hour/state; a 48-atom supercell takes hours (leave the
+  CPU running overnight).
 """
 
 import os
@@ -15,25 +19,29 @@ import time
 
 from pymatgen.core import Lattice, Structure
 
-# 赝势探测顺序：环境变量 > py312 conda 环境 sssp 目录
+# Pseudopotential search order: environment variable > py312 conda environment sssp directory
 _PSEUDO_CANDIDATES = [
     os.environ.get("QE_PSEUDO_DIR"),
     r"D:\anaconda\envs\py312\share\sssp\efficiency",
     r"D:\anaconda\share\sssp\efficiency",
 ]
 
-# SSSP efficiency 赝势文件名（本案例元素；缺失元素报错提示）
+# SSSP efficiency pseudopotential file names (the elements of this case; missing elements raise an error)
 _PSEUDO_FILES = {
     "Li": "li_pbe_v1.4.uspp.F.UPF",
     "Ni": "ni_pbe_v1.4.uspp.F.UPF",
     "Mn": "mn_pbe_v1.5.uspp.F.UPF",
     "Co": "Co_pbe_v1.2.uspp.F.UPF",
     "O": "O.pbe-n-kjpaw_psl.0.1.UPF",
+    "P": "P.pbe-n-rrkjus_psl.1.0.0.UPF",
     "Si": "Si.pbe-n-rrkjus_psl.1.0.0.UPF",
     "Mg": "Mg.pbe-n-kjpaw_psl.0.3.0.UPF",
+    "F": "f_pbe_v1.4.uspp.F.UPF",
+    "Al": "Al.pbe-n-kjpaw_psl.1.0.0.UPF",
+    "B": "b_pbe_v1.4.uspp.F.UPF",
 }
 
-_MAGNETIC = {"Ni", "Mn", "Co"}  # 需要 nspin=2 与初始磁矩的元素
+_MAGNETIC = {"Ni", "Mn", "Co"}  # elements needing nspin=2 and an initial magnetic moment
 
 
 def pseudo_dir() -> str:
@@ -46,13 +54,14 @@ def pseudo_dir() -> str:
 
 
 def pw_bin() -> str:
-    for name in ("pw.x", "pw.exe", "pw.x.exe"):  # MSYS2 包内为 pw.exe
+    for name in ("pw.x", "pw.exe", "pw.x.exe"):  # the MSYS2 package ships pw.exe
         found = shutil.which(name)
         if found:
             return found
     for cand in (
-        # MSYS2 原版 pw.exe 栈保留仅 2MB（计算初始化即栈溢出 0xC00000FD）；
-        # pw_stack4g.exe = pefile 打过补丁的副本（栈保留 4GB），优先使用
+        # The stock MSYS2 pw.exe reserves only a 2MB stack (stack overflow 0xC00000FD during
+        # computation initialization); pw_stack4g.exe = a pefile-patched copy (4GB stack
+        # reservation), preferred
         r"C:\msys64\ucrt64\bin\pw_stack4g.exe",
         r"C:\msys64\ucrt64\bin\pw.exe",  # MSYS2 mingw-w64-ucrt-x86_64-quantum-espresso
         r"C:\msys64\mingw64\bin\pw.x.exe",
@@ -68,12 +77,12 @@ def pw_bin() -> str:
 
 
 def _magnetization(structure: Structure) -> dict[str, float]:
-    """磁性元素初始磁矩（铁磁初猜，筛选口径）。"""
+    """Initial magnetic moments for the magnetic elements (ferromagnetic initial guess, the screening convention)."""
     return {el: 0.6 for el in {s.specie.symbol for s in structure} if el in _MAGNETIC}
 
 
 def write_inputs(structure: Structure, workdir: str, prefix: str, relax_cell: bool) -> None:
-    """pymatgen → pw.x 输入文件（vc-relax 或 relax）。"""
+    """pymatgen → pw.x input file (vc-relax or relax)."""
     from pymatgen.io.pwscf import PWInput
 
     pseudo = {}
@@ -102,20 +111,22 @@ def write_inputs(structure: Structure, workdir: str, prefix: str, relax_cell: bo
     }
     if mag:
         system["nspin"] = 2
-        # QE 的 namelist 不支持 dict——统一标量初猜（全部元素 0.6，仅初始猜测）
+        # QE's namelist does not support a dict — one uniform scalar initial guess (0.6 for
+        # every element, an initial guess only)
         system["starting_magnetization"] = 0.6
     electrons = {"conv_thr": 1.0e-7, "mixing_beta": 0.3}
     pw = PWInput(structure, pseudo=pseudo, control=control, system=system, electrons=electrons)
     os.makedirs(workdir, exist_ok=True)
     in_path = os.path.join(workdir, f"{prefix}.in")
     pw.write_file(in_path)
-    # Fortran namelist 里反斜杠是转义符：Windows 路径必须换成正斜杠（否则 pw.x 静默崩溃）
+    # In Fortran namelists a backslash is an escape character: Windows paths must be turned
+    # into forward slashes (otherwise pw.x crashes silently)
     text = open(in_path, encoding="utf-8").read().replace("\\", "/")
     open(in_path, "w", encoding="utf-8").write(text)
 
 
 def parse_pw_output(text: str) -> tuple[float, bool]:
-    """pw.x stdout → (总能量 eV, 收敛)。"""
+    """pw.x stdout → (total energy eV, converged)."""
     energies = [
         float(line.split()[-2])
         for line in text.splitlines()
@@ -128,12 +139,12 @@ def parse_pw_output(text: str) -> tuple[float, bool]:
 
 
 def run_pw(workdir: str, prefix: str) -> tuple[float, bool, float]:
-    """执行 pw.x → (总能量 eV, 收敛, 耗时秒)。"""
+    """Run pw.x → (total energy eV, converged, elapsed seconds)."""
     t0 = time.time()
     in_file = os.path.join(workdir, f"{prefix}.in")
     out_file = os.path.join(workdir, f"{prefix}.out")
     env = dict(os.environ)
-    # MSYS2 的 pw.exe 需要 ucrt64\bin 下的运行时 DLL（libgcc/libgfortran/MPI 等）
+    # MSYS2's pw.exe needs the runtime DLLs under ucrt64\bin (libgcc/libgfortran/MPI, etc.)
     env["PATH"] = os.path.dirname(pw_bin()) + os.pathsep + env.get("PATH", "")
     with open(out_file, "w", encoding="utf-8") as out:
         subprocess.run([pw_bin(), "-in", in_file], stdout=out, stderr=subprocess.STDOUT, check=False, env=env)
@@ -146,7 +157,7 @@ def run_pw(workdir: str, prefix: str) -> tuple[float, bool, float]:
 
 
 def qe_endorsement(formula: str, delith_frac: float = 0.3) -> dict:
-    """单个组分周期 DFT 背书：满锂 vc-relax + 去锂 relax + Li 金属参考 → 电压。"""
+    """Periodic-DFT endorsement for a single composition: fully lithiated vc-relax + delithiated relax + Li metal reference → voltage."""
     import tempfile
 
     from bda.simulators.comp_runner import (
@@ -186,7 +197,7 @@ def qe_endorsement(formula: str, delith_frac: float = 0.3) -> dict:
 
 
 def run_qe_endorsement(in_data: dict) -> dict:
-    """IN: {"candidates": [{"formula", "name"}]} → OUT: 每候选周期 DFT 背书（含 NMC811 基线）。"""
+    """IN: {"candidates": [{"formula", "name"}]} → OUT: periodic-DFT endorsement per candidate (including the NMC811 baseline)."""
     cands = in_data.get("candidates", [])
     if not cands:
         raise ValueError("input must contain a non-empty 'candidates' list")

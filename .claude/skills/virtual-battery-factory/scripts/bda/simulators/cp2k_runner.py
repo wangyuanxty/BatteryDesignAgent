@@ -1,12 +1,14 @@
-"""分子真 DFT 背书（run-cp2k）：CP2K PBE-D3(BJ) + GTH 基组（原生 Windows，MSYS2 包）。
+"""Molecular true-DFT endorsement (run-cp2k): CP2K PBE-D3(BJ) + GTH basis sets (native
+Windows, MSYS2 package).
 
-与 run-orca 同构输出（E_hartree/homo_ev/lumo_ev/ie_ev/ea_ev）：中性态 GEO_OPT，
-阳/阴离子态在中性优化几何上做垂直单点（IE/EA 为垂直值，与 run-orca 口径一致）。
-CPU 分钟级/小分子（FEC 级 10 原子 ≈ 15-40 分钟/分子）。
+Output is isomorphic to run-orca (E_hartree/homo_ev/lumo_ev/ie_ev/ea_ev): neutral state
+GEO_OPT, cation/anion states as vertical single points on the neutral optimized geometry
+(IE/EA are vertical values, matching the run-orca convention). CPU minutes per small
+molecule (a FEC-scale 10-atom molecule ≈ 15-40 minutes/molecule).
 
-环境：MSYS2 `pacman -S mingw-w64-ucrt-x86_64-cp2k`（cp2k.ssmp.exe；栈 2MB 需 pefile
-补丁为 cp2k_stack4g.exe）；数据文件 C:\\cp2k-data（BASIS_MOLOPT/GTH_POTENTIALS/dftd3.dat
-从 cp2k/cp2k GitHub data/ 下载）。
+Environment: MSYS2 `pacman -S mingw-w64-ucrt-x86_64-cp2k` (cp2k.ssmp.exe; its 2MB stack
+must be patched with pefile into cp2k_stack4g.exe); data files in C:\\cp2k-data
+(BASIS_MOLOPT/GTH_POTENTIALS/dftd3.dat downloaded from cp2k/cp2k GitHub data/).
 """
 
 import os
@@ -20,7 +22,7 @@ _CP2K_DATA_CANDIDATES = [
     r"C:\cp2k-data",
 ]
 
-# 常见电解液分子元素（DZVP-MOLOPT-SR-GTH 短程基组 + GTH-PBE 赝势）
+# Common electrolyte molecule elements (DZVP-MOLOPT-SR-GTH short-range basis + GTH-PBE pseudopotential)
 _KIND = {"H": ("DZVP-MOLOPT-SR-GTH", "GTH-PBE"),
          "C": ("DZVP-MOLOPT-SR-GTH", "GTH-PBE"),
          "O": ("DZVP-MOLOPT-SR-GTH", "GTH-PBE"),
@@ -34,8 +36,8 @@ _KIND = {"H": ("DZVP-MOLOPT-SR-GTH", "GTH-PBE"),
 
 def cp2k_bin() -> str:
     for cand in (
-        r"C:\msys64\ucrt64\bin\cp2k_stack4g.exe",  # pefile 栈补丁版（4GB reserve）
-        r"C:\msys64\ucrt64\bin\cp2k.ssmp.exe",  # MSYS2 原版（栈 2MB，大分子会溢出）
+        r"C:\msys64\ucrt64\bin\cp2k_stack4g.exe",  # pefile stack-patched build (4GB reserve)
+        r"C:\msys64\ucrt64\bin\cp2k.ssmp.exe",  # stock MSYS2 build (2MB stack, overflows on large molecules)
     ):
         if os.path.isfile(cand):
             return cand
@@ -55,7 +57,7 @@ def data_dir() -> str:
 
 
 def smiles_to_xyz(smiles: str) -> list[str]:
-    """SMILES → RDKit 3D → xyz 行（元素 x y z，Å）。"""
+    """SMILES → RDKit 3D → xyz lines (element x y z, Å)."""
     from rdkit import Chem
     from rdkit.Chem import AllChem
 
@@ -72,7 +74,7 @@ def smiles_to_xyz(smiles: str) -> list[str]:
 
 def build_input(coords: list[str], charge: int, multiplicity: int, geo_opt: bool,
                 workdir: str, name: str) -> str:
-    """CP2K 输入（20 Å 真空盒孤立分子；GEO_OPT 或 ENERGY）。"""
+    """CP2K input (isolated molecule in a 20 Å vacuum box; GEO_OPT or ENERGY)."""
     dd = data_dir().replace("\\", "/")
     kinds = "\n".join(
         f"      &KIND {el}\n"
@@ -139,7 +141,7 @@ def build_input(coords: list[str], charge: int, multiplicity: int, geo_opt: bool
 
 
 def _parse_energy(text: str) -> float:
-    """CP2K 输出 → 总能量 (hartree)。"""
+    """CP2K output → total energy (hartree)."""
     lines = [l for l in text.splitlines() if "ENERGY| Total FORCE_EVAL" in l]
     if not lines:
         raise RuntimeError("cp2k produced no total energy")
@@ -147,10 +149,11 @@ def _parse_energy(text: str) -> float:
 
 
 def _parse_homo_lumo(text: str) -> tuple[float | None, float | None]:
-    """最后一个 MO 本征值块 → (HOMO eV, LUMO eV)。
+    """Last MO eigenvalue block → (HOMO eV, LUMO eV).
 
-    本构建的 EIGVALS 输出无占据数列（'MO| Index au eV'）——HOMO/LUMO 序号
-    由 'Number of occupied orbitals:' 行确定（HOMO=第 N 个，LUMO=第 N+1 个）。
+    The EIGVALS output of this build has no occupation column ('MO| Index au eV') — the
+    HOMO/LUMO indices are determined from the 'Number of occupied orbitals:' line
+    (HOMO = the N-th, LUMO = the N+1-th).
     """
     lines = text.splitlines()
     n_occ = None
@@ -183,8 +186,9 @@ def _parse_homo_lumo(text: str) -> tuple[float | None, float | None]:
 
 
 def _ensure_statm() -> None:
-    """DBCSR 在 SCF 启动时读 /proc/self/statm（gfortran 直连 Windows CRTL，
-    无路径翻译）——在 C:\\proc\\self\\statm 放一个静态页面数文件（32GB 口径）。"""
+    """DBCSR reads /proc/self/statm when the SCF starts (gfortran talks to the Windows CRTL
+    directly, with no path translation) — so place a static page-count file at
+    C:\\proc\\self\\statm (32GB convention)."""
     p = r"C:\proc\self\statm"
     if not os.path.isfile(p):
         os.makedirs(os.path.dirname(p), exist_ok=True)
@@ -193,18 +197,18 @@ def _ensure_statm() -> None:
 
 
 def run_cp2k(workdir: str, name: str) -> tuple[float, bool, float]:
-    """执行 cp2k.ssmp（经 MSYS2 bash：DBCSR 需 /proc/self/statm，仅 MSYS2 模拟）
-    → (能量 hartree, 正常结束, 耗时秒)。"""
+    """Run cp2k.ssmp (through MSYS2 bash: DBCSR needs /proc/self/statm, which only MSYS2
+    emulates) → (energy hartree, clean exit, elapsed seconds)."""
     t0 = time.time()
     _ensure_statm()
     bash = r"C:\msys64\usr\bin\bash.exe"
-    # MSYS 路径：C:/x/y → /c/x/y
+    # MSYS path: C:/x/y → /c/x/y
     in_win = os.path.join(workdir, f"{name}.in").replace("\\", "/")
     in_msys = "/" + in_win[0].lower() + in_win[2:]
     bin_msys = "/" + cp2k_bin().replace("\\", "/")[0].lower() + cp2k_bin().replace("\\", "/")[2:]
     cmd = f"{bin_msys} -i '{in_msys}'"
     env = dict(os.environ)
-    env["OMP_NUM_THREADS"] = str(min(8, os.cpu_count() or 4))  # 32 线程易内存吃满崩溃
+    env["OMP_NUM_THREADS"] = str(min(8, os.cpu_count() or 4))  # 32 threads easily exhausts memory and crashes
     env["OMP_STACKSIZE"] = "512M"
     out_file = os.path.join(workdir, f"{name}.out")
     with open(out_file, "w", encoding="utf-8") as out:
@@ -218,7 +222,8 @@ def run_cp2k(workdir: str, name: str) -> tuple[float, bool, float]:
 
 
 def cp2k_endorsement(smiles: str) -> dict:
-    """单分子真 DFT 背书：中性 GEO_OPT + 离子态垂直单点 → E/HOMO/LUMO/IE/EA。"""
+    """Single-molecule true-DFT endorsement: neutral GEO_OPT + vertical single points on the
+    ionic states → E/HOMO/LUMO/IE/EA."""
     import tempfile
 
     from bda.simulators.orca_runner import _multiplicity_for
@@ -232,7 +237,8 @@ def cp2k_endorsement(smiles: str) -> dict:
         e0, ok0, t0 = run_cp2k(workdir, "neutral")
         text0 = open(os.path.join(workdir, "neutral.out"), encoding="utf-8", errors="replace").read()
         homo, lumo = _parse_homo_lumo(text0)
-        # 优化后的几何（中性）：取 GEO_OPT 收敛构型重新写垂直单点
+        # Optimized geometry (neutral): take the GEO_OPT converged configuration and rewrite
+        # the vertical single points with it
         opt_xyz = _extract_opt_coords(text0, coords)
         ie = ea = None
         ok_ion = True
@@ -260,7 +266,7 @@ def cp2k_endorsement(smiles: str) -> dict:
 
 
 def _extract_opt_coords(text: str, coords: list[str]) -> list[str] | None:
-    """GEO_OPT 输出 → 优化后坐标（取最后出现的 &COORD 块）。"""
+    """GEO_OPT output → optimized coordinates (take the last &COORD block that appears)."""
     blocks = text.split("&COORD")
     if len(blocks) < 2:
         return None
@@ -272,7 +278,7 @@ def _extract_opt_coords(text: str, coords: list[str]) -> list[str] | None:
 
 
 def run_cp2k_endorsement(in_data: dict) -> dict:
-    """IN: {"candidates": [{"smiles"}]} → OUT: 每候选 endorsement（与 run-orca 同构）。"""
+    """IN: {"candidates": [{"smiles"}]} → OUT: one endorsement per candidate (isomorphic to run-orca)."""
     cands = in_data.get("candidates", [])
     if not cands:
         raise ValueError("input must contain a non-empty 'candidates' list")

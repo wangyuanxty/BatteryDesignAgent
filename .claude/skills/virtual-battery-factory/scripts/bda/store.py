@@ -4,7 +4,8 @@ from pathlib import Path
 
 
 def _repo_root() -> Path:
-    """仓库根 = 含 .git 或 .claude 的最上层目录（相对路径一律基于它解析，杜绝 cwd 依赖）。"""
+    """Repo root = topmost directory containing .git or .claude (relative paths always
+    resolve against it, eliminating any cwd dependency)."""
     p = Path(__file__).resolve()
     for parent in p.parents:
         if (parent / ".git").exists() or (parent / ".claude").exists():
@@ -17,8 +18,9 @@ REPO_ROOT = _repo_root()
 
 class CaseWorkspace:
     def __init__(self, case_id: str, root: str = "runs", create: bool = True):
-        # 相对 root 基于仓库根解析（t2_r1 实测：agent cd 进工作区后相对路径
-        # 拼成 runs/runs/exp/... 双重路径——绝对化后免疫 cwd）
+        # A relative root is resolved against the repo root (observed in t2_r1: after the
+        # agent cd'd into the workspace, the relative path concatenated into a doubled
+        # runs/runs/exp/... path — absolutizing it makes the code immune to cwd)
         p = Path(root)
         if not p.is_absolute():
             p = REPO_ROOT / p

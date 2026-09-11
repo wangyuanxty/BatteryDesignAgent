@@ -22,7 +22,7 @@ def _make_deliverables(d: Path) -> None:
 
 
 def _audit_check(report) -> dict:
-    return next(c for c in report["checks"] if "审计链" in c["check"])
+    return next(c for c in report["checks"] if "audit chain" in c["check"])
 
 
 def test_all_pass(tmp_path):
@@ -58,7 +58,7 @@ def test_empty_pdf_fails(tmp_path):
         _make_deliverable(d, stem, ".pdf", content="x" * 500)  # <1KB
     report = verify_deliverables(tmp_path)
     assert report["all_pass"] is False
-    assert any("PDF 非空" in c["check"] and not c["pass"] for c in report["checks"])
+    assert any("PDFs non-empty" in c["check"] and not c["pass"] for c in report["checks"])
 
 
 def test_index_without_ids_fails(tmp_path):

@@ -7,7 +7,7 @@ The only variable under test is the orchestration substrate (OpenAI Agents SDK
 instead of the Claude agent SDK).
 
 Usage:
-    .venv/Scripts/python.exe paper/portability/oa_sdk/run_oa.py "TASK TEXT" \
+    D:/anaconda/envs/py312/python.exe paper/portability/oa_sdk/run_oa.py "TASK TEXT" \
         --workspace runs/portability/t1_oa --max-turns 300
 """
 import argparse
@@ -51,7 +51,7 @@ WORKSPACE: Path = REPO_ROOT  # set in main
 @function_tool
 def run_shell(command: str) -> str:
     """Run a shell command in the repository root and return stdout/stderr (truncated to 8000 chars).
-    Use for ALL bda simulation/evaluation commands, e.g. `.venv/Scripts/python.exe -m bda run-pyamm ...`.
+    Use for ALL bda simulation/evaluation commands, e.g. `D:/anaconda/envs/py312/python.exe -m bda run-pyamm ...`.
     Long simulations may take minutes; the command has a 30-minute timeout."""
     import subprocess
 
@@ -142,7 +142,7 @@ def build_instructions(workspace: Path) -> str:
         f"- You are running under a different agent harness than usual; the protocol rules above are unchanged and fully binding.\n"
         f"- Your workspace (artifacts, log.jsonl, deliverables) is: {workspace}\n"
         "- Shell commands execute in the repository root; use the read/write/list tools with workspace-relative paths.\n"
-        "- The bda tool library is invoked exactly as the protocol says: `.venv/Scripts/python.exe -m bda <subcommand> ...`\n"
+        "- The bda tool library is invoked exactly as the protocol says: `D:/anaconda/envs/py312/python.exe -m bda <subcommand> ...`\n"
         "- You may not delegate to other agents; do everything yourself with the four tools provided.\n"
     )
     return skill + note

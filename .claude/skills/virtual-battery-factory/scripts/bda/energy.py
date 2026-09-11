@@ -1,10 +1,13 @@
-"""calc-energy：合同口径能量密度计算（所有任务共用同一公式，杜绝跨任务抄先例）。
+"""calc-energy: contract-conforming energy density calculation (all tasks share this one
+formula, so no task can copy another task's precedent).
 
-ED = ∫V·I_1C dt / Σ(层厚×(1−孔隙率)×密度×面积)
-- I_1C = Nominal cell capacity × 1（恒流）
-- 面积 = Electrode height × width
-- 层：正/负极活性层（含孔隙）、正/负集流体（无孔隙因子）、隔膜
-- 电解液不计入质量（参数集缺密度，如实标注）
+ED = ∫V·I_1C dt / Σ(layer thickness×(1−porosity)×density×area)
+- I_1C = Nominal cell capacity × 1 (constant current)
+- area = Electrode height × width
+- layers: positive/negative active layers (porosity included), positive/negative current
+  collectors (no porosity factor), separator
+- the electrolyte is not counted toward the mass (the parameter set has no density for it;
+  stated as-is)
 """
 import json
 from pathlib import Path
@@ -19,7 +22,8 @@ def _layer(th: float, por: float, den: float) -> float:
 
 def calc_energy(params_json: str, discharge_json: str, base: str) -> dict:
     if base.endswith(".json"):
-        # 自定义参数集（高电压 LNMO 等）：Chen2020 基底 + JSON 覆盖键（OCP 符号函数手动绑定）
+        # Custom parameter set (high-voltage LNMO, etc.): Chen2020 base plus JSON
+        # override keys (the OCP symbolic function is bound by hand)
         import json as _json
         from pathlib import Path as _Path
 
@@ -41,8 +45,8 @@ def calc_energy(params_json: str, discharge_json: str, base: str) -> dict:
     dis = json.loads(Path(discharge_json).read_text(encoding="utf-8-sig"))
     v = np.asarray(dis["voltage_v"])
     t = np.asarray(dis["time_s"])
-    # 兼容 numpy 2（np.trapezoid）与 1.x（np.trapz 旧名）
-    _trapz = getattr(np, "trapezoid", np.trapz)
+    # Compatible with numpy 2 (np.trapezoid) and 1.x (the old np.trapz name)
+    _trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     energy_wh = float(_trapz(v * i_1c, t) / 3600.0)
     pos_el = _layer(
         float(pv["Positive electrode thickness [m]"]),
@@ -66,7 +70,8 @@ def calc_energy(params_json: str, discharge_json: str, base: str) -> dict:
         float(pv["Separator density [kg.m-3]"]),
     )
     mass_kg = (pos_el + neg_el + pos_cc + neg_cc + sep) * area
-    # 体积（合同口径：Σ层厚×面积，含孔隙；与质量同层集——电极/隔膜/集流体，不含电解液）
+    # Volume (contract convention: Σ layer thickness × area, porosity included; same layer
+    # set as the mass — electrodes/separator/current collectors, electrolyte excluded)
     thickness_m = (
         float(pv["Positive electrode thickness [m]"])
         + float(pv["Negative electrode thickness [m]"])
@@ -76,13 +81,16 @@ def calc_energy(params_json: str, discharge_json: str, base: str) -> dict:
     )
     volume_m3 = thickness_m * area
     volume_l = volume_m3 * 1000.0  # 1 m³ = 1000 L
-    # 电压平台（机械推导）：放电时间中点处的电压（恒流放电，时间中点 ≈ 容量中点）
+    # Voltage plateau (mechanically derived): the voltage at the mid-point of the
+    # discharge time (constant-current discharge, so the time midpoint ≈ capacity midpoint)
     mid_idx = int(len(t) * 0.5)
     midpoint_voltage_v = float(v[mid_idx])
-    # 直流内阻（机械推导）：放电起始 OCV 与 10% 放电时间处电压差 / I_1C（恒流）
+    # DC internal resistance (mechanically derived): voltage difference between the start
+    # of discharge (OCV) and the 10% discharge time, divided by I_1C (constant current)
     idx = max(1, int(len(t) * 0.1))
     dcr_ohm = (v[0] - v[idx]) / i_1c
-    # 功率密度（理论峰值近似）：P_max = V_OC²/(4·R_DC)，按质量归一
+    # Power density (approximate theoretical peak): P_max = V_OC²/(4·R_DC), normalized
+    # per unit mass
     power_density_w_kg = (v[0] ** 2) / (4.0 * dcr_ohm) / mass_kg if dcr_ohm > 0 else float("nan")
     return {
         "capacity_ah": dis["capacity_ah"],
@@ -104,7 +112,7 @@ def calc_energy(params_json: str, discharge_json: str, base: str) -> dict:
         },
         "area_m2": area,
         "electrolyte_included": False,
-        "note": "电解液不计入质量与体积（参数集缺密度）",
+        "note": "electrolyte is not counted toward mass or volume (parameter set has no density)",
     }
 
 

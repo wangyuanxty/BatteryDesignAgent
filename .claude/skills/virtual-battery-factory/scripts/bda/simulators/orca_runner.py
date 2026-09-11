@@ -28,9 +28,10 @@ def _multiplicity_for(smiles: str, charge: int) -> int:
 
 
 def _parse_orbital_energies(text: str) -> tuple[float | None, float | None]:
-    """ORCA 6 'ORBITAL ENERGIES' 块（P_OrbEnergies 输出）→ (HOMO eV, LUMO eV)。
+    """ORCA 6 'ORBITAL ENERGIES' block (P_OrbEnergies output) → (HOMO eV, LUMO eV).
 
-    行格式：NO  OCC  E(Eh)  E(eV)——HOMO=占据数 ≥1.5 的最后一个，LUMO=下一个。
+    Row format: NO  OCC  E(Eh)  E(eV) — HOMO = the last one with occupation >= 1.5,
+    LUMO = the next one.
     """
     lines = text.splitlines()
     start = None
@@ -54,7 +55,8 @@ def _parse_orbital_energies(text: str) -> tuple[float | None, float | None]:
         return None, None
     homo = lumo = None
     for ev, occ in rows:
-        # 占据阈值 0.5：闭壳层 occ=2.0、开壳层 occ=1.0 均视为占据（虚轨道=0.0）
+        # Occupation threshold 0.5: both closed-shell occ=2.0 and open-shell occ=1.0
+        # count as occupied (virtual orbitals = 0.0)
         if occ >= 0.5:
             homo = ev
             lumo = None
@@ -87,7 +89,8 @@ def _write_input(
     AllChem.EmbedMolecule(mol, randomSeed=seed)
     AllChem.MMFFOptimizeMolecule(mol)
     conf = mol.GetConformer()
-    # ORCA 6：坐标用外部 .xyz 文件（* xyzfile 语法；旧 * xyz 内联块已移除）
+    # ORCA 6: coordinates come from an external .xyz file (* xyzfile syntax; the old
+    # inline * xyz block has been removed)
     lines = [str(mol.GetNumAtoms()), name]
     for atom in mol.GetAtoms():
         pos = conf.GetAtomPosition(atom.GetIdx())
@@ -105,7 +108,7 @@ def _run_and_parse(workdir: Path, name: str) -> dict:
     env = dict(os.environ)
     extra = []
     orca_dir = os.path.dirname(shutil.which("orca") or "")
-    mpi_dir = r"C:\Program Files\Microsoft MPI\Bin"  # MS-MPI 的 mpiexec（%pal 需要）
+    mpi_dir = r"C:\Program Files\Microsoft MPI\Bin"  # MS-MPI's mpiexec (needed by %pal)
     if os.path.isdir(mpi_dir):
         extra.append(mpi_dir)
     if orca_dir:
@@ -114,7 +117,8 @@ def _run_and_parse(workdir: Path, name: str) -> dict:
     proc = subprocess.run(["orca", f"{name}.inp"], cwd=workdir, capture_output=True, text=True, env=env)
     if proc.returncode != 0:
         raise RuntimeError(f"ORCA failed: {proc.stderr[-300:]}")
-    # ORCA 6.1 输出走 stdout，不写 .out 文件（已实测）
+    # ORCA 6.1 writes its output to stdout and does not create a .out file (verified
+    # experimentally)
     out_text = proc.stdout
     E = None
     for line in out_text.splitlines():

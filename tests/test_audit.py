@@ -110,7 +110,7 @@ def test_log_evaluate_pass_with_evidence(tmp_path):
     assert len(e["evidence"]) == 3                # ED / T_max / plated 各一条
     src = {ev["metric"]: ev for ev in e["evidence"]}
     assert src["energy_density_wh_kg"]["source"].endswith("cell/v1_energy.json:energy_density_wh_kg")
-    assert "anode_potential_v (min=0.015V>0 推导)" in src["plated"]["source"]
+    assert "anode_potential_v (min=0.015V>0 derived)" in src["plated"]["source"]
 
 
 def test_log_evaluate_fail_when_ed_below_min(tmp_path):
@@ -143,7 +143,7 @@ def test_log_evaluate_unchecked_criteria_recorded(tmp_path):
     e = _last_entry(ws)
     assert e["verdict"] == "pass"                 # 已检查指标全过
     assert e["unchecked"] == ["T_max_K", "plated"]
-    assert "未检查 criteria: T_max_K, plated" in e["note"]
+    assert "unchecked criteria: T_max_K, plated" in e["note"]
 
 
 def test_log_evaluate_round_zero_baseline_allowed(tmp_path):
@@ -192,6 +192,6 @@ def test_cli_module_entrypoint_runs(tmp_path):
         capture_output=True, text=True, timeout=60,
     )
     assert proc.returncode == 0, proc.stderr
-    assert "已记录" in proc.stdout                # 进程真实执行了命令
+    assert "recorded" in proc.stdout              # 进程真实执行了命令
     e = _last_entry(ws)
     assert e["action"] == "evaluate" and e["verdict"] == "pass"

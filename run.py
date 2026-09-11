@@ -102,7 +102,10 @@ def _brief(msg: Message) -> str:
     """Compress one SDK message into a one-line progress summary."""
     if isinstance(msg, ResultMessage):
         cost = f"${msg.total_cost_usd:.4f}" if msg.total_cost_usd is not None else "$?"
-        return f"[result] error={msg.is_error} cost={cost} {(msg.result or '')[:120]}"
+        turns = getattr(msg, "num_turns", "?")
+        dur = getattr(msg, "duration_ms", "?")
+        return (f"[result] error={msg.is_error} turns={turns} duration_ms={dur} cost={cost} "
+                f"{(msg.result or '')[:120]}")
     if isinstance(msg, SystemMessage):
         return f"[system:{msg.subtype}] {json.dumps(msg.data, ensure_ascii=False)[:200]}"
     if isinstance(msg, UserMessage):
@@ -188,6 +191,20 @@ def _disable_auto_memory() -> None:
     os.environ["CLAUDE_CODE_DISABLE_AUTO_MEMORY"] = "1"
 
 
+def _plugin_off_settings() -> str | None:
+    """Highest-priority settings layer disabling every plugin enabled by project settings.
+
+    Governed sessions must load no plugin skills/hooks/MCP servers; the protocol skills
+    (virtual-battery-factory, cad-skill) are repo skills, not plugins, and stay available.
+    MCP servers are additionally blocked by strict_mcp_config.
+    """
+    path = REPO_ROOT / ".claude" / "settings.json"
+    if not path.exists():
+        return None
+    data = json.loads(path.read_text(encoding="utf-8"))
+    disabled = {name: False for name in (data.get("enabledPlugins") or {})}
+    return json.dumps({"enabledPlugins": disabled}) if disabled else None
+
 
 async def _run(
     log: logging.Logger,
@@ -195,22 +212,29 @@ async def _run(
     max_turns: int | None,
     system: str | None = None,
     skills: list[str] | None = None,
-    hooks: dict | None = None,
     model: str | None = None,
     plugins: list[str] | None = None,
     allowed_tools: list[str] | None = None,
+    tools: list[str] | None = None,
+    resume: str | None = None,
 ) -> int:
-    """Run one session, return the process exit code."""
+    """Run one session, return the process exit code. With `resume`, continue an
+    interrupted session (by id) from its own transcript."""
+    if resume:
+        log.info("resuming session %s", resume)
     options = ClaudeAgentOptions(
         system_prompt=system,
         skills=skills,
-        hooks=hooks,
+        resume=resume,
         permission_mode="bypassPermissions",
         effort="max",
         enable_file_checkpointing=True,
         allowed_tools=allowed_tools or ALLOWED_TOOLS,
+        tools=tools or None,
         setting_sources=["project"],
         plugins=plugins,
+        settings=_plugin_off_settings(),
+        strict_mcp_config=True,
         max_turns=max_turns,
         cwd=str(REPO_ROOT),
         model=model or None,
@@ -224,6 +248,9 @@ async def _run(
         log.error("error: %s", getattr(result, "errors", "unknown error"))
         return 1
     log.info("tokens: %s", _usage_summary(result))
+    log.info("sdk_turns: %s | sdk_duration_ms: %s | api_duration_ms: %s",
+             getattr(result, "num_turns", "?"), getattr(result, "duration_ms", "?"),
+             getattr(result, "duration_api_ms", "?"))
     log.info("result:\n%s", result.result or "")
     return 0
 
@@ -237,24 +264,43 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("prompt", nargs="?", help="Task description, e.g.: python run.py \"design a battery with 20%% higher energy density...\"")
     parser.add_argument("--max-turns", type=int, default=300, help="Maximum conversation turns (default 1000)")
     parser.add_argument("--workspace", default=None, help="Workspace directory (artifact destination); unset = agent decides")
-    parser.add_argument("--model", default=os.environ.get("ANTHROPIC_MODEL") or "", help="Model override (robustness experiments, e.g. deepseek-v4-pro; default = ANTHROPIC_MODEL or session default)")
+    parser.add_argument("--model", default=os.environ.get("ANTHROPIC_MODEL") or "", help="Model override (robustness experiments, e.g. official-deepseek-v4-pro; default = ANTHROPIC_MODEL or session default)")
     parser.add_argument(
         "--override",
         default=None,
         help="system prompt override (ablation B, e.g. 'architecture variant count not enforced') — system-level instruction, overrides skill rules",
     )
+    parser.add_argument("--resume", default=None, help="Resume an interrupted session by its session id (continues that conversation); the prompt is treated as a continuation nudge")
+    parser.add_argument(
+        "--bare",
+        action="store_true",
+        help="protocol-free control: initial prompt carries no protocol sentence (no zero-interaction rule, no log.jsonl entry-0 instruction, no SKILL.md reference); role statement kept",
+    )
     args = parser.parse_args(argv)
+    if args.model in ("deepseek-v4-pro", "official-deepseek-v4-pro"):
+        args.model = "official-deepseek-v4-pro"  # official channel (same model, stable/fast)
     if not args.prompt:
         parser.error('Task description required, e.g.: python run.py "design a battery with 20% higher energy density..."')
     if args.max_turns is not None and args.max_turns <= 0:
         parser.error("--max-turns must be a positive integer")
     ws = Path(args.workspace).resolve() if args.workspace else None
-    prompt = f"headless session: no user present, skip clarification questions (SKILL.md zero-interaction rule), parse parameters from the task text, use defaults for unspecified ones, write to log.jsonl entry 0.\nTask: {args.prompt}"
+    if args.bare:
+        prompt = (
+            "Headless session: no user present. "
+            "WORKSPACE DISCIPLINE: read/write only your own workspace and the task text; do not read "
+            "other runs' workspaces or the skill/protocol files.\n"
+            f"Task: {args.prompt}"
+        )
+    else:
+        prompt = f"Headless task: no user present. Parse the design target, explore the available simulation tools, and produce your best battery design. Keep notes in the workspace.\nTask: {args.prompt}"
     if ws:
         prompt = f"Workspace: {ws}\n" + prompt
     system = f"You are a battery design agent. In this task: {args.override}" if args.override else None
+
+    allowed_tools = ["Bash", "Read", "Write", "Edit", "Grep", "Glob", "PowerShell"] if args.bare else ALLOWED_TOOLS
+    bare_tools = ["Bash", "Read", "Write", "Edit", "Grep", "Glob", "PowerShell"] if args.bare else None
     log = _setup_logging(ws)
-    return asyncio.run(_run(log, prompt, args.max_turns, system=system, model=args.model or None))
+    return asyncio.run(_run(log, prompt, args.max_turns, system=system, model=args.model or None, allowed_tools=allowed_tools, tools=bare_tools, resume=args.resume))
 
 
 if __name__ == "__main__":

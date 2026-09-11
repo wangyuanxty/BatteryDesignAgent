@@ -1,9 +1,10 @@
-"""log.jsonl → 自包含 HTML 报告（工程蓝图纸模板，确定性渲染，零 LLM）。
+"""log.jsonl → self-contained HTML report (engineering blueprint template, deterministic
+rendering, zero LLM).
 
-数据源：
-- log.jsonl：criteria 第 0 条 + propose/funnel/evaluate/endorse/final 条目
-- <case_dir>/config.yaml：goal（可选，仅用于图纸头展示）
-- <case_dir>/cell/*.json：run-pyamm 曲线输出（time_s/voltage_v/anode_potential_v）
+Data sources:
+- log.jsonl: criteria entry 0 + propose/funnel/evaluate/endorse/final entries
+- <case_dir>/config.yaml: goal (optional, used only for the blueprint header)
+- <case_dir>/cell/*.json: run-pyamm curve output (time_s/voltage_v/anode_potential_v)
 """
 
 import csv
@@ -14,10 +15,10 @@ from pathlib import Path
 
 TEMPLATE_PATH = Path(__file__).parent / "report_template.html"
 
-# 内联 SVG 曲线几何（viewBox 640×320）
+# Inline SVG curve geometry (viewBox 640×320)
 _VIEW_W, _VIEW_H = 640, 320
 _PAD_L, _PAD_R, _PAD_T, _PAD_B = 56, 20, 16, 40
-_MAX_PTS = 400  # 每条曲线路径的采样点数上限
+_MAX_PTS = 400  # upper bound on sampling points per curve path
 
 
 def _load_log(case_dir: str) -> list[dict]:
@@ -32,7 +33,7 @@ def _html_escape(s: str) -> str:
 
 
 def _attr_escape(s: str) -> str:
-    """HTML 属性值转义（配合单引号定界使用）。"""
+    """Escape HTML attribute values (used with single-quote delimiters)."""
     return _html_escape(str(s)).replace('"', "&quot;").replace("'", "&#39;")
 
 
@@ -57,7 +58,7 @@ def _as_list(v) -> list:
 
 
 def _fmt_num(v, sig: int = 4) -> str:
-    """数值展示格式化：int 原样、float 取有效数字、其余转字符串。"""
+    """Number display formatting: int as-is, float to significant digits, anything else as a string."""
     if isinstance(v, bool):
         return str(v).lower()
     if isinstance(v, int):
@@ -166,7 +167,7 @@ _CAND_HEAD = "<tr><th>Candidate</th><th>Component</th><th>Type</th><th>Role</th>
 
 
 def _read_goal(case_dir: str) -> str | None:
-    """从 config.yaml 读取设计目标（缺失/损坏时返回 None，如实标注）。"""
+    """Read the design goal from config.yaml (returns None when missing/corrupt, stated as-is)."""
     p = Path(case_dir) / "config.yaml"
     if not p.exists():
         return None
@@ -184,9 +185,9 @@ def _verdict_class(verdict: str) -> str:
     v = str(verdict).strip().lower()
     if not v:
         return "neutral"
-    if "不达标" in v or v in ("fail", "failed", "reject", "rejected", "no"):
+    if "fail" in v or v in ("fail", "failed", "reject", "rejected", "no"):
         return "bad"
-    if "达标" in v or v in ("pass", "passed", "ok", "yes"):
+    if "pass" in v or v in ("pass", "passed", "ok", "yes"):
         return "ok"
     return "neutral"
 
@@ -196,13 +197,14 @@ def _verdict_badge(verdict: str) -> str:
     return f'<span class="badge {cls}">{_html_escape(str(verdict))}</span>'
 
 
-# 五阶段流程（1=规划，2–4=漏斗阶段，5=True DFT/MD endorsement；阶段编号与 SKILL.md 流程一致。
-# 阶段 5 沿用 .badge.stage.end 铜色样式区分。）
+# Five-stage flow (1=planning, 2–4=funnel stages, 5=True DFT/MD endorsement; the stage
+# numbering matches the SKILL.md flow. Stage 5 reuses the .badge.stage.end copper style to
+# set it apart.)
 _STAGE_LABELS = {1: "STAGE 1 Plan", 2: "STAGE 2 Materials", 3: "STAGE 3 Cell", 4: "STAGE 4 Safety", 5: "STAGE 5 True DFT/MD"}
 
 
 def _stage_badge(stage: int | None) -> str:
-    """STAGE 小标（blueprint 风格：等宽 10.5px 边框徽章，沿用 .badge + --blue/--accent）。"""
+    """Small STAGE badge (blueprint style: monospace 10.5px bordered badge, reusing .badge + --blue/--accent)."""
     if stage not in _STAGE_LABELS:
         return ""
     cls = "badge stage end" if stage == 5 else "badge stage"
@@ -210,9 +212,10 @@ def _stage_badge(stage: int | None) -> str:
 
 
 def _stage_range_badge(lo: int, hi: int) -> str:
-    """轮卡片阶段范围徽章：单阶段沿用 _stage_badge；跨阶段显示 STAGE N–M（en dash）。
-    范围仅由数字阶段（1–5）构成，阶段 5（True DFT/MD endorsement）可参与范围（如 STAGE 4–5）；
-    endorse/final 条目不进轮卡片，阶段 5 在Flow overview条中单独显示。"""
+    """Round-card stage-range badge: a single stage reuses _stage_badge; a span shows STAGE N–M (en dash).
+    The range is built only from numeric stages (1–5), and stage 5 (True DFT/MD endorsement) may take
+    part in a range (e.g. STAGE 4–5); endorse/final entries do not enter round cards, and stage 5 is
+    shown separately in the Flow overview row."""
     if lo == hi:
         return _stage_badge(lo)
     if lo not in _STAGE_LABELS or hi not in _STAGE_LABELS:
@@ -221,9 +224,9 @@ def _stage_range_badge(lo: int, hi: int) -> str:
 
 
 def _entry_stage(e: dict) -> int | None:
-    """log 条目 → 流程阶段：plan=1（总体设计规划）；mol. propose/funnel=2（材料）；
-    struct propose=3（电芯）；evaluate 按内容推断（安全Metric=4，结构=3，否则=2）；
-    endorse/final=5（True DFT/MD endorsement）。"""
+    """log entry → flow stage: plan=1 (overall design planning); mol. propose/funnel=2 (materials);
+    struct propose=3 (cell); evaluate inferred from content (safety metrics=4, struct=3, else=2);
+    endorse/final=5 (True DFT/MD endorsement)."""
     action = e.get("action")
     if action == "plan":
         return 1
@@ -237,21 +240,23 @@ def _entry_stage(e: dict) -> int | None:
     if action == "funnel":
         return 2
     if action == "evaluate":
-        # 先看结构化 metrics（安全Metric=阶段4，结构覆盖=阶段3），文本兜底——不靠"结构"字样碰巧命中
-        # （实测：agent 日志 evaluate 条目无"结构"字样，曾误判为材料轮=2）
+        # Structured metrics first (safety metrics=stage 4, struct coverage=stage 3), with a text
+        # fallback — not relying on the word "struct" happening to appear
+        # (observed: the agent's log evaluate entries carry no "struct" wording, which used to be
+        # misjudged as a materials round=2)
         metrics = e.get("metrics") or {}
         has_safety = isinstance(metrics.get("T_max_K"), (int, float)) or "plated" in metrics
         if has_safety:
             return 4
         text = json.dumps(e, ensure_ascii=False)
-        if "struct" in text or "结构" in text:
+        if "struct" in text:
             return 3
         return 2
     return None
 
 
 def _plot_stage(filename: str) -> int | None:
-    """曲线文件名 → 阶段：discharge=3（Cell design）、charge/aging=4（安全/老化评估）；无法判定则不贴。"""
+    """Curve filename → stage: discharge=3 (Cell design), charge/aging=4 (safety/aging assessment); if it cannot be decided, no stage is attached."""
     low = filename.lower()
     if "discharge" in low:
         return 3
@@ -279,11 +284,12 @@ _STAGE1_UNITS = {"max_energy_ev": "eV", "max_homo_ev": "eV"}
 
 
 def _normalize_criteria(criteria: dict) -> dict[str, dict]:
-    """criteria → {"stage1"/"stage2"/"stage3"/"meta": {...}}。
+    """criteria → {"stage1"/"stage2"/"stage3"/"meta": {...}}.
 
-    新协议为显式分层（stageN/meta 键）；旧日志为扁平键（如 T_max_C），按键名归组：
-    电位窗/淘汰线（homo/energy_ev/voltage/window）→ stage1；容量/Energy density（capacity/density）→ stage2；
-    温度/析锂（t_max/temp/plat）→ stage3；其余 → meta。
+    The new protocol is explicitly layered (stageN/meta keys); old logs use flat keys (such as
+    T_max_C), grouped by key name: potential window/elimination line (homo/energy_ev/voltage/
+    window) → stage1; capacity/Energy density (capacity/density) → stage2; temperature/plating
+    (t_max/temp/plat) → stage3; everything else → meta.
     """
     norm: dict[str, dict] = {}
     for k in _STAGE_KEYS:
@@ -308,7 +314,7 @@ def _normalize_criteria(criteria: dict) -> dict[str, dict]:
 
 
 def _flat_thresholds(criteria: dict) -> dict:
-    """stage1–3 Threshold合并为扁平字典（KPI/Achieved列机械比较用；meta 不参与）。"""
+    """Merge the stage1–3 Thresholds into a flat dict (for the mechanical KPI/Achieved column comparison; meta does not participate)."""
     norm = _normalize_criteria(criteria)
     merged: dict = {}
     for k in ("stage1", "stage2", "stage3"):
@@ -317,7 +323,7 @@ def _flat_thresholds(criteria: dict) -> dict:
 
 
 def _achieve_cell(value, spec) -> str:
-    """单MetricAchieved格：数值 vs {"min"/"max"} Threshold → ✓/✗ 徽章 + Achieved值；无数据 → 破折号。"""
+    """Single Metric Achieved cell: value vs {"min"/"max"} Threshold → ✓/✗ badge + the Achieved value; no data → em dash."""
     if isinstance(value, bool):
         show = "No plating" if not value else "Plating risk"
         if isinstance(spec, bool):
@@ -340,13 +346,14 @@ def _achieve_cell(value, spec) -> str:
 
 
 def _stage_achieve_badge(stage_key: str, stage_dict: dict, metrics: dict, funnel_latest: dict | None) -> str:
-    """阶段头部"Achieved"徽章：stage1 看漏斗；stage2/3 看Metric对照；无数据 → mute。"""
+    """Stage-header "Achieved" badge: stage1 looks at the funnel; stage2/3 look at the metric comparison; no data → mute."""
     if stage_key == "stage1":
         if funnel_latest is None:
             return '<span class="badge mute">Not run</span>'
         n, m = _to_int(funnel_latest.get("passed")), _to_int(funnel_latest.get("disputed"))
-        # 分歧不是失败（协议："分歧是'该动脑子'的信号"），处置留痕于漏斗明细；
-        # 阶段 2 Achieved = 有候选通过漏斗（passed > 0）
+        # Divergence is not failure (the protocol: "divergence is a signal to think harder"), and
+        # its handling is recorded in the funnel detail;
+        # stage 2 Achieved = some candidate passed the funnel (passed > 0)
         cls = "ok" if n > 0 else "bad"
         return f'<span class="badge {cls}">Achieved · PASS {n} · DISP {m}</span>'
     verdicts: list[bool] = []
@@ -434,7 +441,7 @@ def _criteria_html(criteria: dict, log: list[dict]) -> str:
 
 
 def _candidates_html(log: list[dict]) -> str:
-    """SHEET 01 涉及候选：全部 propose/endorse 候选去重后的总表（首次出现顺序）。"""
+    """SHEET 01 candidates involved: master table of all propose/endorse candidates, deduplicated (in first-appearance order)."""
     seen: dict[str, object] = {}
     order: list[str] = []
     for e in log:
@@ -454,7 +461,7 @@ def _goal_mark(ok: bool) -> str:
 
 
 def _goal_parts(stage_key: str, stage_dict: dict) -> str:
-    """阶段目标压缩文本：'E ≤ 0.0 eV · HOMO ≤ −6.0 eV' / 'Energy density ≥ 300 Wh/kg' 等。"""
+    """Compressed stage-goal text: 'E ≤ 0.0 eV · HOMO ≤ −6.0 eV' / 'Energy density ≥ 300 Wh/kg', etc."""
     labels = {
         "max_energy_ev": "E", "max_homo_ev": "HOMO",
         "energy_density_wh_kg": "Energy density", "capacity_ah": "Capacity", "T_max_K": "T_max",
@@ -466,7 +473,7 @@ def _goal_parts(stage_key: str, stage_dict: dict) -> str:
             parts.append(_threshold_text(v))
             continue
         if isinstance(v, str):
-            continue  # 自由文本规则（如 plating_rule）不进入压缩目标行
+            continue  # free-text rules (such as plating_rule) do not enter the compressed goal row
         label = labels.get(k, str(k))
         if isinstance(v, dict):
             t = _threshold_text(v)
@@ -479,14 +486,14 @@ def _goal_parts(stage_key: str, stage_dict: dict) -> str:
 
 
 def _flow_achieve(stage_key: str, stage_dict: dict, log: list[dict]) -> str:
-    """流程条Achieved摘要：stage1 看最新漏斗；stage2/3 看最新评估Metric对照。"""
+    """Flow-row Achieved summary: stage1 looks at the latest funnel; stage2/3 look at the latest evaluation's metric comparison."""
     if stage_key == "stage1":
         funnels = [e for e in log if e.get("action") == "funnel"]
         if not funnels:
             return "—"
         f = funnels[-1]
         n, m = _to_int(f.get("passed")), _to_int(f.get("disputed"))
-        # 阶段 2 Achieved = 有候选通过漏斗（分歧已处置，留痕于漏斗明细）
+        # stage 2 Achieved = some candidate passed the funnel (divergence already handled, recorded in the funnel detail)
         return f"PASS {n} · DISP {m} {_goal_mark(n > 0)}"
     metrics = _latest_metrics(log)
     if not stage_dict or not metrics:
@@ -507,11 +514,13 @@ def _flow_achieve(stage_key: str, stage_dict: dict, log: list[dict]) -> str:
 
 
 def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: dict) -> str:
-    """概览区Flow overview条：五阶段徽章，各带计数/结论摘要 + 目标与Achieved（由 criteria 与 log 机械推导）。
+    """Overview-area Flow overview row: five stage badges, each with a count/conclusion summary plus
+    target and Achieved (mechanically derived from criteria and log).
 
-    阶段1 总体设计规划=plan 条目；阶段2 Materials design=mol. propose/funnel（判定层 stage1）；
-    阶段3 Cell design=struct propose/discharge 曲线（判定层 stage2）；
-    阶段4 Safety assessment=charge45 曲线（判定层 stage3）；阶段5 True DFT/MD endorsement=endorse/final（含最终结论）。
+    Stage 1 overall design planning = plan entries; stage 2 Materials design = mol. propose/funnel
+    (verdict layer stage1); stage 3 Cell design = struct propose/discharge curves (verdict layer
+    stage2); stage 4 Safety assessment = charge45 curves (verdict layer stage3); stage 5 True DFT/MD
+    endorsement = endorse/final (including the final conclusion).
     """
     mol_prop = struct_prop = funnel_n = endorse_n = final_n = plan_n = 0
     for e in log:
@@ -536,7 +545,7 @@ def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: di
     verdict = str(finals[-1].get("verdict") or "") if finals else ""
     close_sum = f"Endorse {endorse_n} · Final {final_n}" + (f" · Verdict {verdict}" if verdict else "")
     norm = _normalize_criteria(criteria)
-    # 流程阶段 → 判定层键映射（编号独立，阶段 2/3/4 分别对应判定层 stage1/2/3）
+    # Flow stage → verdict layer key mapping (numbering is independent; stages 2/3/4 correspond to verdict layers stage1/2/3)
     stage_to_key = {2: "stage1", 3: "stage2", 4: "stage3"}
     items = (
         (1, "Stage 1 · Overall planning", f"plan {plan_n} · design_plan.md"),
@@ -566,7 +575,7 @@ def _flow_html(log: list[dict], cell_files: list[tuple[str, dict]], criteria: di
 
 
 def _kpi_compare(value, thresholds: dict, key: str, direction: str) -> tuple[str, str]:
-    """关键结果 vs 扁平化Threshold（stage1–3 合并）的机械比较 → (颜色类, Threshold说明)。"""
+    """Key results vs the flattened Thresholds (stage1–3 merged), compared mechanically → (color class, Threshold description)."""
     spec = thresholds.get(key)
     thr = spec.get(direction) if isinstance(spec, dict) else None
     if not isinstance(value, (int, float)) or not isinstance(thr, (int, float)):
@@ -801,7 +810,7 @@ def _rounds_html(log: list[dict]) -> str:
 
 
 def _rounds_ov_html(log: list[dict]) -> str:
-    """迭代轨迹顶部Round overview表：轮次/阶段/候选数/关键Metric/结论（由 propose/evaluate 机械推导）。"""
+    """Round overview table at the top of the iteration trajectory: round/stage/candidate count/key metrics/conclusion (mechanically derived from propose/evaluate)."""
     groups: dict[int, list[dict]] = {}
     for e in log:
         r = e.get("round")
@@ -850,7 +859,7 @@ def _rounds_ov_html(log: list[dict]) -> str:
 
 
 def _trend_bars(caption: str, rows: list[tuple[str, float]], threshold: tuple | None) -> str:
-    """逐轮Metric柱状图（内联 SVG）；threshold = (数值, 标签) 画参考线。"""
+    """Per-round metric bar chart (inline SVG); threshold = (value, label) draws a reference line."""
     W, H = 340, 200
     pad_l, pad_r, pad_t, pad_b = 42, 12, 16, 28
     vals = [v for _, v in rows if isinstance(v, (int, float))]
@@ -901,7 +910,7 @@ def _trend_bars(caption: str, rows: list[tuple[str, float]], threshold: tuple | 
 
 
 def _trends_html(log: list[dict], criteria: dict) -> str:
-    """逐轮Energy density/T_max Trends图（evaluate metrics 机械推导，Threshold线来自 criteria）。"""
+    """Per-round Energy density/T_max Trends chart (mechanically derived from evaluate metrics; Threshold lines come from criteria)."""
     evals = [e for e in log if e.get("action") == "evaluate"]
     ed_rows: list[tuple[str, float]] = []
     tmax_rows: list[tuple[str, float]] = []
@@ -958,7 +967,7 @@ def _funnel_html(log: list[dict]) -> str:
 
 
 def _load_cell_curves(case_dir: str) -> list[tuple[str, dict]]:
-    """cell/*.json 中 run-pyamm 曲线输出（含 time_s 与至少一条等长曲线序列）。"""
+    """run-pyamm curve output among cell/*.json (containing time_s and at least one equal-length curve series)."""
     cell_dir = Path(case_dir) / "cell"
     if not cell_dir.is_dir():
         return []
@@ -980,7 +989,7 @@ def _load_cell_curves(case_dir: str) -> list[tuple[str, dict]]:
             ):
                 out.append((p.name, data))
             continue
-        # 老化协议输出形态：cycle_numbers + capacity_ah_per_cycle
+        # Aging protocol output shape: cycle_numbers + capacity_ah_per_cycle
         cn = data.get("cycle_numbers")
         cap = data.get("capacity_ah_per_cycle")
         if (
@@ -993,10 +1002,10 @@ def _load_cell_curves(case_dir: str) -> list[tuple[str, dict]]:
 
 
 def _svg_plot(filename: str, data: dict) -> str:
-    """run-pyamm 输出 → 内联 SVG 曲线（网格 + 序列 + 轴标注 + tooltip 数据）。
+    """run-pyamm output → inline SVG curve (grid + series + axis labels + tooltip data).
 
-    放电/快充协议：time_s 为横轴、voltage_v/anode_potential_v 双序列；
-    老化协议：cycle_numbers 为横轴、capacity_ah_per_cycle 单序列。
+    Discharge/fast-charge protocols: time_s on the x-axis, a voltage_v/anode_potential_v pair of series;
+    aging protocol: cycle_numbers on the x-axis, a single capacity_ah_per_cycle series.
     """
     aging = isinstance(data.get("capacity_ah_per_cycle"), list) and isinstance(
         data.get("cycle_numbers"), list
@@ -1076,7 +1085,7 @@ def _svg_plot(filename: str, data: dict) -> str:
     elements.append(f'<text x="{(x0 + x1) / 2:.1f}" y="{_VIEW_H - 8}" text-anchor="middle">{"cycle" if aging else "time [s]"}</text>')
 
     model = str(data.get("model_used") or "N/A")
-    label = f"{filename} curves (model {model}）"
+    label = f"{filename} curves (model {model})"
     return (
         f'<svg class="plot" viewBox="0 0 {_VIEW_W} {_VIEW_H}" role="img" '
         f'aria-label="{_attr_escape(label)}" '
@@ -1193,7 +1202,7 @@ def _notes_html(log: list[dict]) -> str:
 
 
 def _fill_template(parts: dict[str, str]) -> str:
-    """模板占位符一次性替换；缺位即报错（宁可失败也不产出残缺报告）。"""
+    """One-shot replacement of the template placeholders; a missing slot is an error (better to fail than to emit a defective report)."""
     template = TEMPLATE_PATH.read_text(encoding="utf-8")
     missing: list[str] = []
 
@@ -1233,8 +1242,9 @@ def render_report(case_dir: str, out_html: str = "report.html") -> str:
     }
     html = _fill_template(parts)
     out_p = Path(out_html)
-    # out 语义：纯文件名 → 相对 case_dir（默认 report.html）；含目录（绝对/完整相对）→ 完整路径
-    # （实测：完整相对路径曾被拼成 case_dir/完整路径 双重目录）
+    # out semantics: a plain filename → relative to case_dir (default report.html); containing a
+    # directory (absolute/full relative) → the full path
+    # (observed: a full relative path used to get concatenated into a doubled case_dir/full-path directory)
     out_path = Path(case_dir) / out_html if out_p.parent == Path(".") else out_p
     out_path.write_text(html, encoding="utf-8")
     return str(out_path)

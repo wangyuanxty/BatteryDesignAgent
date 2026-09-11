@@ -1,18 +1,25 @@
-"""log-evaluate：评估条目确定性写入（判定由代码完成，agent 只传候选与输出文件）。
+"""log-evaluate: deterministic writing of evaluation entries (the verdict is computed by
+code; the agent only passes the candidate and the output files).
 
-背景：agent 在对话里评估候选（读仿真输出、口头下结论）不会自动落日志——
-t1_r1_v3 实测 V1-V3 评估只存在于散文引用、审计链无条目。本命令把
-"评估发生 → 条目存在"变成机械保证：
+Background: when the agent evaluates a candidate in the conversation (reads simulation
+output, states a conclusion verbally) nothing is logged automatically — as observed in
+t1_r1_v3, where the V1-V3 evaluations existed only as prose references and the audit chain
+had no entries. This command turns "an evaluation happened → an entry exists" into a
+mechanical guarantee:
 
-- criteria 取自 log.jsonl 第 0 条（开跑前预注册的阈值）
-- metrics 从仿真输出 JSON 文件机械提取（plated 由 anode_potential_v 推导）
-- verdict 由代码对照阈值判定（min/max 数值 / 布尔等值），agent 不得手写
-- evidence 指向实际文件路径与键，数值永远有来源（杜绝幻觉数值）
+- criteria come from entry 0 of log.jsonl (the thresholds pre-registered before the run)
+- metrics are extracted mechanically from the simulation output JSON files (plated is
+  derived from anode_potential_v)
+- the verdict is computed by code against the thresholds (min/max numbers / boolean
+  equality); the agent must not write it by hand
+- evidence points at the actual file paths and keys, so every number always has a source
+  (no hallucinated values)
 
-verdict 规则：被检查的 criteria 非空且全部通过 → pass，否则 fail；
-输出文件缺某 criteria 指标 → 记入 entry.unchecked 并在 note 追加说明
-（阶段未到的指标属于合法缺失——材料轮评估不测 T_max，由最终
-endorse/final 的"无证据不许结案"兜底全 criteria 覆盖）。
+Verdict rule: the checked criteria are non-empty and all pass → pass, otherwise fail;
+if an output file is missing a criterion's metric → it is recorded in entry.unchecked and
+a note is appended (a metric whose stage has not been reached yet is a legitimate
+absence — a materials-round evaluation does not measure T_max — and the final
+endorse/final "no evidence, no closing" rule backstops full criteria coverage).
 """
 import json
 import sys
@@ -20,14 +27,14 @@ from pathlib import Path
 
 from bda.store import CaseWorkspace, REPO_ROOT, append_entry
 
-_STAGE_KEYS = ("stage1", "stage2", "stage3")  # meta 不参与判定
+_STAGE_KEYS = ("stage1", "stage2", "stage3")  # meta does not participate in the verdict
 
 
 def load_criteria(ws: CaseWorkspace) -> dict:
-    """log.jsonl 第 0 条 criteria（开跑前预注册）；缺失即错误。"""
+    """criteria from entry 0 of log.jsonl (pre-registered before the run); missing is an error."""
     log_path = ws.path / "log.jsonl"
     if not log_path.exists():
-        raise RuntimeError(f"log.jsonl 不存在：{log_path}（先写 criteria 第 0 条再评估）")
+        raise RuntimeError(f"log.jsonl not found: {log_path} (write the criteria entry 0 before evaluating)")
     for line in log_path.read_text(encoding="utf-8-sig").splitlines():
         line = line.strip()
         if not line:
@@ -35,11 +42,11 @@ def load_criteria(ws: CaseWorkspace) -> dict:
         entry = json.loads(line)
         if isinstance(entry.get("criteria"), dict):
             return entry["criteria"]
-    raise RuntimeError("log.jsonl 第 0 条 criteria 未找到（评估判定需要预注册阈值）")
+    raise RuntimeError("no criteria entry at line 0 of log.jsonl (the verdict needs pre-registered thresholds)")
 
 
 def flatten_criteria(criteria: dict) -> dict:
-    """stage1–3 合并为扁平 {指标键: 阈值}（meta 不参与判定）。"""
+    """Merge stage1–3 into a flat {metric key: threshold} (meta does not participate in the verdict)."""
     flat: dict = {}
     for k in _STAGE_KEYS:
         v = criteria.get(k)
@@ -49,12 +56,15 @@ def flatten_criteria(criteria: dict) -> dict:
 
 
 def extract_metrics(files: list[Path]) -> dict[str, tuple]:
-    """仿真输出 JSON → {指标键: (值, 来源文件)}，后文件覆盖前文件（last-wins）。
+    """Simulation output JSON → {metric key: (value, source file)}, later files override
+    earlier ones (last-wins).
 
-    标量（int/float/bool）直接提取；`anode_potential_v` 列表保留给 plated 推导：
-    criteria 常含 `plated: false`（要求无析锂）而输出无该键 → 由电压时序
-    min < 0 机械推导（v3 人工条目同样口径）。推导结果以 `plated` 键进入
-    metrics，`_plated_note` 内部键携带证据来源标注（两者都不进条目 metrics）。
+    Scalars (int/float/bool) are extracted directly; the `anode_potential_v` list is kept
+    for deriving plated: criteria often contain `plated: false` (requiring no lithium
+    plating) while the output has no such key → it is derived mechanically from the voltage
+    time series min < 0 (the same convention as the manual v3 entry). The derived result
+    enters metrics under the key `plated`, and the internal key `_plated_note` carries the
+    evidence provenance annotation (neither enters the entry's metrics).
     """
     metrics: dict[str, tuple] = {}
     potentials: dict[Path, list] = {}
@@ -68,18 +78,18 @@ def extract_metrics(files: list[Path]) -> dict[str, tuple]:
             elif k == "anode_potential_v" and isinstance(v, list) and v:
                 potentials[f] = v
     if "plated" not in metrics and potentials:
-        f, v = max(potentials.items(), key=lambda kv: len(kv[1]))  # 最完整时序
+        f, v = max(potentials.items(), key=lambda kv: len(kv[1]))  # most complete time series
         mn = min(v)
         metrics["plated"] = (mn < 0.0, f)
         metrics["_plated_note"] = (
-            f"anode_potential_v (min={mn:.4g}V{'<' if mn < 0 else '>'}0 推导)",
+            f"anode_potential_v (min={mn:.4g}V{'<' if mn < 0 else '>'}0 derived)",
             f,
         )
     return metrics
 
 
 def _rel_to(path: Path, base: Path) -> str:
-    """来源路径相对化：在 base 下 → 相对 posix 串；否则回退绝对路径。"""
+    """Make the source path relative: under base → relative posix string, else the absolute path."""
     try:
         return path.relative_to(base).as_posix()
     except ValueError:
@@ -87,12 +97,13 @@ def _rel_to(path: Path, base: Path) -> str:
 
 
 def _threshold_ok(value, threshold) -> bool:
-    """阈值三形态：{"min": n} / {"max": n} / 布尔等值 / 标量数值（视为 min）。"""
+    """Three threshold forms: {"min": n} / {"max": n} / boolean equality / scalar number (treated as min)."""
     if isinstance(threshold, dict):
         lo = threshold.get("min")
         hi = threshold.get("max")
         if lo is not None or hi is not None:
-            # 有数值边界但 value 不可比（str/list）→ 不过；无任何边界 → 视为未限定通过
+            # A numeric bound exists but value is not comparable (str/list) → fail; no bound
+            # at all → treat as unconstrained and pass
             if not isinstance(value, (int, float)):
                 return False
             if isinstance(lo, (int, float)) and value < lo:
@@ -104,13 +115,15 @@ def _threshold_ok(value, threshold) -> bool:
         return bool(value) == threshold
     if isinstance(threshold, (int, float)) and isinstance(value, (int, float)):
         return value >= threshold
-    return False  # 无法判定的形态一律不过（宁可 fail 不可假 pass）
+    return False  # any form that cannot be decided fails (better a fail than a false pass)
 
 
 def check_against_criteria(metrics: dict[str, tuple], thresholds: dict, base: Path) -> tuple[list, list]:
-    """→ (evidence 列表, unchecked 键列表)。evidence 指向文件:键，判定结果由代码给出。
+    """→ (evidence list, unchecked key list). evidence points at file:key and the verdict is
+    produced by code.
 
-    base = case 目录：来源路径相对化（审计日志跨机器可重放，不嵌绝对路径）。
+    base = the case directory: source paths are relativized (the audit log must be
+    replayable across machines, so no absolute paths are embedded).
     """
     evidence: list[dict] = []
     unchecked: list[str] = []
@@ -137,8 +150,9 @@ def check_against_criteria(metrics: dict[str, tuple], thresholds: dict, base: Pa
 
 
 def _evaluate_one(case_dir: Path, records: list, candidate: str, outputs: list[str], note: str) -> dict:
-    """单个候选评估（内部共用）：读输出文件 → 机械判定 → 返回条目（不落盘）。"""
-    thresholds = None  # 每候选共享同轮 criteria，由调用方传入（见 _evaluate_record）
+    """Evaluate a single candidate (shared internally): read output files → mechanical
+    verdict → return the entry (without writing it to disk)."""
+    thresholds = None  # every candidate shares the same round's criteria, passed in by the caller (see _evaluate_record)
 
     files: list[Path] = []
     for arg in outputs:
@@ -148,18 +162,18 @@ def _evaluate_one(case_dir: Path, records: list, candidate: str, outputs: list[s
                 p = cand
                 break
         if p is None:
-            raise RuntimeError(f"输出文件不存在：{arg}")
+            raise RuntimeError(f"output file does not exist: {arg}")
         files.append(p)
     if not files:
-        raise RuntimeError("无有效输出文件")
+        raise RuntimeError("no valid output files")
     metrics = extract_metrics(files)
     evidence, unchecked = check_against_criteria(metrics, dict(records), base=case_dir)
     if not evidence:
-        raise RuntimeError("输出文件中没有任何 criteria 指标（metrics 为空或键不匹配）")
+        raise RuntimeError("no criteria metric in the output files (metrics empty or keys do not match)")
     verdict = "pass" if all(ev["verdict"] == "pass" for ev in evidence) else "fail"
     note_raw = note or ""
     if unchecked:
-        note_raw = (note_raw + "｜" if note_raw else "") + "未检查 criteria: " + ", ".join(unchecked)
+        note_raw = (note_raw + " | " if note_raw else "") + "unchecked criteria: " + ", ".join(unchecked)
     entry = {
         "action": "evaluate",
         "metrics": {
@@ -187,21 +201,22 @@ def cmd_log_evaluate(args) -> int:
     thresholds = flatten_criteria(criteria)
 
     if getattr(args, "batch_file", None):
-        # 批量模式：一次评估多个候选，每个候选逐条落 evaluate 条目（机械判定）
+        # Batch mode: evaluate several candidates at once, writing one evaluate entry per
+        # candidate (mechanical verdict)
         import json as _json
 
         batch = _json.loads(Path(args.batch_file).read_text(encoding="utf-8-sig"))
         if not isinstance(batch, list) or not batch:
-            raise RuntimeError("--batch-file 必须是非空列表 [{'candidate': 'V1', 'outputs': [...], 'note': ...}]")
+            raise RuntimeError("--batch-file must be a non-empty list [{'candidate': 'V1', 'outputs': [...], 'note': ...}]")
         for rec in batch:
             if "outputs" not in rec:
-                raise RuntimeError(f"batch 记录缺 outputs 键: {rec}")
+                raise RuntimeError(f"batch record is missing the outputs key: {rec}")
             rec_round = rec.get("round", args.round)
             entry = _evaluate_one(case_dir, thresholds, rec.get("candidate", ""), rec["outputs"], rec.get("note", ""))
             entry["round"] = rec_round
             append_entry(ws, entry)
             print(
-                f"log-evaluate 已记录: round={rec_round} "
+                f"log-evaluate recorded: round={rec_round} "
                 f"candidate={entry.get('candidate', '-')} verdict={entry['verdict']} "
                 f"checked={len(entry['evidence'])} unchecked={len(entry.get('unchecked', []))}"
             )
@@ -212,12 +227,12 @@ def cmd_log_evaluate(args) -> int:
     append_entry(ws, entry)
 
     print(
-        f"log-evaluate 已记录: round={args.round} "
+        f"log-evaluate recorded: round={args.round} "
         f"candidate={args.candidate or '-'} verdict={entry['verdict']} "
         f"checked={len(entry['evidence'])} unchecked={len(entry.get('unchecked', []))}"
     )
     for ev in entry["evidence"]:
-        print(f"  [{ev['verdict'].upper()}] {ev['metric']} = {ev['value']} 阈值={ev['threshold']} 来源={ev['source']}")
+        print(f"  [{ev['verdict'].upper()}] {ev['metric']} = {ev['value']} threshold={ev['threshold']} source={ev['source']}")
     if entry.get("unchecked"):
-        print(f"  [!] 未检查 criteria: {', '.join(entry['unchecked'])}（输出文件缺指标，评估不完整）", file=sys.stderr)
+        print(f"  [!] unchecked criteria: {', '.join(entry['unchecked'])} (output files are missing metrics; the evaluation is incomplete)", file=sys.stderr)
     return 0
