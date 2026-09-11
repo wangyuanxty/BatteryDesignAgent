@@ -291,6 +291,29 @@
   <section class="slide">
     <div class="inner">
       <p class="eyebrow">05 · 结果 ②</p>
+      <h2>安全判据：三种做法在这里分得最干净</h2>
+      <ul class="pts">
+        <li><b>它做的是判据，不是"报个温度"</b>——析锂由<b>负极电位时序</b>自动推出（任一刻 &lt; 0 V 即析锂）；热失控由<b>三副反应 ODE</b> 判定触发与否（工具库命令 <code>run-tr</code>）。</li>
+        <li><b>混动任务的针刺判据</b>（10 W 短路热，不得触发热失控）——三种做法：</li>
+      </ul>
+      <div class="t-wrap">
+        <table>
+          <thead><tr><th>做法</th><th>针刺结果</th><th>交出来的是什么</th></tr></thead>
+          <tbody>
+            <tr><td>按流程的 agent（4 个模型）</td><td class="win">全部通过</td><td class="num">三副反应模型判定：未触发</td></tr>
+            <tr><td>不按流程的 agent</td><td class="gap">未证明</td><td class="num">只报稳态热点 <b>118.5 °C</b>，没有触发判据</td></tr>
+            <tr><td>贝叶斯优化</td><td class="gap">触发</td><td class="num">它的设计在针刺下触发了热失控</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">118.5 °C 看着"安全"，但<b>热点温度 ≠ 热失控触发</b>——前者是最后有多热，后者是放热反应能不能自持。这是五种"改判据"里，做电池的人一眼就能看穿的一种。</div>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">05 · 结果 ③</p>
       <h2>测量漂移：不按流程时，agent 会自己把标准调松</h2>
       <div class="t-wrap">
         <table>
@@ -308,10 +331,10 @@
     </div>
   </section>
 
-  <!-- 11 -->
+  <!-- 12 -->
   <section class="slide">
     <div class="inner">
-      <p class="eyebrow">05 · 结果 ③</p>
+      <p class="eyebrow">05 · 结果 ④</p>
       <h2>消融：哪条流程规则真的在起作用</h2>
       <div class="cards">
         <div class="card">
@@ -334,10 +357,10 @@
     </div>
   </section>
 
-  <!-- 12 -->
+  <!-- 13 -->
   <section class="slide">
     <div class="inner">
-      <p class="eyebrow">05 · 结果 ④</p>
+      <p class="eyebrow">05 · 结果 ⑤</p>
       <h2>真计算背书：结论级数字不由代理模型签字</h2>
       <ul class="pts">
         <li><b>两套独立 DFT 交叉验证</b>（ORCA r2SCAN-3c ＋ CP2K PBE-D3）：旗舰案例的决赛分子在两个独立程序里结论一致。</li>
@@ -348,10 +371,10 @@
     </div>
   </section>
 
-  <!-- 13 -->
+  <!-- 14 -->
   <section class="slide">
     <div class="inner">
-      <p class="eyebrow">05 · 结果 ⑤</p>
+      <p class="eyebrow">05 · 结果 ⑥</p>
       <h2>把目标设到文献之外：两条强制任务</h2>
       <div class="cards">
         <div class="card">
@@ -369,7 +392,7 @@
     </div>
   </section>
 
-  <!-- 14 -->
+  <!-- 15 -->
   <section class="slide">
     <div class="inner">
       <p class="eyebrow">06 · 预备问答（上）</p>
@@ -390,7 +413,7 @@
     </div>
   </section>
 
-  <!-- 15 -->
+  <!-- 16 -->
   <section class="slide">
     <div class="inner">
       <p class="eyebrow">06 · 预备问答（下）</p>
@@ -411,7 +434,7 @@
     </div>
   </section>
 
-  <!-- 16 -->
+  <!-- 17 -->
   <section class="slide">
     <div class="inner">
       <p class="eyebrow">07 · 当前状态</p>
@@ -431,7 +454,7 @@
   <button type="button" id="prev" aria-label="上一页">← 上页</button>
   <button type="button" id="next" aria-label="下一页">下页 →</button>
 </div>
-<div class="hud" id="hud">1 / 16</div>
+<div class="hud" id="hud">1 / 17</div>
 
 <script>
   (function () {

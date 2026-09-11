@@ -238,7 +238,7 @@ kirkaldy2024lgm50}) matches our calibrated parameter set
 validation of the simulator's calibration against a production cell, as
 distinct from any validation of the designs themselves.
 
-The paper makes three contributions. (i) We present the first end-to-end
+The paper makes four contributions. (i) We present the first end-to-end
 agent for full-chain battery cell design: given nothing but a
 natural-language scenario target, a single autonomous loop traverses
 the whole chain of battery design levers---material system, formulation,
@@ -252,7 +252,7 @@ the simulation tool library, the evaluation and audit layer
 audit-chain rejection), and every experiment artifact are released in a
 single open-source repository, demonstrated portable across three agent
 harnesses (Section~5.7), and every conclusion-grade number can be
-replayed from the ledger from the audit ledgers. (ii) We distill the
+replayed from the audit ledgers. (ii) We distill the
 system's steering logic into a transferable mechanism pattern for
 engineering agents: multi-resolution cost scheduling (cheap proxies
 first, true first principles last), symptom-to-scale fallback routing
@@ -275,7 +275,18 @@ side, no composition in the six computable families meets both the voltage
 target and the compatibility limit of the fixed electrolyte; the agent
 returns a negative result and says why: the one candidate that clears the
 voltage window would have to charge at 7.41 V, and its route---oxygen-redox
-layered chemistry---does not work.
+layered chemistry---does not work. (iv) Safety is carried as a first-class
+objective rather than a closing sanity check, and it is the criterion class
+where the three conditions separate most cleanly. The closing stage reads
+plating off the anode-potential time series and thermal runaway off a
+three-reaction model; on the hybrid task's nail-penetration criterion the
+governed agent passes under all four models, the workflow-free agent
+reports a steady-state hotspot temperature ($118.5\,^\circ$C) in place of
+a runaway trigger, and the optimizer's design triggers runaway. A battery
+engineer can see at once why the substituted number is the wrong one---a
+hotspot temperature measures how warm the cell ends up, not whether the
+decomposition reaction sustains itself---which is what makes this the
+clearest of the five ways the ungoverned measurement drifted.
 
 \subsection{Contributions and Organization}
 
