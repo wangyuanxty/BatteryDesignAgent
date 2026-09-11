@@ -1,6 +1,6 @@
 """make_figs.py — generate all matplotlib figures for the paper (paper/figs/*.pdf).
 
-Run from repo root:  .venv/Scripts/python.exe paper/figs/make_figs.py
+Run from repo root:  D:/anaconda/envs/py312/python.exe paper/figs/make_figs.py
 Every number is read from experiment artifacts (runs/, calibration/); the few
 constants hardcoded here are copied from the audit records in docs/experiment-design.md.
 """

@@ -1,0 +1,466 @@
+<title>虚拟电池工厂 · 汇报幻灯</title>
+<style>
+  :root {
+    --paper: #F6F6F3; --surface: #FFFFFF; --ink: #171A2B; --ink-soft: #4A4F63;
+    --muted: #767C90; --line: #DCDDE3; --accent: #A75A28; --accent-soft: #F3E7DC;
+    --teal: #2C5A78; --teal-soft: #E3EBF1; --good: #2E7D52; --good-soft: #E3EFE8;
+    --warn-soft: #F6EADF;
+    --serif: Georgia, "Songti SC", "SimSun", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SFMono-Regular", Consolas, "Courier New", monospace;
+    --pad-x: clamp(30px, 6vw, 110px);
+    --pad-y: clamp(26px, 5.2vh, 72px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #13151F; --surface: #1B1E2B; --ink: #E8E9EF; --ink-soft: #B9BDCC;
+      --muted: #8B90A3; --line: #2C3040; --accent: #D98A4E; --accent-soft: #33261C;
+      --teal: #7FAECB; --teal-soft: #1E2A33; --good: #6FBF8F; --good-soft: #1D2E24;
+      --warn-soft: #2E241C;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #13151F; --surface: #1B1E2B; --ink: #E8E9EF; --ink-soft: #B9BDCC;
+    --muted: #8B90A3; --line: #2C3040; --accent: #D98A4E; --accent-soft: #33261C;
+    --teal: #7FAECB; --teal-soft: #1E2A33; --good: #6FBF8F; --good-soft: #1D2E24;
+    --warn-soft: #2E241C;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--paper); color: var(--ink); font-family: var(--sans);
+    font-size: clamp(13px, 1.25vw, 18px); line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .deck { position: relative; height: 100dvh; overflow: hidden; }
+  .slide {
+    position: absolute; inset: 0; display: none; flex-direction: column; justify-content: center;
+    padding: var(--pad-y) var(--pad-x); overflow: auto;
+  }
+  .slide.active { display: flex; animation: fade .22s ease-out; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+  .inner { width: 100%; max-width: 1150px; margin: 0 auto; }
+
+  .kicker {
+    font-family: var(--mono); font-size: clamp(11px, 1vw, 13.5px); letter-spacing: .15em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 14px;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: clamp(11px, 1vw, 13.5px); letter-spacing: .13em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 10px;
+  }
+  h1 { font-family: var(--serif); font-size: clamp(32px, 4.6vw, 56px); line-height: 1.12; margin: 0 0 16px; letter-spacing: -.01em; text-wrap: balance; }
+  h2 { font-family: var(--serif); font-size: clamp(22px, 2.8vw, 38px); line-height: 1.22; margin: 0 0 clamp(14px, 2.4vh, 26px); text-wrap: balance; }
+  .sub { font-size: clamp(15px, 1.5vw, 21px); color: var(--ink-soft); margin: 0 0 22px; max-width: 66ch; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 30px; font-family: var(--mono); font-size: clamp(11.5px, 1.05vw, 14px); color: var(--muted); }
+  .meta b { color: var(--ink-soft); font-weight: 600; }
+  .hint { margin-top: 30px; font-family: var(--mono); font-size: clamp(11px, 1vw, 13px); color: var(--muted); }
+
+  ul.pts { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: clamp(10px, 1.6vh, 18px); }
+  ul.pts li { padding-left: 26px; position: relative; max-width: 82ch; }
+  ul.pts li::before { content: ""; position: absolute; left: 0; top: .58em; width: 9px; height: 9px; background: var(--accent); border-radius: 2px; }
+  ul.pts li b { font-weight: 650; }
+  .note { margin-top: clamp(14px, 2.2vh, 24px); padding: 14px 18px; background: var(--warn-soft); border-left: 3px solid var(--accent); font-size: clamp(12.5px, 1.15vw, 16px); }
+  .note.teal { background: var(--teal-soft); border-left-color: var(--teal); }
+  .note.good { background: var(--good-soft); border-left-color: var(--good); }
+  .hl { color: var(--accent); font-weight: 650; }
+  code { font-family: var(--mono); font-size: .88em; background: var(--accent-soft); padding: 1px 5px; border-radius: 3px; }
+
+  .t-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: clamp(11px, 1.1vw, 15px); font-variant-numeric: tabular-nums; }
+  th, td { padding: clamp(6px, .9vh, 11px) clamp(9px, 1vw, 15px); text-align: left; border-bottom: 1px solid var(--line); }
+  th { font-family: var(--mono); font-size: .82em; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--paper); }
+  tr:last-child td { border-bottom: none; }
+  .win { color: var(--good); font-weight: 700; }
+  .gap { color: var(--accent); font-weight: 600; }
+  .num { font-family: var(--mono); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: clamp(12px, 1.4vw, 18px); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--teal); border-radius: 4px; padding: clamp(13px, 1.5vw, 19px); }
+  .card .tag { font-family: var(--mono); font-size: .72em; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); display: block; margin-bottom: 8px; }
+  .card h3 { margin: 0 0 7px; font-size: 1.04em; }
+  .card p { margin: 0; font-size: .9em; color: var(--ink-soft); line-height: 1.5; }
+  .big { font-family: var(--mono); font-size: clamp(20px, 2.4vw, 32px); color: var(--accent); font-weight: 700; }
+
+  .qa { display: flex; flex-direction: column; gap: clamp(10px, 1.6vh, 18px); }
+  .qa .item { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: clamp(11px, 1.3vh, 16px) clamp(14px, 1.4vw, 20px); }
+  .qa .q { font-weight: 650; margin: 0 0 5px; font-size: 1em; }
+  .qa .a { margin: 0; font-size: .9em; color: var(--ink-soft); }
+  .qa .a b { color: var(--ink); }
+
+  .chain { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
+  .chain li { display: grid; grid-template-columns: 84px 1fr; gap: 18px; padding: clamp(9px, 1.4vh, 15px) 0; border-bottom: 1px solid var(--line); }
+  .chain li:first-child { border-top: 1px solid var(--line); }
+  .chain .n { font-family: var(--mono); font-size: .92em; color: var(--accent); font-weight: 700; padding-top: 2px; }
+  .chain .t { font-weight: 650; display: block; margin-bottom: 2px; }
+  .chain .d { color: var(--ink-soft); font-size: .92em; margin: 0; }
+
+  .hud { position: fixed; bottom: 14px; right: 20px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .navbtns { position: fixed; bottom: 10px; left: 20px; display: flex; gap: 8px; }
+  .navbtns button {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-soft); background: var(--surface);
+    border: 1px solid var(--line); border-radius: 4px; padding: 5px 11px; cursor: pointer;
+  }
+  .navbtns button:hover { border-color: var(--accent); color: var(--accent); }
+  .navbtns button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0; transition: width .2s ease; }
+
+  @media print {
+    .hud, .navbtns, .progress { display: none !important; }
+    .deck { height: auto; overflow: visible; }
+    .slide { display: flex !important; position: static; height: auto; min-height: 88vh; page-break-after: always; animation: none; overflow: visible; }
+  }
+</style>
+
+<div class="progress" id="prog"></div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 -->
+  <section class="slide active">
+    <div class="inner">
+      <p class="kicker">组会汇报</p>
+      <h1>让 Agent 自己设计电池</h1>
+      <p class="sub"><i>An Autonomous End-to-End Agent for Battery Cell Design with Verifiable Outcomes</i><br>
+      一句话输入——"设计一块能量密度 ≥ 392.61 Wh/kg、4C 快充不析锂、最高温度 ≤ 60 ℃ 的轿车电池"——它自己走完分子筛选 → 电极结构 → 电芯仿真 → 安全验证 → 真 DFT/MD，交出一块完整的电芯设计。</p>
+      <div class="meta">
+        <span><b>8 个场景任务</b> 轿车 · 储能 · 电动工具 · 极寒 · 旗舰 · 手机 · 混动 · 无人机</span>
+        <span><b>主模型全部达标</b> 3 seeds 复现 24/24</span>
+        <span><b>同类方法对比</b> 贝叶斯优化 3/8 · 不按流程的 agent 0/7</span>
+      </div>
+      <p class="hint">→ / 空格 翻页 · ← 返回 · F11 全屏 · Ctrl+P 可打印成讲义</p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">01 · 出发点</p>
+      <h2>电池设计要在五个互相牵制的层上同时定方案，而每验一次都很贵</h2>
+      <ul class="pts">
+        <li><b>五层互相牵制</b>——材料体系、电解液配方、电极结构（颗粒半径／孔隙率／厚度）、电芯架构、热管理；单独把哪一层调到最好，都可能让整芯更差；</li>
+        <li><b>验证代价高</b>——寿命评估动辄数千小时连续充放；固/液相输运系数、反应速率常数这些关键微观参数测不到，只能由宏观电压／容量轨迹反推（教科书级的<b>逆问题</b>）；</li>
+        <li><b>现有自动化各做一段</b>——贝叶斯优化只调结构参数、自主实验室只做合成闭环、LLM 化学家只做分子任务；<b>没有谁在一条闭环里跑完整条链</b>（从电解液到热集成）。</li>
+      </ul>
+      <div class="note">于是我们问两个问题：一个 LLM agent 能不能把整条链自己跑完？它报出来的结果，能不能核？</div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">02 · 研究现状</p>
+      <h2>五条路线，各自留下的空缺</h2>
+      <div class="t-wrap">
+        <table>
+          <thead><tr><th>路线</th><th>代表工作</th><th>空缺</th></tr></thead>
+          <tbody>
+            <tr><td>经典优化与代理模型</td><td>贝叶斯优化／高斯过程（含电池设计专用 BO）</td><td>搜索空间是<b>列好的参数</b>；换体系、改化学这类杠杆不在其空间内</td></tr>
+            <tr><td>分子／材料筛选</td><td>高通量筛选、ML 势（MACE／CHGNet）、半经验量子（xTB）</td><td>单点预测；<b>没有跨尺度闭环</b>，不回答"装进电芯行不行"</td></tr>
+            <tr><td>LLM 用于科学发现</td><td>ChemCrow、Coscientist、A-Lab 等自主实验系统</td><td>多为"工具调用＋文献问答"，<b>判据由模型自选</b>，结论无法按规则复核</td></tr>
+            <tr><td>电池专用 agent</td><td>Battery-Sim-Agent 等（以 BO 为标准配置）</td><td>以结构参数为主；<b>材料级杠杆缺席</b></td></tr>
+            <tr><td>工程实践／可验证性</td><td>跑前定好判据、审计链、按规则核对</td><td>在科学 agent 里<b>尚未成为默认</b>；多数工作把"模型自报的达标"当成结论</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">02 · 文献留下的空缺</p>
+      <h2>两件没人做过的事 —— 也就是本文要回答的问题</h2>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">空缺 1</span>
+          <h3>整条链没人跑完</h3>
+          <p>材料发现停在做材料、电路自动化停在电路、参数反演停在参数；<b>没有谁把从电解液到热集成的整条链放进一条自主闭环</b>。</p>
+        </div>
+        <div class="card">
+          <span class="tag">空缺 2</span>
+          <h3>没有一套考"整条链"的任务</h3>
+          <p>已有工作的评测都落在链的一段：曲线拟合误差、分子性质、合成的配方。<b>没有任务集要求 agent 交出一份完整电芯设计，并同时满足容量、4C 不析锂、温度、SEI、质量这些绝对判据</b>。我们的 8 个场景任务就是填这个坑：3 个瓶颈在结构、5 个要靠材料，让对比能真的判别出东西。</p>
+        </div>
+      </div>
+      <div class="note teal">三个研究问题：<b>①固定流程能不能提高达标率，代价多少？ ②流程里哪条规则真在起作用？ ③按规则核对，接得住"自己改判据"吗？</b></div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">03 · 方法</p>
+      <h2>流程：五阶段漏斗 + 五条常开规则</h2>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">Stage 1–2</span>
+          <h3>规划 → 分子筛选</h3>
+          <p>先出方案（目标分解、候选策略、预算、风险），再做材料级筛选：三个模型异质投票（MACE／CHGNet／xTB）。</p>
+        </div>
+        <div class="card">
+          <span class="tag">Stage 3–4</span>
+          <h3>电芯设计 → 安全评估</h3>
+          <p>SPMe 速筛 → DFN 精算；4C/45 °C 耦合热 + 析锂判定，安全是独立的目标维度。</p>
+        </div>
+        <div class="card">
+          <span class="tag">Stage 5</span>
+          <h3>真计算背书</h3>
+          <p>只给决赛圈：两套独立 DFT（ORCA r2SCAN-3c／CP2K PBE-D3）＋真 MD 扩散。</p>
+        </div>
+        <div class="card">
+          <span class="tag">Governance</span>
+          <h3>五条规则常开</h3>
+          <p>回退路由、天花板评估（达到上限才触发换体系）、多模型投票、<b>按规则核对</b>、<b>审计链拒绝</b>。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">03 · 方法</p>
+      <h2>一条闭环：设计目标进来，核对写在外面</h2>
+      <ul class="chain">
+        <li><span class="n">IN</span><div><span class="t">自然语言设计目标（唯一输入）</span><p class="d">目标与阈值原文即判据；agent 不得重新锚定、重新校准或重新诠释。</p></div></li>
+        <li><span class="n">LOOP</span><div><span class="t">每轮：提出 → 筛选 → 仿真</span><p class="d">失败被<b>诊断到原因所在的尺度</b>再退回；当前体系被证明达不到时，才升级到换体系。</p></div></li>
+        <li><span class="n">TOOL</span><div><span class="t">命令行工具库 bda</span><p class="d">电芯／分子／量子／热失控／能量密度口径——全部由流程规定，agent 只调用、不改造。</p></div></li>
+        <li><span class="n">JUDGE</span><div><span class="t">核对程序（代码，在 agent 之外）</span><p class="d">读第 0 条判据与仿真输出，<b>按规则核对</b>；证据链缺项即拒绝，不允许"口头结论"。</p></div></li>
+        <li><span class="n">LEDGER</span><div><span class="t">审计账本 log.jsonl</span><p class="d">逐轮留痕：候选、理由、输出、核对结果、证据。论文每个数字都能从账本重放。</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">04 · 实验设计</p>
+      <h2>8 个场景任务 × 三种做法，条件相同</h2>
+      <ul class="pts">
+        <li><b>任务</b>：8 个场景（快充车／电网储能／电动工具／极寒设备／旗舰车／手机／混动／长航时无人机），判据全是绝对数值。</li>
+        <li><b>三种做法</b>：按流程的 agent／不按流程的 agent（同 harness、同预算、同<b>通用仿真栈</b>，prompt 里写明可用库与入口 API）／贝叶斯优化（复刻已发表的 BO 标准配置，50 次评估）。</li>
+        <li><b>同预算</b>：agent 侧统一 300 轮上限；BO 侧固定 50 次评估——用轮次／消息／token 同口径记录，不用美元口径比较。</li>
+        <li><b>重复</b>：主模型 3 seeds（24/24）；另有两个外部厂商模型各 8 跑（模型鲁棒性）。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">04 · 实验设计</p>
+      <h2>"达标"怎么判：判据分层 + 代码判定</h2>
+      <div class="t-wrap">
+        <table>
+          <thead><tr><th>层</th><th>内容</th><th>谁判</th></tr></thead>
+          <tbody>
+            <tr><td>stage1</td><td>分子级目标与淘汰线（稳定性上限、氧化稳定性上限）</td><td class="num">漏斗规则</td></tr>
+            <tr><td>stage2</td><td>电芯性能（容量 / 能量密度，统一口径 <code>calc-energy</code>）</td><td class="num">按规则核对</td></tr>
+            <tr><td>stage3</td><td>安全（最高温度、是否析锂——由负极电位时序自动推导）</td><td class="num">按规则核对</td></tr>
+            <tr><td>meta</td><td>轮次预算、真计算开关等案例级参数</td><td class="num">第 0 条落盘</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note teal">判据在<b>第 0 条</b>落盘后即固定：跑完不许改阈值（结果不利时放宽判据＝作弊）。核对命令 <code>bda log-evaluate</code> 由代码生成结论与证据，agent 不得手写。</div>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">05 · 结果 ①</p>
+      <h2>主对比：按流程 8/8，另两种做法各 3/8</h2>
+      <div class="t-wrap">
+        <table>
+          <thead><tr><th>做法</th><th>达标</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>按流程的 agent（主模型）</td><td class="win num">8 / 8</td><td>两个 DeepSeek 世代模型各自 8/8；主模型三 seed 复现 24/24</td></tr>
+            <tr><td>按流程的 agent（其他模型）</td><td class="num">4 / 8</td><td><b>GPT-5.6 Luna</b> 与 <b>mimo-v2.5</b> 各 4/8，经 OpenAI 兼容 API 接入——如实报告模型依赖</td></tr>
+            <tr><td>贝叶斯优化</td><td class="num">3 / 8</td><td>恰好是<b>瓶颈在结构</b>的那三个；材料瓶颈的五个全部卡死</td></tr>
+            <tr><td>不按流程的 agent（批内）</td><td class="gap num">0 / 7</td><td>结论全部经统一口径复判；该批工具不对称已披露（见 Q&amp;A）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note good">两种做法的失败<b>互不重叠</b>：BO 缺杠杆、不按流程的 agent 缺外部判定、按流程时两者都有——这正是论文的核心观察。</div>
+
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">05 · 结果 ②</p>
+      <h2>测量漂移：不按流程时，agent 会自己把标准调松</h2>
+      <div class="t-wrap">
+        <table>
+          <thead><tr><th>模式</th><th>实测</th></tr></thead>
+          <tbody>
+            <tr><td>自设阈值</td><td class="num">"−6.9 mV 也算安全"（目标是零容忍；它自设析锂起点 −10 mV）</td></tr>
+            <tr><td>替换模型</td><td class="num">SEI 生长律换成溶剂扩散限制模型（目标口径是 ec 反应限制）→ 复判后 818.9 nm（限 550）</td></tr>
+            <tr><td>换口径</td><td class="num">"96.7% 保持率"在 C/3 下测（目标是 5C/1C）；且自设扩散系数为标准值 2.5×</td></tr>
+            <tr><td>缺判据变量</td><td class="num">只给热点温度、不给触发判据；或干脆没有负极电位时序</td></tr>
+            <tr><td>离开测量空间</td><td class="num">换到锂金属体系（不在已验证参数集内）——"达标"但不计入</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">所以本文的对照不是"裸 agent 不行"，而是：<b>没有外部核对时，"达标"这件事本身不可判定</b>。</div>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">05 · 结果 ③</p>
+      <h2>消融：哪条流程规则真的在起作用</h2>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">天花板评估</span>
+          <h3>对 2/3 材料瓶颈任务<b>因果</b></h3>
+          <p>关掉"当前体系不可达才升级材料搜索"，这些任务直接失败——它是材料杠杆的触发器。</p>
+        </div>
+        <div class="card">
+          <span class="tag">强制结构探索</span>
+          <h3>对 1/6 任务因果</h3>
+          <p>多数任务不强制探索也能找到结构解；影响面小于预期，如实报告。</p>
+        </div>
+        <div class="card">
+          <span class="tag">三模型投票</span>
+          <h3>被触发但<b>从未改变结论</b></h3>
+          <p>本套任务里没有出现"分歧决定胜负"的案例；作为零结果如实记录。</p>
+        </div>
+      </div>
+      <div class="note teal">另有模型鲁棒性（4 个模型家族、3 个 harness 可移植）与仿真器锚定：商用 LG M50T 实测与参数集吻合到 <b>0.45% 容量 / 20.6 mV RMSE</b>。</div>
+    </div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">05 · 结果 ④</p>
+      <h2>真计算背书：结论级数字不由代理模型签字</h2>
+      <ul class="pts">
+        <li><b>两套独立 DFT 交叉验证</b>（ORCA r2SCAN-3c ＋ CP2K PBE-D3）：旗舰案例的决赛分子在两个独立程序里结论一致。</li>
+        <li><b>真 MD</b>：经典力场跑 1 ns，报告 Li⁺ 扩散系数 <code>D_Li = 5.4×10⁻¹¹ m²/s</code>——"结论级"数值，代理模型不参与签字。</li>
+        <li><b>成本纪律</b>：真计算只给 Top-N 收尾；漏斗内禁止调用（毫秒级代理负责淘汰，小时级真计算负责背书）。</li>
+      </ul>
+      <div class="note">除了这三层流程，还有一层：<b>交付数字的证据等级是分层的</b>——论文里每个数都标了来源（工具直接值／由工具值推算／领域估计）。</div>
+    </div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">05 · 结果 ⑤</p>
+      <h2>把目标设到文献之外：两条强制任务</h2>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">添加剂侧</span>
+          <h3>72 候选 → <span class="big">TFAA</span></h3>
+          <p>目标 SEI ≤370 nm，而文献里最好的添加剂只到 385 nm。agent 交出三氟乙酸酐：不在已知集、不属于任何已筛化学族，且<b>比电解液自身溶剂更先被还原</b>——能成膜的前提。电芯：SEI 322.6 nm / 400.29 Wh/kg / 无热失控。</p>
+        </div>
+        <div class="card">
+          <span class="tag">电极侧</span>
+          <h3>42 候选 → <span class="big">负结果</span></h3>
+          <p>窗 4.6 V，且必须与固定碳酸酯电解液相容。唯一过电压窗的候选（4.641 V）充电要 <b>7.41 V</b>，超电解液极限 2.6 V → 它自己算出来后如实判负，并指出机理：氧参与氧化还原的层状路线走不通。</p>
+        </div>
+      </div>
+      <div class="note">两件事都写进论文：它<b>能在给定体系之外做设计</b>，也<b>不把"看着达标"当成达标</b>。</div>
+    </div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">06 · 预备问答（上）</p>
+      <div class="qa">
+        <div class="item">
+          <p class="q">"不按流程的 agent 不给 CLI 工具"，这样比公平吗？</p>
+          <p class="a"><b>差的是流程自带的那套工具，不是能力。</b>两侧跑在同一个环境克隆上（同库同版本、同 CUDA），且裸版 prompt 里<b>写明了可用库与主要入口 API</b>；按流程时多的是一套编码了测量口径的命令（命名老化流程、统一口径的能量密度、按规则核对）。更早那批连通用库与环境说明都没有——论文已如实披露其工具不对称，并把该批<b>一并报告</b>，不作为同工具对比。</p>
+        </div>
+        <div class="item">
+          <p class="q">为什么判据用 HOMO 这种代理量？</p>
+          <p class="a">因为在这套实验里它有明确物理含义：HOMO 深度经固定公式映射到 SEI 生长速率 k，是<b>可复算、无自由参数</b>的映射。但它也暴露了判据的通病——<b>判据测什么，就只会得到什么</b>：只要求"HOMO 越深越好"时，agent 交回的是惰性全氟分子（根本不会成膜）；加上"必须比溶剂先被还原"之后，答案才落到真能起作用的化学上。</p>
+        </div>
+        <div class="item">
+          <p class="q">为什么贝叶斯优化只有 3/8？</p>
+          <p class="a">它的搜索空间是<b>十个结构参数</b>，没有分子／材料杠杆。三个结构性瓶颈任务它能达标（厚度、孔隙率、质量），五个材料瓶颈任务它连"候选"都给不出——这不是调参问题，是<b>空间之外</b>。它的最优解甚至违反目标的约束判据（SEI 559.2 nm vs 370 nm）。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">06 · 预备问答（下）</p>
+      <div class="qa">
+        <div class="item">
+          <p class="q">那算"发明了新材料／新分子"吗？</p>
+          <p class="a"><b>不算，论文也没这么主张。</b>TFAA 是已编目的化合物、且属文献已知的酸酐类添加剂；电极侧的候选也已在 Materials Project 有计算条目。我们的判据能证明的是"<b>不在我们给定的集合里</b>"，证明不了"文献里没有"——<b>离开给定集合 ≠ 离开文献</b>，这两件事在论文里分开写。</p>
+        </div>
+        <div class="item">
+          <p class="q">预算真的对齐吗？</p>
+          <p class="a">agent 侧统一 <b>300 轮</b>上限（轮次按 SDK 定义：一次"用户侧输入→响应"往返为一轮）；BO 侧固定 <b>50 次评估</b>。成本口径用轮次／消息／token，<b>不用美元</b>（不同模型渠道单价不同，不可比）。外部厂商模型 4/8 的降级已如实写入正文。</p>
+        </div>
+        <div class="item">
+          <p class="q">T9 为什么收在负结果？</p>
+          <p class="a">因为"可用"这条线只能这么画：5.3 V 窗配上固定的碳酸酯电解液（阳极极限约 4.8 V）<b>物理上就装不进这颗电芯</b>；把窗口挪到电解液撑得住的 4.6 V 之后，六个可算族里没有解——唯一过电压窗的候选充电要 7.41 V。与其交一个"通过但用不了"的答案，不如如实报负。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 -->
+  <section class="slide">
+    <div class="inner">
+      <p class="eyebrow">07 · 当前状态</p>
+      <h2>状态与下一步</h2>
+      <ul class="pts">
+        <li><b>已完成</b>：正文 68 页编译零错误；8 个设计目标 × 3 seeds 主实验、消融、模型鲁棒性、跨 harness 移植、真计算背书齐备；T9／T10 两条强制任务只报最新臂；全部示意图改为可复现的矢量图。</li>
+        <li><b>主张边界</b>：不主张"性能更强"，也不主张"发明了新材料"——主张的是<b>可验证性</b>：判据在跑前落盘、核对由代码做、证据逐条可重放。</li>
+        <li><b>下一步</b>：补一组 T10 的不按流程对照（该任务目前只有按流程与 BO 两组）；条件相同的不按流程批次 T1–T4 补完；审稿返修。</li>
+      </ul>
+      <div class="note teal">仓库（流程规则·工具库·核对程序·全部实验工件）：<code>github.com/wangyuanxty/BatteryDesignAgent</code></div>
+    </div>
+  </section>
+
+</div>
+
+<div class="navbtns">
+  <button type="button" id="prev" aria-label="上一页">← 上页</button>
+  <button type="button" id="next" aria-label="下一页">下页 →</button>
+</div>
+<div class="hud" id="hud">1 / 16</div>
+
+<script>
+  (function () {
+    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    var i = 0, n = slides.length;
+    var hud = document.getElementById('hud');
+    var prog = document.getElementById('prog');
+
+    function show(k) {
+      i = Math.max(0, Math.min(n - 1, k));
+      slides.forEach(function (s, idx) { s.classList.toggle('active', idx === i); });
+      hud.textContent = (i + 1) + ' / ' + n;
+      prog.style.width = ((i + 1) / n * 100) + '%';
+      slides[i].scrollTop = 0;
+    }
+
+    function next() { show(i + 1); }
+    function prev() { show(i - 1); }
+
+    document.addEventListener('keydown', function (e) {
+      var k = e.key;
+      if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown' || k === 'Enter') { e.preventDefault(); next(); }
+      else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') { e.preventDefault(); prev(); }
+      else if (k === 'Home') { e.preventDefault(); show(0); }
+      else if (k === 'End') { e.preventDefault(); show(n - 1); }
+    });
+
+    document.getElementById('next').addEventListener('click', next);
+    document.getElementById('prev').addEventListener('click', prev);
+    show(0);
+  })();
+</script>
