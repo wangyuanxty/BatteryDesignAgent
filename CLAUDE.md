@@ -44,6 +44,7 @@
 | 外部厂商 / vendor | 其他模型 / other models |
 | 机械判定 / mechanized adjudication | 按规则核对 / code-computed verdict |
 | 杠杆 / lever | 设计变量 / design variable |
+| 天花板 / ceiling | 上限 / reachability（够不够得着） |
 
 ### 二、不要过度修辞
 
