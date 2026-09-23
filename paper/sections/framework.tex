@@ -97,30 +97,30 @@ fallback routing and the outside-agent evaluator.
 \caption{The fixed design loop. The target is the sole input;
 each round proposes, screens (when the bottleneck is molecular), simulates,
 and is checked by code outside the agent; diagnosed failures route back
-to the scale of their cause, and a material ceiling escalates to a system
-switch. The red-dashed evaluator delivers the code-computed verdict
+to the scale of their cause, and a system that cannot reach the target
+escalates to a system switch. The red-dashed evaluator delivers the code-computed verdict
 and refuses incomplete audit chains; the exit path ends in endorsement and
 the deliverable package.}
 \label{fig:protocol}
 \end{figure}
 
-\textbf{Component 1: the layered multi-precision funnel with ceiling
+\textbf{Component 1: the layered multi-precision funnel with reachability
 escalation.} Screening proceeds from cheapest to dearest: millisecond-scale
 machine-learning potentials (MACE \cite{batatia2022mace}, CHGNet
 \cite{deng2023chgnet}) and a semi-empirical quantum method (xTB
 \cite{bannwarth2019xtb}) at the molecular scale; seconds-scale SPMe then
 minutes-scale DFN at the cell scale. The opening of cell design triggers a
-\emph{ceiling assessment}: the agent estimates the best architecture-plus-
+\emph{reachability check}: the agent estimates the best architecture-plus-
 formulation achievable within the current system and compares it to the
-target. If the objective exceeds the ceiling, the agent is required to
+target. If the objective exceeds what the current system can reach, the agent is required to
 escalate into material design (inventing additives or switching systems) 
 rather than tuning parameters inside a space that provably cannot close the
 gap:
 \begin{equation}
 \label{eq:escalate}
-\text{escalate} \iff \exists c:\; t_c > \mathrm{ceiling}_c(\text{system}),
+\text{escalate} \iff \exists c:\; t_c > \bar\Phi_c(S),
 \end{equation}
-where $\mathrm{ceiling}_c(\text{system})$ is the best target value the
+where $\bar\Phi_c(S)$ is the best target value the
 current system's architecture and formulation can reach on criterion $c$. The escalation decision is written to the log with its evidence (which
 variables were assessed, the limit values, the gap).
 
@@ -140,7 +140,7 @@ properties.
 is screened by three methodologically distinct models (two ML potentials
 from different families plus a semi-empirical quantum method) whose
 agreement or disagreement is itself signal. Hard elimination lines (energy
-above the stability ceiling, non-convergence, HOMO above the oxidation
+above the stability threshold, non-convergence, HOMO above the oxidation
 line) are applied by code; disagreement among the three ranks marks a candidate
 \emph{disputed}:
 \begin{equation}

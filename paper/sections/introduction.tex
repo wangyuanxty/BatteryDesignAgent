@@ -198,7 +198,7 @@ actually executes \cite{delegatedagency2026, nikpayam2024aiassisted}.
 
 We evaluate the workflow in a thirty-two-run matrix plus twelve ablation
 runs. Eight scenario tasks: a sedan's energy-and-fast-charge target, a
-drone's weight-and-rate envelope, a smartphone's volumetric ceiling, and five
+drone's weight-and-rate envelope, a smartphone's demanding volumetric target, and five
 others---are written as natural-language requirements with absolute numeric
 criteria and no other declarations. Each task is given, under identical
 resources, to three decision-makers: the governed agent (two different LLMs,
@@ -222,8 +222,8 @@ discloses the batch's tool asymmetry and reports it as a bundled condition
 rather than as an equal-tooling control.
 
 Three further results speak to \emph{why} the workflow works. First, ablation
-shows the mechanisms are not interchangeable: turning off the ceiling
-assessment that triggers material escalation costs two of three
+shows the mechanisms are not interchangeable: turning off the reachability
+check that triggers material escalation costs two of three
 material-bottleneck tasks outright; turning off forced architecture exploration
 costs one of six; turning off the three-model vote changes nothing: an
 ``unrealized premium'', since in this suite the governed agent never exercised
@@ -256,7 +256,7 @@ system's steering logic into a transferable mechanism pattern for
 engineering agents: multi-resolution cost scheduling (cheap proxies
 first, true first principles last), symptom-to-scale fallback routing
 (failures diagnosed to the scale of their cause before retrying), a
-ceiling assessment that triggers material-level search only when the
+reachability check that triggers material-level search only when the
 current system provably cannot close the gap, a three-consecutive-failure
 stop rule that questions the assumptions rather than retrying blindly, and
 heterogeneous-model disagreement detection (reported as not exercised in

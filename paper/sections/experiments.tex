@@ -12,9 +12,9 @@ criteria (Table~\ref{tab:tasks}). The scenarios span the design landscape
 deliberately: a sedan (performance plus thermal safety), grid storage
 (cycle life plus low temperature), power tools (rate plus power), extreme
 cold (low temperature plus volumetric density), a flagship vehicle (extreme
-energy density), a smartphone (volumetric ceiling plus a strict temperature
+energy density), a smartphone (demanding volumetric target plus a strict temperature
 red line plus a voltage plateau), a hybrid vehicle (high-temperature aging
-plus nail penetration), and a drone (specific energy plus a mass ceiling).
+plus nail penetration), and a drone (specific energy plus a mass limit).
 Across the eight tasks, fourteen distinct metric types are checked, and
 all criteria of a task are AND-judged: a design must satisfy every clause
 of its target to be ``achieved.''
@@ -200,10 +200,10 @@ separately in Section~5.8.
 
 These rules are fixed properties of the workflow; ablation is
 an experimental intervention that relaxes exactly one rule per run.
-An ablation variant is declared in the task text itself (``ceiling
+An ablation variant is declared in the task text itself (``reachability
 escalation disabled'') (keeping the natural-language requirement the sole
 entry point) and the declaration is recorded in the run's entry-0 metadata.
-Three ablations are executed: \emph{ceiling escalation off} (no proactive
+Three ablations are executed: \emph{reachability escalation off} (no proactive
 material-design escalation; the agent tunes within the current system unless
 the text names materials), on T2/T5/T6; \emph{architecture forcing off} (no
 required 2--4 architecture variants per round), on T1/T2/T3/T4/T7/T8; and

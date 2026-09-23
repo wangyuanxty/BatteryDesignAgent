@@ -294,7 +294,7 @@ margin-widening probe. Table~\ref{supp:tab:datasheet} condenses the
 technical datasheet of the final design (VBF-T6R1-DSH-01), whose Source
 column points each value at its tool-output file.
 Figure~\ref{supp:fig:trace} plots the decision trajectory with the target
-line and the baseline ceiling; Figure~\ref{supp:fig:t6curves} shows the two
+line and the best the baseline can reach; Figure~\ref{supp:fig:t6curves} shows the two
 decisive curves---the plateau gap that forced the system switch and the
 plating margin the criterion judges.
 
@@ -378,7 +378,7 @@ deliverable labels its own estimates.
 \includegraphics[width=0.8\linewidth]{figs/fig_trace_t6.pdf}
 \caption{Governed decision trace on T6 (smartphone target): volumetric
 energy density by round, with the design target line (950 Wh/L) and the baseline
-ceiling (854 Wh/L). The jump across the dashed line is the ceiling
+the best the baseline can reach (854 Wh/L). The jump across the dashed line is the reachability
 escalation (the LNMO system switch) followed by rounds of refinement to
 1135.8 Wh/L.}
 \label{supp:fig:trace}
@@ -389,7 +389,7 @@ escalation (the LNMO system switch) followed by rounds of refinement to
 \includegraphics[width=\linewidth]{figs/fig_case_t6_curves.pdf}
 \caption{The T6 case at curve level. (a) 1C discharge: the Chen2020
 baseline's midpoint voltage sits below the 4.1 V target plateau, which is
-what the ceiling assessment diagnosed; the final LNMO design clears it
+what the reachability check diagnosed; the final LNMO design clears it
 (4.1145 V). (b) The final design's anode potential during 4C charge stays
 above the 0 V plating criterion throughout (min $+11.0$ mV).}
 \label{supp:fig:t6curves}
@@ -419,17 +419,17 @@ T1 & 25/50 & 0/50 & 27/50 & thermal line of the safety exam binds \\
 T2 & 0/50 & 0/50 & 0/50 & plating; SEI bridge is material \\
 T3 & 0/50 & 0/50 & 0/50 & plating; 5C retention is material \\
 T4 & 34/50 & 22/50 & 38/50 & low-temperature retention binds \\
-T5 & 0/50 & 0/50 & 0/50 & plating; chemistry ceiling \\
-T6 & 0/50 & 0/50 & 0/50 & plateau ceiling: max 4.0090 V $<$ 4.1 V \\
+T5 & 0/50 & 0/50 & 0/50 & plating; chemistry limit \\
+T6 & 0/50 & 0/50 & 0/50 & plateau limit: max 4.0090 V $<$ 4.1 V \\
 T7 & 0/50 & 0/50 & 0/50 & SEI; plating \\
-T8 & 10/50 & 1/50 & 11/50 & mass ceiling 40 g binds \\
+T8 & 10/50 & 1/50 & 11/50 & mass limit 40 g binds \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Two structural properties follow. \emph{First}, the five
 material-bottleneck tasks are threshold-invariant at $\pm 5\%$: the
-optimizer's failure there is ceiling-bound, not threshold-bound. Across all
+optimizer's failure there is bound by reachability, not by the threshold. Across all
 400 trials, the highest midpoint voltage any design reaches is $4.0115$ V
 against the $4.1$ V target line; plating and SEI violations are
 bound by the available variables, so loosening the numeric thresholds cannot admit a design that
