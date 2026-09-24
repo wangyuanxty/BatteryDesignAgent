@@ -7,8 +7,8 @@ remains the shared tool library. Same task texts, same model, same budget
 (recursion_limit) as the other legs.
 
 Usage:
-    D:/anaconda/envs/py312/python.exe paper/portability/langchain/run_lc.py "TASK TEXT" \
-        --workspace runs/portability/t1_lc --max-turns 300
+    D:/anaconda/envs/py312/python.exe portability/langchain/run_lc.py "TASK TEXT" \
+        --workspace portability/t1_lc --max-turns 300
 """
 import argparse
 import os

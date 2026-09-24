@@ -19,3 +19,9 @@ docs/backups/
 texput.log
 param_dump.txt
 runs/.env_local
+
+# 论文构建与预览产物（2026-09-24）
+paper/Battery_Design_Agent.pdf
+paper/_p.txt
+paper/_page2.png
+paper/figs/_preview_*.png

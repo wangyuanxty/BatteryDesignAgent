@@ -2,7 +2,7 @@
 
 Executes the §4.6 design: the same protocol, the same task texts (T1 structural
 bottleneck, T6 material bottleneck), the same model, and the same 300-turn
-budget, under the OpenAI Agents SDK harness. Workspaces: runs/portability/{t1,t6}_oa.
+budget, under the OpenAI Agents SDK harness. Workspaces: portability/{t1,t6}_oa.
 Run after the primary-harness legs; verdicts are judged afterwards by the SAME
 bda adjudication layer (log-evaluate / verify-deliverables) — the judgment
 mechanics are CLI, hence harness-independent by construction.
@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-RUNNER = REPO_ROOT / "paper" / "portability" / "oa_sdk" / "run_oa.py"
+RUNNER = REPO_ROOT / "portability" / "oa_sdk" / "run_oa.py"
 PY = Path('D:/anaconda/envs/py312/python.exe')  # migrated from the retired .venv
 
 TASKS = [
@@ -36,7 +36,7 @@ MAX_TURNS = 300
 
 def main() -> int:
     for task_id, text in TASKS:
-        ws = REPO_ROOT / "runs" / "portability" / f"{task_id}_oa"
+        ws = REPO_ROOT / "portability" / f"{task_id}_oa"
         print(f"=== starting {task_id}_oa (model={MODEL}, max_turns={MAX_TURNS}) ===", flush=True)
         r = subprocess.run(
             [str(PY), str(RUNNER), text, "--workspace", str(ws), "--max-turns", str(MAX_TURNS), "--model", MODEL],

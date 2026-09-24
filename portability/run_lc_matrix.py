@@ -3,7 +3,7 @@
 Same §4.6 design as the other legs: identical protocol, identical task texts
 (T1 structural bottleneck, T6 material bottleneck), identical model and budget,
 under the LangChain harness (on-demand skill idiom). Workspaces:
-runs/portability/{t1,t6}_lc. Verdicts are judged afterwards by the same bda
+portability/{t1,t6}_lc. Verdicts are judged afterwards by the same bda
 adjudication layer.
 """
 import subprocess
@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-RUNNER = REPO_ROOT / "paper" / "portability" / "langchain" / "run_lc.py"
+RUNNER = REPO_ROOT / "portability" / "langchain" / "run_lc.py"
 PY = Path('D:/anaconda/envs/py312/python.exe')  # migrated from the retired .venv
 
 TASKS = [
@@ -35,7 +35,7 @@ MAX_TURNS = 300
 
 def main() -> int:
     for task_id, text in TASKS:
-        ws = REPO_ROOT / "runs" / "portability" / f"{task_id}_lc"
+        ws = REPO_ROOT / "portability" / f"{task_id}_lc"
         print(f"=== starting {task_id}_lc (model={MODEL}, max_turns={MAX_TURNS}) ===", flush=True)
         r = subprocess.run(
             [str(PY), str(RUNNER), text, "--workspace", str(ws), "--max-turns", str(MAX_TURNS), "--model", MODEL],

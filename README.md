@@ -10,7 +10,7 @@ adjudication with an evidence-chain audit ledger) specified entirely in
 natural language. The protocol itself is a self-contained declarative
 artifact (`.claude/skills/virtual-battery-factory/`) and is
 harness-independent by construction --- cross-harness portability runs under
-the OpenAI Agents SDK and LangChain live in `paper/portability/`.
+the OpenAI Agents SDK and LangChain live in `portability/`.
 
 ## Entry point and structure
 
@@ -25,8 +25,8 @@ the OpenAI Agents SDK and LangChain live in `paper/portability/`.
   `assets/` (sample cases). If the environment is missing, the agent
   installs it itself per protocol step 0.
 - **Cross-harness legs** (portability experiment, §4.6 of the paper):
-  `paper/portability/oa_sdk/run_oa.py` (OpenAI Agents SDK --- protocol
-  injected as instructions) and `paper/portability/langchain/run_lc.py`
+  `portability/oa_sdk/run_oa.py` (OpenAI Agents SDK --- protocol
+  injected as instructions) and `portability/langchain/run_lc.py`
   (LangChain --- protocol loaded via an on-demand `load_skill` tool), with
   batch drivers `run_oa_matrix.py` / `run_lc_matrix.py`.
 

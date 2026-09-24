@@ -7,8 +7,8 @@ The only variable under test is the orchestration substrate (OpenAI Agents SDK
 instead of the Claude agent SDK).
 
 Usage:
-    D:/anaconda/envs/py312/python.exe paper/portability/oa_sdk/run_oa.py "TASK TEXT" \
-        --workspace runs/portability/t1_oa --max-turns 300
+    D:/anaconda/envs/py312/python.exe portability/oa_sdk/run_oa.py "TASK TEXT" \
+        --workspace portability/t1_oa --max-turns 300
 """
 import argparse
 import asyncio
