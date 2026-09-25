@@ -274,7 +274,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--bare",
         action="store_true",
-        help="protocol-free control: initial prompt carries no protocol sentence (no zero-interaction rule, no log.jsonl entry-0 instruction, no SKILL.md reference); role statement kept",
+        help="workflow-free control: initial prompt carries no workflow sentence (no zero-interaction rule, no log.jsonl entry-0 instruction, no SKILL.md reference); role statement kept",
     )
     args = parser.parse_args(argv)
     if args.model in ("deepseek-v4-pro", "official-deepseek-v4-pro"):

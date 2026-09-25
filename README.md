@@ -4,30 +4,30 @@ An LLM-agent-driven, cross-scale virtual battery design platform: a fully
 software-simulated closed loop spanning material design, cell design, and
 safety assessment --- with no dependence on physical experiments.
 
-The agent executes a **protocolized governance** design loop (five-stage
-multi-precision funnel, evaluation-and-fallback routing, mechanized
-adjudication with an evidence-chain audit ledger) specified entirely in
-natural language. The protocol itself is a self-contained declarative
-artifact (`.claude/skills/virtual-battery-factory/`) and is
-harness-independent by construction --- cross-harness portability runs under
-the OpenAI Agents SDK and LangChain live in `portability/`.
+The agent executes a **fixed design workflow** (five-stage multi-precision
+funnel, evaluation-and-fallback routing, code-computed verdicts with an
+evidence-chain audit ledger) specified entirely in natural language. The
+workflow itself is a self-contained declarative artifact
+(`.claude/skills/virtual-battery-factory/`) and is harness-independent by
+construction --- cross-harness portability runs under the OpenAI Agents SDK
+and LangChain live in `portability/`.
 
 ## Entry point and structure
 
-- **`run.py`** (repo root): a thin Agent SDK launcher. It loads the protocol
+- **`run.py`** (repo root): a thin Agent SDK launcher. It loads the workflow
   skill (`.claude/skills/virtual-battery-factory/SKILL.md`) verbatim into the
   agent's system prompt and drives the simulation library `python -m bda`
   through the harness's built-in shell tool. No custom tools are registered.
-- The protocol skill is self-contained under
-  `.claude/skills/virtual-battery-factory/`: `SKILL.md` (the protocol),
+- The workflow skill is self-contained under
+  `.claude/skills/virtual-battery-factory/`: `SKILL.md` (the workflow rules),
   `references/cli-commands.md` (command reference),
   `scripts/bda/` (the simulation library, pip-editable install), and
   `assets/` (sample cases). If the environment is missing, the agent
-  installs it itself per protocol step 0.
-- **Cross-harness legs** (portability experiment, §4.6 of the paper):
-  `portability/oa_sdk/run_oa.py` (OpenAI Agents SDK --- protocol
+  installs it itself per workflow step 0.
+- **Cross-harness runs** (portability experiment, §5.7 of the paper):
+  `portability/oa_sdk/run_oa.py` (OpenAI Agents SDK --- workflow
   injected as instructions) and `portability/langchain/run_lc.py`
-  (LangChain --- protocol loaded via an on-demand `load_skill` tool), with
+  (LangChain --- workflow loaded via an on-demand `load_skill` tool), with
   batch drivers `run_oa_matrix.py` / `run_lc_matrix.py`.
 
 ## Installation
@@ -60,7 +60,7 @@ Create `.env` in the repo root before running:
 | Variable | Default | Meaning |
 |---|---|---|
 | `ANTHROPIC_BASE_URL` | `https://api.deepseek.com/anthropic` | Anthropic-compatible endpoint |
-| `ANTHROPIC_MODEL` | `deepseek-v4-pro` | Model name |
+| `ANTHROPIC_MODEL` | `official-deepseek-v4-pro` | Model name; `deepseek-v4-pro` is normalized to the official channel |
 | `ANTHROPIC_AUTH_TOKEN` | `.env`'s `DEEPSEEK_API_KEY` | Credential; skipped if an Anthropic token is already set |
 
 Secrets are injected only into child-process environment variables, never
@@ -89,17 +89,17 @@ reserved for finalists. **Workspace = the run directory** (`log.jsonl`,
 ## Ablation experiments
 
 Ablation is declared in the task text itself (the natural-language input
-remains the only entry point) and recorded in entry-0 metadata; the
-governance components are fixed, always-on rules in the product protocol:
+remains the only entry point) and recorded in entry-0 metadata; the workflow
+rules are fixed and always on:
 
 | Declaration in the task text | What it answers |
 |---|---|
-| `ceiling_escalation off` | Contribution of the ceiling-assessment → material-design escalation mechanism |
+| `reachability_escalation off` | Contribution of the reachability check → material-design escalation |
 | `exploration_force off` | Contribution of the forced 2–4 architecture variants per round |
 | `funnel_voting off` | Contribution of three-model heterogeneous voting in the molecular funnel |
 
 All on = the full system (main results). See the paper
-(`paper/main.tex`, §4.3) for the executed ablation matrix.
+(`paper/main.tex`, §5.3) for the executed ablation matrix.
 
 ## Reporting
 
@@ -119,6 +119,10 @@ D:/anaconda/envs/py312/python.exe -m pytest
 
 ## Repository policy
 
-`paper/`, `data/`, `docs/`, `references/` and `.env` are gitignored --- the
-manuscript, experiment artifacts, and literature live locally and are not
-versioned. The audit ledgers of finished runs (`runs/`) are likewise local.
+Versioned: the manuscript (`paper/`, excluding build and preview products),
+the experiment artifacts (`runs/`, including the audit ledgers), the
+documentation (`docs/`), and the literature (`references/`).
+
+Gitignored: `data/`, `.env` and `runs/.env_local` (secrets are never
+committed), plus the paper build and preview products listed in
+`.gitignore`.

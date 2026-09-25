@@ -1,5 +1,10 @@
 # Paper Experiment Design (Final v1)
 
+> **已被取代（2026-09-24）。** 本文档描述的是 2026-08 那套实验设计，行文里带着
+> 此后已清除的词（协议 / 契约 / 治理 / 尺子 / 天花板等），任务集也已被替换。
+> 领域结构与设计变量的可用性看 `battery-design-map.md`；重构后的实验设计另出文档。
+> **保留此文件仅作历史记录，不要据此设计新实验。**
+
 > Status: main matrix executed 2026-08-25 (8 tasks × {protocol pro, protocol flash, C1 pro, C2 BO}); model robustness §5 executed with all 16 runs; ablation B pending (see §8). 2026-08-26 additions: pro 3-seed replication (T2-T8 r2/r3, in progress), gpt-5.6-luna third-model leg (4/8 honest), BO 3-seed robustness (16/16 done, seed-invariant 3/8).
 
 ## 1. Research Questions
