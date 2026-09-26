@@ -350,25 +350,25 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 | | 孔隙率 | `Negative/Positive electrode porosity` | → **PyBaMM** → 能量密度、倍率、析锂 | 通 |
 | | 活性材料体积分数 | `Negative/Positive electrode active material volume fraction` | 与孔隙率互锁——该集里两者之和恰为 1，所以是**同一个自由度** | 通 |
 | | 颗粒半径 | `Negative/Positive particle radius [m]` | → **PyBaMM** → 倍率 | 通 |
-| | 粒径分布 | `get_size_distribution_parameters` 附加的分布参数 | 形状是假设的对数正态（sd 默认 0.3），未实测 | △（形状是假设的） |
+| | 粒径分布 | `get_size_distribution_parameters` 附加的分布参数 | 形状是假设的对数正态（sd 默认 0.3）；真实形状**没有计算路径**，只能激光粒度仪实测 | ✗ 缺输入 |
 | | **导电剂 / 粘结剂比例** | **无**——参数集把电极建成"活性材料＋空隙"两相，活性分数＋孔隙率恰为 1，**导电剂与粘结剂的体积根本没建模** | —— | ✗ 没有对应参数 |
-| | 包覆剂（改界面动力学） | **SEI 侧 8 个**：`SEI kinetic rate constant`、`SEI resistivity`、`SEI solvent diffusivity`、`SEI electron conductivity`、`SEI reaction exchange current density`、`SEI partial molar volume`、`SEI open-circuit potential`、`SEI growth activation energy` | 包覆材料 → **△ 贵**（DFT 界面势垒）→ 这一组 | △ 算得慢 |
-| | 掺杂剂（改开裂） | **开裂侧 24 个**（OKane2022 独有）：`Paris' law constant b/m`、`cracking rate`、`critical stress [Pa]`、`initial crack length/width [m]`、`number of cracks per unit area`、`Young's modulus [Pa]`、`Poisson's ratio`、`partial molar volume`、`volume change`、`LAM constant …` | 掺杂剂 → 这一组 | △ 算得慢 |
+| | 包覆剂（改界面动力学） | **SEI 侧 8 个**：`SEI kinetic rate constant`、`SEI resistivity`、`SEI solvent diffusivity`、`SEI electron conductivity`、`SEI reaction exchange current density`、`SEI partial molar volume`、`SEI open-circuit potential`、`SEI growth activation energy` | 包覆材料 → **△ 贵**（DFT 界面势垒）→ 速率常数；**8 个里只通这一条**，其余 7 个连路径都不清楚 | △ 算得慢（只通一条） |
+| | 掺杂剂（改开裂） | **开裂侧 24 个**（OKane2022 独有）：`Paris' law constant b/m`、`cracking rate`、`critical stress`、`initial crack length/width`、`number of cracks per unit area`、`Young's modulus`、`Poisson's ratio`、`volume change`、`LAM constant`… | **Paris 常数这类是疲劳试验的拟合参数，没有第一性原理路径**；只有杨氏模量、泊松比这类弹性常数能算，是少数 | ✗ 缺理论 |
 | **4 电芯结构** | 隔膜厚度 | `Separator thickness [m]` | → **PyBaMM** → 能量密度、质量 | 通 |
 | | 隔膜孔隙率 | `Separator porosity` | → **PyBaMM** → 倍率 | 通 |
 | | 集流体厚度 | `Negative/Positive current collector thickness [m]` | → **PyBaMM** → 能量密度、质量 | 通 |
 | | 电极面积 | `Electrode height [m]` × `Electrode width [m]` | → **PyBaMM** → 容量、能量 | 通 |
 | | 并联电极数（叠片数 / 卷绕圈数） | `Number of electrodes connected in parallel to make a cell` | → **PyBaMM** → 容量 | 通 |
 | | N/P 比 | 无直接参数——由厚度与活性材料分数算出 | —— | 通（派生量） |
-| | 外形 | 不是参数，是模型选项 `cell geometry` | pouch 配 `x-lumped` 实测跑通；圆柱要补极耳坐标与集流体表面积 | 通（pouch）／△（圆柱） |
+| | 外形 | 不是参数，是模型选项 `cell geometry` | pouch 配 `x-lumped` 实测跑通；圆柱要补极耳坐标与集流体表面积 | 通（pouch）／△ 缺参数值（圆柱） |
 | | 接触电阻 | `Contact resistance [Ohm]` | 装配 / 焊接 | 通（值要实测） |
 | **5 热管理** | 电芯尺寸 | `Cell volume [m3]`、`Cell cooling surface area [m2]` | → **PyBaMM** → $T_{\max}$ | 通 |
 | | 散热系数 | `Total heat transfer coefficient [W.m-2.K-1]` | 冷却设计 → **△ 缺流体那一段** → 这个数 | △ 缺模型 |
 | | 分部位散热 | `Edge heat transfer coefficient`、`Positive/Negative tab heat transfer coefficient`、`Positive/Negative current collector surface heat transfer coefficient`（多数集里没有） | 同上，但自由度更细 | △ 缺模型 |
-| | 表面辐射率 | `Cell emissivity`（仅 1 个集有） | —— | △（多数集里没有这个参数） |
+| | 表面辐射率 | `Cell emissivity`（仅 1 个集有） | 模型里有这个量，只是这个集没给值 | △ 缺参数值（查手册） |
 | **6 电解液配方** | 盐浓度 | `Initial concentration in electrolyte [mol.m-3]` | → **MD** → $\sigma$、$t^+$、$D_e$ → **PyBaMM** | △ 算得慢 |
 | | 溶剂比 | `EC initial concentration in electrolyte [mol.m-3]`、`Bulk solvent concentration [mol.m-3]` | 同上 | △ 算得慢 |
-| | 输运参数本身 | `Electrolyte conductivity`、`Electrolyte diffusivity`、`Cation transference number`、`Thermodynamic factor` | 是**结果**不是可直接设的量——参数集里它们是随浓度变的**函数**，MD 给的是单点 | △ 算得慢（要一条曲线，不是一个点） |
+| | 输运参数本身 | `Electrolyte conductivity`、`Electrolyte diffusivity`、`Cation transference number`、`Thermodynamic factor` | 是**结果**不是可直接设的量——参数集里它们是随浓度变的**函数**，MD 给的是单点 | △ 给单点要函数（是拟合问题，不是算力） |
 | | 添加剂 | 同"包覆剂"那一组 SEI 参数 | 分子 → **xTB** → HOMO / LUMO → **✗ 断**（到 SEI 参数没有换算） | ✗ 缺理论 |
 | **7 工艺** | 化成 | `Initial SEI thickness [m]`、`Initial SEI on cracks thickness [m]`、`Initial concentration in negative/positive electrode [mol.m-3]` | **能设**——化成结果就落在这些参数上 | 通（值要工艺定） |
 | | 注液量 | 无 | —— | ✗ 没有对应参数 |
@@ -504,15 +504,21 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 | 分子 → HOMO / LUMO | **通**——xTB 秒级 |
 | HOMO / LUMO → SEI 速率常数 | **✗ 缺理论**——没有换算 |
 
-**链上的断点分五种。关键不在"现在断了"，而在"补不补得起来"**——所以标记分两类：**△ 补得起来（花代价），✗ 补不起来。**
+**链上的断点分六种。关键不在"现在断了"，而在"补不补得起来"**——所以标记分两类：**△ 补得起来（花代价），✗ 补不起来。**
 
 | 标记 | 类型 | 缺什么 | 代理模型帮得上吗 | 怎么补 | 表里的例子 |
 |---|---|---|---|---|---|
-| **△** | 算得慢 | 算力 | **帮得上** | 建代理模型——用便宜的近似贵的 | 包覆剂 → SEI 速率常数 |
-| **△** | 缺模型 | 另一套仿真工具 | 帮得上（先有工具，才谈代理） | 建传热 / 流场仿真 | 冷却设计 → 散热系数 |
-| **✗** | 缺输入 | 实验数据 | 帮不上 | 先做实验拿数据 | 导电剂比例 → 电导率；新组分 → 整套参数 |
-| **✗** | 缺理论 | 科学本身 | 帮不上 | 等科学进展 | 添加剂 → SEI 厚度 |
-| **✗** | 没有对应参数 | 参数表里没这个量 | 帮不上 | 换成能表示它的模型 | 注液量 |
+| **△** | 算得慢 | 算力 | **帮得上** | 建代理模型——用便宜的近似贵的 | 盐浓度、溶剂比 → 输运参数 |
+| **△** | 算得慢（只通一条） | 算力，且路径只有一条 | 只能帮那一条 | 建代理模型，其余参数另想办法 | 包覆剂 → SEI 侧 8 个里只通速率常数 |
+| **△** | 缺模型 | 另一套仿真工具 | 帮得上（先有工具，才谈代理） | 建流场 / 传热仿真 | 冷却设计 → 散热系数 |
+| **△** | 缺参数值 | 模型有这个量，参数集没给值 | 用不上 | 查手册、实测、或自己补 | 外形（圆柱）的极耳坐标；表面辐射率 |
+| **✗** | 缺输入 | 实验数据 | 帮不上 | 先做实验 | 导电剂比例、新组分、粒径分布的真实形状 |
+| **✗** | 缺理论 | 科学上还没有路径 | 帮不上 | 等科学进展 | 添加剂；掺杂剂 → Paris 常数 |
+| **✗** | 没有对应参数 | 模型里根本没这个量 | 帮不上 | 换成能表示它的模型 | 注液量 |
+
+**△ 能修，✗ 修不了**——缺输入要实验、缺理论要等科学、没有对应参数要换模型，都不是建个代理模型能解决的。
+
+**"△ 算得慢"这一栏尤其不能一概而论**：里面混着三种处境——① 真算得慢、代理能帮（盐浓度 → 输运参数）；② 算得慢但**只通一条路**（包覆剂 → 势垒 → 速率常数，同组另外 7 个 SEI 参数没有路径）；③ 根本不是算力问题（输运参数是"给单点要函数"的拟合问题、表面辐射率是"参数集没给值"、外形圆柱是"要自己补几何参数"）。
 
 **△ 那一类是"能修的"**：真值算得出来，只是贵，所以可以拿便宜的近似它。**✗ 那三类修不了**——缺输入要实验、缺理论要等科学、模型里没有这一项要换模型，都不是建个代理模型能解决的。
 
@@ -527,9 +533,12 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 | | 变量 |
 |---|---|
 | **能设计又能验证** | 换已验证体系（只有几个可选）／电极厚度（＝面负载量）／孔隙率与活性材料分数（同一自由度）／颗粒半径／隔膜厚度与孔隙率／集流体厚度／电极面积／并联电极数／N/P 比（派生）／外形（pouch）／接触电阻（值要实测）／电芯尺寸／化成（值要工艺定） |
-| **△ 补得起来** | 粒径分布（形状是假设的）／包覆剂与掺杂剂（建代理模型）／冷却设计 → 散热系数（流场仿真或经验关联式）／分部位散热／表面辐射率／外形（圆柱与 2D/3D 要补参数）／盐浓度与溶剂比（MD）／输运参数本身 |
-| **✗ 补不起来——要实验** | 导电剂 / 粘结剂比例、新组分 |
-| **✗ 补不起来——要等科学** | 添加剂 |
+| **△ 算得慢（代理能帮）** | 盐浓度与溶剂比（MD → 输运参数）；包覆剂 → SEI 速率常数（只通这一条） |
+| **△ 缺模型** | 冷却设计 → 散热系数、分部位散热（建流场 / 传热仿真） |
+| **△ 缺参数值** | 外形（圆柱）的极耳坐标与集流体表面积；表面辐射率——查手册或自己补 |
+| **△ 给单点要函数** | 输运参数本身（MD 给单点，参数集要的是随浓度变的函数） |
+| **✗ 补不起来——要实验** | 导电剂 / 粘结剂比例、新组分、粒径分布的真实形状 |
+| **✗ 补不起来——要等科学** | 添加剂；掺杂剂 → Paris 常数这类疲劳拟合参数 |
 | **✗ 补不起来——没有对应参数** | 注液量 |
 
 这张表决定了 agent 的实际设计空间：**它不是"六个步骤都能做"，而是六大块里有一半只能设、不能验。** 一个设计量如果设了却拿不到反馈，它不会让结果变好，只会让报告多一行字。
