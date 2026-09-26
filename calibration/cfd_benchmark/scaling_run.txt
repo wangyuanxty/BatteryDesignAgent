@@ -1,0 +1,10 @@
+GRID 40x20: cells=    800  wall=    7.39 s  (46.2 us per cell per sweep)
+GRID 80x40: cells=   3200  wall=   12.28 s  (19.2 us per cell per sweep)
+GRID 160x80: cells=  12800  wall=   37.48 s  (14.6 us per cell per sweep)
+GRID 240x120: cells=  28800  wall=   85.19 s  (14.8 us per cell per sweep)
+-- scaling --
+cells x4.0 -> time x1.66
+cells x4.0 -> time x3.05
+cells x2.2 -> time x2.27
+
+[exited with code 0]

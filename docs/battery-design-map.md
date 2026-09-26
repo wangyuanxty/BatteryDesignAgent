@@ -124,7 +124,7 @@
 | 电芯 | DFN + 热耦合 | 温度分布、$T_{\max}$ | 秒级（未单独实测，与上面同量级） |
 | | 热失控 ODE | 触发判据 | 秒（未实测） |
 | | 机械–热耦合 | 针刺 / 挤压 | 分钟–小时（**未实测**） |
-| 系统 | CFD | 电池包级热管理 | 小时（**未实测**，见待办 #121） |
+| 系统 | CFD | 电池包级热管理 | **实测**：二维 2.9 万单元 × 200 迭代 = 85 s（**未收敛，是下界**）；外推三维百万单元 ≈ 10 h（见第五节实测表） |
 
 **电极与电芯两行由 PyBaMM 提供**（SPM / SPMe / P2D / DFN、老化、热耦合都在里面）；分子与晶体两行由 xTB / DFT / MD / ML 势提供。**下面说的"仿真器"、参数表，指的就是这两组里的对应工具。**
 
@@ -527,7 +527,7 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 |---|---|---|---|---|
 | **① 只选冷却方式** | 教科书经验关联式（自然对流 5–25、强制风冷 25–250、液冷 500–10000 W/m²K） | 几行代码 | 查表，瞬间 | ✅ 有 |
 | **② 电芯间热网络** | 自己搭：N 个 PyBaMM 单电芯 + 热阻耦合 + 固定点迭代 | 一天左右 | **秒–分钟级** | ❌ **没有现成的** |
-| **③ 给定流道算 $h$** | **FiPy**（pip 直接装，纯 Python 有限体积）或 OpenFOAM（要经 WSL——本机 wsl.exe 在但**未装发行版**）：建几何 → 划网格 → 设边界 → 求解 → 后处理 | 环境半天到一天；流程几天 | 分钟–小时级 | ⚠️ **FiPy 可 pip 装**；OpenFOAM 的 conda-forge 包**不存在**，须走 WSL |
+| **③ 给定流道算 $h$** | **FiPy**（pip 直接装，纯 Python 有限体积）或 OpenFOAM（须经 WSL）：建几何 → 划网格 → 设边界 → 求解 → 后处理 | **环境：FiPy 装 9 秒**（实测）；**流程：照 FiPy 自带的 `stokesCavity` 例子改成冷板共轭传热，改了五轮才从 NaN 变成稳定，且仍未收敛** | **实测二维 2.9 万单元 × 200 次迭代 = 85.19 s**（未收敛，是下界）。外推三维百万单元 ≈ 10 h，五百万单元 ≈ 100 h+ | ⚠️ **FiPy 可 pip 装**（实测 9 s）；OpenFOAM 的 conda-forge 包**已核实不存在**（`conda search -c conda-forge openfoam` → no match），本机 WSL **未装分发版**，须先 `wsl --install`（要管理员 + 重启） |
 | **④ 自主设计流道** | 先解决流道几何的参数化 | 开放问题 | —— | —— |
 
 **第二档实测**（本机，Chen2020，SPMe，1C 放电 1 小时）：
@@ -550,7 +550,24 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 
 **第四档的难点不在仿真**：流道几何（蛇形？并行？几进几出？）**没有现成的参数化方式**。没有参数化就没有设计空间，也就没有 agent 能搜的东西——**这是个开放问题，不是工程量问题**。
 
-（第二档的秒级数据是本机实测；**第三档"环境半天到一天、流程几天、分钟到小时级"仍是经验量级、未实测**——待办 #121。）
+（第二档的秒级数据是本机实测。**第三档 2026-09-26 也实测了，见下**。）
+
+**第三档实测**（本机，脚本与输出在 `calibration/cfd_benchmark/`：`coldplate.py` 是把 FiPy 自带的 `examples/flow/stokesCavity.py`（SIMPLE + Rhie–Chow）改成"水冷流道 + 铝板 + 顶部热流"的二维共轭传热；`scale.py` 扫网格）。固定 200 次外层迭代：
+
+| 网格 | 单元数 | 墙钟 | 每单元每迭代 |
+|---|---|---|---|
+| 40×20 | 800 | 7.39 s | 46.2 µs |
+| 80×40 | 3,200 | 12.28 s | 19.2 µs |
+| 160×80 | 12,800 | 37.48 s | 14.6 µs |
+| 240×120 | 28,800 | 85.19 s | 14.8 µs |
+
+**1.3 万单元以上基本线性**（单元 ×4 → 时间 ×3.05）。按 15 µs/单元/迭代 外推三维：**百万单元 × 2000 迭代 ≈ 10 小时；五百万单元 × 5000 迭代 ≈ 100 小时以上。**
+
+**两个必须写明的前提**：① 这几组**都没收敛**——动量残差 300 步后停在 1.6 且缓慢回升，温度场不可用，所以 **85 s 是下界**，收敛只会更慢；② 二维 5 点格式外推三维 7 点格式，每单元成本只会更高，这个外推偏乐观。
+
+**所以原先写的"分钟–小时级"要改**：二维小网格确实是分钟级（85 s），**真实三维冷板是小时到天，低了 1–2 个数量级**。"CFD 进不了设计循环"这个结论因此**更硬，不是更软**。
+
+**另外两条环境事实（本次核实）**：**FiPy pip 装只要 9 秒**（原写"环境半天到一天"是错的）；**OpenFOAM 在 conda-forge 上没有包**（`conda search -c conda-forge openfoam` → no match），而本机 **WSL 没有已安装的分发版**（`wsl -l -v` 直接提示要 `wsl --install`，那要管理员权限加重启）——所以 OpenFOAM 这条路**本次没走**，上面所有数都是 FiPy 的。
 
 
 
@@ -817,14 +834,26 @@ def graphite_cracking_rate_Ai2020(T_dim):
 | | Celgard **2500**（单层 PP） | 厚 25 µm；孔隙率 **55%**（厂商）/ **53%**（实测）；**迂曲度 1.43** | 同上 | 规格书 + **论文** |
 | **箔材** | Cu 箔（负极） | **9 µm**（标准配对）；行业范围 4–12 µm | MTI Korea. *Li-Ion Battery Electrode Strips for 21700 Cylindrical Cell*, Lib-ES21700 (accessed 2026-09-26).<br>*Conductive conduit*. WO 2024/038180 A1, 2024. | 规格书 + 专利 |
 | | Al 箔（正极） | **16 µm**（标准配对）；行业范围 10–20 µm | 同上 | 规格书 + 专利 |
-| **粒径** | NMC811 | D10 **5±1** / D50 **10±2** / D90 **20±4** µm | MSE Supplies. *NMC 811 Cathode Powder* (accessed 2026-09-26). | 规格书 |
+| **粒径** | NMC811——**参数集自己的出处** | 平均颗粒半径 **5.22 µm**（→ 直径 ≈10.4 µm）；同文一并给石墨 5.86 µm、Si 1.52 µm。**这三个数就是 PyBaMM 里 `Positive/Negative particle radius [m]` 的值**（本机 dump 核对：Chen2020 / ORegan2022 / OKane2022 三套都是 5.22 与 5.86 µm） | Chen, C.-H.; Brosa Planella, F.; O'Regan, K.; Gastol, D.; Widanage, W. D.; Kendrick, E. *J. Electrochem. Soc.* **2020**, *167* (8), 080534. DOI: 10.1149/1945-7111/ab9050. | **论文** |
+| | NMC811（激光衍射，独立佐证） | **D50 = 9.58 / 10.09 µm**；**一次颗粒 300–500 nm 与二次颗粒 ≈10 µm 分开报** | Heidbüchel, M.; Gomez-Martin, A.; Frankenstein, L.; Makvandi, A.; Peterlechner, M.; Wilde, G.; Winter, M.; Kasnatscheew, J. *Small Sci.* **2024**, *4* (10), 2400135. DOI: 10.1002/smsc.202400135. | **论文**（成分是 NCM90-6-4，不是严格的 NMC811） |
+| | 同上（共沉淀 + 900 °C 煅烧） | **D10 3.08 / D50 13.57 / D90 32.53 µm**（空气）；O₂、N₂ 两条对照 D50 = 14.19、20.81 µm | Tiozzo, A.; Ghaseminezhad, K.; Mazzucco, A.; Giuliano, M.; Rocca, R.; Dotoli, M.; Nicol, G.; Nervi, C.; Baricco, M.; Sgroi, M. F. *Crystals* **2024**, *14* (2), 137. DOI: 10.3390/cryst14020137. | **论文** |
+| | 综述给的区间 | 二次颗粒（多晶）**5–20 µm**；单晶一次颗粒 **1–5 µm** | Ogley, M. J. W.; Johnston, B. I. J.; Hall, D. S.; Piper, L. F. J. *Chem. Rev.* **2025**, *125* (20), 9774–9806. DOI: 10.1021/acs.chemrev.5c00330. | **论文**（综述） |
+| | NMC811（供应商，作对照） | D10 **5±1** / D50 **10±2** / D90 **20±4** µm | MSE Supplies. *NMC 811 Cathode Powder* (accessed 2026-09-26). | 规格书 |
 | | 球化天然石墨 | **高功率 5–10 µm / 高能量 15–25 µm**；<5 µm 容量掉、>25 µm 扩散受限 | Glass, D. E.; Pathirana, T.; Yan, S.; Best, A. S.; Parsa, M. R.; Bunney, K.; Ellis, A. V. *Adv. Powder Technol.* **2025**, *36* (12), 105115. DOI: 10.1016/j.apt.2025.105115.<br>Gracheva, A. V.; Klyukova, K. E.; Makhina, V. S.; Morozov, N. S.; Konstantinov, M. S.; Filippova, M. S.; Semenyako, D. M.; Chebotarev, S. N.; Avdeev, V. V. *J. Electrochem. Soc.* **2025**, *172* (11), 110542. DOI: 10.1149/1945-7111/ae1dd2. | **论文** |
+
+**NMC811 这一栏要连带记的三条**：
+
+**一、5.22 µm 是"半径"，不是 D50。** 它由 SEM 图像上量颗粒截面再按球形折算，**不是激光衍射的 D50**；换算成直径 ≈10.4 µm，正好落在供应商规格 D50 = 10±2 µm 上——两条独立路径对上了。**填参数时填 5.22 µm 半径**，别把直径填进去。
+
+**二、测法不统一，表里要标。** Chen 2020、Huang 2024、Tran 2022 是 **SEM 量截面**；Heidbüchel 2024 与 Tiozzo 2024 是**激光衍射**。同叫"粒径"，两种测法给的分布不完全可比。
+
+**三、一次颗粒与二次颗粒必须分开。** 扩散发生在**一次晶粒**内，开裂发生在**二次颗粒**上。综述给的区间是二次 5–20 µm（多晶）、单晶一次 1–5 µm；Heidbüchel 给的是二次 ≈10 µm、一次 300–500 nm。**模型里 `Positive particle radius [m]` 用的是二次颗粒的值**——这一点在写方法学时要说清，否则"粒径"两个字会有两种读法。
 | **接触电阻** | Cu–Cu（极耳 / 母排焊接） | **0.044–0.055 mΩ**（100–200 A，180 s，四线法） | Kumar, N.; et al. *In-depth evaluation of laser-welded similar and dissimilar material tab-to-busbar electrical interconnects for EV battery pack*. Univ. Warwick WRAP, **2021**. | **论文** |
 | | Cu–Al | 比 Cu–Cu 高 **16–20%** | 同上 | **论文** |
 | | Cu–Hilumin（镀镍钢端子） | **0.353 mΩ**（50 A） | Kumar, N.; et al. *J. Mater. Eng. Perform.* **2025**. DOI: 10.1007/s11665-025-11595-7. | **论文** |
 | | Ni–Hilumin | **0.54 mΩ**（50 A） | 同上 | **论文** |
 | **表面辐射率** | 阳极氧化铝 | **0.82**（25 °C）→ **0.68**（180 °C） | Kohara, S.; Niimi, Y. *Mater. Sci. Forum* **1996**, *217–222*, 1623. | **论文** |
-| | 裸不锈钢（**18650 尺寸圆柱**） | **ε = 0.32** | *Importance of Heat Transfer by Radiation in Li-Ion Batteries during Thermal Abuse*. *J. Electrochem. Soc.* DOI: 10.1149/1.1391131. | **论文** |
+| | 裸不锈钢（**18650 尺寸圆柱**） | **ε = 0.32** | Hatchard, T. D. *Electrochem. Solid-State Lett.* **1999**, *3* (7), 305. DOI: 10.1149/1.1391131. | **论文** |
 | | 贴标签（相对裸壳） | 表面换热系数 **+27 ~ +39%** | 同上 | **论文** |
 | | 黑漆 | **ε ≈ 0.90** | 同上 | **论文** |
 | | **镀镍钢外壳** | **无直接测量值** | —— | —— |
@@ -838,7 +867,7 @@ def graphite_cracking_rate_Ai2020(T_dim):
 | 候选 | 文献报的量（数字 + 条件） | 出处 | 能不能换 |
 |---|---|---|---|
 | **FEC 3 wt%、VC 3 wt%** | TEM 测 SEI 厚度：**10–20 nm（加添加剂）vs 10–40 nm（不加）**；石墨/Li 半电池，1.2 M LiPF₆ in EC/EMC 3:7 | Nie, M.; Demeaux, J.; Young, B. T.; Heskett, D. R.; Chen, Y.; Bose, A.; Woicik, J. C.; Lucht, B. L. *J. Electrochem. Soc.* **2015**, *162* (13), A7008–A7014. DOI: 10.1149/2.0021513jes. | **⚠ 能换，但取不出倍数**——两个区间**重叠**，原文给的是范围不是均值，没有可比的比 |
-| **FEC 10 wt% / DTD / TPP / VC 1 wt%**（cryo-TEM） | 加添加剂 SEI **稳定在 <90 nm**；不加则石墨剥离、**200 圈 45 °C 后长到 ~450 nm**。效果排序 FEC > DTD ≈ TPP > VC | Han, B.; Zou, Y.; Xu, G.; Hu, S.; Kang, Y.; Qian, Y.; Wu, J.; Ma, X.; Yao, J.; Li, T.; Zhang, Z.; Meng, H.; Wang, H.; Deng, Y.; Li, J.; Gu, M. *Energy Environ. Sci.* **2021**, *14* (9), 4882–4889. DOI: 10.1039/D1EE01678D. | **✔ 能换**——比值 ≤90/450 = **0.20**，套 45 °C / 200 圈的扫描表反解得 **k×0.0019**（下面有算式）<br>**证据要打折**：这两个数字来自检索摘要，本次没读到原文；另有二手摘要给"<70 nm"（那比值更低、k 还要再小） |
+| **FEC 10 wt% / DTD 1 wt% / TPP 1 wt% / VC 1 wt%**（cryo-TEM，石墨/NCM523 2000 mAh 软包） | 加添加剂 SEI **稳定在 <90 nm**；不加则 EC–DEC 电解液本身就剥离石墨、**200 圈 45 °C 后长到 ~450 nm**（剥离的石墨烯层嵌在 SEI 里，增强局部电子通道，SEI 一直长）。效果排序 FEC > DTD ≈ TPP > VC。化成：45 °C 下 0.05C 3 h 再 0.1C 3 h | Han, B.; Zou, Y.; Xu, G.; Hu, S.; Kang, Y.; Qian, Y.; Wu, J.; Ma, X.; Yao, J.; Li, T.; Zhang, Z.; Meng, H.; Wang, H.; Deng, Y.; Li, J.; Gu, M. *Energy Environ. Sci.* **2021**, *14* (9), 4882–4889. DOI: 10.1039/D1EE01678D. | **✔ 能换**——比值 ≤90/450 = **0.20**，套 45 °C / 200 圈的扫描表反解得 **k×0.0019**（下面有算式）<br>**证据等级**：两次独立检索都渲染出同一组数字与同一套条件（<90 nm / ~450 nm、200 圈、45 °C、EC–DEC），**但原文（RSC 403）本次没读成**，仍按"未读原文"记 |
 | **MMDS、PS（1,3-丙烷磺内酯）** | 超高精度库仑法（UHPC）测**库仑不效率 CIE**、充电终点容量滑移率；2% VC + 1% MMDS 全指标优于单用 2% VC；PS 的缺点是阻抗涨得快 | Xia, J.; Harlow, J. E.; Petibon, R.; Burns, J. C.; Chen, L. P.; Dahn, J. R. *J. Electrochem. Soc.* **2014**, *161* (4), A547–A553. DOI: 10.1149/2.049404jes. | **✔ 正是能换的那个量（CIE）**——**但数值只画在图里，正文没给数**；要读图才能取 |
 | **VC + DTD**（NMC532 单晶 / 人造石墨软包，1.33 M LiPF₆ EC:EMC:DMC 25:5:70，4.3 V） | 首圈效率 0.86（1% VC）、0.86（2% VC）、**0.884（2% VC + 3% DTD）**、0.85（1% VC + 2% DTD）；多数电芯在 20 与 40 °C 下都跑到 1500 圈以上 | Taskovic, T.; Thompson, L. M.; Eldesoky, A.; Lumsden, M. D.; Dahn, J. R. *J. Electrochem. Soc.* **2021**, *168* (1), 010514. DOI: 10.1149/1945-7111/abd833. | ✘ **首圈效率是化成，不是循环 CE**——它对应的是初始 SEI，而首圈那条换算在情形四里已证明是反的 |
 | **VEC**（NMC622 / 人造石墨软包） | 到 50% SoH 的循环数：**基线 412 圈、VC 531 圈、VEC 1928 圈**（VEC 到 1900 圈还有 60% SoH） | Pfeiffer, F.; Griggio, A.; Weiling, M.; Wang, J.-F.; Reißig, F.; Peschel, C.; Pillatsch, L.; Warrington, S.; Nowak, S.; Grimaudo, V.; Wright, I. A.; Baghernejad, M. *Adv. Energy Mater.* **2024**, *14* (39), 2402187. DOI: 10.1002/aenm.202402187. | ✘ 循环寿命——情形四 |
@@ -906,7 +935,8 @@ def graphite_cracking_rate_Ai2020(T_dim):
 |---|---|
 | **镀镍钢外壳的发射率** | 查不到直接测量值。最接近的是"镍镀铁（未抛光）0.11"、"氧化镍 0.59–0.86"，以及"裸不锈钢 18650 壳 0.32"——**都不是镀镍钢** |
 | Advanced Powder Technology 那篇的**完整标题与完整作者** | ~~只拿到 DOI 与部分作者~~ **2026-09-26 已补齐**——OpenAlex 记录：标题 *Increasing the yields of natural flake graphite spheronization with the NARA Hybridization System*，作者 Glass, D. E.; Pathirana, T.; Yan, S.; Best, A. S.; Parsa, M. R.; Bunney, K.; Ellis, A. V.，*Adv. Powder Technol.* **2025**, *36* (12), 105115 |
-| NMC811 的**论文级**粒径来源 | 目前只有供应商规格书；Song et al., *Ionics* **2022**, *28*, 5421–5431（DOI: 10.1007/s11581-022-04756-4）研究过 Ni-rich 正极粒径，但是固态电池体系、且未报 D50 |
+| NMC811 的**论文级**粒径来源 | ~~目前只有供应商规格书~~ **2026-09-26 已补齐**——参数集自己的出处 Chen et al. *J. Electrochem. Soc.* **2020**, *167* (8), 080534 给平均半径 **5.22 µm**（本机 dump 核对过，就是 PyBaMM 里的值），另有 Heidbüchel 2024（激光衍射 D50 9.58–10.09 µm）与 Tiozzo 2024（D10/D50/D90）两条独立佐证 |
+| NMC811 的**振实密度 / 极片压实**（与粒径同报的论文） | **查不到**——唯一同时给比表面积 / 粒径 / 振实密度的表是 NMC622、0.4–1.5 µm 的体系，成分与粒径都不对。流传的 NMC811 振实密度 ≈2.1–2.3 g/cm³ **只有供应商来源** |
 | 第 **2/3/4** 类（添加剂、包覆、掺杂） | ~~未查~~ **2026-09-26 已查完**（见上）——候选查得到，**能进模型的只有 1 条实打实的（Han 2021 的添加剂 SEI 厚度 → k×0.0019）**；包覆与掺杂 0 条 |
 | 包覆的 **SEI 厚度实测**（石墨 / NMC 体系） | **查不到**——同行评议文献里没有"包覆 vs 不包覆"的 SEI 厚度（nm）实测；唯一的实测倍数在 Si 薄膜上（Xiao 2011，约 5–10 倍）。**要用只能拿 Si 的倍数类比，那是假设** |
 | 掺杂的 **裂纹密度数值 / 掺杂后力学参数** | **查不到**——没有"掺杂 vs 不掺杂"的裂纹密度数；也没有掺杂量 → 杨氏模量 / 硬度 / 断裂韧性的实测序列。检索到的力学综述（Stallard 2022, *Joule*）给框架不给掺杂对比值 |
