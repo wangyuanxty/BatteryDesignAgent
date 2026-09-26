@@ -628,6 +628,62 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 
 ---
 
+## 七、候选查找表（要预编的那张表）
+
+主表里标「通·查」的那些，值只能查、算不出。**这张表就是把它们预先编好**，agent 运行时查表取用——**表内是全部可用候选，不出去找**（表外自己找会产生幻觉、无法验证）。
+
+**引用格式**（四类来源各一种）：
+
+| 来源 | 格式 |
+|---|---|
+| 期刊论文 | Author, A. B.; Author, C. D. *Journal* **Year**, *Vol* (Issue), Pages. DOI. |
+| 手册 | Author. *Title*, Ed.; Publisher: Place, Year; Table X.Y. |
+| 厂商规格书 | Vendor. *Document Title*, Rev.; Date. URL (accessed YYYY-MM-DD). |
+| 专利 | Inventor. *Title*. Patent No., Year. |
+
+**证据等级**：论文（同行评议）＞ 手册（标准参考）＞ 规格书（厂商，未经评审）＞ 反推（由文献换算、含假设）。
+
+### 已查到的（六类）
+
+| 类 | 候选 | 参数 / 值 | 出处 | 等级 |
+|---|---|---|---|---|
+| **电解液** | LiPF₆ in **EC:EMC (3:7)**、**EC:DMC (1:1)**、**EMC:FEC (19:1)** | σ(c,T)、D(c,T)、t⁺、热力学因子，**0.1–3.0 M，−10–+50 °C** | Landesfeind, J.; Gasteiger, H. A. *J. Electrochem. Soc.* **2019**, *166* (14), A3079–A3097. DOI: 10.1149/2.0571912jes. | **论文** |
+| | 上述三体系的**代码实现** | PyBaMM 系数数组（可直接调用） | O'Regan, K.; Brosa Planella, F.; Widanage, W. D.; Kendrick, E. *Electrochim. Acta* **2022**, *425*, 140700. DOI: 10.1016/j.electacta.2022.140700. | **论文** |
+| **隔膜** | Celgard **2325**（PP/PE/PP） | 厚 25 µm；孔隙率 **39%**（厂商）/ **41%**（X 射线实测）；**迂曲度 2.23** | Celgard. *Product Data — Battery Separator Products*. https://www.celgard.com/product-data (accessed 2026-09-26).<br>Finegan, D. P.; Cooper, S. J.; Tjaden, B.; Taiwo, O. O.; Gelb, J.; Hinds, G.; Brett, D. J. L.; Shearing, P. R. *J. Power Sources* **2016**, *333*, 184–192. DOI: 10.1016/j.jpowsour.2016.09.132. | 规格书 + **论文** |
+| | Celgard **2500**（单层 PP） | 厚 25 µm；孔隙率 **55%**（厂商）/ **53%**（实测）；**迂曲度 1.43** | 同上 | 规格书 + **论文** |
+| **箔材** | Cu 箔（负极） | **9 µm**（标准配对）；行业范围 4–12 µm | MTI Korea. *Li-Ion Battery Electrode Strips for 21700 Cylindrical Cell*, Lib-ES21700 (accessed 2026-09-26).<br>*Conductive conduit*. WO 2024/038180 A1, 2024. | 规格书 + 专利 |
+| | Al 箔（正极） | **16 µm**（标准配对）；行业范围 10–20 µm | 同上 | 规格书 + 专利 |
+| **粒径** | NMC811 | D10 **5±1** / D50 **10±2** / D90 **20±4** µm | MSE Supplies. *NMC 811 Cathode Powder* (accessed 2026-09-26). | 规格书 |
+| | 球化天然石墨 | **高功率 5–10 µm / 高能量 15–25 µm**；<5 µm 容量掉、>25 µm 扩散受限 | Glass, D.; Pathirana, T.; Yan, S.; Best, A. S.; Parsa, M.; Bunney, K.; et al. *Adv. Powder Technol.* **2025**, 105115. DOI: 10.1016/j.apt.2025.105115.<br>Gracheva, M.; Klyukova, E.; et al. *J. Electrochem. Soc.* **2025**, *172*, 110542. DOI: 10.1149/1945-7111/ae1dd2. | **论文** |
+| **接触电阻** | Cu–Cu（极耳 / 母排焊接） | **0.044–0.055 mΩ**（100–200 A，180 s，四线法） | Kumar, N.; et al. *In-depth evaluation of laser-welded similar and dissimilar material tab-to-busbar electrical interconnects for EV battery pack*. Univ. Warwick WRAP, **2021**. | **论文** |
+| | Cu–Al | 比 Cu–Cu 高 **16–20%** | 同上 | **论文** |
+| | Cu–Hilumin（镀镍钢端子） | **0.353 mΩ**（50 A） | Kumar, N.; et al. *J. Mater. Eng. Perform.* **2025**. DOI: 10.1007/s11665-025-11595-7. | **论文** |
+| | Ni–Hilumin | **0.54 mΩ**（50 A） | 同上 | **论文** |
+| **表面辐射率** | 阳极氧化铝 | **0.82**（25 °C）→ **0.68**（180 °C） | Kohara, S.; Niimi, Y. *Mater. Sci. Forum* **1996**, *217–222*, 1623. | **论文** |
+| | 裸不锈钢（**18650 尺寸圆柱**） | **ε = 0.32** | *Importance of Heat Transfer by Radiation in Li-Ion Batteries during Thermal Abuse*. *J. Electrochem. Soc.* DOI: 10.1149/1.1391131. | **论文** |
+| | 贴标签（相对裸壳） | 表面换热系数 **+27 ~ +39%** | 同上 | **论文** |
+| | 黑漆 | **ε ≈ 0.90** | 同上 | **论文** |
+| | **镀镍钢外壳** | **无直接测量值** | —— | —— |
+
+### 三条必须随表记录的注意事项
+
+**一、t⁺ 有已知伪影。** Landesfeind 的迁移数在低浓度/低温下出现偏离（甚至负值），被认为是锂金属极化实验（mossy Li / SEI 层）造成的。**引用时要标这条**，不能当纯测量值用。
+
+**二、迂曲度的文献值极分散。** 同一个 Celgard 2500，文献报过 **3.2 / 2.16 / 2.5 / 1.58 / 1.7**——差近一倍。**表里要标用的是哪一个来源**，不能混用。
+
+**三、发射率随温度变，且外壳表面处理影响很大。** 阳极氧化铝从 0.82（25 °C）掉到 0.68（180 °C）；18650 裸壳 ε=0.32，**贴个标签就把表面换热抬高 27–39%**。手册值通常是 25 °C 稳态测的，与工况不符。
+
+### 尚未解决的
+
+| 缺口 | 状态 |
+|---|---|
+| **镀镍钢外壳的发射率** | 查不到直接测量值。最接近的是"镍镀铁（未抛光）0.11"、"氧化镍 0.59–0.86"，以及"裸不锈钢 18650 壳 0.32"——**都不是镀镍钢** |
+| Advanced Powder Technology 那篇的**完整标题与完整作者** | 只拿到 DOI 与部分作者 |
+| NMC811 的**论文级**粒径来源 | 目前只有供应商规格书；Song et al., *Ionics* **2022**, *28*, 5421–5431（DOI: 10.1007/s11581-022-04756-4）研究过 Ni-rich 正极粒径，但是固态电池体系、且未报 D50 |
+| 第 **2/3/4** 类（添加剂、包覆、掺杂） | **未查**——文献报的不是 PyBaMM 参数，**要先定换算法** |
+
+---
+
 ## 附：当前命令行实现的对应（**待废弃**）
 
 下表记录的是**当前这套命令行工具**与指标的对应关系。该工具库将整体重写，本表仅作过渡期参考，**不要据此设计新东西**。
