@@ -405,10 +405,10 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 | | 电极面积 | `Electrode height [m]` × `Electrode width [m]` | 容量、电芯质量、$T_{\max}$（经散热面积） | **通·设**——直接填 |
 | | 并联电极数（叠片数 / 卷绕圈数） | `Number of electrodes connected in parallel to make a cell` | 容量、电芯质量 | **通·设**——直接填 |
 | | N/P 比 | 无直接参数——由厚度与活性材料分数算出 | 析锂、容量、能量密度 | **通·设**——派生量，不用单独设 |
-| | 外形 | 不是参数，是模型选项 `cell geometry` | $T_{\max}$、电芯质量、体积 | **通·设**——pouch 直接可用；圆柱的几何参数查该电芯规格书或按卷绕几何算 |
+| | 外形 | 不是参数，是模型选项 `cell geometry` | $T_{\max}$、电芯质量、体积、**针刺 / 过充通过性**（经冷却表面积 → `hA`） | **通·设**——pouch 直接可用；圆柱的几何参数查该电芯规格书或按卷绕几何算 |
 | | 接触电阻 | `Contact resistance [Ohm]` | 内阻、比功率、倍率保持 | **通·查**——模型里有这一格（默认 0），值查文献典型值或按工艺经验取 |
-| **热管理** | 电芯尺寸 | `Cell volume [m3]`、`Cell cooling surface area [m2]` | $T_{\max}$、能量密度（体积）、电芯质量 | **通·设**——直接填 |
-| | 散热系数 | `Total heat transfer coefficient [W.m-2.K-1]` | $T_{\max}$、热失控起始温度 | **通·算**——① 经验关联式（瞬间）；② 自搭电芯间热网络（实测 10 电芯 16.2 s） |
+| **热管理** | 电芯尺寸 | `Cell volume [m3]`、`Cell cooling surface area [m2]` | $T_{\max}$、能量密度（体积）、电芯质量、**针刺 / 过充通过性**（经 $m C_p$＝质量×900 与冷却面积） | **通·设**——直接填 |
+| | 散热系数 | `Total heat transfer coefficient [W.m-2.K-1]` | $T_{\max}$、热失控起始温度、**针刺 / 挤压 / 过充通过性**（经 `hA`） | **通·算**——① 经验关联式（瞬间）；② 自搭电芯间热网络（实测 10 电芯 16.2 s） |
 | | 分部位散热 | `Edge heat transfer coefficient`、`Positive/Negative tab heat transfer coefficient`、`Positive/Negative current collector surface heat transfer coefficient`（多数集里没有） | 同上，可分辨极耳/边缘局部温度 | **通·算**——同上，可分辨极耳 / 边缘局部温度 |
 | | 表面辐射率 | `Cell emissivity` | $T_{\max}$ | **通·查**——查 Incropera《传热学》附表 / ASHRAE Handbook，按外壳表面处理取值 |
 | **电解液配方** | 盐浓度 | `Initial concentration in electrolyte [mol.m-3]` | 倍率保持、低温保持、内阻、析锂 | **通·查**——常用电解液有**实测的 σ(c) 数据**（如 Landesfeind 2019）；只有新配方才要 MD（8.5 h+） |
@@ -416,6 +416,52 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 | | 输运参数本身 | `Electrolyte conductivity`、`Electrolyte diffusivity`、`Cation transference number`、`Thermodynamic factor` | 倍率保持、低温保持、内阻、析锂 | **通·查**——参数集里是随浓度变的函数；用文献的 σ(c) 形式，或用 LECA 拟合 |
 | | 添加剂 | 同"包覆剂"那一组 SEI 参数 | SEI 厚度、循环寿命、库仑效率、析锂 | **通·查（只有一条）**——Han 2021 给了石墨上加 FEC/DTD/TPP/VC 前后的 SEI 厚度（200 圈 45 °C：~450 → <90 nm），按第七节的换算反解得 `SEI kinetic rate constant` = 基线 ×0.0019。**其余添加剂文献只报容量保持率或首圈效率，两个都换不过去**（第七节已展开） |
 | **工艺** | 化成 | `Initial SEI thickness [m]`、`Initial SEI on cracks thickness [m]`、`Initial concentration in negative/positive electrode [mol.m-3]` | SEI 厚度、库仑效率、循环寿命 | **通·设**——能填；填多少按工艺经验 |
+
+### 两条指标原来漏了——补上，并写清是谁在管
+
+上面主表里原先一次没出现的指标有两条：**日历老化 / 自放电**、**针刺 / 挤压 / 过充通过性**。这两条的处境完全不同，分开说。
+
+#### ① 针刺 / 挤压 / 过充通过性 —— 能算，走的是 `run-tr`，**参数不在参数集里**
+
+用的是 `bda/simulators/thermal_runaway.py`：零维集总热平衡 ＋ 三副反应（SEI 分解 / 负极–电解液 / 正极–电解液），stiff ODE（BDF）。判据是 **dT/dt > 1 K/s 或 T ≥ 573 K**。
+
+$$\underbrace{mC_p\frac{dT}{dt}}_{\text{热容}}=\underbrace{\textstyle\sum_i \Delta H_i r_i\cdot f_{\rm act}}_{\text{三条副反应产热}}-\underbrace{hA\,(T-T_{\rm amb})}_{\text{散热}}+\underbrace{Q_{\rm nail}}_{\text{针刺}}$$
+
+**五个入口，各自是谁在改**：
+
+| 入口 | 参数 | 出自哪一步 / 哪个设计变量 |
+|---|---|---|
+| **热容** | $mC_p$，`--mass-kg` 时 = **质量 × 900** | **电芯质量** ← 电极厚度、孔隙率、活性材料体积分数、集流体厚度、电极面积、并联电极数、电芯尺寸（`calc-energy` 的 `mass_kg`） |
+| **散热** | `hA`，默认 **0.05 W/K**（绝热近似） | **散热系数 $h$ × 冷却表面积 $A$** ← 散热系数、电芯尺寸、外形 |
+| **初始温度** | `--sim` 读过充输出的 `T_max_K` | 过充那一轮的温升 ← 整个结构 + 热管理的设计变量 |
+| **针刺产热** | `Q_nail = I_{sc}^2R_{\rm short}` | **表里没有这个设计变量**——短路电阻要实测 |
+| **SEI 覆盖度** | `--x0`，默认 1.0。R2 的反应因子是 $(1-x)$：**SEI 完整（x=1）时负极–电解液反应被完全抑制；SEI 分解完（x→0）才失控** | SEI 那一组设计变量（化成、包覆剂、添加剂）——**但 SEI 厚度（nm）→ 覆盖度（0–1）之间没有换算，现在的默认是"假设 SEI 完好"** |
+
+**要记的一条**：三条副反应的 `A / Ea / ΔH`、`COVERAGE_FACTOR = 0.05`、`ACTIVE_MASS_FRAC = 0.3` **全是写死在源码里的文献标定值**（Kim 2019 / Coman 2016），**不是设计变量，也不来自参数集**。所以这条路**改不了"电池是什么材料"，只能改"电池多大、散热多好、多热才开跑"**。
+
+#### ② 日历老化 / 自放电 —— 两个的缺法不一样
+
+| | 状态 |
+|---|---|
+| **自放电** | **✗ 模型里没有这个量。** 把 PyBaMM 的 `models/` 全目录 grep 了一遍，"self discharge" **0 命中**——没有自放电子模型（也没有氧化还原穿梭、微短路那类）。**没有量，就没有设计变量能改它** |
+| **日历老化** | **参数齐、协议缺、温度还是关的**（三条都在下面） |
+
+日历老化拆成三条说：
+
+**一、机理上它就是静置时 SEI 继续长**，用的还是那 8 个 `SEI *` 参数。所以管它的设计变量与循环老化**同一套**——化成、包覆剂、添加剂。
+
+**二、但现在没有静置协议。** `PROTOCOLS` 里一共 8 个（4 个放电、1 个充电、1 个过充、2 个循环老化），**"静置 / 存储"一个都没有**。所以日历老化**现在根本跑不了**，不是查不到值，是工具里没有这条实验。
+
+**三、更麻烦的是温度被关掉了。** `SEI growth activation energy` 在 **Chen2020 = 0.0 J/mol**——意味着 **SEI 生长完全不随温度变**，"45 °C 存 30 天"和"25 °C 存 30 天"在模型里**给出的数一模一样**。查了 6 套参数集：
+
+| 参数集 | `SEI growth activation energy [J.mol-1]` |
+|---|---|
+| **OKane2022** | **38000** |
+| Chen2020 / Ai2020 / Mohtat2020 / Ramadass2004 / Xu2019 | **全是 0** |
+
+**所以这两条要真进主表，得先补工具侧的两件事**——加一个静置协议、把活化能换成非零（换到 OKane2022，或查一个文献值覆盖）。**这两件都不是查文献能解决的**，所以本轮只把链路写清，**不往主表里塞格**：写了却跑不出数，只会让报告多一行字。
+
+
 
 **另有一个不属七步、但改几何时必须同步的量**
 
