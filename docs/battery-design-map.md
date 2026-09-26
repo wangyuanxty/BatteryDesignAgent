@@ -1063,7 +1063,14 @@ def graphite_cracking_rate_Ai2020(T_dim):
 
 **四、About:Energy 的第三个文件不要用。** 它有 NMC111 与 LFP 两个实测集，但第三个 `AE_gen1_BPX.json` **自己标注是虚构的 NMC811 演示电芯**。
 
-**一个待核**：LiionDB 把 Verma et al. *J. Electrochem. Soc.* **2017**, *164* (13), A3380–A3392. DOI: 10.1149/2.1701713jes. 归在 "NMC523" 名下，但那条的化学式 LiNi₀.₅Co₀.₂Mn₀.₃O₂ **和 NMC532 是同一个 Ni:Mn:Co 比、只是阳离子顺序不同**。**要靠它补 NMC532 的话，先核这个归类。**
+**一个命名坑（2026-09-27 已核）**：Verma, A.; Smith, K. A.; Santhanagopalan, S.; Abraham, D. P.; Yao, K. P. C.; Mukherjee, P. P. *J. Electrochem. Soc.* **2017**, *164* (13), A3380–A3392. DOI: 10.1149/2.1701713jes. 标题写的是 **LiNi₀.₅Co₀.₂Mn₀.₃O₂**，论文自己标 **"NCM523"**。
+
+| 顺序 | 读出来 |
+|---|---|
+| **NCM**（Ni–Co–Mn，**论文用的**） | Ni 5 / Co 2 / Mn 3 → **523**，与论文自标一致 |
+| **NMC**（Ni–Mn–Co，**行业通用**） | Ni 5 / Mn 3 / Co 2 → **532** |
+
+**同一个化学式，两套写法**——所以 LiionDB 归在 NMC523 **没有错**，它跟着原文标签走；**但这个材料按行业约定就是 NMC532，可以拿它补 NMC532 的数据，引用时要说明"原文标的是 NCM523"**，否则会被读成另一个材料。（那篇摘要自身也不一致：公式行写 NCM523，正文里又出现一次 NCM532。）
 
 ### 第 2/3/4 类：添加剂、包覆、掺杂
 
