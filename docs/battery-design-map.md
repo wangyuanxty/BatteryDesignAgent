@@ -371,8 +371,8 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 | | 散热系数 | `Total heat transfer coefficient [W.m-2.K-1]` | 冷却设计 → 这个数 | **通**——两条可用路：① 经验关联式（教科书 Nusselt 公式，**瞬间出结果**）；② 自搭电芯间热网络（**实测 10 电芯 16.2 s**；无现成库） |
 | | 分部位散热 | `Edge heat transfer coefficient`、`Positive/Negative tab heat transfer coefficient`、`Positive/Negative current collector surface heat transfer coefficient`（多数集里没有） | 同上，自由度更细 | **通**——同上 |
 | | 表面辐射率 | `Cell emissivity` | —— | **通**——查 Incropera《传热学》附表 / ASHRAE Handbook 的辐射率表，按外壳表面处理取值（抛光铝 0.04–0.06 / 氧化铝 0.2–0.4 / 涂覆 0.8–0.95） |
-| **6 电解液配方** | 盐浓度 | `Initial concentration in electrolyte [mol.m-3]` | → MD → $\sigma$、$t^+$、$D_e$ → **PyBaMM** | **✗ 算得慢且没有现成代理**——MD 要 ns 级轨迹（**实测 1 ns = 8.5 h+**）；没有"配方 → σ"的现成代理模型（BAMBOO 是加速 MD 的力场、不是代理；LECA 是拟合工具、要自己准备数据）。**先标不通，后面再处理** |
-| | 溶剂比 | `EC initial concentration in electrolyte [mol.m-3]`、`Bulk solvent concentration [mol.m-3]` | 同上 | **✗ 算得慢且没有现成代理**——同上 |
+| **6 电解液配方** | 盐浓度 | `Initial concentration in electrolyte [mol.m-3]` | → MD → $\sigma$、$t^+$、$D_e$ → **PyBaMM** | **✗ 算得慢且没有可用代理**——MD 要 ns 级轨迹（**实测 1 ns = 8.5 h+**）。BAMBOO 查过：是给 **LAMMPS** 用的机器学习力场，安装脚本全是 Linux 路径（`apt-get`、`/opt/libtorch`、`/usr/local/cuda`）且要**从源码编译 LAMMPS**，本机装不了，**弃用**；LECA 是拟合工具、要自己准备数据。**先标不通，后面再处理** |
+| | 溶剂比 | `EC initial concentration in electrolyte [mol.m-3]`、`Bulk solvent concentration [mol.m-3]` | 同上 | **✗ 算得慢且没有可用代理**——同上 |
 | | 输运参数本身 | `Electrolyte conductivity`、`Electrolyte diffusivity`、`Cation transference number`、`Thermodynamic factor` | 参数集里它们是随浓度变的**函数**，MD 给的是单点 | **通**——单点拟合成函数：用 **LECA** 拟合，或套文献现成形式（Landesfeind 2019，我们 bib 里有） |
 | | 添加剂 | 同"包覆剂"那一组 SEI 参数 | 分子 → **xTB** → HOMO / LUMO → **到 SEI 参数没有换算** | **✗ 没有计算路径**——领域还没有标准 SEI 数据集，结构—性质数据库尚未建立 |
 | **7 工艺** | 化成 | `Initial SEI thickness [m]`、`Initial SEI on cracks thickness [m]`、`Initial concentration in negative/positive electrode [mol.m-3]` | **能设**——化成结果就落在这些参数上 | **通**——能填；填多少要工艺经验，仿真推不出来 |
@@ -541,7 +541,7 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 
 | 要代理的 | 现成开源的？ | 实际是什么 | 要不要自己训 |
 |---|---|---|---|
-| **电解液输运**（盐浓度、溶剂比 → $\sigma$、$t^+$、$D_e$） | ❌ **没有直接可用的** | **BAMBOO**（bytedance/bamboo）——clone 下来看是 **ByteDance AI Molecular Simulation BOOster**：给锂电电解液 **MD 用的机器学习力场**（LAMMPS pair style + 训练脚本 + 检查点 + HuggingFace 数据集）。**是加速 MD 的力场，不是"分子 → 电导率"的预测器**<br>**LECA**（Harrison-Teeg/LECA）——clone 下来 29 个文件，prep / fit / analyze 三模块 + estimators，**没有任何数据集或模型检查点**；是**拿自己的数据拟合的工具包** | **要**——要么用 BAMBOO 加速 MD 自己算，要么拿数据用 LECA 拟合。**没有"输入配方直接出 σ"的预训练模型** |
+| **电解液输运**（盐浓度、溶剂比 → $\sigma$、$t^+$、$D_e$） | ❌ **没有可用的** | **BAMBOO**（bytedance/bamboo）—— **弃用**：查过是给 **LAMMPS** 用的机器学习力场，安装要 Linux（脚本含 `apt-get`、`/opt/libtorch`、`/usr/local/cuda`）且要**从源码编译 LAMMPS**，本机装不了<br>**LECA**（Harrison-Teeg/LECA）—— **不是代理**：是拿自己的数据拟合的工具包，无自带数据集或模型 | **暂时没有可用路径**——先标不通 |
 | **化学式 → OCP 曲线** | ✅ **有**，但**其实不必用代理** | 预训练 MLIP + 凸包法——M3GNet / **CHGNet** / MACE 算形成能，取凸包斜率得电压曲线；ALIGNN-FF + AtomGPT Battery Explorer 有网页服务（MAE 0.17 V，R² 0.94） | **不用**——**实测 CHGNet 10 次弛豫 = 28.8 s**，直接算就是秒级，没有代理的必要 |
 | **包覆 → 界面势垒** | ❌ 没有现成模型，**但也不必用代理** | ML 势 NEB——**实测 5 图跑 30 步 = 0.6 s**，按真实界面尺寸外推 ≈ 2 分钟 | **不用**——直接算；断的是势垒**之后**（要假设机理） |
 | **包覆剂 → SEI 参数** | ❌ **没有** | 只能用积木自己搭：ChemBERTa / Mol-BERT / SolvBERT（分子性质预训练）、MACE 等 MLIP（模拟 SEI 生成） | **要**，且第一步是自己造数据——文献一致指出领域**还没有标准的 SEI 数据集**，结构—性质数据库尚未建立 |
@@ -564,7 +564,7 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 | **通（20 行）** | 换已验证体系 / 电极厚度（＝面负载量）/ 孔隙率 / 活性材料体积分数 / 颗粒半径 / **包覆剂** / 隔膜厚度 / 隔膜孔隙率 / 集流体厚度 / 电极面积 / 并联电极数 / N/P 比 / 外形 / 接触电阻 / 电芯尺寸 / **散热系数** / 分部位散热 / 表面辐射率 / 输运参数本身 / 化成 |
 | **✗ 模型里没有这个量** | 导电剂 / 粘结剂比例、注液量、新组分 |
 | **✗ 没有计算路径** | 粒径分布的真实形状、掺杂剂 → Paris 常数、添加剂 → SEI 参数 |
-| **✗ 算得慢且没有现成代理** | 盐浓度、溶剂比 → $\sigma$（MD 8.5 h+，无现成代理、要自己训）——**先标不通，后面再处理** |
+| **✗ 算得慢且没有可用代理** | 盐浓度、溶剂比 → $\sigma$（MD 8.5 h+；BAMBOO 是 LAMMPS 用的力场、本机装不了，已弃用；LECA 是拟合工具不是代理）——**先标不通，后面再处理** |
 
 这张表决定了 agent 的实际设计空间：**它不是"六个步骤都能做"，而是六大块里有一半只能设、不能验。** 一个设计量如果设了却拿不到反馈，它不会让结果变好，只会让报告多一行字。
 
