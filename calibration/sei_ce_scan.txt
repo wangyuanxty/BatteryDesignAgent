@@ -1,0 +1,20 @@
+k x 1          SEI=  449.12 nm   CE(mean 10..100) = 99.6648%
+k x 0.3        SEI=  416.24 nm   CE(mean 10..100) = 99.6730%
+k x 0.1        SEI=  384.96 nm   CE(mean 10..100) = 99.6873%
+k x 0.03       SEI=  339.59 nm   CE(mean 10..100) = 99.7124%
+k x 0.01       SEI=  266.30 nm   CE(mean 10..100) = 99.7694%
+k x 0.003      SEI=  149.51 nm   CE(mean 10..100) = 99.8820%
+k x 0.001      SEI=   66.93 nm   CE(mean 10..100) = 99.9536%
+k x 0.0003     SEI=   25.43 nm   CE(mean 10..100) = 99.9853%
+k x 0.0001     SEI=   11.99 nm   CE(mean 10..100) = 99.9950%
+
+-- CE-loss ratio (relative to baseline) --
+k x 1          CE loss = 0.3352 pp   loss/loss_base = 1.0000
+k x 0.3        CE loss = 0.3270 pp   loss/loss_base = 0.9756
+k x 0.1        CE loss = 0.3127 pp   loss/loss_base = 0.9330
+k x 0.03       CE loss = 0.2876 pp   loss/loss_base = 0.8579
+k x 0.01       CE loss = 0.2306 pp   loss/loss_base = 0.6879
+k x 0.003      CE loss = 0.1180 pp   loss/loss_base = 0.3520
+k x 0.001      CE loss = 0.0464 pp   loss/loss_base = 0.1384
+k x 0.0003     CE loss = 0.0147 pp   loss/loss_base = 0.0439
+k x 0.0001     CE loss = 0.0050 pp   loss/loss_base = 0.0148

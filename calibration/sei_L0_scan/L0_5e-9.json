@@ -1,0 +1,11 @@
+{
+  "model_used": "SPMe",
+  "protocol": "aging",
+  "cycle_numbers": [
+    1
+  ],
+  "capacity_ah_per_cycle": [
+    1.6479504954952655
+  ],
+  "sei_thickness_nm_end": 46.448128787246354
+}

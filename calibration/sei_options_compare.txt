@@ -1,0 +1,18 @@
+== reaction limited   (scaling: SEI reaction exchange current density [A.m-2]) ==
+   x1      SEI=   28.30 nm   growth=    23.30 nm   growth/growth(base)=  1.0000   (proportional = 1.0)
+   x0.5    SEI=   16.87 nm   growth=    11.87 nm   growth/growth(base)=  0.5096   (proportional = 0.5)
+   x0.2    SEI=    9.80 nm   growth=     4.80 nm   growth/growth(base)=  0.2062   (proportional = 0.2)
+   x0.1    SEI=    7.41 nm   growth=     2.41 nm   growth/growth(base)=  0.1035   (proportional = 0.1)
+   x0.01   SEI=    5.24 nm   growth=     0.24 nm   growth/growth(base)=  0.0104   (proportional = 0.01)
+== ec reaction limited   (scaling: SEI kinetic rate constant [m.s-1]) ==
+   x1      SEI=  449.12 nm   growth=   444.12 nm   growth/growth(base)=  1.0000   (proportional = 1.0)
+   x0.5    SEI=  430.42 nm   growth=   425.42 nm   growth/growth(base)=  0.9579   (proportional = 0.5)
+   x0.2    SEI=  404.93 nm   growth=   399.93 nm   growth/growth(base)=  0.9005   (proportional = 0.2)
+   x0.1    SEI=  384.96 nm   growth=   379.96 nm   growth/growth(base)=  0.8555   (proportional = 0.1)
+   x0.01   SEI=  266.30 nm   growth=   261.30 nm   growth/growth(base)=  0.5884   (proportional = 0.01)
+== solvent-diffusion limited   (scaling: SEI solvent diffusivity [m2.s-1]) ==
+   x1      SEI=    7.43 nm   growth=     2.43 nm   growth/growth(base)=  1.0000   (proportional = 1.0)
+   x0.5    SEI=    6.33 nm   growth=     1.33 nm   growth/growth(base)=  0.5486   (proportional = 0.5)
+   x0.2    SEI=    5.57 nm   growth=     0.57 nm   growth/growth(base)=  0.2353   (proportional = 0.2)
+   x0.1    SEI=    5.29 nm   growth=     0.29 nm   growth/growth(base)=  0.1209   (proportional = 0.1)
+   x0.01   SEI=    5.03 nm   growth=     0.03 nm   growth/growth(base)=  0.0124   (proportional = 0.01)
