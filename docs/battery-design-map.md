@@ -342,36 +342,36 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 
 **逐个设计变量过一遍**（步骤编号同第二节）。**参数**列写 PyBaMM 里对应的参数名——**一个设计变量一行，不合并**；**△** = 补得起来（花代价），**✗** = 补不起来。
 
-| 步骤 | 设计变量 | 参数（PyBaMM 参数名） | 传导链 | 情况 |
+| 步骤 | 设计变量 | 参数（PyBaMM 参数名） | 传导链 | 情况（怎么用 / 缺什么 / 拿什么补） |
 |---|---|---|---|---|
-| **2 选化学体系** | 换已验证体系 | ——（换的是整套参数集，不是某一个参数） | 体系 → **PyBaMM** → 能量密度、倍率、析锂、$T_{\max}$、SEI | 通（只有几个可选） |
-| | 新组分 | ——（该组分的参数集不存在） | 化学式 → **CHGNet / QE** → 平均电压、形成能；推不出整套参数 | ✗ 缺输入 |
-| **3 电极配方与修饰** | 电极厚度（＝面负载量） | `Negative/Positive electrode thickness [m]` | → **PyBaMM** → 能量密度、析锂、倍率 | 通 |
-| | 孔隙率 | `Negative/Positive electrode porosity` | → **PyBaMM** → 能量密度、倍率、析锂 | 通 |
-| | 活性材料体积分数 | `Negative/Positive electrode active material volume fraction` | 与孔隙率互锁——该集里两者之和恰为 1，所以是**同一个自由度** | 通 |
-| | 颗粒半径 | `Negative/Positive particle radius [m]` | → **PyBaMM** → 倍率 | 通 |
-| | 粒径分布 | `get_size_distribution_parameters` 附加的分布参数 | 形状是假设的对数正态（sd 默认 0.3）；真实形状**没有计算路径**，只能激光粒度仪实测 | ✗ 缺输入 |
-| | **导电剂 / 粘结剂比例** | **无**——参数集把电极建成"活性材料＋空隙"两相，活性分数＋孔隙率恰为 1，**导电剂与粘结剂的体积根本没建模** | —— | ✗ 没有对应参数 |
-| | 包覆剂（改界面动力学） | **SEI 侧 8 个**：`SEI kinetic rate constant`、`SEI resistivity`、`SEI solvent diffusivity`、`SEI electron conductivity`、`SEI reaction exchange current density`、`SEI partial molar volume`、`SEI open-circuit potential`、`SEI growth activation energy` | 包覆材料 → **△ 贵**（DFT 界面势垒）→ 速率常数；**8 个里只通这一条**，其余 7 个连路径都不清楚 | △ 算得慢（只通一条） |
-| | 掺杂剂（改开裂） | **开裂侧 24 个**（OKane2022 独有）：`Paris' law constant b/m`、`cracking rate`、`critical stress`、`initial crack length/width`、`number of cracks per unit area`、`Young's modulus`、`Poisson's ratio`、`volume change`、`LAM constant`… | **Paris 常数这类是疲劳试验的拟合参数，没有第一性原理路径**；只有杨氏模量、泊松比这类弹性常数能算，是少数 | ✗ 缺理论 |
-| **4 电芯结构** | 隔膜厚度 | `Separator thickness [m]` | → **PyBaMM** → 能量密度、质量 | 通 |
-| | 隔膜孔隙率 | `Separator porosity` | → **PyBaMM** → 倍率 | 通 |
-| | 集流体厚度 | `Negative/Positive current collector thickness [m]` | → **PyBaMM** → 能量密度、质量 | 通 |
-| | 电极面积 | `Electrode height [m]` × `Electrode width [m]` | → **PyBaMM** → 容量、能量 | 通 |
-| | 并联电极数（叠片数 / 卷绕圈数） | `Number of electrodes connected in parallel to make a cell` | → **PyBaMM** → 容量 | 通 |
-| | N/P 比 | 无直接参数——由厚度与活性材料分数算出 | —— | 通（派生量） |
-| | 外形 | 不是参数，是模型选项 `cell geometry` | pouch 配 `x-lumped` 实测跑通；圆柱要补**极耳坐标与集流体表面积**——那是**该电芯的几何**，来自厂商规格书、按卷绕几何算、或从文献同型号抄（Ecker2015 / NCA_Kim2011 / Ramadass2004 / Marquis2019 四个集里有，各是各自论文那颗电芯的值）；**不是通用手册** | 通（pouch）／△ 缺参数值（圆柱） |
-| | 接触电阻 | `Contact resistance [Ohm]` | 装配 / 焊接 | 通（值要实测） |
-| **5 热管理** | 电芯尺寸 | `Cell volume [m3]`、`Cell cooling surface area [m2]` | → **PyBaMM** → $T_{\max}$ | 通 |
-| | 散热系数 | `Total heat transfer coefficient [W.m-2.K-1]` | 冷却设计 → **△ 缺流体那一段** → 这个数 | △ 缺模型 |
-| | 分部位散热 | `Edge heat transfer coefficient`、`Positive/Negative tab heat transfer coefficient`、`Positive/Negative current collector surface heat transfer coefficient`（多数集里没有） | 同上，但自由度更细 | △ 缺模型 |
-| | 表面辐射率 | `Cell emissivity` | **查传热手册的辐射率表**（Incropera / ASHRAE），但取值要对应外壳的**表面处理**：抛光铝 0.04–0.06、氧化铝 0.2–0.4、涂覆 0.8–0.95。参数集里只有 Ai2020 给了（0.95） | △ 缺参数值 |
-| **6 电解液配方** | 盐浓度 | `Initial concentration in electrolyte [mol.m-3]` | → **MD** → $\sigma$、$t^+$、$D_e$ → **PyBaMM** | △ 算得慢 |
-| | 溶剂比 | `EC initial concentration in electrolyte [mol.m-3]`、`Bulk solvent concentration [mol.m-3]` | 同上 | △ 算得慢 |
-| | 输运参数本身 | `Electrolyte conductivity`、`Electrolyte diffusivity`、`Cation transference number`、`Thermodynamic factor` | 是**结果**不是可直接设的量——参数集里它们是随浓度变的**函数**，MD 给的是单点 | △ 给单点要函数（是拟合问题，不是算力） |
-| | 添加剂 | 同"包覆剂"那一组 SEI 参数 | 分子 → **xTB** → HOMO / LUMO → **✗ 断**（到 SEI 参数没有换算） | ✗ 缺理论 |
-| **7 工艺** | 化成 | `Initial SEI thickness [m]`、`Initial SEI on cracks thickness [m]`、`Initial concentration in negative/positive electrode [mol.m-3]` | **能设**——化成结果就落在这些参数上 | 通（值要工艺定） |
-| | 注液量 | 无 | —— | ✗ 没有对应参数 |
+| **2 选化学体系** | 换已验证体系 | ——（换整套参数集，不是某一个参数） | 体系 → **PyBaMM** → 能量密度、倍率、析锂、$T_{\max}$、SEI | **通**——内置 15 个集任选一个整套装入（清单与 SEI / 开裂覆盖见下） |
+| | 新组分 | ——（该组分的参数集不存在） | 化学式 → **CHGNet / QE** → 平均电压、形成能；推不出整套参数 | **✗ 缺输入**——没有覆盖任意新组分的参数库（Materials Project / OQMD 是 DFT 数据，不是电池模型参数）；只能用常数 OCP 近似硬搭，误差没有界 |
+| **3 电极配方与修饰** | 电极厚度（＝面负载量） | `Negative/Positive electrode thickness [m]` | → **PyBaMM** → 能量密度、析锂、倍率 | **通**——直接填 |
+| | 孔隙率 | `Negative/Positive electrode porosity` | → **PyBaMM** → 能量密度、倍率、析锂 | **通**——直接填 |
+| | 活性材料体积分数 | `Negative/Positive electrode active material volume fraction` | 与孔隙率互锁——实测该集里两者之和恒为 1 | **通**——与孔隙率是同一个自由度 |
+| | 颗粒半径 | `Negative/Positive particle radius [m]` | → **PyBaMM** → 倍率 | **通**——直接填（粉体规格有限） |
+| | 粒径分布 | `get_size_distribution_parameters` 附加的分布参数 | 形状是假设的对数正态（sd 默认 0.3） | **✗ 缺输入**——分布形状只能**激光粒度仪实测**；PyBaMM 那个函数只是塞一个**假设的**形状进去 |
+| | **导电剂 / 粘结剂比例** | **无**——参数集把电极建成"活性材料＋空隙"两相（实测两者之和恒为 1），**导电剂与粘结剂连体积都没有** | —— | **✗ 没有对应参数**——改配方后的新电导率只能**四探针实测**或**断层成像（FIB-SEM / X 射线）** |
+| | 包覆剂（改界面动力学） | **SEI 侧 8 个**：`SEI kinetic rate constant`、`SEI resistivity`、`SEI solvent diffusivity`、`SEI electron conductivity`、`SEI reaction exchange current density`、`SEI partial molar volume`、`SEI open-circuit potential`、`SEI growth activation energy` | 包覆材料 → 界面迁移势垒 → 速率常数；**8 个里只通这一条** | **△ 算得慢**——代理=**自己用 DFT / ML 势做 NEB 算界面势垒**。**没有现成模型**（文献一致指出领域还没有标准 SEI 数据集，结构—性质数据库尚未建立）；其余 7 个参数连路径都不清楚 |
+| | 掺杂剂（改开裂） | **开裂侧 24 个**（OKane2022 独有）：`Paris' law constant b/m`、`cracking rate`、`critical stress`、`initial crack length/width`、`number of cracks per unit area`、`Young's modulus`、`Poisson's ratio`、`volume change`、`LAM constant`… | **Paris 常数是疲劳试验的拟合参数** | **✗ 缺理论**——没有第一性原理路径；只有杨氏模量、泊松比这类弹性常数能算，是少数 |
+| **4 电芯结构** | 隔膜厚度 | `Separator thickness [m]` | → **PyBaMM** → 能量密度、质量 | **通**——直接填 |
+| | 隔膜孔隙率 | `Separator porosity` | → **PyBaMM** → 倍率 | **通**——直接填 |
+| | 集流体厚度 | `Negative/Positive current collector thickness [m]` | → **PyBaMM** → 能量密度、质量 | **通**——直接填 |
+| | 电极面积 | `Electrode height [m]` × `Electrode width [m]` | → **PyBaMM** → 容量、能量 | **通**——直接填 |
+| | 并联电极数（叠片数 / 卷绕圈数） | `Number of electrodes connected in parallel to make a cell` | → **PyBaMM** → 容量 | **通**——直接填 |
+| | N/P 比 | 无直接参数——由厚度与活性材料分数算出 | —— | **通（派生量）**——不用单独设 |
+| | 外形 | 不是参数，是模型选项 `cell geometry` | pouch 配 `x-lumped` **实测跑通**；圆柱要补极耳坐标与集流体表面积 | **通（pouch）／△ 缺参数值（圆柱）**——补法：查**该电芯的规格书**、按**卷绕几何算**、或**抄文献同型号**（Ecker2015 / NCA_Kim2011 / Ramadass2004 / Marquis2019 四集里有）。**不是通用手册**，每个电芯都不一样 |
+| | 接触电阻 | `Contact resistance [Ohm]` | 装配 / 焊接质量 | **△ 缺参数值**——模型里有这一格（默认 0），值取决于焊接工艺，要**实测（EIS）**或按工艺经验估 |
+| **5 热管理** | 电芯尺寸 | `Cell volume [m3]`、`Cell cooling surface area [m2]` | → **PyBaMM** → $T_{\max}$ | **通**——直接填（注意各集的电芯差别极大） |
+| | 散热系数 | `Total heat transfer coefficient [W.m-2.K-1]` | 冷却设计 → **缺流体那一段** → 这个数 | **△ 缺模型**——三条路，**全部已查**：① **经验关联式**（教科书 Nusselt 公式，瞬间出结果）；② **自搭电芯间热网络**（N 个 PyBaMM 单电芯 + 热阻耦合，**实测 10 电芯 16.2 s**；**没有现成库**，LiSimPack 是空仓库）；③ **全 CFD**（OpenFOAM 要经 WSL，本机 **WSL 未装发行版**；**FiPy 可直接 pip 装**，纯 Python 有限体积） |
+| | 分部位散热 | `Edge heat transfer coefficient`、`Positive/Negative tab heat transfer coefficient`、`Positive/Negative current collector surface heat transfer coefficient`（多数集里没有） | 同上，自由度更细 | **△ 缺模型**——同上 |
+| | 表面辐射率 | `Cell emissivity` | —— | **△ 缺参数值**——查 **Incropera《传热学》附表 / ASHRAE Handbook 的辐射率表**，取值对应外壳表面处理（抛光铝 0.04–0.06 / 氧化铝 0.2–0.4 / 涂覆 0.8–0.95）；参数集里只有 Ai2020 给了（0.95） |
+| **6 电解液配方** | 盐浓度 | `Initial concentration in electrolyte [mol.m-3]` | → MD → $\sigma$、$t^+$、$D_e$ → **PyBaMM** | **△ 算得慢**——**没有现成的"配方 → σ"预训练模型**（已查：BAMBOO 是**机器学习力场**、加速 MD 但不是预测器；LECA 是**拟合工具包**、无自带数据）。要么用 **BAMBOO 加速 MD** 自己算，要么拿数据用 **LECA** 拟合 |
+| | 溶剂比 | `EC initial concentration in electrolyte [mol.m-3]`、`Bulk solvent concentration [mol.m-3]` | 同上 | **△ 算得慢**——同上 |
+| | 输运参数本身 | `Electrolyte conductivity`、`Electrolyte diffusivity`、`Cation transference number`、`Thermodynamic factor` | 参数集里它们是随浓度变的**函数**，MD 给的是单点 | **△ 给单点要函数**——用 **LECA** 拟合，或套文献现成形式（Landesfeind 2019，我们 bib 里有） |
+| | 添加剂 | 同"包覆剂"那一组 SEI 参数 | 分子 → **xTB** → HOMO / LUMO → **到 SEI 参数没有换算** | **✗ 缺理论**——领域还没有标准 SEI 数据集 |
+| **7 工艺** | 化成 | `Initial SEI thickness [m]`、`Initial SEI on cracks thickness [m]`、`Initial concentration in negative/positive electrode [mol.m-3]` | **能设**——化成结果就落在这些参数上 | **通（值要工艺定）**——能填，但填多少要工艺经验，仿真推不出来 |
+| | 注液量 | 无 | —— | **✗ 没有对应参数** |
 | | 压实 | 就是第 4 步的孔隙率 | —— | （已并回孔隙率） |
 
 **另有一个不属七步、但改几何时必须同步的量**
