@@ -418,35 +418,35 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 
 **唯一一次实测对标用的是别人的数据**：LG M50T 的 0.1C 放电曲线取自 Imperial College 公开数据集，用来锚定参数集（0.45% 容量 / 20.6 mV RMSE）——那是**用别人的实测验仿真器**，不是测我们设计的电芯。
 
-| 步骤 | 设计变量 | 参数（PyBaMM 参数名） | 影响哪些指标 | 判定（怎么用 / 为什么不通） |
-|---|---|---|---|---|
-| **选化学体系** | 换已验证体系 | ——（换整套参数集，不是某一个参数） | **几乎全部**——能量密度、容量、电压平台、倍率、低温、SEI、安全 | **通·设**——内置 15 个集任选一个整套装入 |
-| | 新组分 | ——（该组分的参数集不存在） | 同上（若参数齐备） | **✗（仅当全新）**——已知组分：OCP 用 MLIP 算（实测 28.8 s/条）、其余查文献；**全新组分没有文献也算不出** |
-| **电极配方与修饰** | 电极厚度（＝面负载量） | `Negative/Positive electrode thickness [m]` | 能量密度（质量/体积）、容量、内阻、倍率保持、析锂、$T_{\max}$ | **通·设**——直接填 |
-| | 孔隙率 | `Negative/Positive electrode porosity` | 能量密度（质量/体积）、内阻、倍率保持、析锂 | **通·设**——直接填 |
-| | 活性材料体积分数 | `Negative/Positive electrode active material volume fraction` | 同孔隙率（同一自由度） | **通·设**——与孔隙率互锁（实测两者之和恒为 1） |
-| | 颗粒半径 | `Negative/Positive particle radius [m]` | 倍率保持、低温保持、内阻 | **通·设**——直接填（值按粉体规格取） |
-| | 粒径分布 | `get_size_distribution_parameters` 附加的分布参数 | 倍率保持、低温保持 | **通·查**——用文献 / 供应商给的**典型分布**（对数正态 + 报告的 sd）；这一批的真实形状只能实测 |
-| | **导电剂 / 粘结剂比例** | **无**——参数集把电极建成"活性材料＋空隙"两相（实测两者之和恒为 1），**导电剂与粘结剂连体积都没有** | 内阻、比功率、倍率保持 | **通·查**——模型里没有碳 / 粘结剂的体积，但**电极电子电导率可用文献值或渗流模型拟合值**；要精确到本配方只能实测 |
-| | 包覆剂（改界面动力学） | **SEI 侧 8 个**：`SEI kinetic rate constant`、`SEI resistivity`、`SEI solvent diffusivity`、`SEI electron conductivity`、`SEI reaction exchange current density`、`SEI partial molar volume`、`SEI open-circuit potential`、`SEI growth activation energy` | SEI 厚度、循环寿命、容量保持率、库仑效率 | **✗**——2026-09-26 查证：石墨 / NMC 体系**没有"包覆 vs 不包覆"的 SEI 厚度实测**（唯一的实测倍数在 Si 薄膜上），文献只报保持率；NEB 算势垒那一步是真能算（实测分钟级），但**势垒 → 速率常数要先选机理、还要一个拿不到的指前因子**。参数可以设，**但设的是假设不是查来的值**（第七节已展开） |
-| | 掺杂剂（改开裂） | **开裂侧 24 个**（OKane2022 独有）：`Paris' law constant b/m`、`cracking rate`、`critical stress`、`initial crack length/width`、`number of cracks per unit area`、`Young's modulus`、`Poisson's ratio`、`volume change`、`LAM constant`… | 循环寿命、容量保持率 | **✗**——两个原因都在源码里查实过：① `cracking rate` 在参数集里是**写死的常数**（`Ai2020.py:208`，k_cr = 3.9×10⁻²⁰，疲劳试验拟合），不由任何可算量组合出来；② 文献侧**没有掺杂前后的裂纹密度数值，也没有掺杂量 → 力学参数的实测序列** |
-| **电芯结构** | 隔膜厚度 | `Separator thickness [m]` | 能量密度（质量/体积）、内阻、倍率保持、析锂 | **通·设**——按隔膜规格填 |
-| | 隔膜孔隙率 | `Separator porosity` | 内阻、倍率保持、析锂 | **通·设**——直接填 |
-| | 集流体厚度 | `Negative/Positive current collector thickness [m]` | 能量密度（质量/体积）、电芯质量 | **通·设**——按箔材规格填 |
-| | 电极面积 | `Electrode height [m]` × `Electrode width [m]` | 容量、电芯质量、$T_{\max}$（经散热面积） | **通·设**——直接填 |
-| | 并联电极数（叠片数 / 卷绕圈数） | `Number of electrodes connected in parallel to make a cell` | 容量、电芯质量 | **通·设**——直接填 |
-| | N/P 比 | 无直接参数——由厚度与活性材料分数算出 | 析锂、容量、能量密度 | **通·设**——派生量，不用单独设 |
-| | 外形 | 不是参数，是模型选项 `cell geometry` | $T_{\max}$、电芯质量、体积、**针刺 / 过充通过性**（经冷却表面积 → `hA`） | **通·设**——pouch 直接可用；圆柱的几何参数查该电芯规格书或按卷绕几何算 |
-| | 接触电阻 | `Contact resistance [Ohm]` | 内阻、比功率、倍率保持 | **通·查**——模型里有这一格（默认 0），值查文献典型值或按工艺经验取 |
-| **热管理** | 电芯尺寸 | `Cell volume [m3]`、`Cell cooling surface area [m2]` | $T_{\max}$、能量密度（体积）、电芯质量、**针刺 / 过充通过性**（经 $m C_p$＝质量×900 与冷却面积） | **通·设**——直接填 |
-| | 散热系数 | `Total heat transfer coefficient [W.m-2.K-1]` | $T_{\max}$、热失控起始温度、**针刺 / 挤压 / 过充通过性**（经 `hA`） | **通·算**——① 经验关联式（瞬间）；② 自搭电芯间热网络（实测 10 电芯 16.2 s） |
-| | 分部位散热 | `Edge heat transfer coefficient`、`Positive/Negative tab heat transfer coefficient`、`Positive/Negative current collector surface heat transfer coefficient`（多数集里没有） | 同上，可分辨极耳/边缘局部温度 | **通·算**——同上，可分辨极耳 / 边缘局部温度 |
-| | 表面辐射率 | `Cell emissivity` | $T_{\max}$ | **通·查**——查 Incropera《传热学》附表 / ASHRAE Handbook，按外壳表面处理取值 |
-| **电解液配方** | 盐浓度 | `Initial concentration in electrolyte [mol.m-3]` | 倍率保持、低温保持、内阻、析锂 | **通·查**——常用电解液有**实测的 σ(c) 数据**（如 Landesfeind 2019）；只有新配方才要 MD（8.5 h+） |
-| | 溶剂比 | `EC initial concentration in electrolyte [mol.m-3]`、`Bulk solvent concentration [mol.m-3]` | 同上 ＋ SEI 厚度 | **通·查**——同上 |
-| | 输运参数本身 | `Electrolyte conductivity`、`Electrolyte diffusivity`、`Cation transference number`、`Thermodynamic factor` | 倍率保持、低温保持、内阻、析锂 | **通·查**——参数集里是随浓度变的函数；用文献的 σ(c) 形式，或用 LECA 拟合 |
-| | 添加剂 | 同"包覆剂"那一组 SEI 参数 | SEI 厚度、循环寿命、库仑效率、析锂 | **通·查（只有一条）**——Han 2021 给了石墨上加 FEC/DTD/TPP/VC 前后的 SEI 厚度（200 圈 45 °C：~450 → <90 nm），按第七节的换算反解得 `SEI kinetic rate constant` = 基线 ×0.0019。**其余添加剂文献只报容量保持率或首圈效率，两个都换不过去**（第七节已展开） |
-| **工艺** | 化成 | `Initial SEI thickness [m]`、`Initial SEI on cracks thickness [m]`、`Initial concentration in negative/positive electrode [mol.m-3]` | SEI 厚度、库仑效率、循环寿命 | **通·设**——能填；填多少按工艺经验 |
+| 步骤 | 设计变量 | 参数（PyBaMM 参数名） | 中间隔着什么 | 影响哪些指标 | 判定（怎么用 / 为什么不通） |
+|---|---|---|---|---|---|
+| **选化学体系** | 换已验证体系 | ——（换整套参数集，不是某一个参数） | **没有中间环节**——参数集整套装入，终点 = PyBaMM | **几乎全部**——能量密度、容量、电压平台、倍率、低温、SEI、安全 | **通·设**——内置 15 个集任选一个整套装入 |
+| | 新组分 | ——（该组分的参数集不存在） | 化学式 → 晶体结构 → OCP/电压 → **要自己凑齐一整套参数**；终点仍是 PyBaMM，但每一步都得自己算 | 同上（若参数齐备） | **✗（仅当全新）**——已知组分：OCP 用 MLIP 算（实测 28.8 s/条）、其余查文献；**全新组分没有文献也算不出** |
+| **电极配方与修饰** | 电极厚度（＝面负载量） | `Negative/Positive electrode thickness [m]` | **面负载量（mg/cm²）÷ 涂层密度 = 厚度**；终点 = 同名参数 | 能量密度（质量/体积）、容量、内阻、倍率保持、析锂、$T_{\max}$ | **通·设**——直接填 |
+| | 孔隙率 | `Negative/Positive electrode porosity` | **辊压设定 → 压实密度 → 孔隙率**；终点 = 同名参数 | 能量密度（质量/体积）、内阻、倍率保持、析锂 | **通·设**——直接填 |
+| | 活性材料体积分数 | `Negative/Positive electrode active material volume fraction` | **配方质量比 → 换算成体积分数**；终点 = 同名参数（与孔隙率互锁） | 同孔隙率（同一自由度） | **通·设**——与孔隙率互锁（实测两者之和恒为 1） |
+| | 颗粒半径 | `Negative/Positive particle radius [m]` | **粉体规格 D50 ÷ 2 = 半径**；终点 = 同名参数 | 倍率保持、低温保持、内阻 | **通·设**——直接填（值按粉体规格取） |
+| | 粒径分布 | `get_size_distribution_parameters` 附加的分布参数 | **激光粒度仪测的分布 → 对数正态拟合**；终点 = 分布参数（形状只能实测） | 倍率保持、低温保持 | **通·查**——用文献 / 供应商给的**典型分布**（对数正态 + 报告的 sd）；这一批的真实形状只能实测 |
+| | **导电剂 / 粘结剂比例** | **无**——参数集把电极建成"活性材料＋空隙"两相（实测两者之和恒为 1），**导电剂与粘结剂连体积都没有** | 配方 → 浆料 → 干燥 → 辊压 → 三维碳网络 → 电导率；**终点不存在——模型里没有这个量** | 内阻、比功率、倍率保持 | **通·查**——模型里没有碳 / 粘结剂的体积，但**电极电子电导率可用文献值或渗流模型拟合值**；要精确到本配方只能实测 |
+| | 包覆剂（改界面动力学） | **SEI 侧 8 个**：`SEI kinetic rate constant`、`SEI resistivity`、`SEI solvent diffusivity`、`SEI electron conductivity`、`SEI reaction exchange current density`、`SEI partial molar volume`、`SEI open-circuit potential`、`SEI growth activation energy` | 包覆材料 → 界面迁移势垒 →（**要先选机理**）速率常数；终点 = `SEI kinetic rate constant`，**中间那步还缺指前因子** | SEI 厚度、循环寿命、容量保持率、库仑效率 | **✗**——2026-09-26 查证：石墨 / NMC 体系**没有"包覆 vs 不包覆"的 SEI 厚度实测**（唯一的实测倍数在 Si 薄膜上），文献只报保持率；NEB 算势垒那一步是真能算（实测分钟级），但**势垒 → 速率常数要先选机理、还要一个拿不到的指前因子**。参数可以设，**但设的是假设不是查来的值**（第七节已展开） |
+| | 掺杂剂（改开裂） | **开裂侧 24 个**（OKane2022 独有）：`Paris' law constant b/m`、`cracking rate`、`critical stress`、`initial crack length/width`、`number of cracks per unit area`、`Young's modulus`、`Poisson's ratio`、`volume change`、`LAM constant`… | 掺杂元素 → 力学性质 →（**要疲劳试验拟合**）Paris 常数；终点 = `cracking rate` 等，**中间那步没有路径** | 循环寿命、容量保持率 | **✗**——两个原因都在源码里查实过：① `cracking rate` 在参数集里是**写死的常数**（`Ai2020.py:208`，k_cr = 3.9×10⁻²⁰，疲劳试验拟合），不由任何可算量组合出来；② 文献侧**没有掺杂前后的裂纹密度数值，也没有掺杂量 → 力学参数的实测序列** |
+| **电芯结构** | 隔膜厚度 | `Separator thickness [m]` | **隔膜规格 → 直接填**；终点 = 同名参数 | 能量密度（质量/体积）、内阻、倍率保持、析锂 | **通·设**——按隔膜规格填 |
+| | 隔膜孔隙率 | `Separator porosity` | **隔膜规格 → 直接填**；终点 = 同名参数 | 内阻、倍率保持、析锂 | **通·设**——直接填 |
+| | 集流体厚度 | `Negative/Positive current collector thickness [m]` | **箔材规格 → 直接填**；终点 = 同名参数 | 能量密度（质量/体积）、电芯质量 | **通·设**——按箔材规格填 |
+| | 电极面积 | `Electrode height [m]` × `Electrode width [m]` | **极片裁切尺寸 → 高 × 宽**；终点 = 同名参数 | 容量、电芯质量、$T_{\max}$（经散热面积） | **通·设**——直接填 |
+| | 并联电极数（叠片数 / 卷绕圈数） | `Number of electrodes connected in parallel to make a cell` | **叠片数 / 卷绕圈数 → 直接填**；终点 = 同名参数 | 容量、电芯质量 | **通·设**——直接填 |
+| | N/P 比 | 无直接参数——由厚度与活性材料分数算出 | 两侧厚度 × 活性材料分数 × 比容量 → 比值；**终点 = 派生量，不单独出现在参数集里** | 析锂、容量、能量密度 | **通·设**——派生量，不用单独设 |
+| | 外形 | 不是参数，是模型选项 `cell geometry` | 封装形式 → 模型选项；**终点 = 选项，不是一个数值** | $T_{\max}$、电芯质量、体积、**针刺 / 过充通过性**（经冷却表面积 → `hA`） | **通·设**——pouch 直接可用；圆柱的几何参数查该电芯规格书或按卷绕几何算 |
+| | 接触电阻 | `Contact resistance [Ohm]` | 焊接工艺 → **只能实测或查文献**；终点 = 同名参数（模型里这一格默认 0） | 内阻、比功率、倍率保持 | **通·查**——模型里有这一格（默认 0），值查文献典型值或按工艺经验取 |
+| **热管理** | 电芯尺寸 | `Cell volume [m3]`、`Cell cooling surface area [m2]` | **外形尺寸 → 体积与散热面积**；终点 = 同名参数 | $T_{\max}$、能量密度（体积）、电芯质量、**针刺 / 过充通过性**（经 $m C_p$＝质量×900 与冷却面积） | **通·设**——直接填 |
+| | 散热系数 | `Total heat transfer coefficient [W.m-2.K-1]` | 冷却设计 → 流场仿真或经验关联式 → $h$；终点 = 同名参数 | $T_{\max}$、热失控起始温度、**针刺 / 挤压 / 过充通过性**（经 `hA`） | **通·算**——① 经验关联式（瞬间）；② 自搭电芯间热网络（实测 10 电芯 16.2 s） |
+| | 分部位散热 | `Edge heat transfer coefficient`、`Positive/Negative tab heat transfer coefficient`、`Positive/Negative current collector surface heat transfer coefficient`（多数集里没有） | 同上；终点 = 极耳 / 边缘各自的换热系数参数 | 同上，可分辨极耳/边缘局部温度 | **通·算**——同上，可分辨极耳 / 边缘局部温度 |
+| | 表面辐射率 | `Cell emissivity` | 外壳表面处理 → **查手册表**；终点 = 同名参数 | $T_{\max}$ | **通·查**——查 Incropera《传热学》附表 / ASHRAE Handbook，按外壳表面处理取值 |
+| **电解液配方** | 盐浓度 | `Initial concentration in electrolyte [mol.m-3]` | **配液称量 → 摩尔浓度**；终点 = 同名参数 | 倍率保持、低温保持、内阻、析锂 | **通·查**——常用电解液有**实测的 σ(c) 数据**（如 Landesfeind 2019）；只有新配方才要 MD（8.5 h+） |
+| | 溶剂比 | `EC initial concentration in electrolyte [mol.m-3]`、`Bulk solvent concentration [mol.m-3]` | **配液称量 → 各组分的摩尔浓度**；终点 = 同名参数 | 同上 ＋ SEI 厚度 | **通·查**——同上 |
+| | 输运参数本身 | `Electrolyte conductivity`、`Electrolyte diffusivity`、`Cation transference number`、`Thermodynamic factor` | 配方 → σ(c,T) 实测或 MD → 拟合；终点 = 同名参数（集里是随浓度变的函数） | 倍率保持、低温保持、内阻、析锂 | **通·查**——参数集里是随浓度变的函数；用文献的 σ(c) 形式，或用 LECA 拟合 |
+| | 添加剂 | 同"包覆剂"那一组 SEI 参数 | 分子 →（**目前只有一条换算**）速率常数；终点 = `SEI kinetic rate constant` | SEI 厚度、循环寿命、库仑效率、析锂 | **通·查（只有一条）**——Han 2021 给了石墨上加 FEC/DTD/TPP/VC 前后的 SEI 厚度（200 圈 45 °C：~450 → <90 nm），按第七节的换算反解得 `SEI kinetic rate constant` = 基线 ×0.0019。**其余添加剂文献只报容量保持率或首圈效率，两个都换不过去**（第七节已展开） |
+| **工艺** | 化成 | `Initial SEI thickness [m]`、`Initial SEI on cracks thickness [m]`、`Initial concentration in negative/positive electrode [mol.m-3]` | 化成制度 → 初始 SEI 厚度 / 初始锂化态；终点 = 同名参数（值按工艺经验定） | SEI 厚度、库仑效率、循环寿命 | **通·设**——能填；填多少按工艺经验 |
 
 ### 三条指标原来漏了——补上，并写清是谁在管
 
@@ -536,6 +536,8 @@ $$\text{材料成本}=\sum_i \text{layer\_kg\_m2}_i \times \text{area\_m2} \time
 | **额定容量** | `Nominal cell capacity [A.h]` | 它定义了"1C 是多少安培"。实测：两面厚度同时加倍，实际容量 4.939 → 9.974 Ah，**而这个参数一直是 5.000 Ah 不变**。所以 **改几何后不同步更新它，1C 就不再是 1C**，所有按 C 率定义的工况全部失真。它**不是可自由设的设计量，而是必须与几何保持一致的量**。 |
 
 **不是设计变量的参数**（列在此处以免再漏）：材料身份（两侧 OCP 曲线、颗粒扩散系数、电极电子电导率、最大锂浓度、交换电流密度、电荷转移系数、双电层电容、Bruggeman 系数、各层密度/比热/热导率…）、运行工况（环境温度、初始温度、电流、电压上/下限）。它们随体系走，或由使用条件给定。
+
+**关于「中间隔着什么」这一列（2026-09-26 恢复）**：它此前被删过一次，原因是**写得时有时无**——28 行里 12 行写了 PyBaMM、16 行没写，而没写的里面**有 11 行其实都是 PyBaMM 的参数**，于是让人读成"没写 = 不用仿真"。**不写 ≠ 不用仿真。** 恢复时定的规矩是：**每一行都必须写出终点**——落 PyBaMM 就写清落到哪个参数，落不进去就写"终点不存在"。**没有一行是空的。**
 
 **注：表里按变量给的是汇总，决定成败的是某一跳——逐行拆开**
 
