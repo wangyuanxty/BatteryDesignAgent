@@ -172,75 +172,115 @@
 
 ---
 
-## 六、基线电芯清单（厂商规格书，2026-09-26）
+## 六、基线电芯清单（厂商规格书，2026-09-27）
 
 > **用途**：若走"拿真实电芯的规格书比不变差"这条路，基线从这里挑。
-> **完整字段**（含 Wh/kg 的计算输入、逐条出处与 URL）在 `calibration/specsheets/`：
-> `21700.md`（13 款）、`pouch-prismatic.md`（21 款）、`18650.md`（6 款，仍在补）。
-> **下表只留选基线要看的几列。**
+> **完整字段**（含 Wh/kg 的计算输入、逐条出处与 URL）在 `calibration/specsheets/` 的
+> `21700.md` / `pouch-prismatic.md` / `18650.md`。**下表只留选基线要看的几列，出处不重复列。**
 
-### 6a. 和我们对得上的体系（NMC / NCA 正极）
+### 6a. 圆柱 21700（13 款，NMC / NCA）
 
-| 型号 | 标称容量·电压 | Wh/kg | Wh/L | 最大持续放电 | 循环寿命（条件） | 规格书 |
-|---|---|---|---|---|---|---|
-| **LG INR21700M50LT**（2021） | 4800 mAh·3.69 V | 269.6（算） | 713.5（算） | 3.0C | 1000 圈 ≥80% 初始能量 | LG 2021-LSD-MBD-b00002 Rev 1 |
-| LG INR21700M50LT（2020） | 4800 mAh·3.69 V | 266.9（算） | 714.0（算） | 3.0C | 1000 圈 ≥80% | LG 2020-LSD-MBD-b00082 Rev 0 |
-| LG INR21700 **M50T**（2018） | 4850 mAh·3.63 V | 260.0（算） | 712.0（算） | 3.0C | **300 圈 80%** | LG LRB-PS-CY18.2Wh-M50T Rev 0 |
-| Samsung INR21700-50G | 4850 mAh·3.63 V | 253.3（算） | 717.7（算） | 9.7 A | 1000 圈 80% | SDI v0.1 |
-| Samsung INR21700-50E | 4900 mAh·3.6 V | 255.7（算） | 702.5（算） | 9.8 A | 500 圈 80% | SDI v0.2（2017-12-19） |
-| Samsung INR21700-48G | 4700 mAh·3.6 V | 247–252（算） | 695–709（算） | 9.6 A | 500 圈 75% @23 °C **与** 500 圈 70% @45 °C | SDI Tentative |
-| Samsung INR21700-50S | 5000 mAh·3.6 V | 250.0（算） | 718.7（算） | 25 A | 250 圈 **60%** @25 A；100 圈 60% @45 A | SDI v0.2 |
-| Samsung INR21700-40T | 4000 mAh·3.6 V | 205.7（算） | 579.2（算） | 35 A | 250 圈 **60%** | SDI v0.0（2017-12） |
-| Samsung INR21700-30T | 3000 mAh·3.6 V | 156.5（算） | 434.4（算） | 35 A | 250 圈 **60%** | SDI v2.0 |
-| Molicel INR-21700-P50B | 5000 mAh·3.6 V | 260（厂商）/ 254（算） | 714 / 703 | **60 A** | **未给**（只画到 500 圈） | Molicel PDS v1.1 |
-| Molicel INR-21700-P45B | 4500 mAh·3.6 V | 242 / 231 | 643 / 633 | 45 A | **未给** | Molicel PDS v1.4 |
-| Molicel INR-21700-P42A | 4200 mAh·3.6 V | 230 / 221 | 615 / 597 | 45 A | **未给** | Molicel PDS V4 |
-| Lishen LR2170SA | 4000 mAh·3.65 V | 211.6（算） | 556.8（算） | 3.0C | 1000 圈 80%（首圈容量） | Lishen v0（2017-11-01） |
-| **CATL S5E891** | 48 Ah·3.65 V | **212（厂商）** | **521（厂商）** | **2C**（96 A @25 °C） | **1500 圈到 80%**，25 °C，24 A 充 / 48 A 放 | CATL CTPS-S5E891-15 Rev 1.0（2017） |
-| Samsung SDI 94 Ah（方形） | 94 Ah·3.68 V | 165（厂商） | 354（算） | 150 A ≈1.6C | **3200 圈到 80% / 5200 圈到 70%**，0.5C/1C 室温 | Samsung SDI V9-2（2015） |
-| Kokam SLPB78205130H | 16 Ah（**未标标称电压**） | 150（厂商） | 252（算） | **8C 连续 / 12C 脉冲** | **未给** | Kokam 2019 ver 4.2 |
-| Kokam SLPB100216216H | 40 Ah | 157（厂商） | 279（算） | 8C / 12C | **未给** | 同上 |
-| Kokam SLPB120216216 | 53 Ah | 179（厂商） | 317（算） | 5C / 8C | **未给** | 同上 |
-| Kokam SLPB160460330 | 240 Ah | 197（厂商） | 272（算） | 2C / 3C | **未给** | 同上 |
-| Panasonic NCR18650BF | 3350 mAh·3.6 V | **248（厂商，不含套管）** / 219 | 677 / 600 | 未给（图到 2C） | 图上 500 圈约 79%（**我方读数**） | Panasonic fileversion 3446 |
-| Panasonic NCR18650PF | 2900 mAh·3.6 V | 207（厂商）/ 200 | 577 / 559 | 未给 | 图上 500 圈约 79%（**读数**） | Panasonic fileversion 3447 |
-| Murata US18650VTC6 | 3120 mAh·3.6 V | 241（算） | 641（算） | 图到 30 A | 图上 500 圈约 75%（**读数**） | Murata Version 001 |
-| Murata US18650VTC5 | 2600 mAh·3.6 V | 211（算） | 534（算） | 图到 30 A | 图上 1000 圈约 67%（**读数**） | 同上 |
-| Murata US18650VTC5A | 2600 mAh·3.6 V | 208（算） | 534（算） | 图到 35 A | 图上 1000 圈约 67%（**读数**） | 同上 |
-| Molicel INR-18650-P26A | 2600 mAh·3.6 V | 190（厂商） | 535（厂商） | 35 A | 图上 500 圈约 90% @10 A（**读数**） | Molicel v1.4 |
-
-### 6b. LFP / LTO —— 体系不符，**只能当对照，不能当基线**
-
-| 型号 | 标称容量·电压 | Wh/kg | Wh/L | 最大持续放电 | 循环寿命（条件） |
+| 型号 | 标称容量 · 电压 | Wh/kg | Wh/L | 最大持续放电 | 循环寿命（条件） |
 |---|---|---|---|---|---|
-| EVE LF105 | 105 Ah·3.2 V | 170（算） | 354（算） | 1C | **4000 圈 ≥80%** @25 °C 0.5C/0.5C；2000 圈 ≥80% @45 °C |
-| SVOLT 184 Ah 刀片 | 184 Ah·3.2 V | ≥166（厂商） | 未给 | 未给（给 1753 W/10 s 脉冲） | ≥2500 圈，25 °C、1C 放、3–100% SOC 到 80% |
-| Gotion IFR28148115A-52Ah | 53.5 Ah·3.2 V | ≥175（厂商） | ≥350（厂商） | 未单列（推荐 1C） | 2000 圈 @25 °C（80%、1C 放到 2.0 V）；45 °C 1000 圈；55 °C 800 圈 |
-| Lishen LP37173207-150Ah | 150 Ah·3.2 V | 未给 | 未给 | 1C 连续 / 3C 60 s | 分四档：200 圈≥97%、500 圈≥95%、800 圈≥93%、3000 圈≥80% |
-| CALB L173F120A | 120 Ah·3.2 V | 132（算） | 276（算） | 1C | ≥2000 圈，1C 放到 80% |
-| CATL LEP64J4K1 | 120 Ah·3.2 V | 135（算） | 277（算） | 1C | ≥3500 圈 @25 °C——**终止判据原文印错**（写"衰减到 161.6 Ah"，比它自己的 120 Ah 还大） |
-| BYD CB98（软包） | 47.7 Ah·3.2 V | 151（算） | 267（算） | 50 A（0–30% SOC）/ 120 A（30–100%） | **未给** |
-| BYD BYDC16（刀片） | 200 Ah·3.2 V | 141（算） | 286（算） | 1.5C | **未给** |
-| A123 AMP20M1HD-A | 19.5 Ah·3.3 V | 131（厂商） | 247（厂商） | 未给（只给 1200 W） | 只有图：100% DoD、+1C/−2C、23 °C |
-| Toshiba SCiB 20 / 23 / 26 Ah | 20–26 Ah·2.3 V | 89 / 96 / 106（厂商） | 176 / 202 / 229（厂商） | 未给 | >70% @**20000 圈**（3C/3C、25 °C） |
-| Toshiba SCiB 2.9 Ah | 2.9 Ah·2.4 V | 46（厂商） | 85（厂商） | 未给 | >80% @**40000 圈**（10C、35 °C） |
+| **LG INR21700M50LT (2021)** | 4800 mAh basis (doc: 1C=4800 mA) · 3.69 V | 269.6 \* | 713.5 \* | 3.0C (14 400 mA) at 10–25 °C | 1,000 cyc, ≥80% of initial energy |
+| **LG INR21700M50LT (2020)** | 4800 mAh basis · 3.69 V | 266.9 \* | 714.0 \* | 3.0C (14 400 mA) | 1,000 cyc, ≥80% of initial energy |
+| **LG INR21700 M50T (2018)** | 4850 mAh basis (doc: 1C=4850 mA) · 3.63 V | 260.0 \* | 712.0 \* | 3.0C (14 550 mA) at 10–25 °C | **300 cyc**, 80% of initial energy |
+| **Molicel INR-21700-P42A** | 4200 typ / 4000 min mAh (15.5 Wh typ) · 3.6 V | 230 stated / 221.4 \* | 615 stated / 596.8 \* | 45 A | **not stated** (chart to 500 cyc only) |
+| **Molicel INR-21700-P45B** | 4500 typ / 4300 min mAh (16.2 Wh typ) · 3.6 V | 242 stated / 231.4 \* | 643 stated / 633.1 \* | 45 A | **not stated** |
+| **Molicel INR-21700-P50B** | 5000 typ / 4850 min mAh (18.0 Wh typ) · 3.6 V | 260 stated / 253.5 \* | 714 stated / 703.4 \* | 60 A | **not stated** |
+| **Samsung INR21700-40T** | 4000 min std / 3900 min rated mAh · 3.6 V | 205.7 \* | 579.2 \* | 35 A (45 A with 80 °C cut) | 250 cyc, **60%** |
+| **Samsung INR21700-48G** | 4700 min / 4800 typ mAh; 17.04/17.4 Wh · 3.6 V | 247.0–252.2 \* | 694.7–709.4 \* | 9.6 A (pulse 35 A/10 s) | 500 cyc, 75% @23 °C **and** 500 cyc, 70% @45 °C |
+| **Samsung INR21700-50E** | 4900 std / 4753 rated mAh · 3.6 V | 255.7 \* | 702.5 \* | 9.8 A | 500 cyc, 80% |
+| **Samsung INR21700-50S** | 5000 typ / 4800 rated mAh · 3.6 V | 250.0 \* | 718.7 \* | 25 A (45 A with 80 °C cut) | 250 cyc **60%** @25 A; 100 cyc **60%** @45 A |
+| **Samsung INR21700-50G** | 4850 mAh min · **3.63 V** | 253.3 \* | 717.7 \* | 9.7 A | 1,000 cyc, 80% |
+| **Samsung INR21700-30T** | 3000 std / 2950 rated mAh · 3.6 V | 156.5 \* | 434.4 \* | 35 A | 250 cyc, **60%** |
+| **Lishen LR2170SA** | 4000 nom / 3900 min mAh · 3.65 V | 211.6 \* | 556.8 \* | 3.0C (12 000 mA) at 5–45 °C | 1,000 cyc, 80% of first-cycle capacity |
 
-### 6c. 这张清单要连带的五条
+### 6b. 方形 / 软包（6 款，NMC）
 
-**一、厂商给的 Wh/kg 自己也有口径。** Panasonic 明写它的 248 Wh/kg 是 *calculated using bare cell dimensions (**without tube**)*，同一份表另一列是 **219**——**同型号差 29 Wh/kg**。**所以比之前不只我们要对齐口径，厂商之间也不一致。**
+| 型号 | 标称容量 · 电压 | Wh/kg | Wh/L | 最大持续放电 | 循环寿命（条件） |
+|---|---|---|---|---|---|
+| **Samsung SDI 94 Ah (EV cell)** | 94 Ah **minimum** (1/3C, 25 °C, discharge, 2.7–4.15 V). Energy 345 Wh min (1/3… | **165 (V, stated as "specific energy (min.)")** | Not given by vendor. **Computed: 354 Wh/L** using 345 Wh / 0.9731 L, volume fr… | **150 A continuous discharge (25 °C) ≈ 1.6C**; peak 409 A. Charge: 72 A contin… | **3,200 cycles to EOL80% / 5,200 cycles to EOL70%, at 0.5C/1C, room temp.** Al… |
+| **Kokam SLPB78205130H (High Power NMC Cell)** | 16 Ah. **Nominal voltage NOT stated in this document.** Note: the vendor-state… | **150 (V)** | Not given by vendor. **Computed: 252 Wh/L** using vendor's own numbers: 150 Wh… | **8C continuous, 12C pulse** (vendor C-rate table); AC-IR 1.2 mΩ | Not stated in this document |
+| **Kokam SLPB100216216H (High Power NMC Cell)** | 40 Ah. **Nominal voltage NOT stated.** The vendor-stated 157 Wh/kg with 0.94 k… | **157 (V)** | Not given by vendor. **Computed: 279 Wh/L** using 157 Wh/kg x 0.94 kg = 147.6 … | **8C continuous, 12C pulse**; AC-IR 0.8 mΩ | Not stated in this document |
+| **Kokam SLPB120216216 (High Energy NMC Cell)** | 53 Ah. **Nominal voltage NOT stated.** The vendor-stated 179 Wh/kg with 1.09 k… | **179 (V)** | Not given by vendor. **Computed: 317 Wh/L** using 179 Wh/kg x 1.09 kg = 195.1 … | **5C continuous, 8C pulse**; AC-IR 0.9 mΩ | Not stated in this document |
+| **Kokam SLPB160460330 (High Energy NMC Cell)** | 240 Ah (largest in vendor table). **Nominal voltage NOT stated.** 197 Wh/kg wi… | **197 (V)** | Not given by vendor. **Computed: 272 Wh/L** using 197 Wh/kg x 4.51 kg = 888.5 … | **2C continuous, 3C pulse**; AC-IR 0.5 mΩ | Not stated in this document |
+| **CATL S5E891 (48 Ah NMC prismatic, P/N FC-N48-S5E891-5AEL)** | **≥ 48 Ah minimum at 1C** (≥ 50 Ah at 0.33C). Energy **≥ 172.8 Wh at 1C** (≥ 1… | **212 (V, at 0.33C) / 200 (V, at 1C)** — vendor states both | **521 (V, at 0.33C) / 490 (V, at 1C)** — vendor states both | **Maximum continuous discharge 96 A @ 25 °C (= 2C), 46 A @ 0 °C, 24 A @ -20 °C… | **≥ 1,500 cycles, capacity fade to 80 %, at 25 ± 2 °C, 24 A charge / 48 A disc… |
 
-**二、循环寿命那一列，标了"读数"的是我们自己在图上量的。** Panasonic、Murata、Molicel 都只画曲线不给数字。**引用时必须带着这个标注**，不能写成厂商声明。
+### 6c. 圆柱 18650（31 款）
 
-**三、"未给"是真的没给，不是没查到。** Molicel 三款、Kokam 四款、BYD 两款都**没有循环寿命**；Kokam 四款**连标称电压都没有**。**这些不能当"不变差"里的基线**——没有基线值就没有可比的项。
+| 型号 | 标称容量 · 电压 | Wh/kg | Wh/L | 最大持续放电 | 循环寿命（条件） |
+|---|---|---|---|---|---|
+| **Panasonic NCR18650BF** | Rated 3200 mAh @20 °C / min 3250 mAh, typ 3350 mAh @25 °C; 3.6 V nom. Charge C… | **248 Wh/kg (vendor)**; a second column gives 219 Wh/kg — Panasonic states the… | **677 Wh/l (vendor)**; second column 600 Wh/l | Not stated as a rating. Discharge-rate chart plotted 0.2C (650 mA) / 0.5C (162… | **500 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Panasonic NCR18650PF** | Rated 2700 mAh @20 °C / min 2750 mAh, typ 2900 mAh @25 °C; 3.6 V nom. Charge C… | **207 Wh/kg (vendor)**; second column 200 Wh/kg — same "bare cell without tube… | **577 Wh/l (vendor)**; second column 559 Wh/l | Not stated as a rating. Discharge-rate chart plotted 0.2C (550 mA) / 0.5C (137… | **500 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Murata US18650VTC5** | Nominal 2600 mAh, rated (min) 2500 mAh; 3.6 V nom. Reference charge (for capac… | **Computed 211 Wh/kg** — not given by vendor. Inputs: 2.600 Ah × 3.6 V = 9.36 … | **Computed 534 Wh/L** — not given by vendor. Same 9.36 Wh; volume from vendor … | Not stated as a rating. Discharge-rate chart plotted 2.5 A / 5 A / 10 A / 15 A… | **1000 cycles shown** (chart end, no EoL criterion stated). Condition: charge … |
+| **Murata US18650VTC5A** | Nominal 2600 mAh, rated (min) 2500 mAh; 3.6 V nom. Reference charge: CCCV 2.5 … | **Computed 208 Wh/kg** — not given by vendor. Inputs: 2.600 Ah × 3.6 V = 9.36 … | **Computed 534 Wh/L** — not given by vendor. Same 9.36 Wh; volume from vendor … | Not stated as a rating. Discharge-rate chart plotted 2.5 A / 5 A / 10 A / 15 A… | **1000 cycles shown** (chart end, no EoL criterion stated). Condition: charge … |
+| **Murata US18650VTC6** | Nominal 3120 mAh, rated (min) 3000 mAh; 3.6 V nom. Reference charge: CCCV 3.0 … | **Computed 241 Wh/kg** — not given by vendor. Inputs: 3.120 Ah × 3.6 V = 11.23… | **Computed 641 Wh/L** — not given by vendor. Same 11.232 Wh; volume from vendo… | Not stated as a rating. Discharge-rate chart plotted 3 A / 5 A / 10 A / 15 A /… | **500 cycles shown** (chart end, no EoL criterion stated). Condition: charge 2… |
+| **Molicel INR-18650-P26A** | Typical 2600 mAh / 9.5 Wh; 3.6 V nominal; charge 4.2 V, discharge 2.5 V. Charg… | **190 Wh/kg (vendor)** — vendor states "Gravimetric 190 Wh/kg" | **535 Wh/l (vendor)** — vendor states "Volumetric 535 Wh/l" | **35 A (vendor)** — listed as "Discharge Current Maximum" | **500 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Panasonic/Sanyo UR18650F** | Rated (min) 2450 mAh @20 °C; capacity min 2500 mAh, **typ 2600 mAh** @25 °C; *… | **193 Wh/kg (vendor)** — "Gravimetric: 193 Wh/kg", footnote "Energy density ba… | **544 Wh/l (vendor)** — "Volumetric: 544 Wh/l", same bare-cell basis | Not stated as a rating. Discharge-rate chart plotted 0.2C / 0.5C / 1C / 2C (te… | **500 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Panasonic/Sanyo UR18650A** | Rated (min) 2100 mAh @20 °C; capacity min 2150 mAh, **typ 2250 mAh** @25 °C; *… | **176 Wh/kg (vendor)** — "Gravimetric: 176 Wh/kg", footnote "Energy density ba… | **453 Wh/l (vendor)** — "Volumetric: 453 Wh/l", same bare-cell basis | Not stated as a rating. Discharge-rate chart plotted 0.2C / 0.5C / 1C / 2C / 3… | **500 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Panasonic/Sanyo UR18650RX** | Rated (min) 1950 mAh @20 °C; capacity min 1950 mAh, **typ 2050 mAh** @25 °C; *… | **155 Wh/kg (vendor)** — "Gravimetric: 155 Wh/kg", footnote "Energy density ba… | **413 Wh/l (vendor)** — "Volumetric: 413 Wh/l", same bare-cell basis | Not stated as a rating. Discharge-rate chart plotted 0.2C / 0.5C / 1C / 2C / 1… | **No cycle-life data in the vendor sheet** — the "Cycle Life Characteristics" … |
+| **Panasonic/Sanyo UR18650ZTA** | Two spec columns. Col 1: rated (min) 2850 mAh @20 °C; min 2900 mAh, **typ 3000… | **220 Wh/kg (vendor)** for col 1; **199 Wh/kg** for col 2. Footnote: "Energy d… | **620 Wh/l (vendor)** for col 1; **561 Wh/l** for col 2, same bare-cell basis | Not stated as a rating. Discharge-rate chart plotted 0.2C (580 mA) / 0.5C (145… | **500 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Molicel INR-18650-P28A** | Typical 2800 mAh / 10.3 Wh; minimum 2700 mAh / 9.56 Wh; **3.6 V** nominal; cha… | **219 Wh/kg (vendor)** — "Gravimetric 219 Wh/kg" | **589 Wh/l (vendor)** — "Volumetric 589 Wh/l" | **35 A (vendor)** — "Discharge Current Maximum" | **500 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Molicel INR-18650-M30A** | Typical 3000 mAh / 10.8 Wh; minimum 2900 mAh / 10.4 Wh; **3.6 V** nominal; cha… | **234 Wh/kg (vendor)** — "Gravimetric 234 Wh/kg" | **632 Wh/l (vendor)** — "Volumetric 632 Wh/l" | **10 A (vendor)** — "Discharge Current Maximum" | **500 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Molicel INR-18650-M35A** | Typical 3450 mAh / 12.5 Wh; minimum 3350 mAh / 11.9 Wh; **3.6 V** nominal; cha… | **264 Wh/kg (vendor)** — "Gravimetric 264 Wh/kg" | **730 Wh/l (vendor)** — "Volumetric 730 Wh/l" | **10 A (vendor)** — "Continuous Discharge Current Maximum" | **400 cycles shown** (chart end, no EoL criterion stated). Condition as printe… |
+| **Molicel INR-18650A** | Minimum 2500 mAh / 9.0 Wh (no typical given); **3.6 V** nominal; charge 4.2 V,… | **205 Wh/kg (vendor)** — "Gravimetric 205 Wh/kg" | **520 Wh/l (vendor)** — "Volumetric 520 Wh/l" | **20 A (vendor)** — "Continuous Discharge Current Maximum" | **600 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Molicel INR-18650-P30B** | Typical 3000 mAh / 10.8 Wh; minimum 2900 mAh / 10.4 Wh; **3.6 V** nominal; cha… | **234 Wh/kg (vendor)** — "Gravimetric 234 Wh/kg" | **631 Wh/l (vendor)** — "Volumetric 631 Wh/l" | **30 A continuous (vendor)** — "Discharge Current Continuous 30 A (80 °C cut-o… | **500 cycles shown** (chart end, no EoL criterion stated). Condition printed o… |
+| **Molicel IHR-18650B** | Typical 2250 mAh / 8.4 Wh; minimum 2150 mAh / 7.8 Wh; **3.6 V** nominal; charg… | **175 Wh/kg (vendor)** — "Gravimetric 175 Wh/kg" | **503 Wh/l (vendor)** — "Volumetric 503 Wh/l" | **4.4 A (vendor)** — "Discharge Current Maximum", with the vendor footnote "* … | **300 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Molicel ICR-18650J** | Typical 2370 mAh / 9.0 Wh; minimum 2300 mAh / 8.4 Wh; **3.7 V** nominal; charg… | **187 Wh/kg (vendor)** — "Gravimetric 187 Wh/kg" | **517 Wh/l (vendor)** — "Volumetric 517 Wh/l" | **5 A (≤45 °C) / 4 A (≤60 °C) (vendor)** — "Discharge Current Maximum", with t… | **300 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Molicel ICR-18650K** | Typical 2600 mAh / 9.8 Wh; minimum 2500 mAh / 9.4 Wh; **3.7 V** nominal; charg… | **205 Wh/kg (vendor)** — "Gravimetric 205 Wh/kg" | **588 Wh/l (vendor)** — "Volumetric 588 Wh/l" | **5 A (≤45 °C) / 4 A (≤60 °C) (vendor)** — "Discharge Current Maximum", with t… | **300 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Molicel ICR-18650M** | Typical 2800 mAh / 10.5 Wh; minimum 2700 mAh / 10.2 Wh; **3.7 V** nominal; cha… | **222 Wh/kg (vendor)** — "Gravimetric 222 Wh/kg" | **631 Wh/l (vendor)** — "Volumetric 631 Wh/l" | **5 A (≤45 °C) / 4 A (≤60 °C) (vendor)** — "Discharge Current Maximum", with t… | **300 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Tenpower INR18650-32HE** | 3200 mAh / 11.52 Wh nominal; **3.6 V** nominal; charge 4.2 V, discharge 2.5 V.… | **245 Wh/kg (vendor)** — "Gravimetric 245 Wh/kg" | **696 Wh/L (vendor)** — "Volumetric 696 Wh/L" | **10 A (vendor)** — "Continuous Discharge Current Maximum" | **1000 cycles shown** (chart end, no EoL criterion stated). Condition: charge … |
+| **Panasonic NCR18650B** | Rated (min) 3200 mAh @20 °C; capacity min 3250 mAh, **typ 3350 mAh** @25 °C; *… | **243 Wh/kg (vendor)** — "Gravimetric: 243 Wh/kg", footnote "Energy density ba… | **676 Wh/l (vendor)** — "Volumetric: 676 Wh/l", same bare-cell basis | Not stated as a rating. Discharge-rate chart plotted 0.2C / 0.5C / 1C / 2C (te… | **500 cycles shown** (chart end, no EoL criterion stated). Condition: charge C… |
+| **Panasonic NCR18650GA** | Rated 3300 mAh @20 °C; capacity min 3350 mAh, **typ 3450 mAh** @25 °C; **3.6 V… | **224 Wh/kg (vendor)** — "Gravimetric 224 Wh/kg", footnote "Energy density is … | **693 Wh/l (vendor)** — "Volumetric 693 Wh/l", same bare-cell basis | Not stated as a rating. Discharge-rate chart plotted 2 A / 4 A / 6 A / 8 A / 1… | **500 cycles shown** (chart end, no EoL criterion stated). Condition as printe… |
+| **Samsung SDI INR18650-25R** | Nominal discharge capacity **2500 mAh** (charge 1.25 A, 4.20 V CCCV, 125 mA cu… | **Computed 200 Wh/kg** — not given by vendor. Inputs: 2.500 Ah × 3.6 V = 9.0 W… | **Computed 526 Wh/L** — not given by vendor. Same 9.0 Wh; volume from vendor d… | **20 A continuous at 25 °C (vendor)** — "3.7 Max. continuous discharge", with … | **250 cycles with a stated end criterion**: "With standard charge and maximum … |
+| **Samsung SDI INR18650-35E** | Standard discharge capacity min **3350 mAh** (charge 0.5C = 1700 mA, 4.2 V, 0.… | **Computed 241 Wh/kg** — not given by vendor. Inputs: 3.350 Ah × 3.6 V = 12.06… | **Computed 684 Wh/L** — not given by vendor. Same 12.06 Wh; volume from vendor… | **8 A continuous; 13 A non-continuous (vendor)** — "3.8 Max. Discharge Current… | **500 cycles with a stated end criterion**: charge 1020 mA with 100 mA cut-off… |
+| **Samsung SDI INR18650-29E** | Nominal capacity **2850 mAh** typical (0.2C, 2.50 V discharge), minimum 2750 m… | **Computed 217 Wh/kg** — not given by vendor. Inputs: 2.850 Ah × 3.65 V = 10.4… | **Computed 602 Wh/L** — not given by vendor. Same 10.403 Wh; volume from vendo… | **2750 mA continuous; 8250 mA non-continuous (vendor)** — "3.8. Max. Discharge… | **500 cycles with a stated end criterion**: charge 1735 mA with 0.05C cut-off;… |
+| **LG Energy Solution INR18650MH1** | Rated capacity nominal **3200 mAh**, minimum 3100 mAh (by standard charge/disc… | **Computed 266 Wh/kg** — not given by vendor. Inputs: 3.200 Ah × 3.70 V = 11.8… | **Computed 683 Wh/L** — not given by vendor. Same 11.84 Wh; volume from vendor… | By temperature, vendor-stated: 0.5C (1550 mA) at −20~10 °C; **6.0 A at 10~25 °… | **Two stated cycle-life criteria, both numerical**: (a) 0.5C/0.5C — charge CC/… |
+| **Molicel INR-18650-P22S** | Typical 2200 mAh / 7.92 Wh; minimum 2000 mAh / 7.2 Wh; **3.6 V** nominal; char… | **147 Wh/kg (vendor)** — "Gravimetric 147 Wh/kg" | **403 Wh/L (vendor)** — "Volumetric 403 Wh/L" | **36 A (vendor)** — "Discharge Current Maximum", with the printed qualificatio… | Cycle-life chart present in the datasheet but the plotted values were not read… |
+| **Samsung SDI ICR18650-26F** | Nominal capacity **2600 mAh** (0.2C, 2.75 V discharge); minimum 2550 mAh. Char… | **Computed 205 Wh/kg** — not given by vendor. Inputs: 2.600 Ah × 3.7 V = 9.62 … | **Computed 557 Wh/L** — not given by vendor. Same 9.62 Wh; volume from vendor … | **5200 mA at 25 °C ambient (vendor)** — "3.9 Max. Discharge Current: 5200mA(am… | **300 cycles with a stated end criterion**: charge with 0.05C cut-off; dischar… |
+| **BAK N18650CH** | Typical capacity **2.6 Ah @0.2C**; cell voltage **3.6 V** nominal; charge limi… | **Computed 203 Wh/kg** — not given by vendor. Inputs: 2.6 Ah × 3.6 V = 9.36 Wh… | **Computed 534 Wh/L** — not given by vendor. Same 9.36 Wh; volume from vendor … | **3C max discharge; 1C max charge (vendor)** | **1000 cycles shown** (chart end, no EoL criterion stated). Condition printed … |
+| **BAK N18650CL-29** | Typical capacity **2.9 Ah @0.2C**; cell voltage **3.6 V** nominal; charge limi… | **Computed 227 Wh/kg** — not given by vendor. Inputs: 2.9 Ah × 3.6 V = 10.44 W… | **Computed 595 Wh/L** — not given by vendor. Same 10.44 Wh; volume from vendor… | **3C max discharge; 1C max charge (vendor)** | **800 cycles shown** (chart end, no EoL criterion stated). Condition printed o… |
+| **BAK N18650CR-35E** | Typical capacity **3.5 Ah @0.2C**; cell voltage **3.6 V** nominal; charge limi… | **Computed 268 Wh/kg** — not given by vendor. Inputs: 3.5 Ah × 3.6 V = 12.6 Wh… | **Computed 719 Wh/L** — not given by vendor. Same 12.6 Wh; volume from vendor … | **3C max discharge; 1C max charge (vendor)** | **800 cycles shown** (chart end, no EoL criterion stated). Condition printed o… |
 
-**四、LG M50 的整芯质量坐实了，但 LG 自己给了三个数**：M50LT(2021) **67.5 ± 1.0 g**（不含垫圈）/ M50LT(2020) **68.2 ± 1.0 g**（含套管+垫圈）/ M50T(2018) **70.0 g 上限**。**差 2.5 g ≈ 10 Wh/kg**——同一颗电芯引用不同文档，出来的能量密度不一样，**用哪份要写清**。（按 67.5 g 算，M50LT 是 **269 Wh/kg**，与 5b 里按 70 g 估的 259 差 4%，那个 1.61 倍的口径差站得住。）
+**6a–6c 合计 50 款**，体系都是 NMC / NCA / NCO，和我们对得上。
 
-**五、一个矛盾要记下**：PyBaMM 的 Chen2020 摘要说负极是 *bi-component Graphite-SiOx*，但 **LG 自己的产品安全数据表**（INR21700M50LT，2021-12-03）把负极活性材料列成 **"Carbon (proprietary)"，成分表里没有任何含硅物质**；正极写的是 "Cobalt Lithium Manganese oxide"（NMC）——对得上。**"M50 是石墨-SiOx 负极"这个说法，LG 自己不认。** 要么 SiOx 低到归进 proprietary carbon，要么论文写错了。**这条会影响"哪个参数集代表哪个真实体系"，用之前要定。**
+### 6d. LFP / LTO —— 体系不符，**只能当对照，不能当基线**
 
-**还没到位的**：LG M48T/M52T/M58T、Panasonic NCR21700 系列、EVE 40P/50E、Lishen LR2170SF/LA、BAK / Tenpower / CATL 的 21700；以及 LG MJ1/M36/HG2、Samsung 25R/30Q/35E 等 18650。**这是检索能力受限（WebSearch 配额用尽、搜索引擎被拦），不是厂商没发布。**
+| 型号 | 标称容量 · 电压 | Wh/kg | Wh/L | 最大持续放电 | 循环寿命（条件） |
+|---|---|---|---|---|---|
+| **A123 Systems AMP20M1HD-A (Nanophosphate Li-ion Prismatic Pouch Cell)** | 19.5 Ah **minimum** (rev MD100105-03, 2012); 19.6 Ah min in rev -01 (2011). 65… | **131 (V)** | **247 (V)** | Datasheet gives "Discharge Power (nominal) 1200 W" and specific power 2400 W/k… | Chart only: "Typical Capacity Fade as a Function of Cycles", **100% DoD, +1C/-… |
+| **EVE Energy LF105 (LiFePO4 prismatic cell)** | 105.0 Ah **minimum** (0.5C/0.5C, 25 ± 2 °C, 2.5–3.65 V, fresh cell). Energy ≥ … | Not given by vendor. **Computed: 170 Wh/kg** using ≥336.0 Wh / 1.980 kg (weigh… | Not given by vendor. **Computed: 354 Wh/L** using 336.0 Wh / 0.9499 L, volume … | **Maximum continuous discharge current 1 C (= 105 A)**; standard discharge 0.5… | **4,000 cycles, capacity retention ≥ 80 %, at 300 kgf ± 20 kgf initial compres… |
+| **CATL LEP64J4K1 (120 Ah cell, ESS)** | **120 Ah typical** (25 ± 2 °C, 1C discharge, fresh cell). Operating voltage 2.… | Not given by vendor. **Computed: 135 Wh/kg** using 384 Wh (120 Ah x 3.2 V) / 2… | Not given by vendor. **Computed: 277 Wh/L** using 384 Wh / 1.3864 L, volume fr… | **Maximum continuous discharge current 1.0 C (= 120 A)**. Standard discharge 1… | **≥ 3,500 cycles, 25 ± 2 °C, 300 ± 20 kgf initial clamping force, standard cha… |
+| **Toshiba SCiB 20Ah (high-energy type)** | 20 Ah rated, **2.3 V nominal** | **89 (V)** | **176 (V)** | Not published as a C-rate. **Output power 1,200 W at SOC 50 %, 10 s, 25 °C; in… | "**over 70 % of its capacity after 20,000 charge/discharge cycles**". Conditio… |
+| **Toshiba SCiB 23Ah (high-energy type)** | 23 Ah rated, **2.3 V nominal** | **96 (V)** | **202 (V)** | Output power 1,000 W (SOC 50 %, 10 s, 25 °C); input 1,000 W. No continuous rat… | As high-energy family: >70 % after 20,000 cycles (3C/3C, 25 °C per brochure) |
+| **Toshiba SCiB 26Ah (high-energy type)** | 26 Ah rated, **2.3 V nominal** | **106 (V)** | **229 (V)** | Output power 1,200 W (SOC 50 %, 10 s, 25 °C); input 1,500 W. No continuous rat… | As high-energy family: >70 % after 20,000 cycles (3C/3C, 25 °C per brochure) |
+| **Toshiba SCiB 2.9Ah (high-power type)** | 2.9 Ah rated, **2.4 V nominal** | **46 (V)** | **85 (V)** | Output power 520 W (SOC 50 %, 10 s, 25 °C); input 410 W. No continuous rating … | "**over 80 % of its initial capacity after 40,000 charge/discharge cycles**" *… |
+| **Toshiba SCiB 10Ah (high-power type)** | 10 Ah rated, **2.4 V nominal** | **47 (V)** | **92 (V)** | Output power 1,800 W (SOC 50 %, 10 s, 25 °C); input 1,500 W. No continuous rat… | **Not stated** |
+| **Toshiba SCiB 20Ah-HP (combination type)** | 20 Ah rated, **2.3 V nominal** | **84 (V)** | **176 (V)** | Output performance 1,900 W (SOC 50 %, 10 s, 25 °C); input 1,900 W. No continuo… | Not stated on this page |
+| **BYD CB98 (47.7 Ah pouch)** | 47.7 Ah; 152.64 Wh; **3.2 V nominal**. Voltage range 3.75–2.0 V/cell. AC-IR 1.… | Not given by vendor. **Computed: 151 Wh/kg** using 152.64 Wh / 1.01 kg (weight… | Not given by vendor. **Computed: 267 Wh/L** using 152.64 Wh / 0.571278 L (257.… | Charge 47.7 A @ 25 °C (**1C**) via 0.5C+0.2C+0.05C profile. Discharge **50 A @… | **Not stated in this 4-page document** — no cycle-life figure appears |
+| **BYD BYDC16 (C16-200Ah short-blade cell)** | **Rated capacity 200 Ah; rated energy 640 Wh; nominal voltage 3.20 V**. Charge… | Not given by vendor. **Computed: 141 Wh/kg** using 640 Wh / 4.53 kg (weight 4.… | Not given by vendor. **Computed: 286 Wh/L** using 640 Wh / 2.239536 L (416.0 x… | **Maximum continuous discharge current 300 A @ 25 °C (= 1.5C)**; continuous ch… | **Not stated** — this 3-page document gives no cycle-life figure (it claims on… |
+| **SVOLT 184Ah blade cell (蜂巢能源)** | **184 Ah** outgoing capacity (≥184 Ah at 25 °C, 61.5 A (1/3C) discharge to 2.0… | **≥ 166 (V, at 1C) / ≥ 175 (V, at 1/3C)** — vendor states both | Not given by vendor (needs the section-8 drawing, which is not in the text lay… | Discharge power **≥ 1,753 W @ 25 ± 3 °C, 50 % SOC, 10 s**; power density **≥ 5… | **≥ 2,500 cycles**, condition: **25 °C, step charge / 1C discharge, 3–100 % SO… |
+| **CALB L173F120A (中航锂电)** | **Nominal capacity 120 Ah** (the document also prints "Minimal Capacity 123 Ah… | Not given by vendor. **Computed: 132 Wh/kg** using 384 Wh (120 Ah x 3.2 V) / 2… | Not given by vendor. **Computed: 276 Wh/L** using 384 Wh / 1.39398 L (173.9 x … | **Maximum continuous discharge current 120 A (= 1C)**. Maximum pulse discharge… | **≥ 2,000 cycles.** Condition: standard charge; **120.0 A (1C) constant-curren… |
+| **Gotion IFR28148115A-52Ah (国轩高科)** | **≥ 53.5 Ah at 0.33C / ≥ 52 Ah at 1C**. **Nominal voltage 3.2 V at 0.33C (3.1 … | **≥ 175 (V, at 0.33C/0.33C)** — vendor states it | **≥ 350 (V, at 0.33C/0.33C)** — vendor states it | Standard charge 52 A (1C) CC to 3.65 V then CV to 2.6 A; standard discharge 52… | **2,000 cycles at room temperature** — condition: **80 % capacity retention, 2… |
+| **Lishen LP37173207-150Ah (力神)** | **150 Ah nominal; 3.2 V nominal** (I1 = 150 A). Charge cut-off 3.65 V; dischar… | Not given by vendor. Weight 2900 ± 50 g — vendor states no Wh/kg | Not given by vendor | **Maximum discharge current at room temperature: 1 I1 continuous (= 150 A, 1C)… | **Four grade points: 200 cycles ≥ 97 % initial capacity; 500 cycles ≥ 95 %; 80… |
+| **Lithium Werks APR18650M1B** | Voltage **3.3 V** nominal; capacity @23 °C typical **1.2 Ah** (min 1.15 Ah); e… | **Computed 95 Wh/kg** — not given by vendor. Inputs: 3.96 Wh (vendor); mass 41… | **Computed 227 Wh/L** — not given by vendor. Same 3.96 Wh; volume from vendor … | **30 A continuous (25C rate); 50 A pulse for 10 s (42C rate) (vendor)**. Minim… | **> 4000 cycles at 1C/1C, 100 % DOD (vendor)** — numerically stated, not a cha… |
+
+### 6e. 这张清单要连带的六条
+
+**一、厂商给的 Wh/kg 自己也有口径。** Panasonic 明写它的 248 Wh/kg 是 *calculated using bare cell dimensions (**without tube**)*，同一份表另一列是 **219**——**同型号差 29 Wh/kg**。**所以不只我们要对齐口径，厂商之间也不一致。**
+
+**二、循环寿命那一列，标"读数"的是我们自己在图上量的。** Panasonic、Murata、Molicel、BAK、Tenpower 都只画曲线不给数字。**引用时必须带这个标注**，不能写成厂商声明。把数字写进规格书的只有：Samsung 25R/35E/29E/26F、LG MH1、Lithium Werks APR18650M1B。
+
+**三、"未给"是真的没给，不是没查到。** Molicel 三款（21700）、Kokam 四款、BYD 两款**没有循环寿命**；**Kokam 四款连标称电压都没有**；**Panasonic UR18650RX 的循环寿命面板原文写着 "Under Construction"**。**没有基线值就没有可比的项——这些不能当"不变差"里的基线。**
+
+**四、LG M50 的整芯质量，LG 自己给了三个数**：M50LT(2021) **67.5 ± 1.0 g**（不含垫圈）/ M50LT(2020) **68.2 ± 1.0 g**（含套管+垫圈）/ M50T(2018) **70.0 g 上限**。**差 2.5 g ≈ 10 Wh/kg**——同一颗电芯引用不同文档，出来的能量密度不一样，**用哪份要写清**。（按 67.5 g 算是 **269 Wh/kg**，与 5c 按 70 g 估的 259 差 4%，那个 1.61 倍的口径差站得住。）
+
+**五、一个矛盾要记下**：PyBaMM 的 Chen2020 摘要说负极是 *bi-component Graphite-SiOx*，但 **LG 自己的产品安全数据表**把负极活性材料列成 **"Carbon (proprietary)"，成分表里没有任何含硅物质**；正极写的是 "Cobalt Lithium Manganese oxide"（NMC）——对得上。**"M50 是石墨-SiOx 负极"这个说法 LG 自己不认。** 要么 SiOx 低到归进 proprietary carbon，要么论文写错了。**这条会影响"哪个参数集代表哪个真实体系"，用之前要定。**
+
+**六、这份清单**不是**所有型号。** 拿不到的：LG MJ1 / M36 / HG2 / HE2 / F1L / M26（**LG 不公开 18650 规格书**）、Samsung 30Q / 32E / 20R / 15M、Murata VTC4 / VTC6A（**murata.com 上就没发布**）、Panasonic NCR18650A、EVE / Lishen / Sunpower。**这是"厂商不发布"或"站点拿不到"，不是没找。**
 
 ---
-
 ## 七、检索时要避的坑（已经踩过的）
 
 | | |
