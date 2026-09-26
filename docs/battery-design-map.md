@@ -342,41 +342,44 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 
 **逐个设计变量过一遍**（步骤编号同第二节）。**参数**列写 PyBaMM 里对应的参数名——**一个设计变量一行，不合并**。
 
-**判定只有两种：通 / 不通。**
+**判定 = 那个参数的值**能不能拿到。三种来源，加一种不通：**
 
-- **通** = 直接能算出结果；**或者算得慢、但有现成可用的代理模型**
-- **✗ 不通** = 算不出结果，或**算得慢且没有现成代理（要自己训）**——这种情况先标不通，并写明原因，以后再处理
+| 标记 | 意思 |
+|---|---|
+| **通·设** | 值由你自己定（设计自由度）——厚度、孔隙率、N/P、面积这些 |
+| **通·算** | 值由工具算出来 |
+| **通·查** | **值只能查文献 / 手册 / 规格书，工具算不出来**（这一类特别标出） |
+| **✗** | 值拿不到——**只有"全新的东西"才是**：既没有文献值，也没有计算路径 |
 
 | 步骤 | 设计变量 | 参数（PyBaMM 参数名） | 影响哪些指标 | 判定（怎么用 / 为什么不通） |
 |---|---|---|---|---|
-| **选化学体系** | 换已验证体系 | ——（换整套参数集，不是某一个参数） | **几乎全部**——能量密度、容量、电压平台、倍率、低温、SEI、安全 | **通**——内置 15 个集任选一个整套装入 |
-| | 新组分 | ——（该组分的参数集不存在） | 同上（若参数齐备） | **✗ 模型里没有该组分的参数集**——只能用常数 OCP 近似硬搭，误差没有界 |
-| **电极配方与修饰** | 电极厚度（＝面负载量） | `Negative/Positive electrode thickness [m]` | 能量密度（质量/体积）、容量、内阻、倍率保持、析锂、$T_{\max}$ | **通**——直接填 |
-| | 孔隙率 | `Negative/Positive electrode porosity` | 能量密度（质量/体积）、内阻、倍率保持、析锂 | **通**——直接填 |
-| | 活性材料体积分数 | `Negative/Positive electrode active material volume fraction` | 同孔隙率（同一自由度） | **通**——与孔隙率是同一个自由度 |
-| | 颗粒半径 | `Negative/Positive particle radius [m]` | 倍率保持、低温保持、内阻 | **通**——直接填（粉体规格有限） |
-| | 粒径分布 | `get_size_distribution_parameters` 附加的分布参数 | 倍率保持、低温保持 | **✗ 真实形状没有计算路径**——只能激光粒度仪实测；那个函数只是塞一个**假设的**形状进去 |
-| | **导电剂 / 粘结剂比例** | **无**——参数集把电极建成"活性材料＋空隙"两相（实测两者之和恒为 1），**导电剂与粘结剂连体积都没有** | 内阻、比功率、倍率保持 | **✗ 模型里没有这个量**——改配方后的新电导率只能四探针实测或断层成像 |
-| | 包覆剂（改界面动力学） | **SEI 侧 8 个**：`SEI kinetic rate constant`、`SEI resistivity`、`SEI solvent diffusivity`、`SEI electron conductivity`、`SEI reaction exchange current density`、`SEI partial molar volume`、`SEI open-circuit potential`、`SEI growth activation energy` | SEI 厚度、循环寿命、容量保持率、库仑效率 | **通**——势垒**直接算**（ML 势 NEB 实测分钟级，不是算力问题）；势垒 → 速率常数用 Arrhenius，**要先选机理**（离子输运还是电子隧穿）。**同组另外 7 个参数没有路径** |
-| | 掺杂剂（改开裂） | **开裂侧 24 个**（OKane2022 独有）：`Paris' law constant b/m`、`cracking rate`、`critical stress`、`initial crack length/width`、`number of cracks per unit area`、`Young's modulus`、`Poisson's ratio`、`volume change`、`LAM constant`… | 循环寿命、容量保持率 | **✗ 没有计算路径**——没有第一性原理路径；只有杨氏模量、泊松比这类弹性常数能算，是少数 |
-| **电芯结构** | 隔膜厚度 | `Separator thickness [m]` | 能量密度（质量/体积）、内阻、倍率保持、析锂 | **通**——直接填 |
-| | 隔膜孔隙率 | `Separator porosity` | 内阻、倍率保持、析锂 | **通**——直接填 |
-| | 集流体厚度 | `Negative/Positive current collector thickness [m]` | 能量密度（质量/体积）、电芯质量 | **通**——直接填 |
-| | 电极面积 | `Electrode height [m]` × `Electrode width [m]` | 容量、电芯质量、$T_{\max}$（经散热面积） | **通**——直接填 |
-| | 并联电极数（叠片数 / 卷绕圈数） | `Number of electrodes connected in parallel to make a cell` | 容量、电芯质量 | **通**——直接填 |
-| | N/P 比 | 无直接参数——由厚度与活性材料分数算出 | 析锂、容量、能量密度 | **通**——派生量，不用单独设 |
-| | 外形 | 不是参数，是模型选项 `cell geometry` | $T_{\max}$、电芯质量、体积 | **通**——pouch 直接可用；圆柱的几何参数**补得上**：查该电芯规格书、按卷绕几何算、或抄文献同型号（Ecker2015 / NCA_Kim2011 / Ramadass2004 / Marquis2019 四集里有） |
-| | 接触电阻 | `Contact resistance [Ohm]` | 内阻、比功率、倍率保持 | **通**——查文献典型值或按工艺经验取 |
-| **热管理** | 电芯尺寸 | `Cell volume [m3]`、`Cell cooling surface area [m2]` | $T_{\max}$、能量密度（体积）、电芯质量 | **通**——直接填（注意各集的电芯差别极大） |
-| | 散热系数 | `Total heat transfer coefficient [W.m-2.K-1]` | $T_{\max}$、热失控起始温度 | **通**——两条可用路：① 经验关联式（教科书 Nusselt 公式，**瞬间出结果**）；② 自搭电芯间热网络（**实测 10 电芯 16.2 s**；无现成库） |
-| | 分部位散热 | `Edge heat transfer coefficient`、`Positive/Negative tab heat transfer coefficient`、`Positive/Negative current collector surface heat transfer coefficient`（多数集里没有） | 同上，可分辨极耳/边缘局部温度 | **通**——同上 |
-| | 表面辐射率 | `Cell emissivity` | $T_{\max}$ | **通**——查 Incropera《传热学》附表 / ASHRAE Handbook 的辐射率表，按外壳表面处理取值（抛光铝 0.04–0.06 / 氧化铝 0.2–0.4 / 涂覆 0.8–0.95） |
-| **电解液配方** | 盐浓度 | `Initial concentration in electrolyte [mol.m-3]` | 倍率保持、低温保持、内阻、析锂 | **✗ 算得慢且没有可用代理**——MD 要 ns 级轨迹（**实测 1 ns = 8.5 h+**）。BAMBOO 查过：是给 **LAMMPS** 用的机器学习力场，安装脚本全是 Linux 路径（`apt-get`、`/opt/libtorch`、`/usr/local/cuda`）且要**从源码编译 LAMMPS**，本机装不了，**弃用**；LECA 是拟合工具、要自己准备数据。**先标不通，后面再处理** |
-| | 溶剂比 | `EC initial concentration in electrolyte [mol.m-3]`、`Bulk solvent concentration [mol.m-3]` | 同上 ＋ SEI 厚度 | **✗ 算得慢且没有可用代理**——同上 |
-| | 输运参数本身 | `Electrolyte conductivity`、`Electrolyte diffusivity`、`Cation transference number`、`Thermodynamic factor` | 倍率保持、低温保持、内阻、析锂 | **通**——单点拟合成函数：用 **LECA** 拟合，或套文献现成形式（Landesfeind 2019，我们 bib 里有） |
-| | 添加剂 | 同"包覆剂"那一组 SEI 参数 | SEI 厚度、循环寿命、库仑效率、析锂 | **✗ 没有计算路径**——领域还没有标准 SEI 数据集，结构—性质数据库尚未建立 |
-| **工艺** | 化成 | `Initial SEI thickness [m]`、`Initial SEI on cracks thickness [m]`、`Initial concentration in negative/positive electrode [mol.m-3]` | SEI 厚度、库仑效率、循环寿命 | **通**——能填；填多少要工艺经验，仿真推不出来 |
-| | 注液量 | 无 | —— | **✗ 模型里没有这个量** |
+| **选化学体系** | 换已验证体系 | ——（换整套参数集，不是某一个参数） | **几乎全部**——能量密度、容量、电压平台、倍率、低温、SEI、安全 | **通·设**——内置 15 个集任选一个整套装入 |
+| | 新组分 | ——（该组分的参数集不存在） | 同上（若参数齐备） | **✗（仅当全新）**——已知组分：OCP 用 MLIP 算（实测 28.8 s/条）、其余查文献；**全新组分没有文献也算不出** |
+| **电极配方与修饰** | 电极厚度（＝面负载量） | `Negative/Positive electrode thickness [m]` | 能量密度（质量/体积）、容量、内阻、倍率保持、析锂、$T_{\max}$ | **通·设**——直接填 |
+| | 孔隙率 | `Negative/Positive electrode porosity` | 能量密度（质量/体积）、内阻、倍率保持、析锂 | **通·设**——直接填 |
+| | 活性材料体积分数 | `Negative/Positive electrode active material volume fraction` | 同孔隙率（同一自由度） | **通·设**——与孔隙率互锁（实测两者之和恒为 1） |
+| | 颗粒半径 | `Negative/Positive particle radius [m]` | 倍率保持、低温保持、内阻 | **通·设**——直接填（值按粉体规格取） |
+| | 粒径分布 | `get_size_distribution_parameters` 附加的分布参数 | 倍率保持、低温保持 | **通·查**——用文献 / 供应商给的**典型分布**（对数正态 + 报告的 sd）；这一批的真实形状只能实测 |
+| | **导电剂 / 粘结剂比例** | **无**——参数集把电极建成"活性材料＋空隙"两相（实测两者之和恒为 1），**导电剂与粘结剂连体积都没有** | 内阻、比功率、倍率保持 | **通·查**——模型里没有碳 / 粘结剂的体积，但**电极电子电导率可用文献值或渗流模型拟合值**；要精确到本配方只能实测 |
+| | 包覆剂（改界面动力学） | **SEI 侧 8 个**：`SEI kinetic rate constant`、`SEI resistivity`、`SEI solvent diffusivity`、`SEI electron conductivity`、`SEI reaction exchange current density`、`SEI partial molar volume`、`SEI open-circuit potential`、`SEI growth activation energy` | SEI 厚度、循环寿命、容量保持率、库仑效率 | **通·算**（已知包覆材料）／**✗**（全新材料）——势垒用 ML 势 NEB 算（实测分钟级）；势垒 → 速率常数用 Arrhenius，**要先选机理**；已知材料的其余参数查文献 |
+| | 掺杂剂（改开裂） | **开裂侧 24 个**（OKane2022 独有）：`Paris' law constant b/m`、`cracking rate`、`critical stress`、`initial crack length/width`、`number of cracks per unit area`、`Young's modulus`、`Poisson's ratio`、`volume change`、`LAM constant`… | 循环寿命、容量保持率 | **通·查**（已知掺杂剂）／**✗**（全新）——Paris 常数等靠文献值，没有第一性原理路径 |
+| **电芯结构** | 隔膜厚度 | `Separator thickness [m]` | 能量密度（质量/体积）、内阻、倍率保持、析锂 | **通·设**——按隔膜规格填 |
+| | 隔膜孔隙率 | `Separator porosity` | 内阻、倍率保持、析锂 | **通·设**——直接填 |
+| | 集流体厚度 | `Negative/Positive current collector thickness [m]` | 能量密度（质量/体积）、电芯质量 | **通·设**——按箔材规格填 |
+| | 电极面积 | `Electrode height [m]` × `Electrode width [m]` | 容量、电芯质量、$T_{\max}$（经散热面积） | **通·设**——直接填 |
+| | 并联电极数（叠片数 / 卷绕圈数） | `Number of electrodes connected in parallel to make a cell` | 容量、电芯质量 | **通·设**——直接填 |
+| | N/P 比 | 无直接参数——由厚度与活性材料分数算出 | 析锂、容量、能量密度 | **通·设**——派生量，不用单独设 |
+| | 外形 | 不是参数，是模型选项 `cell geometry` | $T_{\max}$、电芯质量、体积 | **通·设**——pouch 直接可用；圆柱的几何参数查该电芯规格书或按卷绕几何算 |
+| | 接触电阻 | `Contact resistance [Ohm]` | 内阻、比功率、倍率保持 | **通·查**——模型里有这一格（默认 0），值查文献典型值或按工艺经验取 |
+| **热管理** | 电芯尺寸 | `Cell volume [m3]`、`Cell cooling surface area [m2]` | $T_{\max}$、能量密度（体积）、电芯质量 | **通·设**——直接填 |
+| | 散热系数 | `Total heat transfer coefficient [W.m-2.K-1]` | $T_{\max}$、热失控起始温度 | **通·算**——① 经验关联式（瞬间）；② 自搭电芯间热网络（实测 10 电芯 16.2 s） |
+| | 分部位散热 | `Edge heat transfer coefficient`、`Positive/Negative tab heat transfer coefficient`、`Positive/Negative current collector surface heat transfer coefficient`（多数集里没有） | 同上，可分辨极耳/边缘局部温度 | **通·算**——同上，可分辨极耳 / 边缘局部温度 |
+| | 表面辐射率 | `Cell emissivity` | $T_{\max}$ | **通·查**——查 Incropera《传热学》附表 / ASHRAE Handbook，按外壳表面处理取值 |
+| **电解液配方** | 盐浓度 | `Initial concentration in electrolyte [mol.m-3]` | 倍率保持、低温保持、内阻、析锂 | **通·查**——常用电解液有**实测的 σ(c) 数据**（如 Landesfeind 2019）；只有新配方才要 MD（8.5 h+） |
+| | 溶剂比 | `EC initial concentration in electrolyte [mol.m-3]`、`Bulk solvent concentration [mol.m-3]` | 同上 ＋ SEI 厚度 | **通·查**——同上 |
+| | 输运参数本身 | `Electrolyte conductivity`、`Electrolyte diffusivity`、`Cation transference number`、`Thermodynamic factor` | 倍率保持、低温保持、内阻、析锂 | **通·查**——参数集里是随浓度变的函数；用文献的 σ(c) 形式，或用 LECA 拟合 |
+| | 添加剂 | 同"包覆剂"那一组 SEI 参数 | SEI 厚度、循环寿命、库仑效率、析锂 | **通·查**（已知分子）／**✗**（全新分子）——已知添加剂有文献值（T2 用的就是文献量级的 k）；新分子到 SEI 参数没有换算 |
+| **工艺** | 化成 | `Initial SEI thickness [m]`、`Initial SEI on cracks thickness [m]`、`Initial concentration in negative/positive electrode [mol.m-3]` | SEI 厚度、库仑效率、循环寿命 | **通·设**——能填；填多少按工艺经验 |
 
 **另有一个不属七步、但改几何时必须同步的量**
 
