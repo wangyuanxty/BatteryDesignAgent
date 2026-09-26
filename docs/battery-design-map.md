@@ -377,7 +377,6 @@ $$(\text{碳比例},\ \text{粘结剂比例},\ \text{粒径},\ \text{混合})\ \
 | | 添加剂 | 同"包覆剂"那一组 SEI 参数 | 分子 → **xTB** → HOMO / LUMO → **到 SEI 参数没有换算** | SEI 厚度、循环寿命、库仑效率、析锂 | **✗ 没有计算路径**——领域还没有标准 SEI 数据集，结构—性质数据库尚未建立 |
 | **工艺** | 化成 | `Initial SEI thickness [m]`、`Initial SEI on cracks thickness [m]`、`Initial concentration in negative/positive electrode [mol.m-3]` | **能设**——化成结果就落在这些参数上 | SEI 厚度、库仑效率、循环寿命 | **通**——能填；填多少要工艺经验，仿真推不出来 |
 | | 注液量 | 无 | —— | —— | **✗ 模型里没有这个量** |
-| | 压实 | 就是第 4 步的孔隙率 | —— | （同孔隙率） | （已并回孔隙率） |
 
 **另有一个不属七步、但改几何时必须同步的量**
 
