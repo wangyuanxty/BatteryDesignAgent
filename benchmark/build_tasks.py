@@ -127,13 +127,13 @@ def cls_of(r):
 
 
 TPL = {
-    "cylindrical": {"scenario": "高能量圆柱（车用 / 通用）",
+    "cylindrical": {"scenario": "High-energy cylindrical (automotive / general)",
                     "objectives": [{"metric": "energy_density_wh_kg", "direction": "max"},
                                    {"metric": "rate_retention_5C_1C", "direction": "max"}]},
-    "pouch_prismatic": {"scenario": "软包 / 方形（消费 / 车用）",
+    "pouch_prismatic": {"scenario": "Pouch or prismatic (consumer / automotive)",
                         "objectives": [{"metric": "energy_density_wh_l", "direction": "max"},
                                        {"metric": "energy_density_wh_kg", "direction": "max"}]},
-    "lfp_lto": {"scenario": "长寿命 / 低成本（储能 / 梯次）",
+    "lfp_lto": {"scenario": "Long-life and low-cost (stationary storage / second life)",
                 "objectives": [{"metric": "cycle_life", "direction": "max"},
                                {"metric": "material_cost", "direction": "min"}]},
 }

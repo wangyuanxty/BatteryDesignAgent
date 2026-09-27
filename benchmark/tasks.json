@@ -19,7 +19,7 @@
     {
       "id": "T-cyl-01",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "LG INR21700M50LT (2021)",
         "chemistry_as_stated": null,
@@ -90,7 +90,7 @@
     {
       "id": "T-cyl-02",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "LG INR21700M50LT (2020)",
         "chemistry_as_stated": null,
@@ -161,7 +161,7 @@
     {
       "id": "T-cyl-03",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "LG INR21700 M50T (2018)",
         "chemistry_as_stated": null,
@@ -232,7 +232,7 @@
     {
       "id": "T-cyl-04",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel INR-21700-P42A",
         "chemistry_as_stated": null,
@@ -292,7 +292,7 @@
     {
       "id": "T-cyl-05",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel INR-21700-P45B",
         "chemistry_as_stated": null,
@@ -352,7 +352,7 @@
     {
       "id": "T-cyl-06",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel INR-21700-P50B",
         "chemistry_as_stated": null,
@@ -412,7 +412,7 @@
     {
       "id": "T-cyl-07",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Samsung INR21700-40T",
         "chemistry_as_stated": null,
@@ -477,7 +477,7 @@
     {
       "id": "T-cyl-08",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Samsung INR21700-48G",
         "chemistry_as_stated": null,
@@ -542,7 +542,7 @@
     {
       "id": "T-cyl-09",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Samsung INR21700-50E",
         "chemistry_as_stated": null,
@@ -607,7 +607,7 @@
     {
       "id": "T-cyl-10",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Samsung INR21700-50S",
         "chemistry_as_stated": null,
@@ -672,7 +672,7 @@
     {
       "id": "T-cyl-11",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Samsung INR21700-50G",
         "chemistry_as_stated": null,
@@ -737,7 +737,7 @@
     {
       "id": "T-cyl-12",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Samsung INR21700-30T",
         "chemistry_as_stated": null,
@@ -802,7 +802,7 @@
     {
       "id": "T-cyl-13",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Lishen LR2170SA",
         "chemistry_as_stated": null,
@@ -873,7 +873,7 @@
     {
       "id": "T-lfp-01",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "A123 Systems AMP20M1HD-A (Nanophosphate Li-ion Prismatic Pouch Cell)",
         "chemistry_as_stated": "LFP (Nanophosphate) / graphite",
@@ -955,7 +955,7 @@
     {
       "id": "T-pouch-01",
       "class": "pouch_prismatic",
-      "scenario": "软包 / 方形（消费 / 车用）",
+      "scenario": "Pouch or prismatic (consumer / automotive)",
       "control": {
         "model": "Samsung SDI 94 Ah (EV cell)",
         "chemistry_as_stated": "**Chemistry not stated in this document.** Cell is widely described as NMC — but the source says only \"94Ah cell\".",
@@ -1026,7 +1026,7 @@
     {
       "id": "T-lfp-02",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "EVE Energy LF105 (LiFePO4 prismatic cell)",
         "chemistry_as_stated": "LFP / graphite (doc says \"Prismatic LFP Cells\")",
@@ -1108,7 +1108,7 @@
     {
       "id": "T-lfp-03",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "CATL LEP64J4K1 (120 Ah cell, ESS)",
         "chemistry_as_stated": "LFP (\"120Ah 3.2V rechargeable lithium iron cells for energy storage system\") / anode not stated",
@@ -1192,7 +1192,7 @@
     {
       "id": "T-pouch-02",
       "class": "pouch_prismatic",
-      "scenario": "软包 / 方形（消费 / 车用）",
+      "scenario": "Pouch or prismatic (consumer / automotive)",
       "control": {
         "model": "Kokam SLPB78205130H (High Power NMC Cell)",
         "chemistry_as_stated": "NMC (\"High Power NMC Cell\") / anode not stated",
@@ -1258,7 +1258,7 @@
     {
       "id": "T-pouch-03",
       "class": "pouch_prismatic",
-      "scenario": "软包 / 方形（消费 / 车用）",
+      "scenario": "Pouch or prismatic (consumer / automotive)",
       "control": {
         "model": "Kokam SLPB100216216H (High Power NMC Cell)",
         "chemistry_as_stated": "NMC (\"High Power NMC Cell\") / anode not stated",
@@ -1324,7 +1324,7 @@
     {
       "id": "T-pouch-04",
       "class": "pouch_prismatic",
-      "scenario": "软包 / 方形（消费 / 车用）",
+      "scenario": "Pouch or prismatic (consumer / automotive)",
       "control": {
         "model": "Kokam SLPB120216216 (High Energy NMC Cell)",
         "chemistry_as_stated": "NMC (\"High Energy NMC Cell\") / anode not stated",
@@ -1390,7 +1390,7 @@
     {
       "id": "T-pouch-05",
       "class": "pouch_prismatic",
-      "scenario": "软包 / 方形（消费 / 车用）",
+      "scenario": "Pouch or prismatic (consumer / automotive)",
       "control": {
         "model": "Kokam SLPB160460330 (High Energy NMC Cell)",
         "chemistry_as_stated": "NMC (\"High Energy NMC Cell\") / anode not stated",
@@ -1456,7 +1456,7 @@
     {
       "id": "T-lfp-04",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "Toshiba SCiB 20Ah (high-energy type)",
         "chemistry_as_stated": "**LTO anode** (\"lithium titanium oxide (LTO) in the negative electrode layer\"), cathode not stated / LTO",
@@ -1540,7 +1540,7 @@
     {
       "id": "T-lfp-05",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "Toshiba SCiB 23Ah (high-energy type)",
         "chemistry_as_stated": "LTO anode, cathode not stated",
@@ -1624,7 +1624,7 @@
     {
       "id": "T-lfp-06",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "Toshiba SCiB 26Ah (high-energy type)",
         "chemistry_as_stated": "LTO anode, cathode not stated",
@@ -1708,7 +1708,7 @@
     {
       "id": "T-lfp-07",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "Toshiba SCiB 2.9Ah (high-power type)",
         "chemistry_as_stated": "LTO anode, cathode not stated",
@@ -1792,7 +1792,7 @@
     {
       "id": "T-lfp-08",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "Toshiba SCiB 10Ah (high-power type)",
         "chemistry_as_stated": "LTO anode, cathode not stated",
@@ -1877,7 +1877,7 @@
     {
       "id": "T-lfp-09",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "Toshiba SCiB 20Ah-HP (combination type)",
         "chemistry_as_stated": "LTO anode, cathode not stated",
@@ -1962,7 +1962,7 @@
     {
       "id": "T-pouch-06",
       "class": "pouch_prismatic",
-      "scenario": "软包 / 方形（消费 / 车用）",
+      "scenario": "Pouch or prismatic (consumer / automotive)",
       "control": {
         "model": "CATL S5E891 (48 Ah NMC prismatic, P/N FC-N48-S5E891-5AEL)",
         "chemistry_as_stated": "**NMC** (\"48Ah 可充电三元体系动力电池\" — ternary/NMC power cell). Anode not stated",
@@ -2033,7 +2033,7 @@
     {
       "id": "T-lfp-10",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "BYD CB98 (47.7 Ah pouch)",
         "chemistry_as_stated": "**LFP** (\"LiFePO4 as cathode material\"). Anode not stated",
@@ -2117,7 +2117,7 @@
     {
       "id": "T-lfp-11",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "BYD BYDC16 (C16-200Ah short-blade cell)",
         "chemistry_as_stated": "**LFP** (\"LFP is used as the cathode material\"). Anode not stated",
@@ -2201,7 +2201,7 @@
     {
       "id": "T-lfp-12",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "SVOLT 184Ah blade cell (蜂巢能源)",
         "chemistry_as_stated": "**LFP** (\"184Ah 3.2V 可充电铁锂动力锂电池\" — 3.2 V rechargeable lithium-iron power cell). Anode not stated",
@@ -2283,7 +2283,7 @@
     {
       "id": "T-lfp-13",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "CALB L173F120A (中航锂电)",
         "chemistry_as_stated": "**LFP** (\"Lithium iron phosphate cell\"). Anode not stated",
@@ -2365,7 +2365,7 @@
     {
       "id": "T-lfp-14",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "Gotion IFR28148115A-52Ah (国轩高科)",
         "chemistry_as_stated": "**LFP** (\"锂离子二次电池，方形，LFP 电芯\" — prismatic LFP cell). Anode not stated",
@@ -2447,7 +2447,7 @@
     {
       "id": "T-lfp-15",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "Lishen LP37173207-150Ah (力神)",
         "chemistry_as_stated": "**LFP** (\"锂离子动力电芯\"; the LP/LF series is LiFePO4 — note the document itself says only \"lithium-ion power cell\"). Anode not stated",
@@ -2529,7 +2529,7 @@
     {
       "id": "T-cyl-14",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Panasonic NCR18650BF",
         "chemistry_as_stated": "Not stated in this sheet (NCR series is NCA/graphite — external knowledge, treat as second-hand)",
@@ -2600,7 +2600,7 @@
     {
       "id": "T-cyl-15",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Panasonic NCR18650PF",
         "chemistry_as_stated": "Not stated in this sheet (NCR series is NCA/graphite — external knowledge, treat as second-hand)",
@@ -2671,7 +2671,7 @@
     {
       "id": "T-cyl-16",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Murata US18650VTC5",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -2736,7 +2736,7 @@
     {
       "id": "T-cyl-17",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Murata US18650VTC5A",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -2801,7 +2801,7 @@
     {
       "id": "T-cyl-18",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Murata US18650VTC6",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -2866,7 +2866,7 @@
     {
       "id": "T-cyl-19",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel INR-18650-P26A",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -2931,7 +2931,7 @@
     {
       "id": "T-cyl-20",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Panasonic/Sanyo UR18650F",
         "chemistry_as_stated": "Not stated in this sheet (UR series is NCA/graphite — external knowledge, treat as second-hand)",
@@ -3002,7 +3002,7 @@
     {
       "id": "T-cyl-21",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Panasonic/Sanyo UR18650A",
         "chemistry_as_stated": "Not stated in this sheet (UR series is NCA/graphite — external knowledge, treat as second-hand)",
@@ -3073,7 +3073,7 @@
     {
       "id": "T-cyl-22",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Panasonic/Sanyo UR18650RX",
         "chemistry_as_stated": "Not stated in this sheet (UR series is NCA/graphite — external knowledge, treat as second-hand)",
@@ -3139,7 +3139,7 @@
     {
       "id": "T-cyl-23",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Panasonic/Sanyo UR18650ZTA",
         "chemistry_as_stated": "Not stated in this sheet (UR series is NCA/graphite — external knowledge, treat as second-hand)",
@@ -3210,7 +3210,7 @@
     {
       "id": "T-cyl-24",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel INR-18650-P28A",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -3275,7 +3275,7 @@
     {
       "id": "T-cyl-25",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel INR-18650-M30A",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -3340,7 +3340,7 @@
     {
       "id": "T-cyl-26",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel INR-18650-M35A",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -3405,7 +3405,7 @@
     {
       "id": "T-cyl-27",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel INR-18650A",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -3470,7 +3470,7 @@
     {
       "id": "T-cyl-28",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel INR-18650-P30B",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -3535,7 +3535,7 @@
     {
       "id": "T-cyl-29",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel IHR-18650B",
         "chemistry_as_stated": "Not stated in this sheet (\"IHR\" prefix implies a high-rate variant; sheet gives no chemistry)",
@@ -3600,7 +3600,7 @@
     {
       "id": "T-cyl-30",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel ICR-18650J",
         "chemistry_as_stated": "Not stated in this sheet (ICR prefix denotes LiCoO2-type; sheet does not say so)",
@@ -3665,7 +3665,7 @@
     {
       "id": "T-cyl-31",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel ICR-18650K",
         "chemistry_as_stated": "Not stated in this sheet (ICR prefix denotes LiCoO2-type; sheet does not say so)",
@@ -3730,7 +3730,7 @@
     {
       "id": "T-cyl-32",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel ICR-18650M",
         "chemistry_as_stated": "Not stated in this sheet (ICR prefix denotes LiCoO2-type; sheet does not say so)",
@@ -3795,7 +3795,7 @@
     {
       "id": "T-cyl-33",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Tenpower INR18650-32HE",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -3860,7 +3860,7 @@
     {
       "id": "T-cyl-34",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Panasonic NCR18650B",
         "chemistry_as_stated": "Not stated in this sheet (NCR series is NCA/graphite — external knowledge, treat as second-hand)",
@@ -3931,7 +3931,7 @@
     {
       "id": "T-cyl-35",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Panasonic NCR18650GA",
         "chemistry_as_stated": "Not stated in this sheet (NCR series is NCA/graphite — external knowledge, treat as second-hand)",
@@ -3996,7 +3996,7 @@
     {
       "id": "T-cyl-36",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Samsung SDI INR18650-25R",
         "chemistry_as_stated": "Not stated in this sheet (described only as \"lithium-ion rechargeable cell for power tools\"; external knowledge says NCA/graphite — treat as second-hand)",
@@ -4061,7 +4061,7 @@
     {
       "id": "T-cyl-37",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Samsung SDI INR18650-35E",
         "chemistry_as_stated": "Not stated in this sheet (external knowledge says NCA/graphite — treat as second-hand)",
@@ -4126,7 +4126,7 @@
     {
       "id": "T-cyl-38",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Samsung SDI INR18650-29E",
         "chemistry_as_stated": "Not stated in this sheet (external knowledge says NCA/graphite — treat as second-hand)",
@@ -4193,7 +4193,7 @@
     {
       "id": "T-cyl-39",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "LG Energy Solution INR18650MH1",
         "chemistry_as_stated": "Not stated in this sheet (external knowledge says NMC/graphite — treat as second-hand)",
@@ -4264,7 +4264,7 @@
     {
       "id": "T-cyl-40",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Molicel INR-18650-P22S",
         "chemistry_as_stated": "Not stated in this sheet",
@@ -4324,7 +4324,7 @@
     {
       "id": "T-lfp-16",
       "class": "lfp_lto",
-      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "scenario": "Long-life and low-cost (stationary storage / second life)",
       "control": {
         "model": "Lithium Werks APR18650M1B",
         "chemistry_as_stated": "**LiFePO4 (lithium iron phosphate)** — explicitly stated: \"Based on lithium iron phosphate chemistry (LiFePO4)\", Nanophosphate technology",
@@ -4406,7 +4406,7 @@
     {
       "id": "T-cyl-41",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "Samsung SDI ICR18650-26F",
         "chemistry_as_stated": "Not stated in this sheet (ICR prefix denotes LiCoO2-type; sheet does not say so)",
@@ -4473,7 +4473,7 @@
     {
       "id": "T-cyl-42",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "BAK N18650CH",
         "chemistry_as_stated": "Vendor's own label: \"材料类型 Hi-Ni\" (material type Hi-Ni) — sheet gives no fuller chemistry",
@@ -4544,7 +4544,7 @@
     {
       "id": "T-cyl-43",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "BAK N18650CL-29",
         "chemistry_as_stated": "Vendor's own label: \"材料类型 Hi-Ni\" (material type Hi-Ni) — sheet gives no fuller chemistry",
@@ -4615,7 +4615,7 @@
     {
       "id": "T-cyl-44",
       "class": "cylindrical",
-      "scenario": "高能量圆柱（车用 / 通用）",
+      "scenario": "High-energy cylindrical (automotive / general)",
       "control": {
         "model": "BAK N18650CR-35E",
         "chemistry_as_stated": "Vendor's own label: \"材料类型 Hi-Ni\" (material type Hi-Ni) — sheet gives no fuller chemistry",
