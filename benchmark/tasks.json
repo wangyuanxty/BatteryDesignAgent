@@ -1,0 +1,4687 @@
+{
+  "name": "battery-cell-design-benchmark",
+  "version": "0.1.0",
+  "date": "2026-09-27",
+  "description": "66 cell-design tasks. Each takes one real commercial cell as its control; a method must beat it on the objectives while staying inside the flagged constraints.",
+  "lead_margin": 0.1,
+  "lead_margin_reason": "The simulator's electrode-stack mass runs ~8.6% below the datasheet-implied value, inflating computed energy density by ~9.5%. Below 10% a win cannot be told apart from that bias.",
+  "notes": [
+    "constraints with basis=control_spec take their threshold from that cell's own spec sheet",
+    "constraints with basis=model have no control value and must simply be satisfied",
+    "capacity and energy density are on the whole-cell caliber (stack + electrolyte + packaging)",
+    "parse_failed = we could not extract it though the spec states it; spec_gaps = the spec does not state it",
+    "budget_sim_calls is not set yet",
+    "wh_kg_basis: vendor_stated vs derived (derived = computed from vendor mass and energy)",
+    "cycles_basis: vendor_stated vs read_off_chart (read off a plotted curve by us, not a vendor number)"
+  ],
+  "n_tasks": 66,
+  "tasks": [
+    {
+      "id": "T-cyl-01",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "LG INR21700M50LT (2021)",
+        "chemistry_as_stated": null,
+        "spec_reference": "LG 2021-LSD-MBD-b00002 Rev 1",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 4.8,
+          "wh_kg": 269.6,
+          "wh_kg_basis": "derived",
+          "wh_l": 713.5,
+          "cycles": 1000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": 3.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 4.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 1000,
+          "eol_frac": 0.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 3.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-02",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "LG INR21700M50LT (2020)",
+        "chemistry_as_stated": null,
+        "spec_reference": "LG 2020-LSD-MBD-b00082 Rev 0",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 4.8,
+          "wh_kg": 266.9,
+          "wh_kg_basis": "derived",
+          "wh_l": 714.0,
+          "cycles": 1000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": 3.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 4.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 1000,
+          "eol_frac": 0.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 3.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-03",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "LG INR21700 M50T (2018)",
+        "chemistry_as_stated": null,
+        "spec_reference": "LG LRB-PS-CY18.2Wh-M50T Rev 0",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 4.85,
+          "wh_kg": 260.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 712.0,
+          "cycles": 300,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": 3.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 4.85,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 300,
+          "eol_frac": 0.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 3.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-04",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel INR-21700-P42A",
+        "chemistry_as_stated": null,
+        "spec_reference": "Molicel PDS V4",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 4.0,
+          "wh_kg": 230.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 615.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": null,
+          "max_discharge_A": 45.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 4.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-cyl-05",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel INR-21700-P45B",
+        "chemistry_as_stated": null,
+        "spec_reference": "Molicel PDS v1.4",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 4.3,
+          "wh_kg": 242.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 643.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": null,
+          "max_discharge_A": 45.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 4.3,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-cyl-06",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel INR-21700-P50B",
+        "chemistry_as_stated": null,
+        "spec_reference": "Molicel PDS v1.1",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 4.85,
+          "wh_kg": 260.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 714.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": null,
+          "max_discharge_A": 60.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 4.85,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-cyl-07",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Samsung INR21700-40T",
+        "chemistry_as_stated": null,
+        "spec_reference": "SDI v0.0, Dec 2017",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 3.9,
+          "wh_kg": 205.7,
+          "wh_kg_basis": "derived",
+          "wh_l": 579.2,
+          "cycles": 250,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.6,
+          "max_discharge_C": null,
+          "max_discharge_A": 35.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.9,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 250,
+          "eol_frac": 0.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-08",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Samsung INR21700-48G",
+        "chemistry_as_stated": null,
+        "spec_reference": "SDI, Tentative",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 4.8,
+          "wh_kg": 247.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 694.7,
+          "cycles": 500,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.75,
+          "max_discharge_C": null,
+          "max_discharge_A": 6.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 4.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.75,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-09",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Samsung INR21700-50E",
+        "chemistry_as_stated": null,
+        "spec_reference": "SDI v0.2, 2017-12-19",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 4.753,
+          "wh_kg": 255.7,
+          "wh_kg_basis": "derived",
+          "wh_l": 702.5,
+          "cycles": 500,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": null,
+          "max_discharge_A": 8.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 4.753,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-10",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Samsung INR21700-50S",
+        "chemistry_as_stated": null,
+        "spec_reference": "SDI v0.2",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 4.8,
+          "wh_kg": 250.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 718.7,
+          "cycles": 250,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.6,
+          "max_discharge_C": null,
+          "max_discharge_A": 25.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 4.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 250,
+          "eol_frac": 0.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-11",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Samsung INR21700-50G",
+        "chemistry_as_stated": null,
+        "spec_reference": "SDI v0.1",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 4.85,
+          "wh_kg": 253.3,
+          "wh_kg_basis": "derived",
+          "wh_l": 717.7,
+          "cycles": 1000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": null,
+          "max_discharge_A": 7.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 4.85,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 1000,
+          "eol_frac": 0.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-12",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Samsung INR21700-30T",
+        "chemistry_as_stated": null,
+        "spec_reference": "SDI v2.0",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 2.95,
+          "wh_kg": 156.5,
+          "wh_kg_basis": "derived",
+          "wh_l": 434.4,
+          "cycles": 250,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.6,
+          "max_discharge_C": null,
+          "max_discharge_A": 35.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.95,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 250,
+          "eol_frac": 0.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-13",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Lishen LR2170SA",
+        "chemistry_as_stated": null,
+        "spec_reference": "Lishen, Version 0, 2017-11-01",
+        "source": "calibration/specsheets/21700.md",
+        "spec_values": {
+          "capacity_ah": 3.9,
+          "wh_kg": 211.6,
+          "wh_kg_basis": "derived",
+          "wh_l": 556.8,
+          "cycles": 1000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": 3.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.9,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 1000,
+          "eol_frac": 0.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 3.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-lfp-01",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "A123 Systems AMP20M1HD-A (Nanophosphate Li-ion Prismatic Pouch Cell)",
+        "chemistry_as_stated": "LFP (Nanophosphate) / graphite",
+        "spec_reference": "A123 Systems, Inc. *Nanophosphate Lithium Ion Prismatic Pouch Cell AMP20M1HD-A*, Doc MD100105-03; 2012. https://a123batteries.com/product_images/uploaded_images/amp20.pdf (accessed 2026-09-26). Earlier rev: Doc MD100105-01; 2011. https://liionbms.com/pdf/a123/AMP20M1HD-A.pdf (accessed 2026-09-26) — liionbms.com is a **third-party re-host**",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 19.5,
+          "wh_kg": 131.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 247.0,
+          "cycles": 3500,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 1.0,
+          "max_discharge_C": null,
+          "max_discharge_A": 364.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 19.5,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 131.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-pouch-01",
+      "class": "pouch_prismatic",
+      "scenario": "软包 / 方形（消费 / 车用）",
+      "control": {
+        "model": "Samsung SDI 94 Ah (EV cell)",
+        "chemistry_as_stated": "**Chemistry not stated in this document.** Cell is widely described as NMC — but the source says only \"94Ah cell\".",
+        "spec_reference": "Samsung SDI Co. Ltd. *Introduction of Samsung SDI's 94Ah cells*, V9-2; 31 Dec 2015. https://embdev.net/attachment/491363/SDI94Ah.pdf (accessed 2026-09-26). Document is marked \"Customer \\",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 94.0,
+          "wh_kg": 165.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 354.0,
+          "cycles": 3200,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": 1.6,
+          "max_discharge_A": 150.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_l",
+          "direction": "max"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 94.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 3200,
+          "eol_frac": 0.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 1.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 50,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-lfp-02",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "EVE Energy LF105 (LiFePO4 prismatic cell)",
+        "chemistry_as_stated": "LFP / graphite (doc says \"Prismatic LFP Cells\")",
+        "spec_reference": "EVE Power Co., Ltd. *Product Specification — Prismatic LFP Cells, Model LF105*, Spec. No. RD-LF105-S01-LF, Version C; Mar 2022. https://batteryfinds.com/wp-content/uploads/2023/09/EVE-LF105-105Ah-3.2V-LiFePO4-Prismatic-Battery-Cell-SpecificationDatasheet.pdf (accessed 2026-09-26) — batteryfinds.com is a **third-party re-host** of the vendor's own spec sheet (document itself is EVE-headed, \"Confidential Proprietary\")",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 105.0,
+          "wh_kg": 170.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 354.0,
+          "cycles": 4000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": 1.0,
+          "max_discharge_A": 105.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 105.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 170.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-lfp-03",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "CATL LEP64J4K1 (120 Ah cell, ESS)",
+        "chemistry_as_stated": "LFP (\"120Ah 3.2V rechargeable lithium iron cells for energy storage system\") / anode not stated",
+        "spec_reference": "CATL (Contemporary Amperex Technology Co., Limited). *Product Specification of 120Ah Cell / 120Ah 产品规格书*, Cell Model LEP64J4K1, Rev 1.0. https://batteryfinds.com/wp-content/uploads/2022/11/CATL-120Ah-Lithium-Iron-Phosphate-LiFePO4-LFP-Prismatic-Battery-Cells-Specification.pdf (accessed 2026-09-26) — batteryfinds.com is a **third-party re-host** of the CATL-headed document",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 120.0,
+          "wh_kg": 135.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 277.0,
+          "cycles": 3500,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": null,
+          "max_discharge_C": 1.0,
+          "max_discharge_A": 120.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 120.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 135.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "eol_criterion"
+      ]
+    },
+    {
+      "id": "T-pouch-02",
+      "class": "pouch_prismatic",
+      "scenario": "软包 / 方形（消费 / 车用）",
+      "control": {
+        "model": "Kokam SLPB78205130H (High Power NMC Cell)",
+        "chemistry_as_stated": "NMC (\"High Power NMC Cell\") / anode not stated",
+        "spec_reference": "Kokam Co., Ltd. *KOKAM Lithium Ion Cell* (cell brochure), 2019, ver 4.2. Archived copy of http://kokam.com/data/2019_Kokam_Cell_ver_4.2.pdf via Internet Archive Wayback Machine capture 20190710174913. https://web.archive.org/web/20190710174913id_/http://kokam.com/data/2019_Kokam_Cell_ver_4.2.pdf (accessed 2026-09-26). Vendor-authored document (battery@kokam.com, www.kokam.com); retrieved from the archive because kokam.com now redirects to SolarEdge",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 16.0,
+          "wh_kg": 150.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 252.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": 8.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_l",
+          "direction": "max"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 16.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 8.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 50,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-pouch-03",
+      "class": "pouch_prismatic",
+      "scenario": "软包 / 方形（消费 / 车用）",
+      "control": {
+        "model": "Kokam SLPB100216216H (High Power NMC Cell)",
+        "chemistry_as_stated": "NMC (\"High Power NMC Cell\") / anode not stated",
+        "spec_reference": "Same citation as SLPB78205130H above",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 40.0,
+          "wh_kg": 157.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 279.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": 8.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_l",
+          "direction": "max"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 40.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 8.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 50,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-pouch-04",
+      "class": "pouch_prismatic",
+      "scenario": "软包 / 方形（消费 / 车用）",
+      "control": {
+        "model": "Kokam SLPB120216216 (High Energy NMC Cell)",
+        "chemistry_as_stated": "NMC (\"High Energy NMC Cell\") / anode not stated",
+        "spec_reference": "Same citation as SLPB78205130H above",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 53.0,
+          "wh_kg": 179.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 317.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": 5.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_l",
+          "direction": "max"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 53.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 5.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 50,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-pouch-05",
+      "class": "pouch_prismatic",
+      "scenario": "软包 / 方形（消费 / 车用）",
+      "control": {
+        "model": "Kokam SLPB160460330 (High Energy NMC Cell)",
+        "chemistry_as_stated": "NMC (\"High Energy NMC Cell\") / anode not stated",
+        "spec_reference": "Same citation as SLPB78205130H above",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 240.0,
+          "wh_kg": 197.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 272.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": 2.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_l",
+          "direction": "max"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 240.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 2.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 50,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-lfp-04",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "Toshiba SCiB 20Ah (high-energy type)",
+        "chemistry_as_stated": "**LTO anode** (\"lithium titanium oxide (LTO) in the negative electrode layer\"), cathode not stated / LTO",
+        "spec_reference": "Toshiba. *SCiB™ High-energy type cells*, product page. https://www.global.toshiba/ww/products-solutions/battery/scib/product-next/product/cell/high-energy.html (accessed 2026-09-26); cycle-test condition and LTO anode from Toshiba. *Rechargeable Lithium-ion Battery SCiB™* brochure, PDF. https://www.global.toshiba/content/dam/toshiba/ww/products-solutions/battery/scib/pdf/SCiB_toshiba_en.pdf (accessed 2026-09-26). **No model number is published** — Toshiba designates these only by capacity",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 20.0,
+          "wh_kg": 89.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 176.0,
+          "cycles": 20000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.7,
+          "max_discharge_C": null,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 20.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 89.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "max_discharge"
+      ]
+    },
+    {
+      "id": "T-lfp-05",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "Toshiba SCiB 23Ah (high-energy type)",
+        "chemistry_as_stated": "LTO anode, cathode not stated",
+        "spec_reference": "Same citation as SCiB 20Ah",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 23.0,
+          "wh_kg": 96.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 202.0,
+          "cycles": 20000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.7,
+          "max_discharge_C": null,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 23.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 96.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "max_discharge"
+      ]
+    },
+    {
+      "id": "T-lfp-06",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "Toshiba SCiB 26Ah (high-energy type)",
+        "chemistry_as_stated": "LTO anode, cathode not stated",
+        "spec_reference": "Same citation as SCiB 20Ah",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 26.0,
+          "wh_kg": 106.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 229.0,
+          "cycles": 20000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.7,
+          "max_discharge_C": null,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 26.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 106.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "max_discharge"
+      ]
+    },
+    {
+      "id": "T-lfp-07",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "Toshiba SCiB 2.9Ah (high-power type)",
+        "chemistry_as_stated": "LTO anode, cathode not stated",
+        "spec_reference": "Toshiba. *SCiB™ High-power type cells*, product page. https://www.global.toshiba/ww/products-solutions/battery/scib/product-next/product/cell/high-power.html (accessed 2026-09-26). No model number published",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 2.9,
+          "wh_kg": 46.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 85.0,
+          "cycles": 40000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": null,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.9,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 46.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "max_discharge"
+      ]
+    },
+    {
+      "id": "T-lfp-08",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "Toshiba SCiB 10Ah (high-power type)",
+        "chemistry_as_stated": "LTO anode, cathode not stated",
+        "spec_reference": "Same citation as SCiB 2.9Ah",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 10.0,
+          "wh_kg": 47.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 92.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": null,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 10.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 47.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life",
+        "max_discharge"
+      ]
+    },
+    {
+      "id": "T-lfp-09",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "Toshiba SCiB 20Ah-HP (combination type)",
+        "chemistry_as_stated": "LTO anode, cathode not stated",
+        "spec_reference": "Toshiba. *SCiB™ Combination type cells*, product page. https://www.global.toshiba/ww/products-solutions/battery/scib/product-next/product/cell/combination.html (accessed 2026-09-26). No model number published",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 20.0,
+          "wh_kg": 84.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 176.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": null,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 20.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 84.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life",
+        "max_discharge"
+      ]
+    },
+    {
+      "id": "T-pouch-06",
+      "class": "pouch_prismatic",
+      "scenario": "软包 / 方形（消费 / 车用）",
+      "control": {
+        "model": "CATL S5E891 (48 Ah NMC prismatic, P/N FC-N48-S5E891-5AEL)",
+        "chemistry_as_stated": "**NMC** (\"48Ah 可充电三元体系动力电池\" — ternary/NMC power cell). Anode not stated",
+        "spec_reference": "CATL. *产品规格书 / Product Specification*, model S5E891, Doc No. CTPS-S5E891-15, Rev 1.0; 2017. https://ecoteardown.top/wp-content/uploads/2023/12/CATL-48Ah-3.7V-NMC-Prismatic-Battery-Cell-Specification-Datasheet.pdf (accessed 2026-09-26) — ecoteardown.top is a **third-party re-host** of the CATL-headed document",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 48.0,
+          "wh_kg": 212.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 521.0,
+          "cycles": 1500,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": 2.0,
+          "max_discharge_A": 96.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_l",
+          "direction": "max"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 48.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 1500,
+          "eol_frac": 0.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 2.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 50,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-lfp-10",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "BYD CB98 (47.7 Ah pouch)",
+        "chemistry_as_stated": "**LFP** (\"LiFePO4 as cathode material\"). Anode not stated",
+        "spec_reference": "BYD. *CB98-47.7Ah 电池产品规格书 / CB98-47.7Ah Lithium-ion battery specification*; no revision number printed. https://ecoteardown.top/wp-content/uploads/2023/12/BYD-47.7Ah-3.2V-LiFePO4-Pouch-Battery-Cell-Specification-Datasheet.pdf (accessed 2026-09-26) — ecoteardown.top is a **third-party re-host**; document header carries the BYD copyright line",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 47.7,
+          "wh_kg": 151.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 267.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": 1.0,
+          "max_discharge_A": 7.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 47.7,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 151.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-lfp-11",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "BYD BYDC16 (C16-200Ah short-blade cell)",
+        "chemistry_as_stated": "**LFP** (\"LFP is used as the cathode material\"). Anode not stated",
+        "spec_reference": "BYD Company Limited. *C16-200Ah Cell specification*, Item No. BYDC16, Version 1, File \"C16-200Ah specification\". https://ecoteardown.top/wp-content/uploads/2023/12/BYD-200Ah-3.2V-LiFePO4-Short-Blade-Battery-Cell-Specification-Datasheet.pdf (accessed 2026-09-26) — ecoteardown.top is a **third-party re-host**; the document itself carries \"Copyright © BYD Company Limited\"",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 200.0,
+          "wh_kg": 141.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 286.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": 1.5,
+          "max_discharge_A": 300.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 200.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 141.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-lfp-12",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "SVOLT 184Ah blade cell (蜂巢能源)",
+        "chemistry_as_stated": "**LFP** (\"184Ah 3.2V 可充电铁锂动力锂电池\" — 3.2 V rechargeable lithium-iron power cell). Anode not stated",
+        "spec_reference": "SVOLT Energy Technology Co., Ltd. (蜂巢能源科技有限公司). *SVOLT Design Document*, Doc No. DOC-2005890, Version A. https://batteryfinds.com/wp-content/uploads/2022/11/SVOLT-184Ah-LiFePO4-Blade-Cells-Specification.pdf (accessed 2026-09-26) — batteryfinds.com is a **third-party re-host** of the SVOLT-headed document",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 184.0,
+          "wh_kg": 166.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 8.0,
+          "cycles": 2500,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 1.0,
+          "max_discharge_C": 3.0,
+          "max_discharge_A": 3.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 184.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 166.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-lfp-13",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "CALB L173F120A (中航锂电)",
+        "chemistry_as_stated": "**LFP** (\"Lithium iron phosphate cell\"). Anode not stated",
+        "spec_reference": "CALB (China Aviation Lithium Battery (Luoyang) Co., Ltd.). *产品规格书 / Product Specification, 方形锂离子电池 / Prismatic lithium Ion Battery*, Model L173F120A, Version A/0; 2016-02-25. https://batteryfinds.com/wp-content/uploads/2023/09/CALB-120Ah-3.2V-LiFePO4-Prismatic-Battery-Cell-SpecificationDatasheet.pdf (accessed 2026-09-26) — batteryfinds.com is a **third-party re-host** of the CALB-headed document",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 120.0,
+          "wh_kg": 132.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 276.0,
+          "cycles": 2000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": 1.0,
+          "max_discharge_A": 120.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 120.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 132.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-lfp-14",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "Gotion IFR28148115A-52Ah (国轩高科)",
+        "chemistry_as_stated": "**LFP** (\"锂离子二次电池，方形，LFP 电芯\" — prismatic LFP cell). Anode not stated",
+        "spec_reference": "Gotion High-tech (合肥国轩高科动力能源有限公司). *IFP28148115A-52Ah 锂离子电池产品规格书*, doc no. Q/GX 030-2019; dated 2019-10-29. https://batteryfinds.com/wp-content/uploads/2023/06/GOTION-52Ah-LiFePO4-Prismatic-Battery-Cells-Specification.pdf (accessed 2026-09-26) — batteryfinds.com is a **third-party re-host** of the Gotion-headed scanned document",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 53.5,
+          "wh_kg": 175.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 350.0,
+          "cycles": 2000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.8,
+          "max_discharge_C": 1.0,
+          "max_discharge_A": 52.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 53.5,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 175.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-lfp-15",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "Lishen LP37173207-150Ah (力神)",
+        "chemistry_as_stated": "**LFP** (\"锂离子动力电芯\"; the LP/LF series is LiFePO4 — note the document itself says only \"lithium-ion power cell\"). Anode not stated",
+        "spec_reference": "Tianjin Lishen Battery Joint-Stock Co., Ltd. (力神动力电池系统有限公司). *产品规格书 / Product Specification*, model LP37173207-150Ah, Version 0; 2019-09-30. https://batteryfinds.com/wp-content/uploads/2023/09/Lishen-150Ah-Lithium-Iron-Phosphate-LiFePO4-LFP-Prismatic-Battery-Cells-Specification.pdf (accessed 2026-09-26) — batteryfinds.com is a **third-party re-host**; document is marked \"Lishen Confidential Proprietary\"",
+        "source": "calibration/specsheets/pouch-prismatic.md",
+        "spec_values": {
+          "capacity_ah": 150.0,
+          "wh_kg": 2900.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": null,
+          "cycles": 200,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.97,
+          "max_discharge_C": 1.0,
+          "max_discharge_A": 150.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 150.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 2900.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-14",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Panasonic NCR18650BF",
+        "chemistry_as_stated": "Not stated in this sheet (NCR series is NCA/graphite — external knowledge, treat as second-hand)",
+        "spec_reference": "Panasonic. *Specifications for NCR18650BF*. https://api.pim.na.industrial.panasonic.com/file_stream/main/fileversion/3446 (accessed 2026-09-26).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.2,
+          "wh_kg": 248.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 677.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.79,
+          "max_discharge_C": 0.2,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.79,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 0.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-15",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Panasonic NCR18650PF",
+        "chemistry_as_stated": "Not stated in this sheet (NCR series is NCA/graphite — external knowledge, treat as second-hand)",
+        "spec_reference": "Panasonic. *Specifications for NCR18650PF*. https://api.pim.na.industrial.panasonic.com/file_stream/main/fileversion/3447 (accessed 2026-09-26).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.7,
+          "wh_kg": 207.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 577.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.79,
+          "max_discharge_C": 0.2,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.7,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.79,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 0.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-16",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Murata US18650VTC5",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Murata. *Cylindrical Type Lithium Ion Secondary Battery US18650VTC5*, Version 001. https://www.murata.com/-/media/webrenewal/products/batteries/cylindrical/datasheet/us18650vtc5-product-datasheet.ashx?la=en (accessed 2026-09-26).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.6,
+          "wh_kg": 211.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 534.0,
+          "cycles": 1000,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.67,
+          "max_discharge_C": null,
+          "max_discharge_A": 5.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 1000,
+          "eol_frac": 0.67,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-17",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Murata US18650VTC5A",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Murata. *Cylindrical Type Lithium Ion Secondary Battery US18650VTC5A*, Version 001. https://www.murata.com/-/media/webrenewal/products/batteries/cylindrical/datasheet/us18650vtc5a-product-datasheet.ashx?la=en (accessed 2026-09-26).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.6,
+          "wh_kg": 208.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 534.0,
+          "cycles": 1000,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.67,
+          "max_discharge_C": null,
+          "max_discharge_A": 5.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 1000,
+          "eol_frac": 0.67,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-18",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Murata US18650VTC6",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Murata. *Cylindrical Type Lithium Ion Secondary Battery US18650VTC6*, Version 001. https://www.murata.com/-/media/webrenewal/products/batteries/cylindrical/datasheet/us18650vtc6-product-datasheet.ashx?la=en (accessed 2026-09-26).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.12,
+          "wh_kg": 241.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 641.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.75,
+          "max_discharge_C": null,
+          "max_discharge_A": 3.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.12,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.75,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-19",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel INR-18650-P26A",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model INR-18650-P26A*, Version 1.4. https://www.molicel.com/wp-content/uploads/INR18650P26A_1.4_Product-Data-Sheet-of-INR-18650-P26A-80087.pdf (accessed 2026-09-26).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.6,
+          "wh_kg": 190.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 535.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 1.0,
+          "max_discharge_C": null,
+          "max_discharge_A": 35.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 1.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-20",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Panasonic/Sanyo UR18650F",
+        "chemistry_as_stated": "Not stated in this sheet (UR series is NCA/graphite — external knowledge, treat as second-hand)",
+        "spec_reference": "Panasonic (SANYO Energy U.S.A.). *Lithium Ion UR18650F*, Version 13.02 R1. https://api.pim.na.industrial.panasonic.com/file_stream/main/fileversion/3449 (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.45,
+          "wh_kg": 193.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 544.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.69,
+          "max_discharge_C": 0.2,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.45,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.69,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 0.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-21",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Panasonic/Sanyo UR18650A",
+        "chemistry_as_stated": "Not stated in this sheet (UR series is NCA/graphite — external knowledge, treat as second-hand)",
+        "spec_reference": "Panasonic (SANYO Energy U.S.A.). *Lithium Ion UR18650A*, Version 13.02 R1. https://api.pim.na.industrial.panasonic.com/file_stream/main/fileversion/3452 (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.1,
+          "wh_kg": 176.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 453.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.73,
+          "max_discharge_C": 0.2,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.1,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.73,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 0.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-22",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Panasonic/Sanyo UR18650RX",
+        "chemistry_as_stated": "Not stated in this sheet (UR series is NCA/graphite — external knowledge, treat as second-hand)",
+        "spec_reference": "Panasonic (SANYO Energy U.S.A.). *Lithium Ion UR18650RX*, Version 13.02 R1. https://api.pim.na.industrial.panasonic.com/file_stream/main/fileversion/3450 (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 1.95,
+          "wh_kg": 155.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 413.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": 0.2,
+          "max_discharge_A": 10.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 1.95,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 0.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-cyl-23",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Panasonic/Sanyo UR18650ZTA",
+        "chemistry_as_stated": "Not stated in this sheet (UR series is NCA/graphite — external knowledge, treat as second-hand)",
+        "spec_reference": "Panasonic. *Specifications for UR18650ZTA*. https://api.pim.na.industrial.panasonic.com/file_stream/main/fileversion/3451 (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.85,
+          "wh_kg": 220.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 620.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.8,
+          "max_discharge_C": 0.2,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.85,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 0.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-24",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel INR-18650-P28A",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model INR-18650-P28A*, Version 1.3. https://www.molicel.com/wp-content/uploads/INR18650P28A_1.3_Product-Data-Sheet-of-INR-18650-P28A-80093.pdf (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.8,
+          "wh_kg": 219.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 589.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 1.0,
+          "max_discharge_C": null,
+          "max_discharge_A": 35.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 1.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-25",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel INR-18650-M30A",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model INR-18650-M30A*, Version 2. https://www.molicel.com/wp-content/uploads/INR18650M30A-V2-80088.pdf (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.0,
+          "wh_kg": 234.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 632.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 1.0,
+          "max_discharge_C": null,
+          "max_discharge_A": 10.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 1.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-26",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel INR-18650-M35A",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model INR-18650-M35A*, Version 1.4. https://www.molicel.com/wp-content/uploads/INR18650M35A_1.4_Product-Data-Sheet-of-INR-18650-M35A-80096.pdf (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.45,
+          "wh_kg": 264.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 730.0,
+          "cycles": 400,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.83,
+          "max_discharge_C": null,
+          "max_discharge_A": 10.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.45,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 400,
+          "eol_frac": 0.83,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-27",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel INR-18650A",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model INR-18650A*, Version 4. https://www.molicel.com/wp-content/uploads/DM_INR18650A-V4-80078.pdf (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.5,
+          "wh_kg": 205.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 520.0,
+          "cycles": 600,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.88,
+          "max_discharge_C": null,
+          "max_discharge_A": 20.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.5,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 600,
+          "eol_frac": 0.88,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-28",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel INR-18650-P30B",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model INR-18650-P30B*, Version 1.0. https://www.molicel.com/wp-content/uploads/Product-Data-Sheet-of-INR-18650-P30B-80111.pdf (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.0,
+          "wh_kg": 234.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 631.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.86,
+          "max_discharge_C": null,
+          "max_discharge_A": 30.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.86,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-29",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel IHR-18650B",
+        "chemistry_as_stated": "Not stated in this sheet (\"IHR\" prefix implies a high-rate variant; sheet gives no chemistry)",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model IHR-18650B*, Version 7. https://www.molicel.com/wp-content/uploads/DM_IHR18650B-V7-80055.pdf (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.25,
+          "wh_kg": 175.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 503.0,
+          "cycles": 300,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.98,
+          "max_discharge_C": null,
+          "max_discharge_A": 4.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.25,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 300,
+          "eol_frac": 0.98,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-30",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel ICR-18650J",
+        "chemistry_as_stated": "Not stated in this sheet (ICR prefix denotes LiCoO2-type; sheet does not say so)",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model ICR-18650J*, Version 8. https://www.molicel.com/wp-content/uploads/DM_ICR18650J-V8-80044.pdf (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.37,
+          "wh_kg": 187.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 517.0,
+          "cycles": 300,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.83,
+          "max_discharge_C": null,
+          "max_discharge_A": 5.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.37,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 300,
+          "eol_frac": 0.83,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-31",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel ICR-18650K",
+        "chemistry_as_stated": "Not stated in this sheet (ICR prefix denotes LiCoO2-type; sheet does not say so)",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model ICR-18650K*, Version 9. https://www.molicel.com/wp-content/uploads/DM_ICR18650K-V9-80054.pdf (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.6,
+          "wh_kg": 205.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 588.0,
+          "cycles": 300,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.9,
+          "max_discharge_C": null,
+          "max_discharge_A": 5.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 300,
+          "eol_frac": 0.9,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-32",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel ICR-18650M",
+        "chemistry_as_stated": "Not stated in this sheet (ICR prefix denotes LiCoO2-type; sheet does not say so)",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model ICR-18650M*, Version 3. https://www.molicel.com/wp-content/uploads/DM_ICR18650M-V3-80072.pdf (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.8,
+          "wh_kg": 222.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 631.0,
+          "cycles": 300,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.89,
+          "max_discharge_C": null,
+          "max_discharge_A": 5.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.8,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 300,
+          "eol_frac": 0.89,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-33",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Tenpower INR18650-32HE",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Tenpower (Jiangsu Tenpower Lithium Co.). *Product Datasheet — INR18650-32HE*, v1.4. https://www.tenpowercell.com/wp-content/uploads/2022/12/TP-INR18650-32HE-Product-Datasheet-v1.4.pdf — fetched via https://web.archive.org/web/2022id_/ (direct site returns HTTP 403 to this client) (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.2,
+          "wh_kg": 245.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 696.0,
+          "cycles": 1000,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 1.0,
+          "max_discharge_C": null,
+          "max_discharge_A": 10.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 1000,
+          "eol_frac": 1.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-34",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Panasonic NCR18650B",
+        "chemistry_as_stated": "Not stated in this sheet (NCR series is NCA/graphite — external knowledge, treat as second-hand)",
+        "spec_reference": "Panasonic (SANYO Energy U.S.A.). *Lithium Ion NCR18650B*, VERSION 13.11 R1. https://www.batteryspace.com/prod-specs/NCR18650B.pdf — **distributor re-host** (BatterySpace) of the Panasonic/SANYO sheet; vendor's own copy not reachable here (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.2,
+          "wh_kg": 243.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 676.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.68,
+          "max_discharge_C": 0.2,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.68,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 0.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-35",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Panasonic NCR18650GA",
+        "chemistry_as_stated": "Not stated in this sheet (NCR series is NCA/graphite — external knowledge, treat as second-hand)",
+        "spec_reference": "Panasonic. *Specifications for NCR18650GA*, doc ref 4J14Z5UTAS. https://www.batteryspace.com/prod-specs/11259-NCR18650GA.pdf — **distributor re-host** (BatterySpace) of the Panasonic sheet (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.3,
+          "wh_kg": 224.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 693.0,
+          "cycles": 500,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 0.63,
+          "max_discharge_C": null,
+          "max_discharge_A": 2.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.3,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.63,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-36",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Samsung SDI INR18650-25R",
+        "chemistry_as_stated": "Not stated in this sheet (described only as \"lithium-ion rechargeable cell for power tools\"; external knowledge says NCA/graphite — treat as second-hand)",
+        "spec_reference": "Samsung SDI. *Specification of Product — INR18650-25R*, Spec. No. INR18650-25R, Version 1.0, Mar. 2014. https://www.batteryspace.com/prod-specs/Samsung%20INR18650-25R.pdf — **distributor re-host** (BatterySpace) of Samsung SDI's own specification document (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.5,
+          "wh_kg": 200.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 526.0,
+          "cycles": 250,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.6,
+          "max_discharge_C": null,
+          "max_discharge_A": 20.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.5,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 250,
+          "eol_frac": 0.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-37",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Samsung SDI INR18650-35E",
+        "chemistry_as_stated": "Not stated in this sheet (external knowledge says NCA/graphite — treat as second-hand)",
+        "spec_reference": "Samsung SDI. *Specification of Product — INR18650-35E*, Spec. No. INR18650-35E, Ver. 1.1, July 9th 2015. https://www.batteryspace.com/prod-specs/13103-inr18650-35e.pdf — **distributor re-host** (BatterySpace) of Samsung SDI's own specification document (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.35,
+          "wh_kg": 241.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 684.0,
+          "cycles": 500,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.6,
+          "max_discharge_C": null,
+          "max_discharge_A": 8.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.35,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-38",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Samsung SDI INR18650-29E",
+        "chemistry_as_stated": "Not stated in this sheet (external knowledge says NCA/graphite — treat as second-hand)",
+        "spec_reference": "Samsung SDI. *Specifications of Product — INR18650-29E*, Spec. No. INR18650-29E, Version No. 1.1 (SDI customer copy). https://www.batteryspace.com/prod-specs/2368-INR18650-29E.pdf — **distributor re-host** (BatterySpace) of Samsung SDI's own specification document (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.85,
+          "wh_kg": 217.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 602.0,
+          "cycles": 500,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.7,
+          "max_discharge_C": null,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.85,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.7,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "max_discharge"
+      ]
+    },
+    {
+      "id": "T-cyl-39",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "LG Energy Solution INR18650MH1",
+        "chemistry_as_stated": "Not stated in this sheet (external knowledge says NMC/graphite — treat as second-hand)",
+        "spec_reference": "LG Energy Solution. *Product Specification — Lithium Ion LG INR 18650 MH1*, Document No. PS-CY-INR18650MH1-Promotion-V4, Rev 4, 2021-02-23. https://www.batteryspace.com/prod-specs/5501-LG-18650-MH1-Datasheet.pdf — **distributor re-host** (BatterySpace) of LG Energy Solution's own product specification (marked \"For (Promotion) only\") (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.2,
+          "wh_kg": 266.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 683.0,
+          "cycles": 500,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.7,
+          "max_discharge_C": 0.5,
+          "max_discharge_A": 0.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 500,
+          "eol_frac": 0.7,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 0.5,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-40",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Molicel INR-18650-P22S",
+        "chemistry_as_stated": "Not stated in this sheet",
+        "spec_reference": "Molicel (E-One Moli Energy). *Product Data Sheet — Model INR-18650-P22S*, Version 1.0. https://www.molicel.com/wp-content/uploads/INR18650P22S_1.0_Product-Data-Sheet-of-INR-18650-P22S-80137.pdf (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.2,
+          "wh_kg": 147.0,
+          "wh_kg_basis": "vendor_stated",
+          "wh_l": 403.0,
+          "cycles": null,
+          "cycles_basis": null,
+          "eol_frac": null,
+          "max_discharge_C": null,
+          "max_discharge_A": 36.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "cycle_life"
+      ]
+    },
+    {
+      "id": "T-lfp-16",
+      "class": "lfp_lto",
+      "scenario": "长寿命 / 低成本（储能 / 梯次）",
+      "control": {
+        "model": "Lithium Werks APR18650M1B",
+        "chemistry_as_stated": "**LiFePO4 (lithium iron phosphate)** — explicitly stated: \"Based on lithium iron phosphate chemistry (LiFePO4)\", Nanophosphate technology",
+        "spec_reference": "Lithium Werks (A123 Systems Nanophosphate). *18650 Data Sheet — APR18650M1B*, doc SF000007 rev 2, June 2022, part number 300949-001. https://www.batteryspace.com/prod-specs/6612-APR18650M1B.pdf — **distributor re-host** (BatterySpace) of Lithium Werks' own datasheet (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 1.2,
+          "wh_kg": 95.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 227.0,
+          "cycles": 4000,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 1.0,
+          "max_discharge_C": 25.0,
+          "max_discharge_A": 30.0
+        }
+      },
+      "objectives": [
+        {
+          "metric": "cycle_life",
+          "direction": "max"
+        },
+        {
+          "metric": "material_cost",
+          "direction": "min"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 1.2,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "energy_density_wh_kg",
+          "op": ">=",
+          "value": 95.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        },
+        {
+          "metric": "nail_penetration_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "overcharge_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "thermal_runaway_no_fire",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-41",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "Samsung SDI ICR18650-26F",
+        "chemistry_as_stated": "Not stated in this sheet (ICR prefix denotes LiCoO2-type; sheet does not say so)",
+        "spec_reference": "Samsung SDI. *Specification of Product — ICR18650-26F*, Spec. No. ICR18650-26F, Version No. 0.0, May 2009. https://www.batteryspace.com/prod-specs/ICR18650-26F.pdf — **distributor re-host** (BatterySpace) of Samsung SDI's own specification document (accessed 2026-09-27).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.6,
+          "wh_kg": 205.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 557.0,
+          "cycles": 300,
+          "cycles_basis": "vendor_stated",
+          "eol_frac": 0.7,
+          "max_discharge_C": null,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 300,
+          "eol_frac": 0.7,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": [
+        "max_discharge"
+      ]
+    },
+    {
+      "id": "T-cyl-42",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "BAK N18650CH",
+        "chemistry_as_stated": "Vendor's own label: \"材料类型 Hi-Ni\" (material type Hi-Ni) — sheet gives no fuller chemistry",
+        "spec_reference": "BAK (Shenzhen BAK / Zhengzhou BAK). *产品手册 — 型号 N18650CH*. https://www.bakpower.com/uploads/cpxl_table1/N18650CH.pdf (accessed 2026-09-27). Note: the PDF's Chinese labels did not extract as text; the field mapping above was confirmed by rendering the page and reading it directly.",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.6,
+          "wh_kg": 203.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 534.0,
+          "cycles": 1000,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 1.0,
+          "max_discharge_C": 3.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.6,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 1000,
+          "eol_frac": 1.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 3.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-43",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "BAK N18650CL-29",
+        "chemistry_as_stated": "Vendor's own label: \"材料类型 Hi-Ni\" (material type Hi-Ni) — sheet gives no fuller chemistry",
+        "spec_reference": "BAK (Shenzhen BAK / Zhengzhou BAK). *产品手册 — 型号 N18650CL-29*. https://www.bakpower.com/uploads/cpxl_table1/N18650CL-29.pdf (accessed 2026-09-27). Chinese labels read from the rendered page (see N18650CH note).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 2.9,
+          "wh_kg": 227.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 595.0,
+          "cycles": 800,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 1.0,
+          "max_discharge_C": 3.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 2.9,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 800,
+          "eol_frac": 1.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 3.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    },
+    {
+      "id": "T-cyl-44",
+      "class": "cylindrical",
+      "scenario": "高能量圆柱（车用 / 通用）",
+      "control": {
+        "model": "BAK N18650CR-35E",
+        "chemistry_as_stated": "Vendor's own label: \"材料类型 Hi-Ni\" (material type Hi-Ni) — sheet gives no fuller chemistry",
+        "spec_reference": "BAK (Shenzhen BAK / Zhengzhou BAK). *产品手册 — 型号 N18650CR-35E*. https://www.bakpower.com/uploads/cpxl_table1/N18650CR-35E.pdf (accessed 2026-09-27). Chinese labels read from the rendered page (see N18650CH note).",
+        "source": "calibration/specsheets/18650.md",
+        "spec_values": {
+          "capacity_ah": 3.5,
+          "wh_kg": 268.0,
+          "wh_kg_basis": "derived",
+          "wh_l": 719.0,
+          "cycles": 800,
+          "cycles_basis": "read_off_chart",
+          "eol_frac": 1.0,
+          "max_discharge_C": 3.0,
+          "max_discharge_A": null
+        }
+      },
+      "objectives": [
+        {
+          "metric": "energy_density_wh_kg",
+          "direction": "max"
+        },
+        {
+          "metric": "rate_retention_5C_1C",
+          "direction": "max"
+        }
+      ],
+      "constraints": [
+        {
+          "metric": "capacity_ah",
+          "op": ">=",
+          "value": 3.5,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "cycle_life_at_eol",
+          "op": ">=",
+          "value": 800,
+          "eol_frac": 1.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "max_discharge_C",
+          "op": ">=",
+          "value": 3.0,
+          "basis": "control_spec"
+        },
+        {
+          "metric": "no_lithium_plating",
+          "op": "==",
+          "value": true,
+          "basis": "model"
+        },
+        {
+          "metric": "T_max_C",
+          "op": "<=",
+          "value": 60,
+          "basis": "model"
+        }
+      ],
+      "eval": {
+        "lead_margin": 0.1,
+        "budget_sim_calls": null
+      },
+      "parse_failed": [],
+      "spec_gaps": []
+    }
+  ]
+}
